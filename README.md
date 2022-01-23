@@ -32,7 +32,7 @@ But they seem to be all sports-related. Although lots of students have a huge in
 
 -  If **not** signed in, **visitors** can only view posts and cannot interact with other users.
 - If signed in as **regular users**, he/she can do following: 
-	1. reply to others posts
+	1. reply to others' posts
 	2. reply to private messages
 	3. create new post in group or in his/her own page
 	4. subscribe/ unsubscribe a user
@@ -40,11 +40,13 @@ But they seem to be all sports-related. Although lots of students have a huge in
 	6. anonymous post
 	7. block/report/like/dislike/follow others users/posts
 	8. setting personal information
+	9. receive notifications, such as new followers, new posts, new replies etc
 -   If signed as **managers**:
 	1. can close/delete a post
 	2. can mute a user if he/she violates certain rules
 	3. post rules
 	4. deal with reports from users
+	5. receive notifications including reports or requests from users
 
   ## **Other Functions**
 - Can have different groups in which people of similar interests can discuss with each other. Groups can be "sports", "music", "rate-my-professor", "daily life", "courses" ... and so on. Users can join multiple groups and discuss with others in the group. Each group may have a few managers.

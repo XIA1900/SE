@@ -1,0 +1,11 @@
+server:
+  port: "10010"
+
+database:
+  ip: "157.245.81.46"
+  port: "3306"
+  username: "root"
+  password: "GatorForumDB21!"
+  db1: "gf"
+  db2: "gf_test"
+

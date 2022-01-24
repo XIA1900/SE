@@ -1,0 +1,13 @@
+# This yaml config file is a demo, so the value of each field is not real, but you can try
+
+server:
+  port: "*****"
+
+database:
+  ip: "***.***.***.***"
+  port: "3306"
+  username: "scott"
+  password: "superman"
+  db1: "**"
+  db2: "**"
+

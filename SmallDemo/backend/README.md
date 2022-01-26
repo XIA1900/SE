@@ -1,8 +1,11 @@
 #### Required Packages
-- gin
-- gorm
+- gin (web engine)
+- gorm (SQL database)
   - gorm mysql driver
-- go-yaml/yaml
+- go-yaml/yaml (config)
+- log
+  - go.uber.org/zap (log)
+  - gopkg.in/natefinch/lumberjack.v2 (log files cutting or backup etc.)
 
 
 

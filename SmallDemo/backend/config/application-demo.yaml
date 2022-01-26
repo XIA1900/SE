@@ -11,3 +11,10 @@ database:
   db1: "**"
   db2: "**"
 
+logger:
+  # Debug < Info < Warn < Error
+  lowest_level: "Debug"
+  debug_path: "./log/runtime/debug.log"
+  info_path: "./log/runtime/info.log"
+  warn_path: "./log/runtime/warn.log"
+  error_path: "./log/runtime/error.log"

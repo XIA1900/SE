@@ -18,6 +18,16 @@ type AppConfig struct {
 		Db1      string
 		Db2      string
 	}
+
+	Logger struct {
+		LowestLevel string
+		Path        struct {
+			Debug string
+			Info  string
+			Warn  string
+			Error string
+		}
+	}
 }
 
 var appConfig AppConfig

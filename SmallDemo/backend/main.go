@@ -2,8 +2,10 @@ package main
 
 import (
 	"backend/config"
+	"backend/log"
 	"backend/model"
 	"backend/router"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -11,6 +13,13 @@ func main() {
 	config.LoadAppConfig()
 
 	// necessary components init
+	log.InitLog()
+	defer log.Logger.Sync()
+	log.Logger.Debug("debug log test", zap.String("param", "http"))
+	log.Logger.Info("info log test")
+	log.Logger.Warn("warn test")
+	log.Logger.Error("error test")
+
 	model.InitDB()
 	appConfig := config.GetAppConfig()
 	r := router.InitRouter()

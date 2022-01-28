@@ -19,6 +19,11 @@ type AppConfig struct {
 		Db2      string
 	}
 
+	JWT struct {
+		SecretKey string
+		Expires   int
+	}
+
 	Logger struct {
 		LowestLevel string
 		Path        struct {

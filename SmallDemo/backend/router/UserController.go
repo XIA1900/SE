@@ -10,5 +10,6 @@ func InitUserGroup(r *gin.Engine) {
 	{
 		userGroup.POST("/login", service.Login)
 		userGroup.POST("/register", service.Register)
+		userGroup.POST("/changePassword", service.UpdateUser)
 	}
 }

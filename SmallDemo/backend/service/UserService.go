@@ -71,3 +71,27 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusOK, successMsg)
 	return
 }
+
+func UpdateUser(c *gin.Context) {
+	var registerInfo RegisterInfo
+	if err := c.ShouldBindJSON(&registerInfo); err != nil {
+		errorMsg := RegisterResult{
+			Message: "Request Parameters Error",
+		}
+		c.JSON(http.StatusBadRequest, errorMsg)
+		return
+	}
+
+	newUser := model.User{
+		USERNAME: registerInfo.Username,
+		PASSWORD: registerInfo.Password,
+	}
+
+	model.UpdateUser(newUser)
+
+	successMsg := RegisterResult{
+		Message: "Successfully",
+	}
+	c.JSON(http.StatusOK, successMsg)
+	return
+}

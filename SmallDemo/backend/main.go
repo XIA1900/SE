@@ -28,6 +28,7 @@ func main() {
 
 	// cache init
 	cache.InitRedis()
+
 	// JWT init
 	jwt.InitJWT()
 

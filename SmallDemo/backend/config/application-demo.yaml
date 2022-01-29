@@ -11,10 +11,21 @@ database:
   db1: "**"
   db2: "**"
 
+redis:
+  ip: "***.***.***.***"
+  port: "6379"
+  password: "rocket on!!!"
+  db: 0
+
+jwt:
+  secretkey: "uf.edu"
+  expires: 100000
+
 logger:
   # Debug < Info < Warn < Error
-  lowest_level: "Debug"
-  debug_path: "./log/runtime/debug.log"
-  info_path: "./log/runtime/info.log"
-  warn_path: "./log/runtime/warn.log"
-  error_path: "./log/runtime/error.log"
+  lowestlevel: "Debug"
+  path:
+    debug: "./log/runtime/debug.log"
+    info: "./log/runtime/info.log"
+    warn: "./log/runtime/warn.log"
+    error: "./log/runtime/error.log"

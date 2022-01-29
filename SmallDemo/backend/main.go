@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/cache"
 	"backend/component/jwt"
 	"backend/config"
 	"backend/log"
@@ -24,6 +25,10 @@ func main() {
 
 	// database init
 	model.InitDB()
+
+	// cache init
+	cache.InitRedis()
+	cache.Test()
 
 	// JWT init
 	jwt.InitJWT()

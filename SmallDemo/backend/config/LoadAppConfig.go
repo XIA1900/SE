@@ -19,6 +19,13 @@ type AppConfig struct {
 		Db2      string
 	}
 
+	Redis struct {
+		IP       string
+		Port     string
+		Password string
+		DB       int
+	}
+
 	JWT struct {
 		SecretKey string
 		Expires   int

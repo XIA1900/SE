@@ -17,5 +17,10 @@ func AddUser(user User) {
 
 func UpdateUser(user User) {
 	db := getDB()
-	db.Save(&user)
+	db.Model(&user).Where("USERNAME", user.USERNAME).Update("PASSWORD", user.PASSWORD)
+}
+
+func DeleteUser(user User) {
+	db := getDB()
+	db.Where("USERNAME", user.USERNAME).Delete(&user)
 }

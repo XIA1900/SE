@@ -51,26 +51,39 @@
 
   ```
   ./SmallDemo/backend
-  │  go.mod
-  │  go.sum
-  │  main.go // program enter point
-  │  README.md
-  ├─bin
-  │      Small_Demo_Backend.exe
-  ├─config
-  │      application.yaml // application config file
-  │      LoadAppConfig.go // load config parameters
-  │
-  ├─model
-  │      InitDB.go // data source
-  │      UserDao.go // user table data access operation
-  │
-  ├─router
-  │      InitRouter.go // router initializer
-  │      UserController.go // controller for user operation
-  │
-  └─service
-          UserService.go // user s
+  ├── README.md
+  ├── bin
+  │   └── Small_Demo_backend
+  ├── cache
+  │   └── InitRedis.go
+  ├── component
+  │   └── jwt
+  │       ├── GenerateToken.go
+  │       ├── InitJWT.go
+  │       ├── RefreshToken.go
+  │       └── VerifyToken.go
+  ├── config
+  │   ├── LoadAppConfig.go
+  │   ├── application-demo.yaml
+  │   └── application.yaml
+  ├── go.mod
+  ├── go.sum
+  ├── log
+  │   ├── InitLog.go
+  │   └── runtime
+  │       ├── debug.log
+  │       ├── error.log
+  │       ├── info.log
+  │       └── warn.log
+  ├── main.go
+  ├── model
+  │   ├── InitDB.go
+  │   └── UserDao.go
+  ├── router
+  │   ├── InitRouter.go
+  │   └── UserController.go
+  └── service
+  └── UserService.go
   ```
 
   

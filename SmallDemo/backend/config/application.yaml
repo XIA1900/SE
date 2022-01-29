@@ -1,0 +1,29 @@
+server:
+  port: "10010"
+
+database:
+  ip: "157.245.81.46"
+  port: "3306"
+  username: "root"
+  password: "RoadCenterDB21!"
+  db1: "gf"
+  db2: "gf_test"
+
+redis:
+  ip: "157.245.81.46"
+  port: "6379"
+  password: "rocendis"
+  db: 0
+
+jwt:
+  secretkey: "RoadCenter"
+  expires: 5
+
+logger:
+  # Debug < Info < Warn < Error
+  lowestlevel: "Debug"
+  path:
+    debug: "./log/runtime/debug.log"
+    info: "./log/runtime/info.log"
+    warn: "./log/runtime/warn.log"
+    error: "./log/runtime/error.log"

@@ -52,8 +52,6 @@
   ```
   ./SmallDemo/backend
   ├── README.md
-  ├── bin
-  │   └── Small_Demo_backend
   ├── cache
   │   └── InitRedis.go
   ├── component
@@ -64,17 +62,11 @@
   │       └── VerifyToken.go
   ├── config
   │   ├── LoadAppConfig.go
-  │   ├── application-demo.yaml
-  │   └── application.yaml
+  │   └── application-demo.yaml
   ├── go.mod
   ├── go.sum
   ├── log
-  │   ├── InitLog.go
-  │   └── runtime
-  │       ├── debug.log
-  │       ├── error.log
-  │       ├── info.log
-  │       └── warn.log
+  │   └── InitLog.go
   ├── main.go
   ├── model
   │   ├── InitDB.go
@@ -83,7 +75,7 @@
   │   ├── InitRouter.go
   │   └── UserController.go
   └── service
-  └── UserService.go
+      └── UserService.go
   ```
 
   

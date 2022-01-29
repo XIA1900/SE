@@ -1,13 +1,21 @@
 package model
 
+import "time"
+
 type User struct {
-	ID       uint
-	USERNAME string
-	PASSWORD string
+	ID         uint
+	USERNAME   string
+	PASSWORD   string
+	SALT       string
+	NICKNAME   string
+	BIRTHDAY   time.Time
+	GENDER     int8
+	DEPARTMENT string
 }
 
 func (u User) TableName() string {
-	return "TEST"
+	//return "TEST"
+	return "USER"
 }
 
 func AddUser(user User) {

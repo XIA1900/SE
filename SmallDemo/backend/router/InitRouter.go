@@ -9,6 +9,7 @@ func InitRouter() *gin.Engine {
 
 	// Router Groups Init
 	InitUserGroup(r)
+	InitAdminGroup(r)
 
 	return r
 }

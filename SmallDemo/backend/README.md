@@ -7,6 +7,7 @@
   - go.uber.org/zap (log)
   - gopkg.in/natefinch/lumberjack.v2 (log files cutting or backup etc.)
 - JWT
+- Redis
 
 
 

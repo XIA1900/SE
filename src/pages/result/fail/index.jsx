@@ -6,7 +6,7 @@ import styles from './index.less';
 const Content = (
   <Fragment>
     <div className={styles.title}>
-      <span>您提交的内容有如下错误：</span>
+      <span>Your contents include following errors or violations:</span>
     </div>
     <div
       style={{
@@ -19,13 +19,13 @@ const Content = (
         }}
         className={styles.error_icon}
       />
-      <span>您的账户已被冻结</span>
+      <span>Your account has been blocked.</span>
       <a
         style={{
           marginLeft: 16,
         }}
       >
-        <span>立即解冻</span>
+        <span>Unblock account</span>
         <RightOutlined />
       </a>
     </div>
@@ -36,13 +36,13 @@ const Content = (
         }}
         className={styles.error_icon}
       />
-      <span>您的账户还不具备申请资格</span>
+      <span>Not qualified</span>
       <a
         style={{
           marginLeft: 16,
         }}
       >
-        <span>立即升级</span>
+        <span>Upgrade now</span>
         <RightOutlined />
       </a>
     </div>
@@ -53,11 +53,11 @@ export default () => (
     <Card bordered={false}>
       <Result
         status="error"
-        title="提交失败"
-        subTitle="请核对并修改以下信息后，再重新提交。"
+        title="Error!"
+        subTitle="Sorry for the inconvenience. Please modify your contents and try submitting again."
         extra={
           <Button type="primary">
-            <span>返回修改</span>
+            <span>Modify</span>
           </Button>
         }
         style={{

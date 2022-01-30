@@ -11,7 +11,7 @@ const desc1 = (
         margin: '8px 0 4px',
       }}
     >
-      <span>曲丽丽</span>
+      <span>Lili Qu</span>
       <DingdingOutlined
         style={{
           marginLeft: 8,
@@ -34,7 +34,7 @@ const desc2 = (
         margin: '8px 0 4px',
       }}
     >
-      <span>周毛毛</span>
+      <span>Maomao Zhou</span>
       <a href="">
         <DingdingOutlined
           style={{
@@ -42,17 +42,17 @@ const desc2 = (
             marginLeft: 8,
           }}
         />
-        <span>催一下</span>
+        <span>Push</span>
       </a>
     </div>
   </div>
 );
 const content = (
   <>
-    <Descriptions title="项目名称">
-      <Descriptions.Item label="项目 ID">23421</Descriptions.Item>
-      <Descriptions.Item label="负责人">曲丽丽</Descriptions.Item>
-      <Descriptions.Item label="生效时间">2016-12-12 ~ 2017-12-12</Descriptions.Item>
+    <Descriptions title="Post Name">
+      <Descriptions.Item label="Post ID">23421</Descriptions.Item>
+      <Descriptions.Item label="Poster">Lili Qu</Descriptions.Item>
+      <Descriptions.Item label="Time">2016-12-12</Descriptions.Item>
     </Descriptions>
     <br />
     <Steps progressDot current={1}>
@@ -63,7 +63,7 @@ const content = (
               fontSize: 14,
             }}
           >
-            创建项目
+            Post submitted
           </span>
         }
         description={desc1}
@@ -75,7 +75,7 @@ const content = (
               fontSize: 14,
             }}
           >
-            部门初审
+            Checking
           </span>
         }
         description={desc2}
@@ -87,7 +87,7 @@ const content = (
               fontSize: 14,
             }}
           >
-            财务复核
+            Checking
           </span>
         }
       />
@@ -98,7 +98,7 @@ const content = (
               fontSize: 14,
             }}
           >
-            完成
+            Successful
           </span>
         }
       />
@@ -107,9 +107,9 @@ const content = (
 );
 const extra = (
   <Fragment>
-    <Button type="primary">返回列表</Button>
-    <Button>查看项目</Button>
-    <Button>打印</Button>
+    <Button type="primary">Return</Button>
+    <Button>View my posts</Button>
+    <Button>Print</Button>
   </Fragment>
 );
 export default () => (
@@ -117,8 +117,8 @@ export default () => (
     <Card bordered={false}>
       <Result
         status="success"
-        title="提交成功"
-        subTitle="提交结果页用于反馈一系列操作任务的处理结果， 如果仅是简单操作，使用 Message 全局提示反馈即可。 本文字区域可以展示简单的补充说明，如果有类似展示 “单据”的需求，下面这个灰色区域可以呈现比较复杂的内容。"
+        title="Success"
+        subTitle="Can display post title and a few contents"
         extra={extra}
         style={{
           marginBottom: 16,

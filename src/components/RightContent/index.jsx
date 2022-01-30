@@ -25,9 +25,9 @@ const GlobalHeaderRight = () => {
     <Space className={className}>
       <HeaderSearch
         className={`${styles.action} ${styles.search}`}
-        placeholder="站内搜索"
+        placeholder="Search..."   //original value: 站内搜索
         defaultValue="umi ui"
-        options={[
+        options={[   //pending, need discussion
           {
             label: <a href="https://umijs.org/zh/guide/umi-ui.html">umi ui</a>,
             value: 'umi ui',

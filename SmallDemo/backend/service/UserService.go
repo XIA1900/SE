@@ -72,7 +72,7 @@ func Register(c *gin.Context) {
 	return
 }
 
-func UpdateUser(c *gin.Context) {
+func ChangePassword(c *gin.Context) {
 	var registerInfo RegisterInfo
 	if err := c.ShouldBindJSON(&registerInfo); err != nil {
 		errorMsg := RegisterResult{
@@ -87,7 +87,7 @@ func UpdateUser(c *gin.Context) {
 		PASSWORD: registerInfo.Password,
 	}
 
-	model.UpdateUser(newUser)
+	model.ChangePassword(newUser)
 
 	successMsg := RegisterResult{
 		Message: "Successfully",

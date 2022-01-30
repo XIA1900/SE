@@ -23,7 +23,7 @@ func AddUser(user User) {
 	db.Create(&user)
 }
 
-func UpdateUser(user User) {
+func ChangePassword(user User) {
 	db := getDB()
 	db.Model(&user).Where("USERNAME", user.USERNAME).Update("PASSWORD", user.PASSWORD)
 }

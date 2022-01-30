@@ -11,11 +11,11 @@ export default () => {
   return (
     <DefaultFooter
       copyright={`${currentYear} ${defaultMessage}`}
-      links={[
+      links={[  //pending: these three links are the same. Should we keep only 1 of them?
         {
           key: 'Ant Design Pro',
           title: 'Gator Forum',
-          href: 'https://github.com/fongziyjun16/SE',    //post something
+          href: 'https://github.com/fongziyjun16/SE',   
           blankTarget: true,
         },
         {

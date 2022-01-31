@@ -12,7 +12,7 @@ const Settings = () => {
   const menuMap = {
     base: '基本设置',
     security: '安全设置',
-    binding: '账号绑定',
+    //binding: '账号绑定',
     notification: '新消息通知',
   };
   const [initConfig, setInitConfig] = useState({
@@ -67,8 +67,8 @@ const Settings = () => {
       case 'security':
         return <SecurityView />;
 
-      case 'binding':
-        return <BindingView />;
+      //case 'binding':
+        //return <BindingView />;
 
       case 'notification':
         return <NotificationView />;

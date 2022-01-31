@@ -38,15 +38,15 @@ import HeaderDropdown from '@/components/HeaderDropdown';
 export default () => {
   const menuHeaderDropdown = (
     <Menu selectedKeys={[]}>
-      <Menu.Item key="center">个人中心</Menu.Item>
-      <Menu.Item key="settings">个人设置</Menu.Item>
+      <Menu.Item key="center">Personal Center</Menu.Item>
+      <Menu.Item key="settings">Settings</Menu.Item>
       <Menu.Divider />
-      <Menu.Item key="logout">退出登录</Menu.Item>
+      <Menu.Item key="logout">Log Out</Menu.Item>
     </Menu>
   );
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
-      <Button>hover 展示菜单</Button>
+      <Button>hover Display Menu</Button>
     </HeaderDropdown>
   );
 };
@@ -67,7 +67,7 @@ import HeaderSearch from '@/components/HeaderSearch';
 export default () => {
   return (
     <HeaderSearch
-      placeholder="站内搜索"
+      placeholder="Insite Search"
       defaultValue="umi ui"
       options={[
         { label: 'Ant Design Pro', value: 'Ant Design Pro' },
@@ -121,14 +121,14 @@ export default () => {
     {
       id: '000000001',
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png',
-      title: '你收到了 14 份新周报',
+      title: 'Received 14 new weekly report',
       datetime: '2017-08-09',
       type: 'notification',
     },
     {
       id: '000000002',
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png',
-      title: '你推荐的 曲妮妮 已通过第三轮面试',
+      title: 'Nini Qu you recommended has passed the third-round interview',
       datetime: '2017-08-08',
       type: 'notification',
     },
@@ -139,33 +139,33 @@ export default () => {
       onItemClick={(item) => {
         message.info(`${item.title} 被点击了`);
       }}
-      onClear={(title: string, key: string) => message.info('点击了清空更多')}
+      onClear={(title: string, key: string) => message.info('Click to empty more')}
       loading={false}
-      clearText="清空"
-      viewMoreText="查看更多"
-      onViewMore={() => message.info('点击了查看更多')}
+      clearText="Clear"
+      viewMoreText="View more"
+      onViewMore={() => message.info('Click to view more')}
       clearClose
     >
       <NoticeIcon.Tab
         tabKey="notification"
         count={2}
         list={list}
-        title="通知"
-        emptyText="你已查看所有通知"
+        title="Notifications"
+        emptyText="Empty"
         showViewMore
       />
       <NoticeIcon.Tab
         tabKey="message"
         count={2}
         list={list}
-        title="消息"
-        emptyText="您已读完所有消息"
+        title="Messages"
+        emptyText="Empty"
         showViewMore
       />
       <NoticeIcon.Tab
         tabKey="event"
-        title="待办"
-        emptyText="你已完成所有待办"
+        title="To do"
+        emptyText="Empty"
         count={2}
         list={list}
         showViewMore
@@ -233,7 +233,7 @@ RightContent 是以上几个组件的组合，同时新增了 plugins 的 `Selec
 ```tsx | pure
 <Space>
   <HeaderSearch
-    placeholder="站内搜索"
+    placeholder="Search..."
     defaultValue="umi ui"
     options={[
       { label: <a href="https://umijs.org/zh/guide/umi-ui.html">umi ui</a>, value: 'umi ui' },

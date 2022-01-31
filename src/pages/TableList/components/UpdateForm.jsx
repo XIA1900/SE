@@ -27,7 +27,7 @@ const UpdateForm = (props) => {
             destroyOnClose
             title={intl.formatMessage({
               id: 'pages.searchTable.updateForm.ruleConfig',
-              defaultMessage: '规则配置',
+              defaultMessage: 'Default settings',
             })}
             visible={props.updateModalVisible}
             footer={submitter}
@@ -48,14 +48,14 @@ const UpdateForm = (props) => {
         }}
         title={intl.formatMessage({
           id: 'pages.searchTable.updateForm.basicConfig',
-          defaultMessage: '基本信息',
+          defaultMessage: 'Basic Message',
         })}
       >
         <ProFormText
           name="name"
           label={intl.formatMessage({
             id: 'pages.searchTable.updateForm.ruleName.nameLabel',
-            defaultMessage: '规则名称',
+            defaultMessage: 'Rule Name',
           })}
           width="md"
           rules={[
@@ -64,7 +64,7 @@ const UpdateForm = (props) => {
               message: (
                 <FormattedMessage
                   id="pages.searchTable.updateForm.ruleName.nameRules"
-                  defaultMessage="请输入规则名称！"
+                  defaultMessage="Please enter a name!"
                 />
               ),
             },
@@ -75,11 +75,11 @@ const UpdateForm = (props) => {
           width="md"
           label={intl.formatMessage({
             id: 'pages.searchTable.updateForm.ruleDesc.descLabel',
-            defaultMessage: '规则描述',
+            defaultMessage: 'Rule description',
           })}
           placeholder={intl.formatMessage({
             id: 'pages.searchTable.updateForm.ruleDesc.descPlaceholder',
-            defaultMessage: '请输入至少五个字符',
+            defaultMessage: 'Please enter at least five characters',
           })}
           rules={[
             {
@@ -87,7 +87,7 @@ const UpdateForm = (props) => {
               message: (
                 <FormattedMessage
                   id="pages.searchTable.updateForm.ruleDesc.descRules"
-                  defaultMessage="请输入至少五个字符的规则描述！"
+                  defaultMessage="Please enter at least five characters!"
                 />
               ),
               min: 5,
@@ -102,7 +102,7 @@ const UpdateForm = (props) => {
         }}
         title={intl.formatMessage({
           id: 'pages.searchTable.updateForm.ruleProps.title',
-          defaultMessage: '配置规则属性',
+          defaultMessage: 'Configurate rules',
         })}
       >
         <ProFormSelect

@@ -269,41 +269,6 @@ export default defineConfig({
           path: '/account/center',
           component: './account/center',
         },
-        {
-          name: 'settings',
-          icon: 'smile',
-          path: '/account/settings',
-          component: './account/settings',
-        },
-      ],
-    },
-    {
-      name: 'editor',
-      icon: 'highlight',
-      path: '/editor',
-      routes: [
-        {
-          path: '/editor',
-          redirect: '/editor/flow',
-        },
-        {
-          name: 'flow',
-          icon: 'smile',
-          path: '/editor/flow',
-          component: './editor/flow',
-        },
-        {
-          name: 'mind',
-          icon: 'smile',
-          path: '/editor/mind',
-          component: './editor/mind',
-        },
-        {
-          name: 'koni',
-          icon: 'smile',
-          path: '/editor/koni',
-          component: './editor/koni',
-        },
       ],
     },
     {

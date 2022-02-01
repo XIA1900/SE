@@ -18,7 +18,7 @@ const TableForm = ({ value, onChange }) => {
     const target = getRowByKey(key, newData);
 
     if (target) {
-      // 进入编辑状态时保存原始数据
+      // When begin editing, save original data
       if (!target.editable) {
         cacheOriginData[key] = { ...target };
         setCacheOriginData(cacheOriginData);
@@ -100,7 +100,7 @@ const TableForm = ({ value, onChange }) => {
   const cancel = (e, key) => {
     setClickedCancel(true);
     e.preventDefault();
-    const newData = [...data]; // 编辑前的原始数据
+    const newData = [...data]; // original data before editing
 
     let cacheData = [];
     cacheData = newData.map((item) => {

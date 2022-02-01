@@ -64,7 +64,7 @@ const salesTypeData = [
     y: 1231,
   },
   {
-    x: '其他',
+    x: 'Others',
     y: 1231,
   },
 ];

@@ -8,25 +8,25 @@ import Trend from './Trend';
 import styles from '../style.less';
 const columns = [
   {
-    title: '排名',
+    title: 'Rank',
     dataIndex: 'index',
     key: 'index',
   },
   {
-    title: '搜索关键词',
+    title: 'Search keyword',
     dataIndex: 'keyword',
     key: 'keyword',
     render: (text) => <a href="/">{text}</a>,
   },
   {
-    title: '用户数',
+    title: 'User Count',
     dataIndex: 'count',
     key: 'count',
     sorter: (a, b) => a.count - b.count,
     className: styles.alignRight,
   },
   {
-    title: '周涨幅',
+    title: 'Weekly gains',
     dataIndex: 'range',
     key: 'range',
     sorter: (a, b) => a.range - b.range,
@@ -48,7 +48,7 @@ const TopSearch = ({ loading, visitData2, searchData, dropdownGroup }) => (
   <Card
     loading={loading}
     bordered={false}
-    title="线上热门搜索"
+    title="Online Hot Search"
     extra={dropdownGroup}
     style={{
       height: '100%',

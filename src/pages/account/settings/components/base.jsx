@@ -27,7 +27,7 @@ const validatorPhone = (rule, value, callback) => {
 
 const AvatarView = ({ avatar }) => (
   <>
-    <div className={styles.avatar_title}>头像</div>
+    <div className={styles.avatar_title}>avatar</div>
     <div className={styles.avatar}>
       <img src={avatar} alt="avatar" />
     </div>
@@ -35,7 +35,7 @@ const AvatarView = ({ avatar }) => (
       <div className={styles.button_view}>
         <Button>
           <UploadOutlined />
-          更换头像
+          change your avatar
         </Button>
       </div>
     </Upload>
@@ -61,7 +61,7 @@ const BaseView = () => {
   };
 
   const handleFinish = async () => {
-    message.success('更新基本信息成功');
+    message.success('Change basic information successfully');
   };
 
   return (
@@ -88,55 +88,55 @@ const BaseView = () => {
               <ProFormText
                 width="md"
                 name="email"
-                label="邮箱"
+                label="email"
                 rules={[
                   {
                     required: true,
-                    message: '请输入您的邮箱!',
+                    message: 'Please enter your email address!',
                   },
                 ]}
               />
               <ProFormText
                 width="md"
                 name="name"
-                label="昵称"
+                label="name"
                 rules={[
                   {
                     required: true,
-                    message: '请输入您的昵称!',
+                    message: 'Please enter your name!',
                   },
                 ]}
               />
               <ProFormTextArea
                 name="profile"
-                label="个人简介"
+                label="profile"
                 rules={[
                   {
                     required: true,
-                    message: '请输入个人简介!',
+                    message: 'Please enter your profile!',
                   },
                 ]}
-                placeholder="个人简介"
+                placeholder="profile"
               />
               <ProFormSelect
                 width="sm"
                 name="country"
-                label="国家/地区"
+                label="country"
                 rules={[
                   {
                     required: true,
-                    message: '请输入您的国家或地区!',
+                    message: 'Please enter your country!',
                   },
                 ]}
                 options={[
                   {
-                    label: '中国',
-                    value: 'China',
+                    label: 'United States',
+                    value: 'United States',
                   },
                 ]}
               />
 
-              <ProForm.Group title="所在省市" size={8}>
+              <ProForm.Group title="state" size={8}>
                 <ProFormSelect
                   rules={[
                     {
@@ -173,7 +173,7 @@ const BaseView = () => {
                         rules={[
                           {
                             required: true,
-                            message: '请输入您的所在城市!',
+                            message: 'please enter your city!',
                           },
                         ]}
                         disabled={!province}
@@ -200,21 +200,21 @@ const BaseView = () => {
               <ProFormText
                 width="md"
                 name="address"
-                label="街道地址"
+                label="Street address"
                 rules={[
                   {
                     required: true,
-                    message: '请输入您的街道地址!',
+                    message: 'please enter your street address!',
                   },
                 ]}
               />
               <ProFormFieldSet
                 name="phone"
-                label="联系电话"
+                label="phone"
                 rules={[
                   {
                     required: true,
-                    message: '请输入您的联系电话!',
+                    message: 'please enter your phone!',
                   },
                   {
                     validator: validatorPhone,

@@ -13,7 +13,7 @@ const operationTabList = [
     key: 'articles',
     tab: (
       <span>
-        文章{' '}
+        Posts{' '}
         <span
           style={{
             fontSize: 14,
@@ -28,7 +28,7 @@ const operationTabList = [
     key: 'applications',
     tab: (
       <span>
-        应用{' '}
+        Followers{' '}
         <span
           style={{
             fontSize: 14,
@@ -43,7 +43,7 @@ const operationTabList = [
     key: 'projects',
     tab: (
       <span>
-        项目{' '}
+        Following{' '}
         <span
           style={{
             fontSize: 14,

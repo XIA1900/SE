@@ -50,6 +50,8 @@ const currentUseDetail = {
   avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
   userid: '00000001',
   email: 'Silvia@ufl.edu',
+  signature: 'UF23',
+  group: 'ins:',
   tags: [
     {
       key: '0',
@@ -135,7 +137,7 @@ const currentUseDetail = {
       key: '330000',
     },
     city: {
-      label: 'Gaineville',
+      label: 'Gainesville',
       key: '332608',
     },
   },

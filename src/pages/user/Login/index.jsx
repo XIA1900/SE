@@ -81,7 +81,7 @@ const Login = () => {
       </div>
       <div className={styles.content}>
         <LoginForm
-          logo={<img alt="logo" src="/logo.svg" />}
+          //logo={<img alt="logo" src="/logo.svg" />}
           title="Gator Forum"
           subTitle={intl.formatMessage({
             id: 'pages.layouts.userLayout.title',
@@ -90,14 +90,14 @@ const Login = () => {
             autoLogin: true,
           }}
           actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-            <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-            <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
+            // <FormattedMessage
+            //   key="loginWith"
+            //   id="pages.login.loginWith"
+            //   defaultMessage="其他登录方式"
+            // />,
+            // <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
+            // <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
+            // <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
           ]}
           onFinish={async (values) => {
             await handleSubmit(values);
@@ -111,13 +111,14 @@ const Login = () => {
                 defaultMessage: '账户密码登录',
               })}
             />
+            {/*}
             <Tabs.TabPane
               key="mobile"
               tab={intl.formatMessage({
                 id: 'pages.login.phoneLogin.tab',
                 defaultMessage: '手机号登录',
               })}
-            />
+            />*/}
           </Tabs>
 
           {status === 'error' && loginType === 'account' && (
@@ -176,7 +177,7 @@ const Login = () => {
               />
             </>
           )}
-
+{/*
           {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
           {type === 'mobile' && (
             <>
@@ -262,6 +263,7 @@ const Login = () => {
               />
             </>
           )}
+              */}
           <div
             style={{
               marginBottom: 24,
@@ -270,6 +272,7 @@ const Login = () => {
             <ProFormCheckbox noStyle name="autoLogin">
               <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录" />
             </ProFormCheckbox>
+            {/*
             <a
               style={{
                 float: 'right',
@@ -277,6 +280,7 @@ const Login = () => {
             >
               <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
             </a>
+            */}
           </div>
         </LoginForm>
       </div>

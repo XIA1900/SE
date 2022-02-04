@@ -2,9 +2,10 @@ In this file, we will briefly talk about what we've accomplished.
 
 
 # Frontend
- 1. We have found a template which we think is modifiable and can be used by our Gator Forum.
- 2. We have done some translating work and some vocabularies are changed to make them more suitable to our forum.
-
+ 1. We have found a library(@ant-design-pro) which we think is modifiable and can be used by our Gator Forum.
+ 2. We have set English as default language.
+ 3. After login, user profile page is set as default page at present. But later, we will change this default page as the main page of our forum.
+ 4. Loading page and login page have been modified.
 
 
 

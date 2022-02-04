@@ -51,7 +51,7 @@ const currentUseDetail = {
   userid: '00000001',
   email: 'Silvia@ufl.edu',
   signature: '',
-  title: 'UF23'
+  title: 'UF23',
   group: 'INS:',
   tags: [
     {

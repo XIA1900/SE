@@ -60,4 +60,14 @@ Implementation of Sprint1 is in "SmallDemo", later we will use "GFBackend" as fo
 
   - different log level
 
-  
+
+## Remote Server Deployment
+
+- Deployed
+
+  - MySQL
+
+  - Redis
+
+Later we will deploy our backend into remote server.
+

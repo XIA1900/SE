@@ -81,7 +81,7 @@ const Login = () => {
       </div>
       <div className={styles.content}>
         <LoginForm
-          //logo={<img alt="logo" src="/logo.svg" />}
+          //logo={<img alt="logo" src="/gator.svg" />}
           title="Gator Forum"
           subTitle={intl.formatMessage({
             id: 'pages.layouts.userLayout.title',

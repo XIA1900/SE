@@ -121,7 +121,7 @@ const NoticeIconView = () => {
         tabKey="notification"
         count={unreadMsg.notification}
         list={noticeData.notification}
-        title="Notifications"
+        title="Comments"
         emptyText="Empty"
         showViewMore
       />
@@ -129,13 +129,13 @@ const NoticeIconView = () => {
         tabKey="message"
         count={unreadMsg.message}
         list={noticeData.message}
-        title="Messages"
+        title="Mentions"
         emptyText="Empty"
         showViewMore
       />
       <NoticeIcon.Tab
         tabKey="event"
-        title="To do"
+        title="Likes"
         emptyText="Empty"
         count={unreadMsg.event}
         list={noticeData.event}

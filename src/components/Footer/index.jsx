@@ -10,7 +10,7 @@ export default () => {
   const currentYear = new Date().getFullYear();
   return (
     <DefaultFooter
-      copyright={`${currentYear} ${defaultMessage}`}
+      //copyright={`${currentYear} ${defaultMessage}`}
       links={[  //pending: these three links are the same. Should we keep only 1 of them?
         {
           key: 'Ant Design Pro',

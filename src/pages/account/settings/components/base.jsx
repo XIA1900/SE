@@ -92,7 +92,7 @@ const BaseView = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter your email address!',
+                    message: 'Please input your email address!',
                   },
                 ]}
               />
@@ -103,7 +103,7 @@ const BaseView = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter your name!',
+                    message: 'Please input your name!',
                   },
                 ]}
               />
@@ -113,7 +113,7 @@ const BaseView = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter your profile!',
+                    message: 'Please input your profile!',
                   },
                 ]}
                 placeholder="profile"
@@ -125,13 +125,38 @@ const BaseView = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter your country!',
+                    message: 'Please input your country!',
                   },
                 ]}
                 options={[
                   {
                     label: 'United States',
                     value: 'United States',
+                  },
+                  {
+                    label: 'China',
+                    value: 'China',
+                  },
+                ]}
+              />
+                  <ProFormSelect
+                width="sm"
+                name="state"
+                label="state"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your state!',
+                  },
+                ]}
+                options={[
+                  {
+                    label: 'FL-Florida',
+                    value: 'FL-Florida',
+                  },
+                  {
+                    label: 'GA-Georgia',
+                    value: 'GA-Georgia',
                   },
                 ]}
               />
@@ -141,7 +166,7 @@ const BaseView = () => {
                   rules={[
                     {
                       required: true,
-                      message: '请输入您的所在省!',
+                      message: 'Please input your state!',
                     },
                   ]}
                   width="sm"
@@ -173,7 +198,7 @@ const BaseView = () => {
                         rules={[
                           {
                             required: true,
-                            message: 'please enter your city!',
+                            message: 'please input your city!',
                           },
                         ]}
                         disabled={!province}
@@ -204,7 +229,7 @@ const BaseView = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'please enter your street address!',
+                    message: 'please input your street address!',
                   },
                 ]}
               />
@@ -214,7 +239,7 @@ const BaseView = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'please enter your phone!',
+                    message: 'please input your phone!',
                   },
                   {
                     validator: validatorPhone,

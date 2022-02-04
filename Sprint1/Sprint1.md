@@ -13,7 +13,12 @@ In this file, we will briefly talk about what we've accomplished.
 
 # Backend
 
-**Building Development Foundation**
+## Developers
+
+- Bowei Wu (bowei.wu@ufl.edu))
+- Yingjie Chen (yingjie.chen@ufl.edu)
+
+## Building Development Foundation in Sprint1
 
 ## Related Functions Decision
 

@@ -16,7 +16,12 @@ func AdminLogin(c *gin.Context) {
 		return
 	}
 
-	if loginInfo.Username == "jake_admin" && loginInfo.Password == "12345" {
+	user := model.Admin{
+		USERNAME: loginInfo.Username,
+	}
+	dbUser := model.GetAdminInfo(user)
+
+	if loginInfo.Username == dbUser.USERNAME && loginInfo.Password == dbUser.PASSWORD {
 		successMsg := LoginResult{
 			Message: "Successfully",
 		}

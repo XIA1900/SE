@@ -25,7 +25,12 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if loginInfo.Username == "jake16" && loginInfo.Password == "12345" {
+	user := model.User{
+		USERNAME: loginInfo.Username,
+	}
+	dbUser := model.GetUserInfo(user)
+
+	if loginInfo.Username == dbUser.USERNAME && loginInfo.Password == dbUser.PASSWORD {
 		successMsg := LoginResult{
 			Message: "Successfully",
 		}

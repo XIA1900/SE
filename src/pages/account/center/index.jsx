@@ -184,15 +184,15 @@ const Center = () => {
 
   const renderChildrenByTabKey = (tabValue) => {
     if (tabValue === 'projects') {
-      return <Projects />;
+      return null;
     }
 
     if (tabValue === 'applications') {
-      return <Applications />;
+      return null;
     }
 
     if (tabValue === 'articles') {
-      return <Articles />;
+      return null;
     }
 
     return null;

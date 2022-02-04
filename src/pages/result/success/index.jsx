@@ -11,7 +11,7 @@ const desc1 = (
         margin: '8px 0 4px',
       }}
     >
-      <span>Lili Qu</span>
+      <span>Silvia</span>
       <DingdingOutlined
         style={{
           marginLeft: 8,
@@ -19,7 +19,7 @@ const desc1 = (
         }}
       />
     </div>
-    <div>2016-12-12 12:32</div>
+    <div>2022-01-26 12:32</div>
   </div>
 );
 const desc2 = (
@@ -51,8 +51,8 @@ const content = (
   <>
     <Descriptions title="Post Name">
       <Descriptions.Item label="Post ID">23421</Descriptions.Item>
-      <Descriptions.Item label="Poster">Lili Qu</Descriptions.Item>
-      <Descriptions.Item label="Time">2016-12-12</Descriptions.Item>
+      <Descriptions.Item label="Poster">Silvia</Descriptions.Item>
+      <Descriptions.Item label="Time">2022-01-26</Descriptions.Item>
     </Descriptions>
     <br />
     <Steps progressDot current={1}>
@@ -80,17 +80,7 @@ const content = (
         }
         description={desc2}
       />
-      <Step
-        title={
-          <span
-            style={{
-              fontSize: 14,
-            }}
-          >
-            Checking
-          </span>
-        }
-      />
+      
       <Step
         title={
           <span
@@ -109,7 +99,7 @@ const extra = (
   <Fragment>
     <Button type="primary">Return</Button>
     <Button>View my posts</Button>
-    <Button>Print</Button>
+    
   </Fragment>
 );
 export default () => (

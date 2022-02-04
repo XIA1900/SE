@@ -1,11 +1,11 @@
 export default {
   'pages.layouts.userLayout.title':
-    'Gator Forum is a project created by Center Road',
+    'Gator Forum is a project created by Road Center',
   'pages.login.accountLogin.tab': 'Account Login',
   'pages.login.accountLogin.errorMessage': 'Incorrect username/password(admin/ant.design)',
   'pages.login.failure': 'Login failed, please try again!',
   'pages.login.success': 'Login successful!',
-  'pages.login.username.placeholder': 'Username: admin or user',
+  'pages.login.username.placeholder': 'UFID: admin or user',
   'pages.login.username.required': 'Please input your username!',
   'pages.login.password.placeholder': 'Password: ant.design',
   'pages.login.password.required': 'Please input your password!',

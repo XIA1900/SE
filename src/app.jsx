@@ -61,11 +61,11 @@ export const layout = ({ initialState }) => {
       ? [
           <Link to="/umi/plugin/openapi" target="_blank">
             <LinkOutlined />
-            <span>OpenAPI 文档</span>
+            <span>OpenAPI</span>
           </Link>,
           <Link to="/~docs">
             <BookOutlined />
-            <span>业务组件文档</span>
+            <span>Others</span>
           </Link>,
         ]
       : [],

@@ -50,8 +50,9 @@ const currentUseDetail = {
   avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
   userid: '00000001',
   email: 'Silvia@ufl.edu',
-  signature: 'UF23',
-  group: 'ins:',
+  signature: '',
+  title: 'UF23'
+  group: 'INS:',
   tags: [
     {
       key: '0',

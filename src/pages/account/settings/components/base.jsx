@@ -139,27 +139,7 @@ const BaseView = () => {
                   },
                 ]}
               />
-                  <ProFormSelect
-                width="sm"
-                name="state"
-                label="state"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your state!',
-                  },
-                ]}
-                options={[
-                  {
-                    label: 'FL-Florida',
-                    value: 'FL-Florida',
-                  },
-                  {
-                    label: 'GA-Georgia',
-                    value: 'GA-Georgia',
-                  },
-                ]}
-              />
+            
 
               <ProForm.Group title="state" size={8}>
                 <ProFormSelect

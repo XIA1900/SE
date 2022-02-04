@@ -179,29 +179,29 @@ export default defineConfig({
         // },
       ]
     },
-    {
-      path: '/profile',
-      name: 'profile',
-      icon: 'profile',
-      routes: [
-        {
-          path: '/profile',
-          redirect: '/profile/basic',
-        },
-        {
-          name: 'basic',
-          icon: 'smile',
-          path: '/profile/basic',
-          component: './profile/basic',
-        },
-        {
-          name: 'advanced',
-          icon: 'smile',
-          path: '/profile/advanced',
-          component: './profile/advanced',
-        },
-      ],
-    },
+    // {
+    //   path: '/profile',
+    //   name: 'profile',
+    //   icon: 'profile',
+    //   routes: [
+    //     {
+    //       path: '/profile',
+    //       redirect: '/profile/basic',
+    //     },
+    //     {
+    //       name: 'basic',
+    //       icon: 'smile',
+    //       path: '/profile/basic',
+    //       component: './profile/basic',
+    //     },
+    //     {
+    //       name: 'advanced',
+    //       icon: 'smile',
+    //       path: '/profile/advanced',
+    //       component: './profile/advanced',
+    //     },
+    //   ],
+    // },
     {
       name: 'result',
       icon: 'CheckCircleOutlined',

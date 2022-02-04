@@ -76,7 +76,7 @@ export default {
           },
         ],
         notifyCount: 12,
-        unreadCount: 11,
+        unreadCount: 3,
         country: 'China',
         access: getAccess(),
         geographic: {

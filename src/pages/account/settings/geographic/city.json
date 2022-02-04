@@ -1,15 +1,15 @@
 {
   "110000": [
     {
-      "province": "北京市",
-      "name": "市辖区",
+      "province": "FL-Florida",
+      "name": "Gainesville",
       "id": "110100"
     }
   ],
   "120000": [
     {
-      "province": "天津市",
-      "name": "市辖区",
+      "province": "GA-Georgia",
+      "name": "Atlanta",
       "id": "120100"
     }
   ],

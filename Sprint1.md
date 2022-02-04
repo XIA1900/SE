@@ -13,3 +13,6 @@ In this file, we will briefly talk about what we've accomplished.
 
 
 # Backend
+ 1. We desigend database tables and modified some of them to reduce some data redundancy.
+ 2. We implemented gin web framework of Golang for the backend and successfully connected to the database.
+ 3. For this demo, we developed Admin model and User model.

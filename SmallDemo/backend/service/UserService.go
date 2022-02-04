@@ -92,8 +92,9 @@ func ChangePassword(c *gin.Context) {
 	}
 	updateUser := model.User{
 		USERNAME: changePasswordInfo.Username,
+		PASSWORD: "",
 	}
-	model.GetUserInfo(updateUser)
+	updateUser = model.GetUserInfo(updateUser)
 	//model.ChangePassword(updateUser)
 	//successMsg := ChangePasswordResult{
 	//	Message: "Successfully",

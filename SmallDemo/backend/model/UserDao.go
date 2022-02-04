@@ -20,9 +20,11 @@ func AddUser(user User) {
 	db := getDB()
 	db.Create(&user)
 }
-func GetUserInfo(user User) {
+func GetUserInfo(user User) User {
 	db := getDB()
-	db.Where("USERNAME", user.USERNAME).First(&user)
+	dbUser := User{}
+	db.Take(&dbUser, "username = ?", user.USERNAME)
+	return dbUser
 }
 
 func ChangePassword(user User) {

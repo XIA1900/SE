@@ -11,8 +11,49 @@ In this file, we will briefly talk about what we've accomplished.
 
 
 
-
 # Backend
- 1. We desigend database tables and modified some of them to reduce some data redundancy.
- 2. We implemented gin web framework of Golang for the backend and successfully connected to the database.
- 3. For this demo, we developed Admin model and User model.
+
+## Related Functions Decision
+
+- User Authentication & Authorization
+- Save & Search Articles
+- Private cloud space management
+- Cache Information (Related User Information)
+
+## Database Design
+
+- Discuss Database Schema
+- Tables Definition in backend branch "tables.sql"
+
+## Components Combination
+
+Components Combination in "SmalleDemo" (in backend branch) for Sprint1
+
+- **gin** for web server
+- **gorm** from **MySQL** database operation
+- **Redis** for cache
+- uber/**zap** for log
+- **JWT** for user authentication
+- Configuration Information stored in yaml file (Load when Server Starting)
+
+## Implemented Some Functions
+
+- Load Configuration for different components
+  - load configuration information from yaml file when starting server
+
+- CRUD User Table in DB
+
+- User Authentication 
+
+  - Generation, Verification, Refreshing  of JWT token
+
+- User Login/Register Request/Response
+
+  - with data wrote into database
+  - related API in GitHub Wiki
+
+- Logging Component
+
+  - different log level
+
+  

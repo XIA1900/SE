@@ -8,12 +8,12 @@ In this file, we will briefly talk about what we've accomplished.
 - Yuwei Xia (yuweixia@ufl.edu))
 - Kaiyue Wang(kaiyuewang@ufl.edu)
 
-
+## Done
  1. We have found a library(@ant-design-pro) which we think is modifiable and can be used by our Gator Forum.
  2. We have set English as default language.
- 3. After login, search page is set as main page of our forum. We can access the basic form page(which is used for posting)by clicking post button. After inputing content and submitting , we access result page to show whether posting is successful. 
+ 3. After login, search page is set as main page of our forum. We can access the basic form page(which is used for posting)by clicking 'edit icon'. After inputing content and submitting , we access result page to show whether posting is successful. 
  4. Also, we could click avator on header to access personal center/settings.
- 5. Loading page and login page have been modified.
+ 5. We could click 'notification icon' on header to see messages including mentions,comments,likes.
 
 
 

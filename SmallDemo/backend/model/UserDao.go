@@ -1,26 +1,28 @@
 package model
 
-import "time"
-
 type User struct {
-	ID         uint
-	USERNAME   string
-	PASSWORD   string
-	SALT       string
-	NICKNAME   string
-	BIRTHDAY   time.Time
-	GENDER     int8
-	DEPARTMENT string
+	ID       uint
+	USERNAME string
+	PASSWORD string
+	//SALT       string
+	//NICKNAME   string
+	//BIRTHDAY   time.Time
+	//GENDER     int8
+	//DEPARTMENT string
 }
 
 func (u User) TableName() string {
-	//return "TEST"
-	return "USER"
+	return "TEST"
+	//return "USER"
 }
 
 func AddUser(user User) {
 	db := getDB()
 	db.Create(&user)
+}
+func GetUserInfo(user User) {
+	db := getDB()
+	db.Where("USERNAME", user.USERNAME).First(&user)
 }
 
 func ChangePassword(user User) {

@@ -1,5 +1,5 @@
 import { Space } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Editlined } from '@ant-design/icons';
 import React from 'react';
 import { useModel, SelectLang } from 'umi';
 import Avatar from './AvatarDropdown';
@@ -54,7 +54,7 @@ const GlobalHeaderRight = () => {
           window.open('https://pro.ant.design/docs/getting-started');
         }}
       >
-        <QuestionCircleOutlined />
+        <EditOutlined />
       </span>
       <NoticeIconView />
       <Avatar menu />

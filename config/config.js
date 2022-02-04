@@ -13,7 +13,7 @@ export default defineConfig({
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
     locale: true,
-    siderWidth: 208,
+    siderWidth: 0,
     ...defaultSettings,
   },
   // https://umijs.org/zh-CN/plugins/plugin-locale
@@ -107,18 +107,18 @@ export default defineConfig({
           path: '/form/basic-form',
           component: './form/basic-form',
         },
-        // {
-        //   name: 'step-form',
-        //   icon: 'smile',
-        //   path: '/form/step-form',
-        //   component: './form/step-form',
-        // },
-        // {
-        //   name: 'advanced-form',
-        //   icon: 'smile',
-        //   path: '/form/advanced-form',
-        //   component: './form/advanced-form',
-        // },
+    //     // {
+    //     //   name: 'step-form',
+    //     //   icon: 'smile',
+    //     //   path: '/form/step-form',
+    //     //   component: './form/step-form',
+    //     // },
+    //     // {
+    //     //   name: 'advanced-form',
+    //     //   icon: 'smile',
+    //     //   path: '/form/advanced-form',
+    //     //   component: './form/advanced-form',
+    //     // },
       ],
     },
     {
@@ -202,58 +202,58 @@ export default defineConfig({
     //     },
     //   ],
     // },
-    {
-      name: 'result',
-      icon: 'CheckCircleOutlined',
-      path: '/result',
-      routes: [
-        {
-          path: '/result',
-          redirect: '/result/success',
-        },
-        {
-          name: 'success',
-          icon: 'smile',
-          path: '/result/success',
-          component: './result/success',
-        },
-        {
-          name: 'fail',
-          icon: 'smile',
-          path: '/result/fail',
-          component: './result/fail',
-        },
-      ],
-    },
-    {
-      name: 'exception',
-      icon: 'warning',
-      path: '/exception',
-      routes: [
-        {
-          path: '/exception',
-          redirect: '/exception/403',
-        },
-        {
-          name: '403',
-          icon: 'smile',
-          path: '/exception/403',
-          component: './exception/403',
-        },
-        {
-          name: '404',
-          icon: 'smile',
-          path: '/exception/404',
-          component: './exception/404',
-        },
-        {
-          name: '500',
-          icon: 'smile',
-          path: '/exception/500',
-          component: './exception/500',
-        },
-      ],
-    },
+    // {
+    //   name: 'result',
+    //   icon: 'CheckCircleOutlined',
+    //   path: '/result',
+    //   routes: [
+    //     {
+    //       path: '/result',
+    //       redirect: '/result/success',
+    //     },
+    //     {
+    //       name: 'success',
+    //       icon: 'smile',
+    //       path: '/result/success',
+    //       component: './result/success',
+    //     },
+    //     {
+    //       name: 'fail',
+    //       icon: 'smile',
+    //       path: '/result/fail',
+    //       component: './result/fail',
+    //     },
+    //   ],
+    // },
+    // {
+    //   name: 'exception',
+    //   icon: 'warning',
+    //   path: '/exception',
+    //   routes: [
+    //     {
+    //       path: '/exception',
+    //       redirect: '/exception/403',
+    //     },
+    //     {
+    //       name: '403',
+    //       icon: 'smile',
+    //       path: '/exception/403',
+    //       component: './exception/403',
+    //     },
+    //     {
+    //       name: '404',
+    //       icon: 'smile',
+    //       path: '/exception/404',
+    //       component: './exception/404',
+    //     },
+    //     {
+    //       name: '500',
+    //       icon: 'smile',
+    //       path: '/exception/500',
+    //       component: './exception/500',
+    //     },
+    //   ],
+    // },
     {
       name: 'account',
       icon: 'user',
@@ -279,7 +279,7 @@ export default defineConfig({
     },
     {
       path: '/',
-      redirect: '/account/center',
+      redirect: '/list/search/articles',
     },
     {
       component: '404',

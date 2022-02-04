@@ -7,7 +7,7 @@ const Settings = {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Road Center',   //original: Ant Design Pro
+  title: 'Gator Forum',   //original: Ant Design Pro
   pwa: false,
   logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',

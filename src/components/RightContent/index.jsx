@@ -1,5 +1,5 @@
 import { Space } from 'antd';
-import { Editlined } from '@ant-design/icons';
+import { EditOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useModel, SelectLang } from 'umi';
 import Avatar from './AvatarDropdown';
@@ -26,7 +26,7 @@ const GlobalHeaderRight = () => {
       <span
         className={styles.action}
         onClick={() => {
-          window.open('https://pro.ant.design/docs/getting-started');
+          window.open('https://pro.ant.design/docs/getting-started','_self');
         }}
       >
         <EditOutlined />

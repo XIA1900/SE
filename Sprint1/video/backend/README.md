@@ -14,7 +14,7 @@
 
 - **User Register**
 
-  ![Alt Text](./gifs/userRegister.gif)
+  ![Alt Text](./gifs/UserRegister.gif)
 
 - **User Login**
 

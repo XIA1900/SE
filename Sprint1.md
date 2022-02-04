@@ -40,6 +40,8 @@ Components Combination in "SmalleDemo" (in backend branch) for Sprint1
 
 ## Implemented Some Functions
 
+Implementation of Sprint1 is in "SmallDemo", later we will use "GFBackend" as formal version of backend
+
 - Load Configuration for different components
   - load configuration information from yaml file when starting server
 

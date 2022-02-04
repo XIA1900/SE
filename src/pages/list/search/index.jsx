@@ -4,15 +4,15 @@ import { history } from 'umi';
 const tabList = [
   {
     key: 'articles',
-    tab: '文章',
+    tab: 'Latest posts',
   },
   {
     key: 'projects',
-    tab: '项目',
+    tab: 'Recommoned discussion',
   },
   {
     key: 'applications',
-    tab: '应用',
+    tab: 'Hot',
   },
 ];
 

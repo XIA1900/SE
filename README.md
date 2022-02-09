@@ -14,6 +14,8 @@
 - uber/**zap** for log
 - **JWT** for user authentication
 - configuration information stored in yaml file
+- **Casbin** for role management
+- **Elasticsearch** for forum user searching
 
 ## File Structure
 

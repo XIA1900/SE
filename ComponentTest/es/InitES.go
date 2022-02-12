@@ -13,7 +13,7 @@ func InitES() {
 			"http://167.71.166.120:9200",
 		},
 		Username: "elastic",
-		Password: "gfes22",
+		Password: "",
 	}
 	newES, err := elasticsearch.NewClient(cfg)
 	if err != nil {

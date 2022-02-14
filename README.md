@@ -16,6 +16,7 @@
 - configuration information stored in yaml file
 - **Casbin** for role management
 - **Elasticsearch** for forum user searching
+- **gin-swagger** for api information
 
 ## File Structure
 

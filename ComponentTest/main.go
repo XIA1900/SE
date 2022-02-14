@@ -1,11 +1,14 @@
 package main
 
 import (
+	docs "ComponentTest/docs"
 	"ComponentTest/es"
 	"ComponentTest/log"
 	"ComponentTest/role"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"net/http"
@@ -20,7 +23,9 @@ func main() {
 
 	// ESTest()
 
-	FileUploadTest()
+	// FileUploadDownloadTest()
+
+	SwaggoTest()
 }
 
 func logTest() {
@@ -60,7 +65,7 @@ func ESTest() {
 	fmt.Println(res)
 }
 
-func FileUploadTest() {
+func FileUploadDownloadTest() {
 	router := gin.Default()
 	router.POST("/upload", func(context *gin.Context) {
 		file, err := context.FormFile("pf")
@@ -83,4 +88,34 @@ func FileUploadTest() {
 		context.File("./test_files/cert.txt")
 	})
 	router.Run(":10016")
+}
+
+// @BasePath /api/v1
+
+// HelloWorld godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /example/helloworld [get]
+func HelloWorld(g *gin.Context) {
+	g.JSON(http.StatusOK, "helloworld")
+}
+
+func SwaggoTest() {
+	r := gin.Default()
+
+	docs.SwaggerInfo_swagger.BasePath = "/api/v1"
+	v1 := r.Group("/api/v1")
+	{
+		eg := v1.Group("/example")
+		{
+			eg.GET("/helloworld", HelloWorld)
+		}
+	}
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	r.Run(":10016")
 }

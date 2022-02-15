@@ -100,11 +100,6 @@ func ChangePassword(c *gin.Context) {
 		PASSWORD: "",
 	}
 	updateUser = model.GetUserInfo(updateUser)
-	//model.ChangePassword(updateUser)
-	//successMsg := ChangePasswordResult{
-	//	Message: "Successfully",
-	//}
-	//c.JSON(http.StatusOK, successMsg)
 	if updateUser.PASSWORD == changePasswordInfo.OldPassword {
 		updateUser.PASSWORD = changePasswordInfo.NewPassword
 		model.ChangePassword(updateUser)

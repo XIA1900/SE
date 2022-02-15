@@ -1,14 +1,16 @@
 package model
 
+import "time"
+
 type User struct {
-	ID       uint
-	USERNAME string
-	PASSWORD string
-	//SALT       string
-	//NICKNAME   string
-	//BIRTHDAY   time.Time
-	//GENDER     int8
-	//DEPARTMENT string
+	ID         uint
+	USERNAME   string
+	PASSWORD   string
+	SALT       string
+	NICKNAME   string
+	BIRTHDAY   time.Time
+	GENDER     int8
+	DEPARTMENT string
 }
 
 func (u User) TableName() string {

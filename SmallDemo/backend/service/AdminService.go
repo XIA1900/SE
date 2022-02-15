@@ -60,27 +60,35 @@ func AddAdmin(c *gin.Context) {
 }
 
 func UpdateAdmin(c *gin.Context) {
-	var registerInfo RegisterInfo
-	if err := c.ShouldBindJSON(&registerInfo); err != nil {
-		errorMsg := RegisterResult{
+	var changePasswordInfo ChangePasswordInfo
+	if err := c.ShouldBindJSON(&changePasswordInfo); err != nil {
+		errorMsg := ChangePasswordResult{
 			Message: "Request Parameters Error",
 		}
 		c.JSON(http.StatusBadRequest, errorMsg)
 		return
 	}
-
-	newAdmin := model.Admin{
-		USERNAME: registerInfo.Username,
-		PASSWORD: registerInfo.Password,
+	updateAdmin := model.Admin{
+		USERNAME: changePasswordInfo.Username,
+		PASSWORD: "",
 	}
-
-	model.UpdateAdmin(newAdmin)
-
-	successMsg := RegisterResult{
-		Message: "Successfully",
+	updateAdmin = model.GetAdminInfo(updateAdmin)
+	if updateAdmin.PASSWORD == changePasswordInfo.OldPassword {
+		updateAdmin.PASSWORD = changePasswordInfo.NewPassword
+		model.UpdateAdmin(updateAdmin)
+		successMsg := ChangePasswordResult{
+			Message: "Successfully",
+		}
+		c.JSON(http.StatusOK, successMsg)
+		return
+	} else {
+		print(updateAdmin.PASSWORD)
+		errorMsg := ChangePasswordResult{
+			Message: "Username or Password is not correct",
+		}
+		c.JSON(http.StatusInternalServerError, errorMsg)
+		return
 	}
-	c.JSON(http.StatusOK, successMsg)
-	return
 }
 
 func DeleteAdmin(c *gin.Context) {

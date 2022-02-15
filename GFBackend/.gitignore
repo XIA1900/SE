@@ -1,0 +1,4 @@
+/.idea
+/bin
+/config/application.yaml
+/logger/logs

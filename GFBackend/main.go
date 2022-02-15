@@ -9,6 +9,14 @@ import (
 	"GFBackend/router"
 )
 
+// @title Gator Forum Backend API
+// @version 1.0
+// @description This is the Gator Forum Backend Server
+// @termsOfService https://github.com/fongziyjun16/SE/tree/backend
+
+// @host http://167.71.166.120:10010
+// @BasePath /gf/api
+
 func main() {
 	// Components Initialization
 	config.InitConfig()

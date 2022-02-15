@@ -10,22 +10,102 @@ const docTemplate_swagger = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
+        "termsOfService": "https://github.com/fongziyjun16/SE/tree/backend",
         "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/user/register": {
+            "post": {
+                "description": "get strings by username \u0026 password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_manage"
+                ],
+                "summary": "Register a new User",
+                "parameters": [
+                    {
+                        "description": "User Register only needs Username \u0026 Password(encoded by md5)",
+                        "name": "UserInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.UserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/controller.HTTPError"
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable",
+                        "schema": {
+                            "$ref": "#/definitions/controller.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controller.HTTPError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controller.HTTPError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "message": {
+                    "type": "string",
+                    "example": "process successfully"
+                }
+            }
+        },
+        "controller.UserInfo": {
+            "type": "object",
+            "properties": {
+                "NewPassword": {
+                    "type": "string",
+                    "example": "3ecb441b741bcd433288f5557e4b9118"
+                },
+                "Password": {
+                    "type": "string",
+                    "example": "f9ae5f68ae1e7f7f3fc06053e9b9b539"
+                },
+                "Username": {
+                    "type": "string",
+                    "example": "yingjiechen21"
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo_swagger holds exported Swagger Info so clients can modify it
 var SwaggerInfo_swagger = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "1.0",
+	Host:             "http://167.71.166.120:10010",
+	BasePath:         "/gf/api",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Gator Forum Backend API",
+	Description:      "This is the Gator Forum Backend Server",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate_swagger,
 }

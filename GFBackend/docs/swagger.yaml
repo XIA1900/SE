@@ -1,4 +1,62 @@
+basePath: /gf/api
+definitions:
+  controller.HTTPError:
+    properties:
+      code:
+        example: 200
+        type: integer
+      message:
+        example: process successfully
+        type: string
+    type: object
+  controller.UserInfo:
+    properties:
+      NewPassword:
+        example: 3ecb441b741bcd433288f5557e4b9118
+        type: string
+      Password:
+        example: f9ae5f68ae1e7f7f3fc06053e9b9b539
+        type: string
+      Username:
+        example: yingjiechen21
+        type: string
+    type: object
+host: http://167.71.166.120:10010
 info:
   contact: {}
-paths: {}
+  description: This is the Gator Forum Backend Server
+  termsOfService: https://github.com/fongziyjun16/SE/tree/backend
+  title: Gator Forum Backend API
+  version: "1.0"
+paths:
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: get strings by username & password
+      parameters:
+      - description: User Register only needs Username & Password(encoded by md5)
+        in: body
+        name: UserInfo
+        required: true
+        schema:
+          $ref: '#/definitions/controller.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controller.HTTPError'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/controller.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.HTTPError'
+      summary: Register a new User
+      tags:
+      - user_manage
 swagger: "2.0"

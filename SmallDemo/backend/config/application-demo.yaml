@@ -1,24 +1,30 @@
 # This yaml config file is a demo, so the value of each field is not real, but you can try
 
 server:
-  port: "*****"
+  port: "Go Pikachu"
 
 database:
-  ip: "***.***.***.***"
-  port: "3306"
-  username: "scott"
-  password: "superman"
-  db1: "**"
-  db2: "**"
+  ip: "007.007.007.007"
+  port: "6007"
+  username: "Jame"
+  password: "Bond"
+  db1: "MI6"
+  db2: "MI76"
 
 redis:
-  ip: "***.***.***.***"
-  port: "6379"
+  ip: "009.009.009.009"
+  port: "6009"
   password: "rocket on!!!"
   db: 0
 
+elasticsearch:
+  ip: "009.009.009.009"
+  port: "6009"
+  username: "elastic"
+  password: "es.js"
+
 jwt:
-  secretkey: "uf.edu"
+  secretkey: "SpiderMan"
   expires: 100000
 
 logger:

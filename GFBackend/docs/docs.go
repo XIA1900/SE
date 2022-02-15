@@ -43,19 +43,19 @@ const docTemplate_swagger = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "Created",
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Register Successfully",
                         "schema": {
                             "$ref": "#/definitions/controller.HTTPError"
                         }
                     },
                     "406": {
-                        "description": "Not Acceptable",
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. User Has Existed",
                         "schema": {
                             "$ref": "#/definitions/controller.HTTPError"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
                             "$ref": "#/definitions/controller.HTTPError"
                         }

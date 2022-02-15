@@ -17,9 +17,9 @@ type UserInfo struct {
 // @Accept json
 // @Produce json
 // @Param UserInfo body controller.UserInfo true "User Register only needs Username & Password(encoded by md5)"
-// @Success 201 {object} controller.HTTPError
-// @Failure 406 {object} controller.HTTPError
-// @Failure 500 {object} controller.HTTPError
+// @Success 201 {object} controller.HTTPError "<b>Success</b>. User Register Successfully"
+// @Failure 406 {object} controller.HTTPError "<b>Failure</b>. User Has Existed"
+// @Failure 500 {object} controller.HTTPError "<b>Failure</b>. Server Internal Error."
 // @Router /user/register [post]
 func UserRegister(context *gin.Context) {
 }

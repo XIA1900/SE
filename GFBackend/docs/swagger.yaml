@@ -45,15 +45,15 @@ paths:
       - application/json
       responses:
         "201":
-          description: Created
+          description: <b>Success</b>. User Register Successfully
           schema:
             $ref: '#/definitions/controller.HTTPError'
         "406":
-          description: Not Acceptable
+          description: <b>Failure</b>. User Has Existed
           schema:
             $ref: '#/definitions/controller.HTTPError'
         "500":
-          description: Internal Server Error
+          description: <b>Failure</b>. Server Internal Error.
           schema:
             $ref: '#/definitions/controller.HTTPError'
       summary: Register a new User

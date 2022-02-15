@@ -26,7 +26,7 @@ elasticsearch:
 
 jwt:
   secretkey: "SpiderMan"
-  expires: 100000
+  expires: 100000 # minutes
 
 logger:
   # Debug < Info < Warn < Error

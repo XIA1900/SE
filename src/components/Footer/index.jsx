@@ -5,17 +5,18 @@ export default () => {
   const intl = useIntl();
   const defaultMessage = intl.formatMessage({
     id: 'app.copyright.produced',
-    defaultMessage: 'Gator Forum by Road Center',
+    defaultMessage: 'Gator Forum by Road Center 2022',
   });
   const currentYear = new Date().getFullYear();
   return (
     <DefaultFooter
       //copyright={`${currentYear} ${defaultMessage}`}
-      links={[  //pending: these three links are the same. Should we keep only 1 of them?
+      links={[
+        //pending: these three links are the same. Should we keep only 1 of them?
         {
           key: 'Ant Design Pro',
           title: 'Gator Forum',
-          href: 'https://github.com/fongziyjun16/SE',   
+          href: 'https://github.com/fongziyjun16/SE',
           blankTarget: true,
         },
         {

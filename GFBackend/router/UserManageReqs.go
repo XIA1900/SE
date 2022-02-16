@@ -5,15 +5,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitUserManageReqs() *gin.RouterGroup {
-	appRouter := AppRouter
+func InitUserManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 
-	userManageReqsGroup := appRouter.Group("/user")
+	userManageReqsGroup := baseGroup.Group("/user")
 	{
-		userManageReqsGroup.POST("/register", controller.UserRegister)
+		userManageReqsGroup.POST("/register", controller.RegularRegister)
 		userManageReqsGroup.POST("/login", controller.UserLogin)
 		userManageReqsGroup.POST("/logout", controller.UserLogout)
 		userManageReqsGroup.POST("/password", controller.UserUpdatePassword)
+		userManageReqsGroup.POST("/update", controller.UserUpdate)
+
+		adminReqsGroup := userManageReqsGroup.Group("/admin")
+		{
+			adminReqsGroup.POST("/register", controller.AdminRegister)
+			adminReqsGroup.POST("/delete", controller.UserDelete)
+		}
 	}
 
 	return userManageReqsGroup

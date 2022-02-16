@@ -21,9 +21,9 @@ func RunServer() {
 	docs.SwaggerInfo_swagger.BasePath = appConfig.Server.BasePath
 	AppRouter.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	AppRouter.Group(appConfig.Server.BasePath)
+	baseGroup := AppRouter.Group(appConfig.Server.BasePath)
 	{
-		InitUserManageReqs()
+		InitUserManageReqs(baseGroup)
 	}
 
 	err := AppRouter.Run(":" + strconv.Itoa(appConfig.Server.Port))

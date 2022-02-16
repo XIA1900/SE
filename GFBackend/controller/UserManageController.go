@@ -2,6 +2,8 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"time"
 )
 
 type UserInfo struct {
@@ -11,18 +13,40 @@ type UserInfo struct {
 	ForAdmin    bool   `json:"ForAdmin" example:true`
 }
 
-// UserRegister godoc
-// @Summary Register a new User
-// @Description get strings by username & password
+type NewUserInfo struct {
+	Username   string    `json:"Username" example:"yingjiechen21"`
+	Nickname   string    `json:"Nickname" example:"Peter Park"`
+	Birthday   time.Time `json:"Birthday" example:"2022-02-30"`
+	Gender     string    `json:"Gender" example:"male/female/unknown"`
+	Department string    `json:"Department" example:"CS:GO"`
+}
+
+// RegularRegister godoc
+// @Summary Register a new Regular User
+// @Description only need strings username & password
 // @Tags User Manage
 // @Accept json
 // @Produce json
-// @Param UserInfo body controller.UserInfo true "Regular User Register only needs Username, Password(encoded by md5) & ForAdmin with false. Admin User Register needs Username, Password(encoded by md5) & ForAdmin with true."
+// @Param UserInfo body controller.UserInfo true "Regular User Register only needs Username, Password(encoded by md5) & ForAdmin with false."
 // @Success 201 {object} controller.HTTPError "<b>Success</b>. User Register Successfully"
-// @Failure 406 {object} controller.HTTPError "<b>Failure</b>. User Has Existed"
+// @Failure 400 {object} controller.HTTPError "<b>Failure</b>. Bad Parameters or User Has Existed"
 // @Failure 500 {object} controller.HTTPError "<b>Failure</b>. Server Internal Error."
 // @Router /user/register [post]
-func UserRegister(context *gin.Context) {
+func RegularRegister(context *gin.Context) {
+	var registerInfo UserInfo
+	if err := context.ShouldBindJSON(&registerInfo); err != nil {
+		er := HTTPError{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters or User Has Existed or User has no permission.",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
+
+}
+
+func AdminRegister(context *gin.Context) {
+
 }
 
 func UserLogin(context *gin.Context) {
@@ -32,4 +56,12 @@ func UserLogout(context *gin.Context) {
 }
 
 func UserUpdatePassword(context *gin.Context) {
+}
+
+func UserDelete(context *gin.Context) {
+
+}
+
+func UserUpdate(context *gin.Context) {
+
 }

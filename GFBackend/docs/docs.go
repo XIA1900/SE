@@ -19,7 +19,7 @@ const docTemplate_swagger = `{
     "paths": {
         "/user/register": {
             "post": {
-                "description": "get strings by username \u0026 password",
+                "description": "only need strings username \u0026 password",
                 "consumes": [
                     "application/json"
                 ],
@@ -29,10 +29,10 @@ const docTemplate_swagger = `{
                 "tags": [
                     "User Manage"
                 ],
-                "summary": "Register a new User",
+                "summary": "Register a new Regular User",
                 "parameters": [
                     {
-                        "description": "Regular User Register only needs Username, Password(encoded by md5) \u0026 ForAdmin with false. Admin User Register needs Username, Password(encoded by md5) \u0026 ForAdmin with true.",
+                        "description": "Regular User Register only needs Username, Password(encoded by md5) \u0026 ForAdmin with false.",
                         "name": "UserInfo",
                         "in": "body",
                         "required": true,
@@ -48,8 +48,8 @@ const docTemplate_swagger = `{
                             "$ref": "#/definitions/controller.HTTPError"
                         }
                     },
-                    "406": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. User Has Existed",
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User Has Existed",
                         "schema": {
                             "$ref": "#/definitions/controller.HTTPError"
                         }

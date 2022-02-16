@@ -35,11 +35,10 @@ paths:
     post:
       consumes:
       - application/json
-      description: get strings by username & password
+      description: only need strings username & password
       parameters:
       - description: Regular User Register only needs Username, Password(encoded by
-          md5) & ForAdmin with false. Admin User Register needs Username, Password(encoded
-          by md5) & ForAdmin with true.
+          md5) & ForAdmin with false.
         in: body
         name: UserInfo
         required: true
@@ -52,15 +51,15 @@ paths:
           description: <b>Success</b>. User Register Successfully
           schema:
             $ref: '#/definitions/controller.HTTPError'
-        "406":
-          description: <b>Failure</b>. User Has Existed
+        "400":
+          description: <b>Failure</b>. Bad Parameters or User Has Existed
           schema:
             $ref: '#/definitions/controller.HTTPError'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
             $ref: '#/definitions/controller.HTTPError'
-      summary: Register a new User
+      summary: Register a new Regular User
       tags:
       - User Manage
 swagger: "2.0"

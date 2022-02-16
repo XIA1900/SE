@@ -16,10 +16,15 @@ type User struct {
 	Department string
 }
 
-func (user User) TableName() string {
+func (u User) TableName() string {
 	return "USER"
 }
 
-func CreateUser(user User) {
-	model.DB.Create(&user)
+func (u User) CreateUser(user User) error {
+	// strings in Select() must be as same as User field variables name
+	result := model.DB.Select("Username", "Password", "Salt").Create(&user)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }

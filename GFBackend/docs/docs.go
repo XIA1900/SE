@@ -45,19 +45,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Register Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.HTTPError"
+                            "$ref": "#/definitions/controller.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User Has Existed",
                         "schema": {
-                            "$ref": "#/definitions/controller.HTTPError"
+                            "$ref": "#/definitions/controller.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.HTTPError"
+                            "$ref": "#/definitions/controller.ResponseMsg"
                         }
                     }
                 }
@@ -65,7 +65,7 @@ const docTemplate_swagger = `{
         }
     },
     "definitions": {
-        "controller.HTTPError": {
+        "controller.ResponseMsg": {
             "type": "object",
             "properties": {
                 "code": {

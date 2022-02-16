@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"GFBackend/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -28,21 +29,35 @@ type NewUserInfo struct {
 // @Accept json
 // @Produce json
 // @Param UserInfo body controller.UserInfo true "Regular User Register only needs Username, Password(encoded by md5) & ForAdmin with false."
-// @Success 201 {object} controller.HTTPError "<b>Success</b>. User Register Successfully"
-// @Failure 400 {object} controller.HTTPError "<b>Failure</b>. Bad Parameters or User Has Existed"
-// @Failure 500 {object} controller.HTTPError "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. User Register Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User Has Existed"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/register [post]
 func RegularRegister(context *gin.Context) {
 	var registerInfo UserInfo
 	if err := context.ShouldBindJSON(&registerInfo); err != nil {
-		er := HTTPError{
+		er := ResponseMsg{
 			Code:    http.StatusBadRequest,
-			Message: "Bad Parameters or User Has Existed or User has no permission.",
+			Message: "Bad Parameters or User Has Existed.",
 		}
 		context.JSON(http.StatusBadRequest, er)
 		return
 	}
 
+	err := service.Register(registerInfo.Username, registerInfo.Password)
+	if err != nil {
+		er := ResponseMsg{
+			Code:    http.StatusInternalServerError,
+			Message: "Server Internal Error.",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
+
+	context.JSON(http.StatusCreated, ResponseMsg{
+		Code:    http.StatusCreated,
+		Message: "Create User Successfully",
+	})
 }
 
 func AdminRegister(context *gin.Context) {

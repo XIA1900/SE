@@ -1,6 +1,6 @@
 basePath: /gf/api
 definitions:
-  controller.HTTPError:
+  controller.ResponseMsg:
     properties:
       code:
         example: 200
@@ -50,15 +50,15 @@ paths:
         "201":
           description: <b>Success</b>. User Register Successfully
           schema:
-            $ref: '#/definitions/controller.HTTPError'
+            $ref: '#/definitions/controller.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or User Has Existed
           schema:
-            $ref: '#/definitions/controller.HTTPError'
+            $ref: '#/definitions/controller.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.HTTPError'
+            $ref: '#/definitions/controller.ResponseMsg'
       summary: Register a new Regular User
       tags:
       - User Manage

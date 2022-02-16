@@ -1,6 +1,6 @@
 package controller
 
-type HTTPError struct {
+type ResponseMsg struct {
 	Code    int    `json:"code" example:"200"`
 	Message string `json:"message" example:"process successfully"`
 }

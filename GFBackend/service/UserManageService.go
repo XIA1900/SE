@@ -15,7 +15,9 @@ func Register(username, password string) error {
 		Password: utils.EncodeInMD5(password + salt),
 		Salt:     salt,
 	}
-	err := dao.CreateUser(newUser)
+
+	userDao := dao.User{}
+	err := userDao.CreateUser(newUser)
 	if err != nil {
 		logger.AppLogger.Error(fmt.Sprintf("Create User Error: %s", err.Error()))
 		return err

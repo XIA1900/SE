@@ -11,6 +11,8 @@ definitions:
     type: object
   controller.UserInfo:
     properties:
+      ForAdmin:
+        type: boolean
       NewPassword:
         example: 3ecb441b741bcd433288f5557e4b9118
         type: string
@@ -35,7 +37,9 @@ paths:
       - application/json
       description: get strings by username & password
       parameters:
-      - description: User Register only needs Username & Password(encoded by md5)
+      - description: Regular User Register only needs Username, Password(encoded by
+          md5) & ForAdmin with false. Admin User Register needs Username, Password(encoded
+          by md5) & ForAdmin with true.
         in: body
         name: UserInfo
         required: true
@@ -58,5 +62,5 @@ paths:
             $ref: '#/definitions/controller.HTTPError'
       summary: Register a new User
       tags:
-      - user_manage
+      - User Manage
 swagger: "2.0"

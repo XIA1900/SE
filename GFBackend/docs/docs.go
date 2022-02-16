@@ -27,12 +27,12 @@ const docTemplate_swagger = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user_manage"
+                    "User Manage"
                 ],
                 "summary": "Register a new User",
                 "parameters": [
                     {
-                        "description": "User Register only needs Username \u0026 Password(encoded by md5)",
+                        "description": "Regular User Register only needs Username, Password(encoded by md5) \u0026 ForAdmin with false. Admin User Register needs Username, Password(encoded by md5) \u0026 ForAdmin with true.",
                         "name": "UserInfo",
                         "in": "body",
                         "required": true,
@@ -81,6 +81,9 @@ const docTemplate_swagger = `{
         "controller.UserInfo": {
             "type": "object",
             "properties": {
+                "ForAdmin": {
+                    "type": "boolean"
+                },
                 "NewPassword": {
                     "type": "string",
                     "example": "3ecb441b741bcd433288f5557e4b9118"

@@ -8,13 +8,13 @@ import (
 func InitUserManageReqs() *gin.RouterGroup {
 	appRouter := AppRouter
 
-	userReqsGroup := appRouter.Group("/user")
+	userManageReqsGroup := appRouter.Group("/user")
 	{
-		userReqsGroup.POST("/register", controller.UserRegister)
-		userReqsGroup.POST("/login", controller.UserLogin)
-		userReqsGroup.POST("/logout", controller.UserLogout)
-		userReqsGroup.POST("/password", controller.UserUpdatePassword)
+		userManageReqsGroup.POST("/register", controller.UserRegister)
+		userManageReqsGroup.POST("/login", controller.UserLogin)
+		userManageReqsGroup.POST("/logout", controller.UserLogout)
+		userManageReqsGroup.POST("/password", controller.UserUpdatePassword)
 	}
 
-	return userReqsGroup
+	return userManageReqsGroup
 }

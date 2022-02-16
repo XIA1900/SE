@@ -1,7 +1,7 @@
 import { Space } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import React from 'react';
-import { useModel, SelectLang } from 'umi';
+import { history, useModel, SelectLang } from 'umi';
 import Avatar from './AvatarDropdown';
 import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
@@ -26,7 +26,8 @@ const GlobalHeaderRight = () => {
       <span
         className={styles.action}
         onClick={() => {
-          window.open('https://pro.ant.design/docs/getting-started','_self');
+          //window.open('','_self');
+          history.push('/form/basic-form');
         }}
       >
         <EditOutlined />

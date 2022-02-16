@@ -8,7 +8,7 @@ const Settings = {
   colorWeak: false,
   title: 'Gator Forum', //original: Ant Design Pro
   pwa: false,
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+  logo: './public/icons/gator.png',
   iconfontUrl: '',
 };
 export default Settings;

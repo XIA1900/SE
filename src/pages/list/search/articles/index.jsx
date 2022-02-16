@@ -126,10 +126,10 @@ const Articles = () => {
       >
         {loadingMore ? (
           <span>
-            <LoadingOutlined /> 加载中...
+            <LoadingOutlined /> Loading...
           </span>
         ) : (
-          '加载更多'
+          'Load More'
         )}
       </Button>
     </div>

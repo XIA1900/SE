@@ -8,7 +8,7 @@ import ProForm, {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { useRequest } from 'umi';
+import { history, useRequest } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { fakeSubmitForm } from './service';
 import styles from './style.less';
@@ -17,7 +17,8 @@ const BasicForm = () => {
   const { run } = useRequest(fakeSubmitForm, {
     manual: true,
     onSuccess: () => {
-      message.success('提交成功');
+      //message.success('提交成功');
+      history.push('/result/success');
     },
   });
 
@@ -26,7 +27,7 @@ const BasicForm = () => {
   };
 
   return (
-    <PageContainer content="表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。">
+    <PageContainer content="What do you want to share?">
       <Card bordered={false}>
         <ProForm
           hideRequiredMark
@@ -44,7 +45,7 @@ const BasicForm = () => {
         >
           <ProFormText
             width="md"
-            label="title"
+            label="Title"
             name="title"
             rules={[
               {
@@ -54,9 +55,9 @@ const BasicForm = () => {
             ]}
             placeholder=""
           />
-          
+
           <ProFormTextArea
-            label="content"
+            label="Content"
             width="xl"
             name="goal"
             rules={[
@@ -71,14 +72,14 @@ const BasicForm = () => {
             options={[
               {
                 value: '1',
-                label: 'public',
+                label: 'Public',
               },
               {
                 value: '2',
-                label: 'private',
+                label: 'Private',
               },
             ]}
-            label="share with"
+            label="Share with"
             help=""
             name="publicType"
           />

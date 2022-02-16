@@ -3,6 +3,7 @@ import { defineConfig } from 'umi';
 import { join } from 'path';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
+import { stubFalse } from 'lodash';
 const { REACT_APP_ENV } = process.env;
 export default defineConfig({
   hash: true,
@@ -20,9 +21,9 @@ export default defineConfig({
   locale: {
     // default zh-CN
     default: 'en-US',
-    antd: true,
+    antd: false,
     // default true, when it is true, will use `navigator.language` overwrite default
-    baseNavigator: true,
+    baseNavigator: false,
   },
   dynamicImport: {
     loading: '@ant-design/pro-layout/es/PageLoading',
@@ -107,18 +108,18 @@ export default defineConfig({
           path: '/form/basic-form',
           component: './form/basic-form',
         },
-    //     // {
-    //     //   name: 'step-form',
-    //     //   icon: 'smile',
-    //     //   path: '/form/step-form',
-    //     //   component: './form/step-form',
-    //     // },
-    //     // {
-    //     //   name: 'advanced-form',
-    //     //   icon: 'smile',
-    //     //   path: '/form/advanced-form',
-    //     //   component: './form/advanced-form',
-    //     // },
+        //     // {
+        //     //   name: 'step-form',
+        //     //   icon: 'smile',
+        //     //   path: '/form/step-form',
+        //     //   component: './form/step-form',
+        //     // },
+        //     // {
+        //     //   name: 'advanced-form',
+        //     //   icon: 'smile',
+        //     //   path: '/form/advanced-form',
+        //     //   component: './form/advanced-form',
+        //     // },
       ],
     },
     {
@@ -177,7 +178,7 @@ export default defineConfig({
         //   path: '/list/card-list',
         //   component: './list/card-list',
         // },
-      ]
+      ],
     },
     // {
     //   path: '/profile',

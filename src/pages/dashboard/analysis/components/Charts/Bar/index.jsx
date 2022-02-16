@@ -61,7 +61,7 @@ class Bar extends Component {
       title,
       forceFit = true,
       data,
-      color = 'rgba(24, 144, 255, 0.85)',
+      color = 'rgba(245, 203, 227, 0.85)',
       padding,
     } = this.props;
     const { autoHideXLabels } = this.state;

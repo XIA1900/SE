@@ -23,6 +23,10 @@ type UserManageController struct {
 	userManageService service.IUserManageService
 }
 
+func NewUserManageController(userManageService service.IUserManageService) *UserManageController {
+	return &UserManageController{userManageService: userManageService}
+}
+
 var UserManageSet = wire.NewSet(
 	dao.NewUserDAO,
 	wire.Bind(new(dao.IUserDAO), new(*dao.UserDAO)),
@@ -30,10 +34,6 @@ var UserManageSet = wire.NewSet(
 	wire.Bind(new(service.IUserManageService), new(*service.UserManageService)),
 	NewUserManageController,
 )
-
-func NewUserManageController(userManageService service.IUserManageService) *UserManageController {
-	return &UserManageController{userManageService: userManageService}
-}
 
 // RegularRegister godoc
 // @Summary Register a new Regular User

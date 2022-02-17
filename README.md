@@ -17,6 +17,7 @@
 - **Casbin** for role management
 - **Elasticsearch** for forum user searching
 - **gin-swagger** for api information
+- **wire** for dependency injection
 
 ## File Structure
 

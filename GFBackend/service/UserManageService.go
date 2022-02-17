@@ -8,7 +8,23 @@ import (
 	"fmt"
 )
 
-func Register(username, password string) error {
+type IUserManageService interface {
+	Register(username, password string) error
+	Login(username, password string) error
+	Logout()
+	UpdatePassword()
+	Delete()
+}
+
+type UserManageService struct {
+	userDAO dao.IUserDAO
+}
+
+func NewUserManageService(userDAO dao.IUserDAO) *UserManageService {
+	return &UserManageService{userDAO: userDAO}
+}
+
+func (userManageService *UserManageService) Register(username, password string) error {
 	salt := utils.GetRandomString(6)
 	newUser := dao.User{
 		Username: username,
@@ -16,8 +32,7 @@ func Register(username, password string) error {
 		Salt:     salt,
 	}
 
-	userDao := dao.User{}
-	err := userDao.CreateUser(newUser)
+	err := userManageService.userDAO.CreateUser(newUser)
 	if err != nil {
 		logger.AppLogger.Error(fmt.Sprintf("Create User Error: %s", err.Error()))
 		return err
@@ -31,18 +46,18 @@ func Register(username, password string) error {
 	return nil
 }
 
-func Login() {
+func (userManageService *UserManageService) Login(username, password string) error {
+	return nil
+}
+
+func (userManageService *UserManageService) Logout() {
 
 }
 
-func Logout() {
+func (userManageService *UserManageService) UpdatePassword() {
 
 }
 
-func UpdatePassword() {
-
-}
-
-func Delete() {
+func (userManageService *UserManageService) Delete() {
 
 }

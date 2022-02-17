@@ -1,24 +1,25 @@
 package router
 
 import (
-	"GFBackend/controller"
 	"github.com/gin-gonic/gin"
 )
 
 func InitUserManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 
+	userManageController, _ := InitializeUserManageController()
+
 	userManageReqsGroup := baseGroup.Group("/user")
 	{
-		userManageReqsGroup.POST("/register", controller.RegularRegister)
-		userManageReqsGroup.POST("/login", controller.UserLogin)
-		userManageReqsGroup.POST("/logout", controller.UserLogout)
-		userManageReqsGroup.POST("/password", controller.UserUpdatePassword)
-		userManageReqsGroup.POST("/update", controller.UserUpdate)
+		userManageReqsGroup.POST("/register", userManageController.RegularRegister)
+		userManageReqsGroup.POST("/login", userManageController.UserLogin)
+		userManageReqsGroup.POST("/logout", userManageController.UserLogout)
+		userManageReqsGroup.POST("/password", userManageController.UserUpdatePassword)
+		userManageReqsGroup.POST("/update", userManageController.UserUpdate)
 
 		adminReqsGroup := userManageReqsGroup.Group("/admin")
 		{
-			adminReqsGroup.POST("/register", controller.AdminRegister)
-			adminReqsGroup.POST("/delete", controller.UserDelete)
+			adminReqsGroup.POST("/register", userManageController.AdminRegister)
+			adminReqsGroup.POST("/delete", userManageController.UserDelete)
 		}
 	}
 

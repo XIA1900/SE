@@ -14,6 +14,8 @@ require (
 	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/subcommands v1.2.0 // indirect
+	github.com/google/wire v0.5.0 // indirect
 	github.com/jackc/pgx/v4 v4.15.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect

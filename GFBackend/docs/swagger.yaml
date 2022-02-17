@@ -31,6 +31,36 @@ info:
   title: Gator Forum Backend API
   version: "1.0"
 paths:
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: only need strings username & password
+      parameters:
+      - description: only needs username and password
+        in: body
+        name: UserInfo
+        required: true
+        schema:
+          $ref: '#/definitions/controller.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. User Login Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Username / Password incorrect
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      summary: Admin / Regular User login
+      tags:
+      - User Manage
   /user/register:
     post:
       consumes:

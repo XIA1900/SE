@@ -2,25 +2,19 @@ package dao
 
 import (
 	"GFBackend/model"
-	"time"
 )
 
-type User struct {
-	ID         int
-	Username   string
-	Password   string
-	Salt       string
-	Nickname   string
-	Birthday   time.Time
-	Gender     string
-	Department string
+type IUserDAO interface {
+	CreateUser(user User) error
 }
 
-func (u User) TableName() string {
-	return "USER"
+type UserDAO struct{}
+
+func NewUserDAO() *UserDAO {
+	return new(UserDAO)
 }
 
-func (u User) CreateUser(user User) error {
+func (userDAO *UserDAO) CreateUser(user User) error {
 	// strings in Select() must be as same as User field variables name
 	result := model.DB.Select("Username", "Password", "Salt").Create(&user)
 	if result.Error != nil {

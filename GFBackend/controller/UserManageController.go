@@ -1,25 +1,38 @@
 package controller
 
 import (
+	"GFBackend/model/dao"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
+	"github.com/google/wire"
 	"net/http"
-	"time"
+	"strings"
 )
 
-type UserInfo struct {
-	Username    string `json:"Username" example:"yingjiechen21"`
-	Password    string `json:"Password" example:"f9ae5f68ae1e7f7f3fc06053e9b9b539"`
-	NewPassword string `json:"NewPassword" example:"3ecb441b741bcd433288f5557e4b9118"`
-	ForAdmin    bool   `json:"ForAdmin" example:true`
+//type IUserManageController interface {
+//	RegularRegister(context *gin.Context)
+//	AdminRegister(context *gin.Context)
+//	UserLogin(context *gin.Context)
+//	UserLogout(context *gin.Context)
+//	UserUpdatePassword(context *gin.Context)
+//	UserDelete(context *gin.Context)
+//	UserUpdate(context *gin.Context)
+//}
+
+type UserManageController struct {
+	userManageService service.IUserManageService
 }
 
-type NewUserInfo struct {
-	Username   string    `json:"Username" example:"yingjiechen21"`
-	Nickname   string    `json:"Nickname" example:"Peter Park"`
-	Birthday   time.Time `json:"Birthday" example:"2022-02-30"`
-	Gender     string    `json:"Gender" example:"male/female/unknown"`
-	Department string    `json:"Department" example:"CS:GO"`
+var UserManageSet = wire.NewSet(
+	dao.NewUserDAO,
+	wire.Bind(new(dao.IUserDAO), new(*dao.UserDAO)),
+	service.NewUserManageService,
+	wire.Bind(new(service.IUserManageService), new(*service.UserManageService)),
+	NewUserManageController,
+)
+
+func NewUserManageController(userManageService service.IUserManageService) *UserManageController {
+	return &UserManageController{userManageService: userManageService}
 }
 
 // RegularRegister godoc
@@ -33,24 +46,32 @@ type NewUserInfo struct {
 // @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User Has Existed"
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/register [post]
-func RegularRegister(context *gin.Context) {
+func (userManageController *UserManageController) RegularRegister(context *gin.Context) {
 	var registerInfo UserInfo
 	if err := context.ShouldBindJSON(&registerInfo); err != nil {
 		er := ResponseMsg{
 			Code:    http.StatusBadRequest,
-			Message: "Bad Parameters or User Has Existed.",
+			Message: "Bad Parameters",
 		}
 		context.JSON(http.StatusBadRequest, er)
 		return
 	}
 
-	err := service.Register(registerInfo.Username, registerInfo.Password)
+	err := userManageController.userManageService.Register(registerInfo.Username, registerInfo.Password)
 	if err != nil {
-		er := ResponseMsg{
-			Code:    http.StatusInternalServerError,
-			Message: "Server Internal Error.",
+		if strings.Contains(err.Error(), "Duplicate") {
+			er := ResponseMsg{
+				Code:    http.StatusBadRequest,
+				Message: "User Has Existed.",
+			}
+			context.JSON(http.StatusBadRequest, er)
+		} else {
+			er := ResponseMsg{
+				Code:    http.StatusInternalServerError,
+				Message: "Server Internal Error.",
+			}
+			context.JSON(http.StatusInternalServerError, er)
 		}
-		context.JSON(http.StatusBadRequest, er)
 		return
 	}
 
@@ -60,23 +81,44 @@ func RegularRegister(context *gin.Context) {
 	})
 }
 
-func AdminRegister(context *gin.Context) {
+func (userManageController *UserManageController) AdminRegister(context *gin.Context) {
 
 }
 
-func UserLogin(context *gin.Context) {
+// UserLogin godoc
+// @Summary Admin / Regular User login
+// @Description only need strings username & password
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Param UserInfo body controller.UserInfo true "only needs username and password"
+// @Success 200 {object} controller.ResponseMsg "<b>Success</b>. User Login Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Username / Password incorrect"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/login [post]
+func (userManageController *UserManageController) UserLogin(context *gin.Context) {
+	var userInfo UserInfo
+	if err := context.ShouldBindJSON(&userInfo); err != nil {
+		er := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
+
 }
 
-func UserLogout(context *gin.Context) {
+func (userManageController *UserManageController) UserLogout(context *gin.Context) {
 }
 
-func UserUpdatePassword(context *gin.Context) {
+func (userManageController *UserManageController) UserUpdatePassword(context *gin.Context) {
 }
 
-func UserDelete(context *gin.Context) {
+func (userManageController *UserManageController) UserDelete(context *gin.Context) {
 
 }
 
-func UserUpdate(context *gin.Context) {
+func (userManageController *UserManageController) UserUpdate(context *gin.Context) {
 
 }

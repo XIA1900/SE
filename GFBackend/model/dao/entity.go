@@ -8,11 +8,11 @@ type User struct {
 	Password   string
 	Salt       string
 	Nickname   string
-	Birthday   time.Time
+	Birthday   *time.Time
 	Gender     string
 	Department string
 }
 
 func (u User) TableName() string {
-	return "USER"
+	return "User"
 }

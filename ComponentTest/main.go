@@ -5,13 +5,17 @@ import (
 	"ComponentTest/es"
 	"ComponentTest/log"
 	"ComponentTest/role"
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"math/rand"
 	"net/http"
+	"time"
 )
 
 func main() {
@@ -25,7 +29,12 @@ func main() {
 
 	// FileUploadDownloadTest()
 
-	SwaggoTest()
+	// SwaggoTest()
+
+	// fmt.Println(GetRandomString(6))
+
+	// fmt.Println(EncodeInMD5("jake16"))
+
 }
 
 func logTest() {
@@ -118,4 +127,17 @@ func SwaggoTest() {
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	r.Run(":10016")
+}
+
+func GetRandomString(n int) string {
+	randBytes := make([]byte, n/2)
+	rand.Seed(time.Now().UnixNano())
+	rand.Read(randBytes)
+	return fmt.Sprintf("%x", randBytes)
+}
+
+func EncodeInMD5(s string) string {
+	hasher := md5.New()
+	hasher.Write([]byte(s))
+	return hex.EncodeToString(hasher.Sum(nil))
 }

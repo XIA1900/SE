@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"GFBackend/config"
 	"GFBackend/model/dao"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
@@ -107,6 +108,30 @@ func (userManageController *UserManageController) UserLogin(context *gin.Context
 		return
 	}
 
+	if token, err := userManageController.userManageService.Login(userInfo.Username, userInfo.Password); err != nil {
+		if strings.Contains(err.Error(), "400") {
+			er := ResponseMsg{
+				Code:    http.StatusBadRequest,
+				Message: "Username or Password is not correct",
+			}
+			context.JSON(http.StatusBadRequest, er)
+		} else {
+			er := ResponseMsg{
+				Code:    http.StatusInternalServerError,
+				Message: "Server Internal Error.",
+			}
+			context.JSON(http.StatusInternalServerError, er)
+		}
+		return
+	} else {
+		success := ResponseMsg{
+			Code:    http.StatusOK,
+			Message: token,
+		}
+		context.SetCookie("token", token, config.AppConfig.JWT.Expires*60, "/", "localhost", false, true)
+		context.JSON(http.StatusOK, success)
+		return
+	}
 }
 
 func (userManageController *UserManageController) UserLogout(context *gin.Context) {

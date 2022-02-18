@@ -3,14 +3,17 @@ package service
 import (
 	"GFBackend/logger"
 	"GFBackend/middleware/auth"
+	"GFBackend/model"
 	"GFBackend/model/dao"
 	"GFBackend/utils"
+	"errors"
 	"fmt"
+	"gorm.io/gorm"
 )
 
 type IUserManageService interface {
 	Register(username, password string) error
-	Login(username, password string) error
+	Login(username, password string) (string, error)
 	Logout()
 	UpdatePassword()
 	Delete()
@@ -32,22 +35,46 @@ func (userManageService *UserManageService) Register(username, password string) 
 		Salt:     salt,
 	}
 
-	err := userManageService.userDAO.CreateUser(newUser)
+	err := model.DB.Transaction(func(tx *gorm.DB) error {
+		createUserError := userManageService.userDAO.CreateUser(newUser, tx)
+		if createUserError != nil {
+			logger.AppLogger.Error(fmt.Sprintf("Create User Error: %s", createUserError.Error()))
+			return createUserError
+		}
+
+		_, CasbinAddPolicyError := auth.CasbinEnforcer.AddPolicy(username, "regular")
+		if CasbinAddPolicyError != nil {
+			logger.AppLogger.Error(fmt.Sprintf("Add New User Policy Error: %s", CasbinAddPolicyError.Error()))
+			return CasbinAddPolicyError
+		}
+
+		return nil
+	})
+
 	if err != nil {
-		logger.AppLogger.Error(fmt.Sprintf("Create User Error: %s", err.Error()))
-		return err
-	}
-	_, err = auth.CasbinEnforcer.AddPolicy(username, "regular")
-	if err != nil {
-		logger.AppLogger.Error(fmt.Sprintf("Add New User Policy Error: %s", err.Error()))
 		return err
 	}
 
 	return nil
 }
 
-func (userManageService *UserManageService) Login(username, password string) error {
-	return nil
+func (userManageService *UserManageService) Login(username, password string) (string, error) {
+	dbUser := userManageService.userDAO.GetUserByUsername(username)
+	if dbUser.Username == "" {
+		return "", errors.New("400")
+	}
+
+	inputPassword := utils.EncodeInMD5(password + dbUser.Salt)
+	if inputPassword != dbUser.Password {
+		return "", errors.New("400")
+	}
+
+	token, err := auth.TokenGenerate(username)
+	if err != nil {
+		return "", errors.New("500")
+	}
+
+	return token.Token, nil
 }
 
 func (userManageService *UserManageService) Logout() {

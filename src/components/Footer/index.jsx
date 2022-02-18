@@ -10,7 +10,7 @@ export default () => {
   const currentYear = new Date().getFullYear();
   return (
     <DefaultFooter
-      //copyright={`${currentYear} ${defaultMessage}`}
+      copyright="Gator Forum by Road Center 2022"
       links={[
         //pending: these three links are the same. Should we keep only 1 of them?
         {

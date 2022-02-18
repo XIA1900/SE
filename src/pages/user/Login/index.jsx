@@ -43,7 +43,7 @@ const Login = () => {
   const handleSubmit = async (values) => {
     try {
       // 登录
-      const msg = await login({ ...values, type });
+      const msg = await login({ ...values, type }); //后端
 
       if (msg.status === 'ok') {
         const defaultLoginSuccessMessage = intl.formatMessage({
@@ -81,7 +81,7 @@ const Login = () => {
       </div>
       <div className={styles.content}>
         <LoginForm
-          logo={<img alt="gator" src="gator.jpg" />}
+          logo={<img alt="gator" src="/gator_t.jpg" />}
           title="Gator Forum"
           subTitle={intl.formatMessage({
             id: 'pages.layouts.userLayout.title',

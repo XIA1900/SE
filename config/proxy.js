@@ -27,10 +27,10 @@ export default {
   },
   pre: {
     '/api/': {
-      target: 'your pre url',
+      target: 'your pre url', //配置节点
       changeOrigin: true,
       pathRewrite: {
-        '^': '',
+        '^': '', //  '/api': ''
       },
     },
   },

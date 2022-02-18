@@ -37,10 +37,9 @@ func TokenGenerate(username string) (NewCookieInfo, error) {
 }
 
 func TokenRefresh(tokenContent string) (NewCookieInfo, error, bool) {
-	secretKey := config.AppConfig.JWT.SecretKey
 	payload := &Payload{}
 	_, err := jwt.ParseWithClaims(tokenContent, payload, func(token *jwt.Token) (interface{}, error) {
-		return secretKey, nil
+		return []byte(config.AppConfig.JWT.SecretKey), nil
 	})
 
 	if time.Unix(payload.ExpiresAt, 0).Sub(time.Now()) > 30*time.Second {
@@ -58,7 +57,7 @@ func TokenRefresh(tokenContent string) (NewCookieInfo, error, bool) {
 func TokenVerify(token string) bool {
 	payload := &Payload{}
 	verification, err := jwt.ParseWithClaims(token, payload, func(token *jwt.Token) (interface{}, error) {
-		return config.AppConfig.JWT.SecretKey, nil
+		return []byte(config.AppConfig.JWT.SecretKey), nil
 	})
 	if err != nil || !verification.Valid {
 		return false

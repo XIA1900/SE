@@ -2,6 +2,7 @@ package model
 
 import (
 	"GFBackend/config"
+	"GFBackend/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -22,4 +23,13 @@ func InitDB() {
 	if err != nil {
 		panic("failed to connect database")
 	}
+
+	// default admin user
+	salt := utils.GetRandomString(6)
+	defaultAdmin := User{
+		Username: "boss",
+		Password: utils.EncodeInMD5("007" + salt),
+		Salt:     salt,
+	}
+	DB.Select("Username", "Password", "Salt").Create(&defaultAdmin)
 }

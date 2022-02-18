@@ -20,7 +20,7 @@ definitions:
         example: f9ae5f68ae1e7f7f3fc06053e9b9b539
         type: string
       Username:
-        example: yingjiechen21
+        example: jamesbond21
         type: string
     type: object
 host: http://167.71.166.120:10010
@@ -61,6 +61,26 @@ paths:
       summary: Admin / Regular User login
       tags:
       - User Manage
+  /user/logout:
+    post:
+      consumes:
+      - application/json
+      description: need strings username in post request, need token in cookie
+      parameters:
+      - description: username in post request body
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiAuthToken: []
+      summary: Admin / Regular User logout
+      tags:
+      - User Manage
   /user/register:
     post:
       consumes:
@@ -92,4 +112,9 @@ paths:
       summary: Register a new Regular User
       tags:
       - User Manage
+securityDefinitions:
+  ApiAuthToken:
+    in: cookies
+    name: token
+    type: apiKey
 swagger: "2.0"

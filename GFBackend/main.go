@@ -14,6 +14,10 @@ import (
 // @description This is the Gator Forum Backend Server
 // @termsOfService https://github.com/fongziyjun16/SE/tree/backend
 
+// @securityDefinitions.apikey ApiAuthToken
+// @in cookies
+// @name token
+
 // @host http://167.71.166.120:10010
 // @BasePath /gf/api
 func main() {

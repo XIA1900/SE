@@ -128,13 +128,42 @@ func (userManageController *UserManageController) UserLogin(context *gin.Context
 			Code:    http.StatusOK,
 			Message: token,
 		}
-		context.SetCookie("token", token, config.AppConfig.JWT.Expires*60, "/", "localhost", false, true)
+		context.SetCookie("token", token, config.AppConfig.JWT.Expires*60, config.AppConfig.Server.BasePath, "localhost", false, true)
 		context.JSON(http.StatusOK, success)
 		return
 	}
 }
 
+// UserLogout godoc
+// @Summary Admin / Regular User logout
+// @Description need strings username in post request, need token in cookie
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param username body string true "username in post request body"
+// @Router /user/logout [post]
 func (userManageController *UserManageController) UserLogout(context *gin.Context) {
+	type Info struct {
+		Username string `json:"username"`
+	}
+	var info Info
+	err := context.ShouldBind(&info)
+	if err != nil {
+		return
+	}
+
+	token, err := context.Cookie("token")
+	if err != nil {
+		return
+	}
+
+	err = userManageController.userManageService.Logout(info.Username, token)
+	if err != nil {
+		return
+	}
+
+	context.SetCookie("token", "", -1, config.AppConfig.Server.BasePath, "localhost", false, true)
 }
 
 func (userManageController *UserManageController) UserUpdatePassword(context *gin.Context) {

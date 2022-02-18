@@ -63,6 +63,38 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/user/logout": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need strings username in post request, need token in cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "Admin / Regular User logout",
+                "parameters": [
+                    {
+                        "description": "username in post request body",
+                        "name": "username",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/user/register": {
             "post": {
                 "description": "only need strings username \u0026 password",
@@ -140,9 +172,16 @@ const docTemplate_swagger = `{
                 },
                 "Username": {
                     "type": "string",
-                    "example": "yingjiechen21"
+                    "example": "jamesbond21"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiAuthToken": {
+            "type": "apiKey",
+            "name": "token",
+            "in": "cookies"
         }
     }
 }`

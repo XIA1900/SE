@@ -14,7 +14,7 @@ import (
 type IUserManageService interface {
 	Register(username, password string) error
 	Login(username, password string) (string, error)
-	Logout()
+	Logout(username, token string) error
 	UpdatePassword()
 	Delete()
 }
@@ -29,7 +29,7 @@ func NewUserManageService(userDAO dao.IUserDAO) *UserManageService {
 
 func (userManageService *UserManageService) Register(username, password string) error {
 	salt := utils.GetRandomString(6)
-	newUser := dao.User{
+	newUser := model.User{
 		Username: username,
 		Password: utils.EncodeInMD5(password + salt),
 		Salt:     salt,
@@ -77,8 +77,12 @@ func (userManageService *UserManageService) Login(username, password string) (st
 	return token.Token, nil
 }
 
-func (userManageService *UserManageService) Logout() {
-
+func (userManageService *UserManageService) Logout(username, token string) error {
+	sign := auth.TokenVerify(token)
+	if !sign {
+		return errors.New("")
+	}
+	return nil
 }
 
 func (userManageService *UserManageService) UpdatePassword() {

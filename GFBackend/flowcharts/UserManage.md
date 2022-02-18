@@ -26,5 +26,10 @@ flowchart LR
 ### User Logout
 
 ```mermaid
+flowchart LR
+	Start([Request]) --> Params[/"Request Params"/] --> ParamsCheck{ParamsCheck}
+	ParamsCheck --> | End([End])
+	ParamsCheck --> |Yes| TokenCheck{Token Check} --> |Yes| FutureProcess --> End
+	TokenCheck --> |No| End
 ```
 

@@ -58,7 +58,7 @@ func (userManageController *UserManageController) RegularRegister(context *gin.C
 		return
 	}
 
-	err := userManageController.userManageService.Register(registerInfo.Username, registerInfo.Password)
+	err := userManageController.userManageService.Register(registerInfo.Username, registerInfo.Password, registerInfo.ForAdmin)
 	if err != nil {
 		if strings.Contains(err.Error(), "Duplicate") {
 			er := ResponseMsg{
@@ -82,8 +82,19 @@ func (userManageController *UserManageController) RegularRegister(context *gin.C
 	})
 }
 
+// AdminRegister godoc
+// @Summary Register a new Admin User
+// @Description only need strings username & password & ForAdmin, need token in cookie
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Param UserInfo body controller.UserInfo true "Admin User Register only needs Username, Password(encoded by md5) & ForAdmin with true."
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. User Register Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User Has Existed"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/admin/register [post]
 func (userManageController *UserManageController) AdminRegister(context *gin.Context) {
-
+	userManageController.RegularRegister(context)
 }
 
 // UserLogin godoc
@@ -144,6 +155,8 @@ func (userManageController *UserManageController) UserLogin(context *gin.Context
 // @Param username body string true "username in post request body"
 // @Router /user/logout [post]
 func (userManageController *UserManageController) UserLogout(context *gin.Context) {
+	context.SetCookie("token", "", -1, config.AppConfig.Server.BasePath, "localhost", false, true)
+
 	type Info struct {
 		Username string `json:"username"`
 	}
@@ -162,8 +175,6 @@ func (userManageController *UserManageController) UserLogout(context *gin.Contex
 	if err != nil {
 		return
 	}
-
-	context.SetCookie("token", "", -1, config.AppConfig.Server.BasePath, "localhost", false, true)
 }
 
 func (userManageController *UserManageController) UserUpdatePassword(context *gin.Context) {

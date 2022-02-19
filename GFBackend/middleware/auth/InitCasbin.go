@@ -47,5 +47,5 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("admin", basePath+"/user/admin/delete", "POST")
 
 	// default admin user
-	CasbinEnforcer.AddPolicy("boss", "admin")
+	CasbinEnforcer.AddGroupingPolicy("boss", "admin")
 }

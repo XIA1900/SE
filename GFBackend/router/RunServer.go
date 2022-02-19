@@ -4,6 +4,7 @@ import (
 	"GFBackend/config"
 	"GFBackend/docs"
 	"GFBackend/logger"
+	"GFBackend/middleware/interceptor"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -16,7 +17,9 @@ var AppRouter *gin.Engine
 func RunServer() {
 	appConfig := config.AppConfig
 
+	interceptor.InitNonAuthReq()
 	AppRouter = gin.Default()
+	AppRouter.Use(interceptor.AuthInterceptor())
 
 	docs.SwaggerInfo_swagger.BasePath = appConfig.Server.BasePath
 	AppRouter.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

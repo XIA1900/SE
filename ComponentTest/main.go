@@ -5,16 +5,19 @@ import (
 	"ComponentTest/es"
 	"ComponentTest/log"
 	"ComponentTest/role"
+	"context"
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"math/rand"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -35,6 +38,7 @@ func main() {
 
 	// fmt.Println(EncodeInMD5("jake16"))
 
+	RedisTest()
 }
 
 func logTest() {
@@ -140,4 +144,19 @@ func EncodeInMD5(s string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(s))
 	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func RedisTest() {
+	RDB := redis.NewClient(&redis.Options{
+		Addr:     "167.71.166.120" + ":" + strconv.Itoa(6379),
+		Password: "rocendis",
+		DB:       0,
+	})
+
+	sign, err := RDB.Del(context.Background(), "jake16").Result()
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Println(sign)
+	}
 }

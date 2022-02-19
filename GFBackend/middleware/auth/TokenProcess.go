@@ -2,12 +2,15 @@ package auth
 
 import (
 	"GFBackend/config"
+	"GFBackend/utils"
+	"errors"
 	"github.com/golang-jwt/jwt"
 	"time"
 )
 
 type Payload struct {
 	Username string `json:"username"`
+	Sign     string `json:"sign"`
 	jwt.StandardClaims
 }
 
@@ -20,6 +23,7 @@ func TokenGenerate(username string) (NewCookieInfo, error) {
 	expirationTime := time.Now().Add(time.Duration(config.AppConfig.JWT.Expires) * time.Minute)
 	payload := &Payload{
 		Username: username,
+		Sign:     utils.GetRandomString(12),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -36,13 +40,13 @@ func TokenGenerate(username string) (NewCookieInfo, error) {
 	return newCookieInfo, nil
 }
 
-func TokenRefresh(tokenContent string) (NewCookieInfo, error, bool) {
+func TokenRefresh(token string) (NewCookieInfo, error, bool) {
 	payload := &Payload{}
-	_, err := jwt.ParseWithClaims(tokenContent, payload, func(token *jwt.Token) (interface{}, error) {
+	_, err := jwt.ParseWithClaims(token, payload, func(token *jwt.Token) (interface{}, error) {
 		return []byte(config.AppConfig.JWT.SecretKey), nil
 	})
 
-	if time.Unix(payload.ExpiresAt, 0).Sub(time.Now()) > 30*time.Second {
+	if time.Unix(payload.ExpiresAt, 0).Sub(time.Now()) > 60*time.Second {
 		return NewCookieInfo{}, nil, false
 	}
 
@@ -63,4 +67,28 @@ func TokenVerify(token string) bool {
 		return false
 	}
 	return true
+}
+
+func GetTokenUsername(token string) (string, error) {
+	payload := &Payload{}
+	_, err := jwt.ParseWithClaims(token, payload, func(token *jwt.Token) (interface{}, error) {
+		return []byte(config.AppConfig.JWT.SecretKey), nil
+	})
+	if err != nil {
+		return "", errors.New("400")
+	}
+
+	return payload.Username, nil
+}
+
+func GetTokenSign(token string) (string, error) {
+	payload := &Payload{}
+	_, err := jwt.ParseWithClaims(token, payload, func(token *jwt.Token) (interface{}, error) {
+		return []byte(config.AppConfig.JWT.SecretKey), nil
+	})
+	if err != nil {
+		return "", errors.New("400")
+	}
+
+	return payload.Sign, nil
 }

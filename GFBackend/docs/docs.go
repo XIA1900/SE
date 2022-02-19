@@ -17,6 +17,52 @@ const docTemplate_swagger = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/user/admin/register": {
+            "post": {
+                "description": "only need strings username \u0026 password \u0026 ForAdmin, need token in cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "Register a new Admin User",
+                "parameters": [
+                    {
+                        "description": "Admin User Register only needs Username, Password(encoded by md5) \u0026 ForAdmin with true.",
+                        "name": "UserInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.UserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Register Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User Has Existed",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/user/login": {
             "post": {
                 "description": "only need strings username \u0026 password",

@@ -11,6 +11,7 @@ require (
 	github.com/gin-gonic/gin v1.7.7 // indirect
 	github.com/go-openapi/swag v0.21.1 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
+	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -23,6 +24,7 @@ require (
 	github.com/swaggo/gin-swagger v1.4.1 // indirect
 	github.com/swaggo/swag v1.7.9 // indirect
 	github.com/ugorji/go v1.2.6 // indirect
+	go.opentelemetry.io/otel v0.20.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.20.0 // indirect

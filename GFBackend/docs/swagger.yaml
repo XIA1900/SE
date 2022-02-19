@@ -31,6 +31,38 @@ info:
   title: Gator Forum Backend API
   version: "1.0"
 paths:
+  /user/admin/register:
+    post:
+      consumes:
+      - application/json
+      description: only need strings username & password & ForAdmin, need token in
+        cookie
+      parameters:
+      - description: Admin User Register only needs Username, Password(encoded by
+          md5) & ForAdmin with true.
+        in: body
+        name: UserInfo
+        required: true
+        schema:
+          $ref: '#/definitions/controller.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. User Register Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or User Has Existed
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      summary: Register a new Admin User
+      tags:
+      - User Manage
   /user/login:
     post:
       consumes:

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GFBackend/cache"
 	"GFBackend/config"
 	"GFBackend/elasticsearch"
 	"GFBackend/logger"
@@ -26,7 +27,7 @@ func main() {
 	logger.InitAppLogger()
 	defer logger.AppLogger.Sync()
 	model.InitDB()
-	// cache.InitRedis()
+	cache.InitRedis()
 	auth.InitCasbin()
 	elasticsearch.InitES()
 	router.RunServer()

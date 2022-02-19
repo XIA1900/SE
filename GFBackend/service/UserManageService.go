@@ -1,6 +1,7 @@
 package service
 
 import (
+	"GFBackend/cache"
 	"GFBackend/logger"
 	"GFBackend/middleware/auth"
 	"GFBackend/model"
@@ -12,7 +13,7 @@ import (
 )
 
 type IUserManageService interface {
-	Register(username, password string) error
+	Register(username, password string, forAdmin bool) error
 	Login(username, password string) (string, error)
 	Logout(username, token string) error
 	UpdatePassword()
@@ -27,7 +28,7 @@ func NewUserManageService(userDAO dao.IUserDAO) *UserManageService {
 	return &UserManageService{userDAO: userDAO}
 }
 
-func (userManageService *UserManageService) Register(username, password string) error {
+func (userManageService *UserManageService) Register(username, password string, forAdmin bool) error {
 	salt := utils.GetRandomString(6)
 	newUser := model.User{
 		Username: username,
@@ -42,7 +43,11 @@ func (userManageService *UserManageService) Register(username, password string) 
 			return createUserError
 		}
 
-		_, CasbinAddPolicyError := auth.CasbinEnforcer.AddPolicy(username, "regular")
+		role := "regular"
+		if forAdmin {
+			role = "admin"
+		}
+		_, CasbinAddPolicyError := auth.CasbinEnforcer.AddGroupingPolicy(username, role)
 		if CasbinAddPolicyError != nil {
 			logger.AppLogger.Error(fmt.Sprintf("Add New User Policy Error: %s", CasbinAddPolicyError.Error()))
 			return CasbinAddPolicyError
@@ -71,6 +76,14 @@ func (userManageService *UserManageService) Login(username, password string) (st
 
 	token, err := auth.TokenGenerate(username)
 	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return "", errors.New("500")
+	}
+
+	sign, _ := auth.GetTokenSign(token.Token)
+	err = cache.AddLoginUserWithSign(username, sign)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
 		return "", errors.New("500")
 	}
 
@@ -79,7 +92,11 @@ func (userManageService *UserManageService) Login(username, password string) (st
 
 func (userManageService *UserManageService) Logout(username, token string) error {
 	sign := auth.TokenVerify(token)
-	if !sign {
+	err := cache.DelLoginUserSign(username)
+	if !sign || err != nil {
+		if err != nil {
+			logger.AppLogger.Error(err.Error())
+		}
 		return errors.New("")
 	}
 	return nil

@@ -5,6 +5,7 @@ import (
 	"GFBackend/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"gorm.io/gorm/logger"
 )
 
@@ -31,5 +32,5 @@ func InitDB() {
 		Password: utils.EncodeInMD5("007" + salt),
 		Salt:     salt,
 	}
-	DB.Select("Username", "Password", "Salt").Create(&defaultAdmin)
+	DB.Clauses(clause.OnConflict{DoNothing: true}).Select("Username", "Password", "Salt").Create(&defaultAdmin)
 }

@@ -10,7 +10,7 @@
 - **gin** for web server
 - **gorm** for database operation
   - MySQL
-- ~~**Redis** for cache~~
+- **Redis** for cache
 - uber/**zap** for log
 - **JWT** for user authentication
 - configuration information stored in yaml file

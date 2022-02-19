@@ -31,7 +31,7 @@
   - github.com/swaggo/swag/cmd/swag
   - github.com/swaggo/gin-swagger
   - github.com/swaggo/files
-- ~~Redis~~
-  - ~~github.com/go-redis/redis/v8~~
+- Redis
+  - github.com/go-redis/redis/v8
 - Dependency Injection
   - github.com/google/wire/cmd/wire@latest

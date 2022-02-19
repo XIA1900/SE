@@ -12,11 +12,11 @@ database:
   db1: "MI6"
   db2: "MI76"
 
-#redis:
-#  ip: "009.009.009.009"
-#  port: 2028
-#  password: "rocket on!!!"
-#  db: 0
+redis:
+  ip: "009.009.009.009"
+  port: 2028
+  password: "rocket on!!!"
+  db: 0
 
 elasticsearch:
   ip: "009.009.009.009"

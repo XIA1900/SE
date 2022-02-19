@@ -2,6 +2,7 @@ package controller
 
 import (
 	"GFBackend/config"
+	"GFBackend/middleware/auth"
 	"GFBackend/model/dao"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
@@ -180,8 +181,50 @@ func (userManageController *UserManageController) UserLogout(context *gin.Contex
 func (userManageController *UserManageController) UserUpdatePassword(context *gin.Context) {
 }
 
+// UserDelete godoc
+// @Summary Admin delete Users, cannot self delete
+// @Description need strings username in post request, need token in cookie
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param username body string true "username in post request body"
+// @Router /user/admin/delete [post]
 func (userManageController *UserManageController) UserDelete(context *gin.Context) {
+	type Info struct {
+		Username string `json:"username"`
+	}
+	var info Info
+	err1 := context.ShouldBind(&info)
+	token, _ := context.Cookie("token")
+	currentUsername, _ := auth.GetTokenUsername(token)
+	if err1 != nil || info.Username == currentUsername {
+		er := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters or Current User cannot delete self.",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
 
+	err2 := userManageController.userManageService.Delete(info.Username)
+	if err2 != nil {
+		er := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters or User not exist.",
+		}
+		if strings.Contains(err2.Error(), "user Policy") {
+			er.Code = http.StatusInternalServerError
+			er.Message = "Internal Server Error"
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
+
+	context.JSON(http.StatusCreated, ResponseMsg{
+		Code:    http.StatusCreated,
+		Message: "Delete User Successfully",
+	})
 }
 
 func (userManageController *UserManageController) UserUpdate(context *gin.Context) {

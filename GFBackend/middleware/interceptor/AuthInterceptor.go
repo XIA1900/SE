@@ -8,6 +8,7 @@ import (
 	"GFBackend/middleware/auth"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
 var (
@@ -29,7 +30,7 @@ func InitNonAuthReq() {
 func AuthInterceptor() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		req := context.FullPath()
-		if NonAuthReqs[req] {
+		if NonAuthReqs[req] || strings.Contains(req, "swagger") {
 			context.Next()
 		} else {
 			token, err1 := context.Cookie("token")

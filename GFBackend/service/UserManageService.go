@@ -17,7 +17,7 @@ type IUserManageService interface {
 	Login(username, password string) (string, error)
 	Logout(username, token string) error
 	UpdatePassword()
-	Delete()
+	Delete(username string) error
 }
 
 type UserManageService struct {
@@ -106,6 +106,32 @@ func (userManageService *UserManageService) UpdatePassword() {
 
 }
 
-func (userManageService *UserManageService) Delete() {
+func (userManageService *UserManageService) Delete(username string) error {
+	user := userManageService.userDAO.GetUserByUsername(username)
+	if user.Username == "" {
+		return errors.New("user does not exist")
+	}
+
+	err := model.DB.Transaction(func(tx *gorm.DB) error {
+		deleteUserError := userManageService.userDAO.DeleteUserByUsername(username, tx)
+		if deleteUserError != nil {
+			logger.AppLogger.Error(fmt.Sprintf("Delete User Error: %s", deleteUserError.Error()))
+			return deleteUserError
+		}
+
+		_, CasbinAddPolicyError := auth.CasbinEnforcer.DeleteUser(username)
+		if CasbinAddPolicyError != nil {
+			logger.AppLogger.Error(fmt.Sprintf("Delete User Policy Error: %s", CasbinAddPolicyError.Error()))
+			return CasbinAddPolicyError
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 
 }

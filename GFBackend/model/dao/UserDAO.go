@@ -8,6 +8,7 @@ import (
 type IUserDAO interface {
 	CreateUser(user model.User, tx *gorm.DB) error
 	GetUserByUsername(username string) model.User
+	DeleteUserByUsername(username string, tx *gorm.DB) error
 }
 
 type UserDAO struct{}
@@ -34,4 +35,17 @@ func (userDAO *UserDAO) GetUserByUsername(username string) model.User {
 	var user model.User
 	model.DB.Where("username = ?", username).First(&user)
 	return user
+}
+
+func (userDAO *UserDAO) DeleteUserByUsername(username string, tx *gorm.DB) error {
+	var result *gorm.DB
+	if tx == nil {
+		result = model.DB.Where("Username = ?", username).Delete(&model.User{})
+	} else {
+		result = tx.Where("Username = ?", username).Delete(&model.User{})
+	}
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }

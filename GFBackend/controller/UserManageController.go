@@ -211,7 +211,7 @@ func (userManageController *UserManageController) UserDelete(context *gin.Contex
 	if err2 != nil {
 		er := ResponseMsg{
 			Code:    http.StatusBadRequest,
-			Message: "Bad Parameters or User not exist.",
+			Message: "User not exist.",
 		}
 		if strings.Contains(err2.Error(), "user Policy") {
 			er.Code = http.StatusInternalServerError

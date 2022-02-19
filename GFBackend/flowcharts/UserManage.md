@@ -44,7 +44,7 @@ flowchart LR
 	TokenCheck --> |Yes| RedisCheck{Check Sign in Redis} --> |No| Error
 	RedisCheck --> |Yes| RoleCheck{Check Role} --> |No| Error
 	RoleCheck --> |Yes| UpdataToken{Update Token} --> |No| Handler
-	UpdataToken --> |Yes| NewToken[Generate New Token] --> UpdateRedis[Update S] --> Handler
+	UpdataToken --> |Yes| NewToken[Generate New Token] --> UpdateRedis[Update Sign In Redis] --> Handler
 ```
 
 
@@ -59,6 +59,16 @@ flowchart LR
 	AuthCheck --> |Yes| SearchUser[SearchUser] --> Existed{Existed}
 	Existed --> |Yes| Error
 	Existed --> |No| InsertUser[InsertUser] --> Success[ReturnSuccess] --> End
+```
+
+### User Delete
+
+```mermaid
+flowchart LR
+	Start([Request]) --> Params[/Request Params/] --> CheckParams{Params Check} --> |No| Error[Return Error] --> End([End])
+	CheckParams --> |Yes| DeleteSelf{Delete Self?} --> |Yes| Error
+	DeleteSelf --> |No| IsExisted{Delete User Existed?} --> |No| Error
+	IsExisted --> |Yes| DeleteUser[Delete User] --> Success[Return Success] --> End
 ```
 
 

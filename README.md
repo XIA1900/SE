@@ -41,7 +41,7 @@ But they seem to be all sports-related. Although lots of students have a huge in
 	7. block/report/like/dislike/follow others users/posts
 	8. setting personal information
 	9. receive notifications, such as new followers, new posts, new replies etc
--   If signed as **managers**:
+-   If signed as **group admin**:
 	1. can close/delete a post
 	2. can mute a user if he/she violates certain rules
 	3. post rules

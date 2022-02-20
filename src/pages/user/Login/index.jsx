@@ -51,7 +51,7 @@ const Login = () => {
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
+        await fetchUserInfo(); //successful, wait for user info; this was not implemented
         /** 此方法会跳转到 redirect 参数所在的位置 */
 
         if (!history) return;

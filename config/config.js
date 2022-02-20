@@ -123,18 +123,19 @@ export default defineConfig({
       ],
     },
     {
-      path: '/list',
+      path: '/homepage',
       icon: 'table',
-      name: 'list',
+      name: 'home',
+      hideInMenu: true,
       routes: [
         {
-          path: '/list/search',
-          name: 'search-list',
-          component: './list/search',
+          path: '/homepage',
+          name: 'homepage',
+          component: './homepage',
           routes: [
             {
-              path: '/list/search',
-              redirect: '/list/search/articles',
+              path: '/homepage',
+              redirect: '/homepage',
             },
             // {
             //   name: 'articles',
@@ -280,7 +281,7 @@ export default defineConfig({
     },
     {
       path: '/',
-      redirect: '/list/search/articles',
+      redirect: '/homepage',
     },
     {
       component: '404',

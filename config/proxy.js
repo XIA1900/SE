@@ -26,11 +26,11 @@ export default {
     },
   },
   pre: {
-    '/api/': {
+    '/api': {
       target: 'http://172.20.10.3:10010/gf/api', //配置节点
       changeOrigin: true,
       pathRewrite: {
-        '^': '', //  '/api': ''
+        '^/api': '', //  '/api': ''
       },
     },
   },

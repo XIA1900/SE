@@ -2,3 +2,4 @@
 /bin
 /config/application.yaml
 /logger/logs
+/.DS_Store

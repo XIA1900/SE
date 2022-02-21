@@ -104,6 +104,7 @@ func (userManageController *UserManageController) AdminRegister(context *gin.Con
 // @Tags User Manage
 // @Accept json
 // @Produce json
+// @Security ApiAuthToken
 // @Param UserInfo body controller.UserInfo true "only needs username and password"
 // @Success 200 {object} controller.ResponseMsg "<b>Success</b>. User Login Successfully"
 // @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Username / Password incorrect"

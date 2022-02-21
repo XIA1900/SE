@@ -10,3 +10,7 @@ import (
 func InitializeUserManageController() (*controller.UserManageController, error) {
 	panic(wire.Build(controller.UserManageSet))
 }
+
+func InitializeCommunityManageController() ( , error) {
+
+}

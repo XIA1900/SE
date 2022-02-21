@@ -45,8 +45,9 @@ func Login(c *gin.Context) {
 }
 
 type RegisterInfo struct {
-	Username string `form:"username" json:"username" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required"`
+	Username string           `form:"username" json:"username" binding:"required"`
+	Password string           `form:"password" json:"password" binding:"required"`
+	Birthday *model.LocalTime `form:"birthday" json:"birthday"`
 }
 
 type RegisterResult struct {
@@ -66,6 +67,7 @@ func Register(c *gin.Context) {
 	newUser := model.User{
 		USERNAME: registerInfo.Username,
 		PASSWORD: registerInfo.Password,
+		BIRTHDAY: registerInfo.Birthday,
 	}
 
 	model.AddUser(newUser)

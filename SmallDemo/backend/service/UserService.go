@@ -143,3 +143,40 @@ func DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, successMsg)
 	return
 }
+
+type GetUserInfo struct {
+	Username string `form:"username" json:"username" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required"`
+}
+
+type GetUserInfoResult struct {
+	Message string
+}
+
+func GetUserInfoDetail(c *gin.Context) {
+	var getUserInfo GetUserInfo
+	if err := c.ShouldBindJSON(&getUserInfo); err != nil {
+		errorMsg := RegisterResult{
+			Message: "Request Parameters Error",
+		}
+		c.JSON(http.StatusBadRequest, errorMsg)
+		return
+	}
+
+	user := model.User{
+		USERNAME: getUserInfo.Username,
+		PASSWORD: getUserInfo.Password,
+	}
+	dbUser := model.GetUserInfo(user)
+	if dbUser.USERNAME == getUserInfo.Username && dbUser.PASSWORD == getUserInfo.Password {
+		c.JSON(http.StatusOK, dbUser)
+		return
+	} else {
+		errorMsg := GetUserInfoResult{
+			Message: "Username or Password is not correct",
+		}
+		c.JSON(http.StatusInternalServerError, errorMsg)
+		return
+	}
+
+}

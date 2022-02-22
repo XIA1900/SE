@@ -1,8 +1,8 @@
 This is SE Projects By Center of the Road Group
 
 **Group members:**
-- Frontend: Yuwei Xia, Kaiyue Wang
-- Backend: Bowei Wu, Yingjie Chen
+- Frontend: Yuwei Xia(XIA1900), Kaiyue Wang(kywithsweet)
+- Backend: Bowei Wu(TOMBowei), Yingjie Chen(fongziyjun16)
 
 **Technological stack:**
 - Frontend: React etc.

@@ -1,88 +1,193 @@
-import { PageContainer } from '@ant-design/pro-layout';
-import { Input } from 'antd';
-import { history } from 'umi';
-const tabList = [
-  {
-    key: 'articles',
-    tab: 'Latest posts',
-  },
-  {
-    key: 'projects',
-    tab: 'Recommoned discussion',
-  },
-  {
-    key: 'applications',
-    tab: 'Hot',
-  },
-];
+import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
+import React from 'react';
+import { useRequest } from 'umi';
+import ArticleListContent from './components/ArticleListContent';
+import StandardFormRow from './components/StandardFormRow';
+import TagSelect from './components/TagSelect';
+import { queryList } from '@/services/getList';
+import styles from './style.less';
 
-const Search = (props) => {
-  const handleTabChange = (key) => {
-    const { match } = props;
-    const url = match.url === '/' ? '' : match.url;
+const { Option } = Select;
+const FormItem = Form.Item;
+const pageSize = 10;
 
-    switch (key) {
-      case 'articles':
-        history.push(`${url}/articles`);
-        break;
+const Articles = () => {
+  const [form] = Form.useForm();
+  const { data, reload, loading, loadMore, loadingMore } = useRequest(
+    () => {
+      return queryList({
+        count: pageSize,
+      });
+    },
+    {
+      loadMore: true,
+    },
+  );
+  const list = data?.list || [];
 
-      case 'applications':
-        history.push(`${url}/applications`);
-        break;
+  const IconText = ({ type, text }) => {
+    switch (type) {
+      case 'star-o':
+        return (
+          <span>
+            <StarOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {text}
+          </span>
+        );
 
-      case 'projects':
-        history.push(`${url}/projects`);
-        break;
+      case 'like-o':
+        return (
+          <span>
+            <LikeOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {text}
+          </span>
+        );
+
+      case 'message':
+        return (
+          <span>
+            <MessageOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {text}
+          </span>
+        );
 
       default:
-        break;
+        return null;
     }
   };
 
-  const handleFormSubmit = (value) => {
-    // eslint-disable-next-line no-console
-    console.log(value);
+  const formItemLayout = {
+    wrapperCol: {
+      xs: {
+        span: 24,
+      },
+      sm: {
+        span: 24,
+      },
+      md: {
+        span: 12,
+      },
+    },
   };
 
-  const getTabKey = () => {
-    const { match, location } = props;
-    const url = match.path === '/' ? '' : match.path;
-    const tabKey = location.pathname.replace(`${url}/`, '');
-
-    if (tabKey && tabKey !== '/') {
-      return tabKey;
-    }
-
-    return 'articles';
-  };
+  const loadMoreDom = list.length > 0 && (
+    <div
+      style={{
+        textAlign: 'center',
+        marginTop: 16,
+      }}
+    >
+      <Button
+        onClick={loadMore}
+        style={{
+          paddingLeft: 48,
+          paddingRight: 48,
+        }}
+      >
+        {loadingMore ? (
+          <span>
+            <LoadingOutlined /> Loading...
+          </span>
+        ) : (
+          'Load More'
+        )}
+      </Button>
+    </div>
+  );
 
   return (
-    <PageContainer
-      content={
-        <div
-          style={{
-            textAlign: 'center',
+    <>
+      <Card bordered={false}>
+        <Form
+          layout="inline"
+          form={form}
+          initialValues={{
+            //owner: ['wjh', 'zxx'],
           }}
+          onValuesChange={reload}
         >
-          <Input.Search
-            placeholder="..."
-            enterButton="Search"
-            size="large"
-            onSearch={handleFormSubmit}
-            style={{
-              maxWidth: 522,
-              width: '100%',
-            }}
-          />
-        </div>
-      }
-      tabList={tabList}
-      tabActiveKey={getTabKey()}
-      onTabChange={handleTabChange}
-    >
-      {props.children}
-    </PageContainer>
+          <StandardFormRow
+          block
+          > 
+            <FormItem name="category">
+              <TagSelect expandable>
+                <TagSelect.Option value="cat1">Sports</TagSelect.Option>
+                <TagSelect.Option value="cat2">Professors</TagSelect.Option>
+                <TagSelect.Option value="cat3">Courses</TagSelect.Option>
+                <TagSelect.Option value="cat4">Daily Life</TagSelect.Option>
+                <TagSelect.Option value="cat5">Movies</TagSelect.Option>
+                {/* <TagSelect.Option value="cat6">类目六</TagSelect.Option>
+                <TagSelect.Option value="cat7">类目七</TagSelect.Option>
+                <TagSelect.Option value="cat8">类目八</TagSelect.Option>
+                <TagSelect.Option value="cat9">类目九</TagSelect.Option>
+                <TagSelect.Option value="cat10">类目十</TagSelect.Option>
+                <TagSelect.Option value="cat11">类目十一</TagSelect.Option>
+                <TagSelect.Option value="cat12">类目十二</TagSelect.Option> */}
+              </TagSelect>
+            </FormItem>
+          </StandardFormRow> 
+        </Form>
+      </Card>
+      <Card
+        style={{
+          marginTop: 24,
+        }}
+        bordered={false}
+        bodyStyle={{
+          padding: '8px 32px 32px 32px',
+        }}
+      >
+        <List
+          size="large"
+          loading={loading}
+          rowKey="id"
+          itemLayout="vertical"
+          loadMore={loadMoreDom}
+          dataSource={list}
+          renderItem={(item) => (
+            <List.Item
+              key={item.id}
+              actions={[
+                <IconText key="collection" type="star-o" text={item.star} />,
+                <IconText key="like" type="like-o" text={item.like} />,
+                <IconText key="reply" type="message" text={item.message} />,
+              ]}
+              extra={<div className={styles.listItemExtra} />}
+            >
+              <List.Item.Meta
+                title={
+                  <a className={styles.listItemMetaTitle} href={item.href}>
+                    {item.title}
+                  </a>
+                }
+                description={
+                  <span>
+                    <Tag>tag1</Tag>
+                    <Tag>tag2</Tag>
+                    <Tag>tag3</Tag>
+                  </span>
+                }
+              />
+              <ArticleListContent data={item} />
+            </List.Item>
+          )}
+        />
+      </Card>
+    </>
   );
 };
 
-export default Search;
+export default Articles;

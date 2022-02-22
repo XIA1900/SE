@@ -134,9 +134,20 @@ export default defineConfig({
           component: './homepage',
           routes: [
             {
+              name: 'Gator',
               path: '/homepage',
               redirect: '/homepage',
             },
+            // {
+            //   name: 'Latest',
+            //   path: '/homepage/latest',
+            //   redirect: '/homepage/latest',
+            // },
+            // {
+            //   name: 'Recommendations',
+            //   path: '/homepage/recommendations',
+            //   redirect: '/homepage/recommendations',
+            // },
             // {
             //   name: 'articles',
             //   icon: 'smile',
@@ -296,7 +307,8 @@ export default defineConfig({
   esbuild: {},
   title: false,
   ignoreMomentLocale: true,
-  proxy: proxy[REACT_APP_ENV || 'pre'], //'dev'
+  //proxy: proxy[REACT_APP_ENV || 'pre'], //'dev'
+  proxy: proxy[REACT_APP_ENV || 'dev'],
   manifest: {
     basePath: '/',
   },

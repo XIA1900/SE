@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const titles = [
-  'Alipay',
+  '???',
   'Angular',
   'Ant Design',
   'Ant Design Pro',
@@ -33,7 +33,7 @@ const desc = [
   '那时候我只会想自己想要什么，从不想自己拥有什么',
 ];
 const user = [
-  '付小小',
+  'fxx',
   '曲丽丽',
   '林东东',
   '周星星',

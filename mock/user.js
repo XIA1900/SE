@@ -115,7 +115,7 @@ export default {
       address: 'Sidney No. 1 Lake Park',
     },
   ],
-  'POST /api/login/account': async (req, res) => {
+  'POST /api/user/login': async (req, res) => {
     const { password, username, type } = req.body;
     await waitTime(2000);
 

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined, UserOutlined, CrownOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
 import { history, useModel } from 'umi';
 import { stringify } from 'querystring';
@@ -75,6 +75,12 @@ const AvatarDropdown = ({ menu }) => {
         <Menu.Item key="settings">
           <SettingOutlined />
           Settings
+        </Menu.Item>
+      )}
+      {menu && (
+        <Menu.Item key="groups">
+          <CrownOutlined />
+          Manage Groups
         </Menu.Item>
       )}
       {menu && <Menu.Divider />}

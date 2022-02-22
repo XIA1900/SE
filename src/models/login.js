@@ -1,8 +1,8 @@
 import { router } from 'umi';
-import { login } from '@/services/ant-design-pro/api';
+import { login } from '@/services/login';
 
 const Model = {
-  namespace: 'api',
+  namespace: 'login',
   state: {
     status: undefined, //data: []
   },

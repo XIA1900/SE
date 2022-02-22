@@ -3,9 +3,9 @@ import { request } from 'umi';
 /* 
 query list from homepage;
 
-params = {count: pageSize} : pageSize(how many posts are displayed. eg: 10) 
+params: the number of posts listed at once
 
-return: a list, including pageSize posts and each post should have:
+return: a list, including [params] posts and each post should have:
 1. postid
 2. owner name and href of personal center
 3. title of the post, href of the post
@@ -16,8 +16,7 @@ return: a list, including pageSize posts and each post should have:
 */
 
 export async function queryList(params) {
-    return request('/api/queryList', {
-      params,
-    });
-  }
-  
+  return request('/api/queryList', {
+    params,
+  });
+}

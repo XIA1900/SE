@@ -6,6 +6,7 @@ import Avatar from './AvatarDropdown';
 import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
 import NoticeIconView from '../NoticeIcon';
+import { search } from '@/services/search';
 
 const GlobalHeaderRight = () => {
   const { initialState } = useModel('@@initialState');
@@ -27,26 +28,10 @@ const GlobalHeaderRight = () => {
         className={`${styles.action} ${styles.search}`}
         placeholder="Search..."
         defaultValue=""
-        options={[
-          {
-            label: <a href="https://umijs.org/zh/guide/umi-ui.html">umi ui</a>,
-            value: 'umi ui',
-          },
-          {
-            label: <a href="next.ant.design">Ant Design</a>,
-            value: 'Ant Design',
-          },
-          {
-            label: <a href="https://protable.ant.design/">Pro Table</a>,
-            value: 'Pro Table',
-          },
-          {
-            label: <a href="https://prolayout.ant.design/">Pro Layout</a>,
-            value: 'Pro Layout',
-          },
-        ]} 
-        onSearch={value => {
+        options={[]} //can be changed to history searches
+        onSearch={(value) => {
           console.log('input', value);
+          search(value);
         }}
       />
       <span

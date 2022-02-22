@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type User struct {
 	ID         int
@@ -22,8 +24,8 @@ type Community struct {
 	Creator     string
 	Name        string
 	Description string
-	Num_member  int
-	//Create_time *time.Time
+	Num_Member  int
+	Create_Time time.Time
 }
 
 func (c Community) TableName() string {

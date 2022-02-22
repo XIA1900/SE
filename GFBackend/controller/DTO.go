@@ -1,6 +1,8 @@
 package controller
 
-import "time"
+import (
+	"time"
+)
 
 type ResponseMsg struct {
 	Code    int    `json:"code" example:"200"`
@@ -23,7 +25,8 @@ type NewUserInfo struct {
 }
 
 type CommunityInfo struct {
-	Creator     string `json:"Creator" example:"test1"`
-	Name        string `json:"Name" example:"community1"`
-	Description string `json:"Description" example:"this is a test community"`
+	Creator     string    `json:"Creator" example:"test1"`
+	Name        string    `json:"Name" example:"community1"`
+	Description string    `json:"Description" example:"this is a test community"`
+	Create_Time time.Time `json:"Create_Time" example:"2020-01-01"`
 }

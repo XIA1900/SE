@@ -6,10 +6,11 @@ import (
 	"GFBackend/model/dao"
 	"fmt"
 	"gorm.io/gorm"
+	"time"
 )
 
 type ICommunityManageService interface {
-	CreateCommunity(creator string, name string, description string) error
+	CreateCommunity(creator string, name string, description string, createTime time.Time) error
 }
 
 type CommunityManageService struct {
@@ -20,11 +21,13 @@ func NewCommunityManageService(communityDAO dao.ICommunityDAO) *CommunityManageS
 	return &CommunityManageService{communityDAO: communityDAO}
 }
 
-func (communityManageService *CommunityManageService) CreateCommunity(creator string, name string, description string) error {
+func (communityManageService *CommunityManageService) CreateCommunity(creator string, name string, description string, createTime time.Time) error {
+	createTime = time.Now()
 	newCommunity := model.Community{
 		Creator:     creator,
 		Name:        name,
 		Description: description,
+		Create_Time: createTime,
 	}
 
 	err := model.DB.Transaction(func(tx *gorm.DB) error {

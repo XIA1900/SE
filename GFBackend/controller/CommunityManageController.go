@@ -47,7 +47,7 @@ func (communityManageController *CommunityManageController) CreateCommunity(cont
 		return
 	}
 
-	err := communityManageController.communityManageService.CreateCommunity(communityInfo.Creator, communityInfo.Name, communityInfo.Description)
+	err := communityManageController.communityManageService.CreateCommunity(communityInfo.Creator, communityInfo.Name, communityInfo.Description, communityInfo.Create_Time)
 	if err != nil {
 		if strings.Contains(err.Error(), "Duplicate") {
 			er := ResponseMsg{

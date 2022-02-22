@@ -18,9 +18,9 @@ func NewCommunityDAO() *CommunityDAO {
 func (communityDAO *CommunityDAO) CreateCommunity(community model.Community, tx *gorm.DB) error {
 	var result *gorm.DB
 	if tx == nil {
-		result = model.DB.Select("Creator", "Name", "Description").Create(&community)
+		result = model.DB.Select("Creator", "Name", "Description", "Create_Time").Create(&community)
 	} else {
-		result = tx.Select("Creator", "Name", "Description").Create(&community)
+		result = tx.Select("Creator", "Name", "Description", "Create_Time").Create(&community)
 	}
 	if result.Error != nil {
 		return result.Error

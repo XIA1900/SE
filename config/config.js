@@ -291,6 +291,16 @@ export default defineConfig({
       ],
     },
     {
+      name: 'search',
+      path: '/search',
+      routes: [
+         {
+          path: '/search',
+          component: './search',
+        },
+      ],
+    },
+    {
       path: '/',
       redirect: '/homepage',
     },

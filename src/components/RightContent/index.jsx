@@ -31,19 +31,20 @@ const GlobalHeaderRight = () => {
         options={[]} //can be changed to history searches
         onSearch={(value) => {
           console.log('input', value);
-          search(value);
+          history.push({
+            pathname: '/search',
+            search: value});
         }}
       />
       <span
         className={styles.action}
         onClick={() => {
-          //window.open('','_self');
           history.push('/form/basic-form');
         }}
       >
-        <QuestionCircleOutlined />
+         <EditOutlined />
       </span>
-      <EditOutlined />
+     
       <NoticeIconView />
       <Avatar menu />
       <SelectLang className={styles.action} />

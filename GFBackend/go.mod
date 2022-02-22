@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/casbin/casbin/v2 v2.41.0
 	github.com/casbin/gorm-adapter/v3 v3.5.0
+	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/denisenkom/go-mssqldb v0.12.0 // indirect
 	github.com/elastic/go-elasticsearch/v7 v7.16.1-0.20211220092752-564732cbb96a
 	github.com/gin-gonic/gin v1.7.7

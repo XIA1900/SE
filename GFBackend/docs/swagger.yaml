@@ -1,5 +1,17 @@
 basePath: /gf/api
 definitions:
+  controller.CommunityInfo:
+    properties:
+      Creator:
+        example: test1
+        type: string
+      Description:
+        example: this is a test community
+        type: string
+      Name:
+        example: community1
+        type: string
+    type: object
   controller.ResponseMsg:
     properties:
       code:
@@ -31,6 +43,56 @@ info:
   title: Gator Forum Backend API
   version: "1.0"
 paths:
+  /community/create:
+    post:
+      consumes:
+      - application/json
+      description: need strings creator & community name & description
+      parameters:
+      - description: Create a new community needs Creator, Name & Description.
+        in: body
+        name: CommunityInfo
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CommunityInfo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Create Community Success
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Community already exists
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      summary: Create a new Community
+      tags:
+      - Community Manage
+  /user/admin/delete:
+    post:
+      consumes:
+      - application/json
+      description: need strings username in post request, need token in cookie
+      parameters:
+      - description: username in post request body
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiAuthToken: []
+      summary: Admin delete Users, cannot self delete
+      tags:
+      - User Manage
   /user/admin/register:
     post:
       consumes:
@@ -90,6 +152,8 @@ paths:
           description: <b>Failure</b>. Server Internal Error.
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
       summary: Admin / Regular User login
       tags:
       - User Manage

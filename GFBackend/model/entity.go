@@ -16,3 +16,16 @@ type User struct {
 func (u User) TableName() string {
 	return "User"
 }
+
+type Community struct {
+	ID          int
+	Creator     string
+	Name        string
+	Description string
+	Num_member  int
+	//Create_time *time.Time
+}
+
+func (c Community) TableName() string {
+	return "Community"
+}

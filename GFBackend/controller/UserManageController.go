@@ -89,6 +89,7 @@ func (userManageController *UserManageController) RegularRegister(context *gin.C
 // @Tags User Manage
 // @Accept json
 // @Produce json
+// @Security ApiAuthToken
 // @Param UserInfo body controller.UserInfo true "Admin User Register only needs Username, Password(encoded by md5) & ForAdmin with true."
 // @Success 201 {object} controller.ResponseMsg "<b>Success</b>. User Register Successfully"
 // @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User Has Existed"
@@ -104,7 +105,6 @@ func (userManageController *UserManageController) AdminRegister(context *gin.Con
 // @Tags User Manage
 // @Accept json
 // @Produce json
-// @Security ApiAuthToken
 // @Param UserInfo body controller.UserInfo true "only needs username and password"
 // @Success 200 {object} controller.ResponseMsg "<b>Success</b>. User Login Successfully"
 // @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Username / Password incorrect"

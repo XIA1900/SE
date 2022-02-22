@@ -1,3 +1,4 @@
+//go:build wireinject
 // +build wireinject
 
 package router
@@ -11,6 +12,6 @@ func InitializeUserManageController() (*controller.UserManageController, error) 
 	panic(wire.Build(controller.UserManageSet))
 }
 
-func InitializeCommunityManageController() ( , error) {
-
+func InitializeCommunityManageController() (*controller.CommunityManageController, error) {
+	panic(wire.Build(controller.CommunityManageSet))
 }

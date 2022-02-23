@@ -301,6 +301,16 @@ export default defineConfig({
       ],
     },
     {
+      name: 'group',
+      path: '/group',
+      routes: [
+        {
+          path: '/group',
+          component: "./search",
+        },
+      ],
+    },
+    {
       path: '/',
       redirect: '/homepage',
     },

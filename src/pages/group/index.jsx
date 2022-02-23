@@ -1,33 +1,36 @@
+/* Group page
+Display contents:
+1. Group name
+2. Group introduction
+3. list of posts as link, latest/hottest
+4. button of join/delete group
+5. Group avatar
+6. number of group members
+*/
+
 import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
 import React from 'react';
 import { useRequest } from 'umi';
-import ArticleListContent from './components/ArticleListContent';
-import StandardFormRow from './components/StandardFormRow';
-import TagSelect from './components/TagSelect';
+import ArticleListContent from '@/homepage/components/ArticleListContent';
+import StandardFormRow from '@/homepage/components/StandardFormRow';
 import { queryList } from '@/services/getList';
 import styles from './style.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
+const groupName = history.push.search;
+console.log(groupName);
 
-
-const Articles = ( ) => {
+const Posts = () => {
   const [form] = Form.useForm();
-  // const msg = await queryList( {
-  //   count: pageSize,
-  //   type: 'hottest',
-  //   groupName: null,
-  // });
-
-  // const reload, 
-  const { data, reload, loading, loadMore, loadingMore } =  useRequest(
-    async () => {
-      return await queryList({
+  const { data, reload, loading, loadMore, loadingMore } = useRequest(
+    () => {
+      return queryList({
         count: pageSize,
         type: 'hottest',
-        groupName: null,
+        groupName: groupName,
       });
     },
     {
@@ -35,8 +38,6 @@ const Articles = ( ) => {
     },
   );
   const list = data?.list || [];
-  
-  console.log(list);
 
   const IconText = ({ type, text }) => {
     switch (type) {
@@ -195,4 +196,4 @@ const Articles = ( ) => {
   );
 };
 
-export default Articles;
+export default Posts;

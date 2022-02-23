@@ -139,22 +139,6 @@ export default defineConfig({
               redirect: '/homepage',
             },
             // {
-            //   name: 'Latest',
-            //   path: '/homepage/latest',
-            //   redirect: '/homepage/latest',
-            // },
-            // {
-            //   name: 'Recommendations',
-            //   path: '/homepage/recommendations',
-            //   redirect: '/homepage/recommendations',
-            // },
-            // {
-            //   name: 'articles',
-            //   icon: 'smile',
-            //   path: '/list/search/articles',
-            //   component: './list/search/articles',
-            // },
-            // {
             //   name: 'projects',
             //   icon: 'smile',
             //   path: '/list/search/projects',
@@ -294,7 +278,7 @@ export default defineConfig({
       name: 'search',
       path: '/search',
       routes: [
-         {
+        {
           path: '/search',
           component: './search',
         },
@@ -306,7 +290,17 @@ export default defineConfig({
       routes: [
         {
           path: '/group',
-          component: "./search",
+          component: './search',
+        },
+      ],
+    },
+    {
+      name: 'list',
+      path: '/list',
+      routes: [
+        {
+          path: '/list/search/articles',
+          component: './list/search/articles',
         },
       ],
     },

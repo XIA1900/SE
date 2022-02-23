@@ -12,19 +12,11 @@ const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
 
-
-const Articles = ( ) => {
+const Articles = () => {
   const [form] = Form.useForm();
-  // const msg = await queryList( {
-  //   count: pageSize,
-  //   type: 'hottest',
-  //   groupName: null,
-  // });
-
-  // const reload, 
-  const { data, reload, loading, loadMore, loadingMore } =  useRequest(
-    async () => {
-      return await queryList({
+  const { data, reload, loading, loadMore, loadingMore } = useRequest(
+    () => {
+      return queryList({
         count: pageSize,
         type: 'hottest',
         groupName: null,
@@ -35,7 +27,7 @@ const Articles = ( ) => {
     },
   );
   const list = data?.list || [];
-  
+
   console.log(list);
 
   const IconText = ({ type, text }) => {
@@ -126,14 +118,14 @@ const Articles = ( ) => {
         <Form
           layout="inline"
           form={form}
-          initialValues={{
-            //owner: ['wjh', 'zxx'],
-          }}
+          initialValues={
+            {
+              //owner: ['wjh', 'zxx'],
+            }
+          }
           onValuesChange={reload}
         >
-          <StandardFormRow
-          block
-          > 
+          <StandardFormRow block>
             <FormItem name="category">
               <TagSelect expandable>
                 <TagSelect.Option value="cat1">Sports</TagSelect.Option>
@@ -150,7 +142,7 @@ const Articles = ( ) => {
                 <TagSelect.Option value="cat12">类目十二</TagSelect.Option> */}
               </TagSelect>
             </FormItem>
-          </StandardFormRow> 
+          </StandardFormRow>
         </Form>
       </Card>
       <Card
@@ -173,15 +165,15 @@ const Articles = ( ) => {
             <List.Item
               key={item.id}
               actions={[
-                <IconText key="collection" type="star-o" text={item.star} />,
+                <IconText key="collection" type="star-o" text={item.collection} />,
                 <IconText key="like" type="like-o" text={item.like} />,
-                <IconText key="reply" type="message" text={item.message} />,
+                <IconText key="reply" type="message" text={item.reply} />,
               ]}
               extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={item.href}>
+                  <a className={styles.listItemMetaTitle} href={item.title_href}>
                     {item.title}
                   </a>
                 }

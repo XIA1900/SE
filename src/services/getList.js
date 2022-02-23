@@ -20,6 +20,6 @@ return: a list, including [params] posts and each post should have:
 
 export async function queryList(params) {
   return request('/api/queryList', {
-    data: params,
+    params,
   });
 }

@@ -11,16 +11,6 @@ import (
 	"strings"
 )
 
-//type IUserManageController interface {
-//	RegularRegister(context *gin.Context)
-//	AdminRegister(context *gin.Context)
-//	UserLogin(context *gin.Context)
-//	UserLogout(context *gin.Context)
-//	UserUpdatePassword(context *gin.Context)
-//	UserDelete(context *gin.Context)
-//	UserUpdate(context *gin.Context)
-//}
-
 type UserManageController struct {
 	userManageService service.IUserManageService
 }
@@ -179,6 +169,15 @@ func (userManageController *UserManageController) UserLogout(context *gin.Contex
 	}
 }
 
+// UserUpdatePassword godoc
+// @Summary Admin delete Users, cannot self delete
+// @Description need strings username in post request, need token in cookie
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param username body string true "username in post request body"
+// @Router /user/admin/delete [post]
 func (userManageController *UserManageController) UserUpdatePassword(context *gin.Context) {
 }
 

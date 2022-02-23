@@ -10,7 +10,7 @@ type User struct {
 	Password   string
 	Salt       string
 	Nickname   string
-	Birthday   *time.Time
+	Birthday   string
 	Gender     string
 	Department string
 }

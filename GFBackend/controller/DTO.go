@@ -17,11 +17,11 @@ type UserInfo struct {
 }
 
 type NewUserInfo struct {
-	Username   string     `json:"Username" example:"jamesbond21"`
-	Nickname   string     `json:"Nickname" example:"Peter Park"`
-	Birthday   *time.Time `json:"Birthday" example:"2022-02-30"`
-	Gender     string     `json:"Gender" example:"male/female/unknown"`
-	Department string     `json:"Department" example:"CS:GO"`
+	Username   string `json:"Username" example:"jamesbond21"`
+	Nickname   string `json:"Nickname" example:"Peter Park"`
+	Birthday   string `json:"Birthday" example:"2022-02-30"`
+	Gender     string `json:"Gender" example:"male/female/unknown"`
+	Department string `json:"Department" example:"CS:GO"`
 }
 
 type CommunityInfo struct {

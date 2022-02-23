@@ -28,8 +28,6 @@ const Articles = () => {
   );
   const list = data?.list || [];
 
-  console.log(list);
-
   const IconText = ({ type, text }) => {
     switch (type) {
       case 'star-o':

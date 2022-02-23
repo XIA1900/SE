@@ -37,6 +37,15 @@ const AvatarDropdown = ({ menu }) => {
         return;
       }
 
+      if(key === 'groups') {
+        history.push({
+          pathname: '/account/groups',
+          search: currentUser.name,
+        })
+        return;
+      }
+
+
       history.push(`/account/${key}`);
     },
     [setInitialState],

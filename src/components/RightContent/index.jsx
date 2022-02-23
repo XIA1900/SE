@@ -30,7 +30,6 @@ const GlobalHeaderRight = () => {
         defaultValue=""
         options={[]} //can be changed to history searches
         onSearch={(value) => {
-          console.log('input', value);
           history.push({
             pathname: '/search',
             search: value});

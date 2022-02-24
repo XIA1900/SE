@@ -1,51 +1,35 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Card, List, Typography } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
-import { useRequest } from 'umi';
+import { useRequest, history } from 'umi';
 import { getJoinedGroup } from '@/services/getGroupInfo';
 import styles from './style.less';
+
 const { Paragraph } = Typography;
+// a user can create at most 5 groups
+const user = history.location.search;
+const userName = user.substring(1);
 
 const CardList = () => {
   const { data, loading } = useRequest(() => {
-    return queryFakeList({
-      count: 8,
+    return getJoinedGroup({
+      userName: userName,
     });
   });
+
   const list = data?.list || [];
+
   const content = (
     <div className={styles.pageHeaderContent}>
       <p>
-        段落示意：蚂蚁金服务设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，
-        提供跨越设计与开发的体验解决方案。
+        Please select a group.
       </p>
-      <div className={styles.contentLink}>
-        <a>
-          <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg" />{' '}
-          快速开始
-        </a>
-        <a>
-          <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/NbuDUAuBlIApFuDvWiND.svg" />{' '}
-          产品简介
-        </a>
-        <a>
-          <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/ohOEPSYdDTNnyMbGuyLb.svg" />{' '}
-          产品文档
-        </a>
-      </div>
     </div>
   );
-  const extraContent = (
-    <div className={styles.extraImg}>
-      <img
-        alt="这是一个标题"
-        src="https://gw.alipayobjects.com/zos/rmsportal/RzwpdLnhmvDJToTdfDPe.png"
-      />
-    </div>
-  );
+
   const nullData = {};
   return (
-    <PageContainer content={content} extraContent={extraContent}>
+    <PageContainer content={content} >
       <div className={styles.cardList}>
         <List
           rowKey="id"
@@ -59,7 +43,7 @@ const CardList = () => {
             xl: 4,
             xxl: 4,
           }}
-          dataSource={[nullData, ...list]}
+          dataSource={[ ...list]}
           renderItem={(item) => {
             if (item && item.id) {
               return (
@@ -67,11 +51,11 @@ const CardList = () => {
                   <Card
                     hoverable
                     className={styles.card}
-                    actions={[<a key="option1">操作一</a>, <a key="option2">操作二</a>]}
+                    actions={[<a key="option1"># Group Members: {item.numberOfMember}</a>, <a key="option2"># Posts: {item.numberOfPost}</a>,  <a key="option3">Created At: {item.createdAt}</a>]}
                   >
                     <Card.Meta
-                      avatar={<img alt="" className={styles.cardAvatar} src={item.avatar} />}
-                      title={<a>{item.title}</a>}
+                      avatar={<img alt="" className={styles.cardAvatar} src={item.groupAvatar} />}
+                      title={<a href={item.group_href}>{item.groupName}</a>}
                       description={
                         <Paragraph
                           className={styles.item}
@@ -79,7 +63,7 @@ const CardList = () => {
                             rows: 3,
                           }}
                         >
-                          {item.description}
+                          {item.groupDescription}
                         </Paragraph>
                       }
                     />
@@ -90,9 +74,6 @@ const CardList = () => {
 
             return (
               <List.Item>
-                <Button type="dashed" className={styles.newButton}>
-                  <PlusOutlined /> 新增产品
-                </Button>
               </List.Item>
             );
           }}

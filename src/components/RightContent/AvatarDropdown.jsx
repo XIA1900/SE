@@ -41,7 +41,7 @@ const AvatarDropdown = ({ menu }) => {
         history.push({
           pathname: '/account/selectGroups/created',
           search: currentUser.name,
-        })
+        });
         return;
       }
 
@@ -49,7 +49,7 @@ const AvatarDropdown = ({ menu }) => {
         history.push({
           pathname: '/account/selectGroups/joined',
           search: currentUser.name,
-        })
+        });
         return;
       }
 

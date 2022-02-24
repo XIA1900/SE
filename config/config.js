@@ -261,13 +261,13 @@ export default defineConfig({
           redirect: '/account/center',
         },
         {
-          name: 'center',
+          name: 'Personal Center',
           icon: 'smile',
           path: '/account/center',
           component: './account/center',
         },
         {
-          name: 'settings',
+          name: 'Settings',
           icon: 'smile',
           path: '/account/settings',
           component: './account/settings',
@@ -277,12 +277,14 @@ export default defineConfig({
           component: './account/createdGroups',
         },
         {
+          name:'Group Management',
           path: '/account/selectGroups/created',
           component:'./account/selectGroups/created',
         },
         {
-          path: 'account/selectGroups/joined',
-          component: './account/selectGroups/joined',
+          name: 'My Groups',
+          path: '/account/selectGroups/joined',
+          component:'./account/selectGroups/joined',
         },
       ],
     },

@@ -10,8 +10,8 @@ A group has:
   vi. group id
 
 2. contents
-  i.  group members
-  ii. posts
+  i.  group members, # of members
+  ii. posts, # post number
 
 3. management: 
   i. delete member

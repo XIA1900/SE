@@ -272,6 +272,18 @@ export default defineConfig({
           path: '/account/settings',
           component: './account/settings',
         },
+        {
+          path: '/account/createdGroups',
+          component: './account/createdGroups',
+        },
+        {
+          path: '/account/selectGroups/created',
+          component:'./account/selectGroups/created',
+        },
+        {
+          path: 'account/selectGroups/joined',
+          component: './account/selectGroups/joined',
+        },
       ],
     },
     {
@@ -301,6 +313,10 @@ export default defineConfig({
         {
           path: '/list/search/articles',
           component: './list/search/articles',
+        },
+        {
+          path: '/list/card-list',
+          component: './list/card-list',
         },
       ],
     },

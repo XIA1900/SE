@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { LogoutOutlined, SettingOutlined, UserOutlined, CrownOutlined } from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined, UserOutlined, CrownOutlined, HeartOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
 import { history, useModel } from 'umi';
 import { stringify } from 'querystring';
@@ -37,14 +37,21 @@ const AvatarDropdown = ({ menu }) => {
         return;
       }
 
-      if(key === 'groups') {
+      if(key === 'created_groups') {
         history.push({
-          pathname: '/account/groups',
+          pathname: '/account/selectGroups/created',
           search: currentUser.name,
         })
         return;
       }
 
+      if(key === 'joined_groups') {
+        history.push({
+          pathname: '/account/selectGroups/joined',
+          search: currentUser.name,
+        })
+        return;
+      }
 
       history.push(`/account/${key}`);
     },
@@ -87,9 +94,15 @@ const AvatarDropdown = ({ menu }) => {
         </Menu.Item>
       )}
       {menu && (
-        <Menu.Item key="groups">
+        <Menu.Item key="created_groups">
           <CrownOutlined />
-          Manage Groups
+          Created Groups
+        </Menu.Item>
+      )}
+      {menu && (
+        <Menu.Item key="joined_groups">
+          <HeartOutlined />
+          Joined Groups
         </Menu.Item>
       )}
       {menu && <Menu.Divider />}

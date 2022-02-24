@@ -1,3 +1,15 @@
+/*
+
+A post has:
+title
+owner
+group
+content
+likes
+replies
+collections
+*/
+
 const titles = [
   'I hold a bow of true ice. I hold my heart.',
   'Heavy winds approaching!',

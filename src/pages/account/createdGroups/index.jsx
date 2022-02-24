@@ -7,19 +7,33 @@ import BaseView from './components/base';
 import NotificationView from './components/notification';
 import SecurityView from './components/security';
 import styles from './style.less';
+import { useRequest } from 'ahooks';
+import { getGroupInfo } from '@/services/getGroupInfo';
 const { Item } = Menu;
 
 
 const user = history.location.search;
 
-
 const Groups = () => {
-  const 
+  const { data, reload, loading, loadMore, loadingMore } = useRequest (
+    () => {
+      return getGroupInfo({
+        userName: user,
+      });
+    },
+    {
+      loadMore: true,
+    },
+  );
+
+  const lists = data ?. list || [];
+
+
   const menuMap = {
-    base: 'basic settings',
-    security: ' security settings',
+    base: 'Basic Information',
+    member: 'Group Members',
     //binding: '账号绑定',
-    notification: 'notification',
+    post: 'Posts',
   };
   const [initConfig, setInitConfig] = useState({
     mode: 'inline',
@@ -70,13 +84,13 @@ const Groups = () => {
       case 'base':
         return <BaseView />;
 
-      case 'security':
+      case 'member':
         return <SecurityView />;
 
       case 'binding':
         return <BindingView />;
 
-      case 'notification':
+      case 'post':
         return <NotificationView />;
 
       default:

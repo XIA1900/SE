@@ -1,3 +1,17 @@
+/*
+
+A user has:
+1. username and password
+2. created groups
+3. joined groups
+4. user profile
+5. following user
+6. followers
+7. likes, collections, replies
+8.
+*/
+
+
 const waitTime = (time = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {

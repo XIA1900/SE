@@ -268,6 +268,57 @@ const docTemplate_swagger = `{
                 "responses": {}
             }
         },
+        "/user/password": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need Username, Password, NewPassword",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "Admin \u0026 Regular Update Password",
+                "parameters": [
+                    {
+                        "description": "need Username, Password, NewPassword",
+                        "name": "UserInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.UserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Password not match",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/user/register": {
             "post": {
                 "description": "only need strings username \u0026 password",
@@ -313,6 +364,57 @@ const docTemplate_swagger = `{
                     }
                 }
             }
+        },
+        "/user/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "Update user information including Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department",
+                "parameters": [
+                    {
+                        "description": "need Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department",
+                        "name": "NewUserInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.NewUserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -337,6 +439,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
+<<<<<<< HEAD
         "controller.CommunityResponseMsg": {
             "type": "object",
             "properties": {
@@ -350,6 +453,30 @@ const docTemplate_swagger = `{
                 "message": {
                     "type": "string",
                     "example": "process successfully"
+=======
+        "controller.NewUserInfo": {
+            "type": "object",
+            "properties": {
+                "Birthday": {
+                    "type": "string",
+                    "example": "2022-02-30"
+                },
+                "Department": {
+                    "type": "string",
+                    "example": "CS:GO"
+                },
+                "Gender": {
+                    "type": "string",
+                    "example": "male/female/unknown"
+                },
+                "Nickname": {
+                    "type": "string",
+                    "example": "Peter Park"
+                },
+                "Username": {
+                    "type": "string",
+                    "example": "jamesbond21"
+>>>>>>> e793672fc53b0803617e1d1d642dca9d3eda6469
                 }
             }
         },

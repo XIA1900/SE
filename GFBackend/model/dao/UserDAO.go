@@ -9,6 +9,8 @@ type IUserDAO interface {
 	CreateUser(user model.User, tx *gorm.DB) error
 	GetUserByUsername(username string) model.User
 	DeleteUserByUsername(username string, tx *gorm.DB) error
+	UpdateUserPassword(username string, newPassword string) error
+	UpdateUserByUsername(userInfo model.User) error
 }
 
 type UserDAO struct{}
@@ -44,6 +46,28 @@ func (userDAO *UserDAO) DeleteUserByUsername(username string, tx *gorm.DB) error
 	} else {
 		result = tx.Where("Username = ?", username).Delete(&model.User{})
 	}
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (userDAO *UserDAO) UpdateUserPassword(username string, newPassword string) error {
+	result := model.DB.Model(&model.User{}).Where("Username = ?", username).Update("password", newPassword)
+	if result.Error != nil {
+		return result.Error
+	} else {
+		return nil
+	}
+}
+
+func (userDAO *UserDAO) UpdateUserByUsername(userInfo model.User) error {
+	result := model.DB.Model(&model.User{}).Where("Username = ?", userInfo.Username).Updates(model.User{
+		Nickname:   userInfo.Nickname,
+		Birthday:   userInfo.Birthday,
+		Gender:     userInfo.Gender,
+		Department: userInfo.Department,
+	})
 	if result.Error != nil {
 		return result.Error
 	}

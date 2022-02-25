@@ -15,9 +15,10 @@ import (
 type IUserManageService interface {
 	Register(username, password string, forAdmin bool) error
 	Login(username, password string) (string, error)
-	Logout(username, token string) error
-	UpdatePassword()
+	Logout(username string) error
+	UpdatePassword(username, password, newPassword string) error
 	Delete(username string) error
+	Update(userInfo model.User) error
 }
 
 type UserManageService struct {
@@ -90,10 +91,9 @@ func (userManageService *UserManageService) Login(username, password string) (st
 	return token.Token, nil
 }
 
-func (userManageService *UserManageService) Logout(username, token string) error {
-	sign := auth.TokenVerify(token)
+func (userManageService *UserManageService) Logout(username string) error {
 	err := cache.DelLoginUserSign(username)
-	if !sign || err != nil {
+	if err != nil {
 		if err != nil {
 			logger.AppLogger.Error(err.Error())
 		}
@@ -102,8 +102,20 @@ func (userManageService *UserManageService) Logout(username, token string) error
 	return nil
 }
 
-func (userManageService *UserManageService) UpdatePassword() {
+func (userManageService *UserManageService) UpdatePassword(username, password, newPassword string) error {
+	user := userManageService.userDAO.GetUserByUsername(username)
 
+	if utils.EncodeInMD5(password+user.Salt) != user.Password {
+		return errors.New("400")
+	}
+
+	err := userManageService.userDAO.UpdateUserPassword(username, utils.EncodeInMD5(newPassword+user.Salt))
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return errors.New("500")
+	}
+
+	return nil
 }
 
 func (userManageService *UserManageService) Delete(username string) error {
@@ -134,4 +146,13 @@ func (userManageService *UserManageService) Delete(username string) error {
 
 	return nil
 
+}
+
+func (userManageService *UserManageService) Update(userInfo model.User) error {
+	err := userManageService.userDAO.UpdateUserByUsername(userInfo)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return errors.New("500")
+	}
+	return nil
 }

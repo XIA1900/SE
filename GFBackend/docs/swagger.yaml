@@ -232,11 +232,11 @@ paths:
       - application/json
       responses:
         "201":
-          description: <b>Success</b>. Update Password Successfully
+          description: <b>Success</b>. Follow Successfully
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "400":
-          description: <b>Failure</b>. Bad Parameters
+          description: <b>Failure</b>. Bad Parameters or User not exist.
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "500":

@@ -11,12 +11,6 @@ import (
 var CasbinEnforcer *casbin.Enforcer
 
 func InitCasbin() {
-	// appConfig := config.AppConfig
-	//dsName := appConfig.Database.Username + ":" +
-	//	appConfig.Database.Password + "@tcp(" +
-	//	appConfig.Database.IP + ")/" +
-	//	appConfig.Database.DB1
-	//a, _ := gormadapter.NewAdapter("mysql", dsName, true)
 	a, _ := gormadapter.NewAdapterByDB(model.DB)
 	e, err := casbin.NewEnforcer("middleware/auth/rbac_model.conf", a)
 	CasbinEnforcer = e
@@ -40,6 +34,7 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/logout", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/password", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/update", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/user/follow", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/create", "POST")
 
 	// admin

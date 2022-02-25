@@ -9,6 +9,7 @@ import (
 	"GFBackend/utils"
 	"errors"
 	"fmt"
+	"github.com/google/wire"
 	"gorm.io/gorm"
 )
 
@@ -19,15 +20,28 @@ type IUserManageService interface {
 	UpdatePassword(username, password, newPassword string) error
 	Delete(username string) error
 	Update(userInfo model.User) error
+	Follow(followee, follower string) error
 }
 
 type UserManageService struct {
-	userDAO dao.IUserDAO
+	userDAO   dao.IUserDAO
+	followDAO dao.IFollowDAO
 }
 
-func NewUserManageService(userDAO dao.IUserDAO) *UserManageService {
-	return &UserManageService{userDAO: userDAO}
+func NewUserManageService(userDAO dao.IUserDAO, followDAO dao.IFollowDAO) *UserManageService {
+	return &UserManageService{
+		userDAO:   userDAO,
+		followDAO: followDAO,
+	}
 }
+
+var UserManageServiceSet = wire.NewSet(
+	dao.NewUserDAO,
+	wire.Bind(new(dao.IUserDAO), new(*dao.UserDAO)),
+	dao.NewFollowDAO,
+	wire.Bind(new(dao.IFollowDAO), new(*dao.FollowDAO)),
+	NewUserManageService,
+)
 
 func (userManageService *UserManageService) Register(username, password string, forAdmin bool) error {
 	salt := utils.GetRandomString(6)
@@ -154,5 +168,19 @@ func (userManageService *UserManageService) Update(userInfo model.User) error {
 		logger.AppLogger.Error(err.Error())
 		return errors.New("500")
 	}
+	return nil
+}
+
+func (userManageService UserManageService) Follow(followee, follower string) error {
+	followeeUserInfo := userManageService.userDAO.GetUserByUsername(followee)
+	if followeeUserInfo.Username == "" {
+		return errors.New("400")
+	}
+
+	err1 := userManageService.followDAO.UserFollow(followee, follower)
+	if err1 != nil {
+		return errors.New("500")
+	}
+
 	return nil
 }

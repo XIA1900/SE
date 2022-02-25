@@ -15,6 +15,7 @@ func InitUserManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 		userManageReqsGroup.POST("/logout", userManageController.UserLogout)
 		userManageReqsGroup.POST("/password", userManageController.UserUpdatePassword)
 		userManageReqsGroup.POST("/update", userManageController.UserUpdate)
+		userManageReqsGroup.POST("/follow", userManageController.UserFollow)
 
 		adminReqsGroup := userManageReqsGroup.Group("/admin")
 		{

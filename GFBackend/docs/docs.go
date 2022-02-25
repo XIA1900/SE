@@ -240,13 +240,13 @@ const docTemplate_swagger = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Follow Successfully",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseMsg"
                         }
                     },
                     "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exist.",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseMsg"
                         }

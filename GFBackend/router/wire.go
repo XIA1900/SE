@@ -9,7 +9,7 @@ import (
 )
 
 func InitializeUserManageController() (*controller.UserManageController, error) {
-	panic(wire.Build(controller.UserManageSet))
+	panic(wire.Build(controller.UserManageControllerSet))
 }
 
 func InitializeCommunityManageController() (*controller.CommunityManageController, error) {

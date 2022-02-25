@@ -4,7 +4,6 @@ import (
 	"GFBackend/config"
 	"GFBackend/middleware/auth"
 	"GFBackend/model"
-	"GFBackend/model/dao"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -20,10 +19,8 @@ func NewUserManageController(userManageService service.IUserManageService) *User
 	return &UserManageController{userManageService: userManageService}
 }
 
-var UserManageSet = wire.NewSet(
-	dao.NewUserDAO,
-	wire.Bind(new(dao.IUserDAO), new(*dao.UserDAO)),
-	service.NewUserManageService,
+var UserManageControllerSet = wire.NewSet(
+	service.UserManageServiceSet,
 	wire.Bind(new(service.IUserManageService), new(*service.UserManageService)),
 	NewUserManageController,
 )
@@ -318,43 +315,44 @@ func (userManageController *UserManageController) UserUpdate(context *gin.Contex
 // @Produce json
 // @Security ApiAuthToken
 // @Param username body string true "username in post request body"
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Password Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Follow Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exist."
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/follow [post]
 func (userManageController *UserManageController) UserFollow(context *gin.Context) {
-	var newUserInfo NewUserInfo
-	if err1 := context.ShouldBindJSON(&newUserInfo); err1 != nil {
-		er := ResponseMsg{
+	type Info struct {
+		Username string `json:"username"`
+	}
+	var info Info
+	err1 := context.ShouldBind(&info)
+	if err1 != nil {
+		errMsg := ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters.",
 		}
-		context.JSON(http.StatusBadRequest, er)
+		context.JSON(http.StatusBadRequest, errMsg)
 		return
 	}
 
-	userInfo := model.User{
-		Username:   newUserInfo.Username,
-		Nickname:   newUserInfo.Nickname,
-		Birthday:   newUserInfo.Birthday,
-		Gender:     newUserInfo.Gender,
-		Department: newUserInfo.Department,
-	}
-
-	err2 := userManageController.userManageService.Update(userInfo)
+	token, _ := context.Cookie("token")
+	follower, _ := auth.GetTokenUsername(token)
+	err2 := userManageController.userManageService.Follow(info.Username, follower)
 	if err2 != nil {
-		er := ResponseMsg{
+		errMsg := ResponseMsg{
 			Code:    http.StatusBadRequest,
-			Message: "Bad Parameters.",
+			Message: "User not exist.",
 		}
-		context.JSON(http.StatusBadRequest, er)
+		if strings.Contains(err2.Error(), "500") {
+			errMsg.Code = http.StatusInternalServerError
+			errMsg.Message = "Internal Server Error"
+		}
+		context.JSON(http.StatusBadRequest, errMsg)
 		return
-
 	}
 
 	success := ResponseMsg{
 		Code:    http.StatusOK,
-		Message: "Update User Information Successfully",
+		Message: "Follow Successfully",
 	}
 	context.JSON(http.StatusOK, success)
 	return

@@ -19,6 +19,16 @@ func (u User) TableName() string {
 	return "User"
 }
 
+type Follow struct {
+	Followee   string
+	Follower   string
+	Create_Day string
+}
+
+func (follow Follow) TableName() string {
+	return "Follow"
+}
+
 type Community struct {
 	ID          int
 	Creator     string

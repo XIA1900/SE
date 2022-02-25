@@ -28,7 +28,7 @@ CREATE TABLE `casbin_rule` (
 CREATE TABLE Follow (
     Followee VARCHAR(20) NOT NULL,
     Follower VARCHAR(20) NOT NULL,
-    FollowDay DATE,
+    Create_Day DATE,
     PRIMARY KEY (Followee, Follower)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

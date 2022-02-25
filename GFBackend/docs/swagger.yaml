@@ -2,6 +2,9 @@ basePath: /gf/api
 definitions:
   controller.CommunityInfo:
     properties:
+      Create_Time:
+        example: "2020-01-01"
+        type: string
       Creator:
         example: test1
         type: string
@@ -122,6 +125,8 @@ paths:
           description: <b>Failure</b>. Server Internal Error.
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
       summary: Register a new Admin User
       tags:
       - User Manage
@@ -152,8 +157,6 @@ paths:
           description: <b>Failure</b>. Server Internal Error.
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
-      security:
-      - ApiAuthToken: []
       summary: Admin / Regular User login
       tags:
       - User Manage
@@ -181,10 +184,9 @@ paths:
     post:
       consumes:
       - application/json
-      description: only need strings username & password
+      description: need token in cookie, need username, password, newpassword
       parameters:
-      - description: Regular User Register only needs Username, Password(encoded by
-          md5) & ForAdmin with false.
+      - description: need username, password, newpassword
         in: body
         name: UserInfo
         required: true
@@ -194,7 +196,7 @@ paths:
       - application/json
       responses:
         "201":
-          description: <b>Success</b>. User Register Successfully
+          description: <b>Success</b>. Update Password Successfully
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "400":
@@ -205,7 +207,9 @@ paths:
           description: <b>Failure</b>. Server Internal Error.
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
-      summary: Register a new Regular User
+      security:
+      - ApiAuthToken: []
+      summary: Admin & Regular Update Password
       tags:
       - User Manage
 securityDefinitions:

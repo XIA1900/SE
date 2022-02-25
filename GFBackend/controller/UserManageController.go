@@ -170,15 +170,19 @@ func (userManageController *UserManageController) UserLogout(context *gin.Contex
 }
 
 // UserUpdatePassword godoc
-// @Summary Admin delete Users, cannot self delete
-// @Description need strings username in post request, need token in cookie
+// @Summary Admin & Regular Update Password
+// @Description need token in cookie, need username, password, newpassword
 // @Tags User Manage
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param username body string true "username in post request body"
-// @Router /user/admin/delete [post]
+// @Param UserInfo body controller.UserInfo true "need username, password, newpassword"
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User Has Existed"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/register [post]
 func (userManageController *UserManageController) UserUpdatePassword(context *gin.Context) {
+
 }
 
 // UserDelete godoc

@@ -97,6 +97,11 @@ const docTemplate_swagger = `{
         },
         "/user/admin/register": {
             "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
                 "description": "only need strings username \u0026 password \u0026 ForAdmin, need token in cookie",
                 "consumes": [
                     "application/json"
@@ -143,11 +148,6 @@ const docTemplate_swagger = `{
         },
         "/user/login": {
             "post": {
-                "security": [
-                    {
-                        "ApiAuthToken": []
-                    }
-                ],
                 "description": "only need strings username \u0026 password",
                 "consumes": [
                     "application/json"
@@ -226,7 +226,12 @@ const docTemplate_swagger = `{
         },
         "/user/register": {
             "post": {
-                "description": "only need strings username \u0026 password",
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need username, password, newpassword",
                 "consumes": [
                     "application/json"
                 ],
@@ -236,10 +241,10 @@ const docTemplate_swagger = `{
                 "tags": [
                     "User Manage"
                 ],
-                "summary": "Register a new Regular User",
+                "summary": "Admin \u0026 Regular Update Password",
                 "parameters": [
                     {
-                        "description": "Regular User Register only needs Username, Password(encoded by md5) \u0026 ForAdmin with false.",
+                        "description": "need username, password, newpassword",
                         "name": "UserInfo",
                         "in": "body",
                         "required": true,
@@ -250,7 +255,7 @@ const docTemplate_swagger = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Register Successfully",
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseMsg"
                         }
@@ -275,6 +280,10 @@ const docTemplate_swagger = `{
         "controller.CommunityInfo": {
             "type": "object",
             "properties": {
+                "Create_Time": {
+                    "type": "string",
+                    "example": "2020-01-01"
+                },
                 "Creator": {
                     "type": "string",
                     "example": "test1"

@@ -4,13 +4,14 @@ import (
 	"GFBackend/logger"
 	"GFBackend/model"
 	"GFBackend/model/dao"
+	"GFBackend/utils"
 	"fmt"
 	"gorm.io/gorm"
-	"time"
 )
 
 type ICommunityManageService interface {
-	CreateCommunity(creator string, name string, description string, createTime time.Time) error
+	CreateCommunity(creator string, name string, description string, createTime *utils.LocalTime) error
+	GetCommunityByName(name string) (model.Community, error)
 }
 
 type CommunityManageService struct {
@@ -21,8 +22,7 @@ func NewCommunityManageService(communityDAO dao.ICommunityDAO) *CommunityManageS
 	return &CommunityManageService{communityDAO: communityDAO}
 }
 
-func (communityManageService *CommunityManageService) CreateCommunity(creator string, name string, description string, createTime time.Time) error {
-	createTime = time.Now()
+func (communityManageService *CommunityManageService) CreateCommunity(creator string, name string, description string, createTime *utils.LocalTime) error {
 	newCommunity := model.Community{
 		Creator:     creator,
 		Name:        name,
@@ -42,4 +42,16 @@ func (communityManageService *CommunityManageService) CreateCommunity(creator st
 		return err
 	}
 	return nil
+}
+
+func (communityManageService *CommunityManageService) GetCommunityByName(name string) (model.Community, error) {
+	newCommunity := model.Community{
+		Name: name,
+	}
+	resCommunity, err := communityManageService.communityDAO.GetCommunityByName(newCommunity)
+	if err != nil {
+		logger.AppLogger.Error(fmt.Sprintf("Get Community By Name Error: %s", err.Error()))
+		return model.Community{}, err
+	}
+	return resCommunity, nil
 }

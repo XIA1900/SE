@@ -18,8 +18,52 @@ const docTemplate_swagger = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/community/create": {
+            "get": {
+                "description": "need strings community name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get the Community by Name",
+                "parameters": [
+                    {
+                        "description": "Create a new community needs Creator, Name \u0026 Description.",
+                        "name": "CommunityInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.CommunityInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Community Success",
+                        "schema": {
+                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Community already exists",
+                        "schema": {
+                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                        }
+                    }
+                }
+            },
             "post": {
-                "description": "need strings creator \u0026 community name \u0026 description",
+                "description": "need strings creator \u0026 community name \u0026 description \u0026 create time",
                 "consumes": [
                     "application/json"
                 ],
@@ -97,6 +141,11 @@ const docTemplate_swagger = `{
         },
         "/user/admin/register": {
             "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
                 "description": "only need strings username \u0026 password \u0026 ForAdmin, need token in cookie",
                 "consumes": [
                     "application/json"
@@ -143,11 +192,6 @@ const docTemplate_swagger = `{
         },
         "/user/login": {
             "post": {
-                "security": [
-                    {
-                        "ApiAuthToken": []
-                    }
-                ],
                 "description": "only need strings username \u0026 password",
                 "consumes": [
                     "application/json"
@@ -275,6 +319,10 @@ const docTemplate_swagger = `{
         "controller.CommunityInfo": {
             "type": "object",
             "properties": {
+                "Create_Time": {
+                    "type": "string",
+                    "example": "2020-01-01"
+                },
                 "Creator": {
                     "type": "string",
                     "example": "test1"
@@ -286,6 +334,22 @@ const docTemplate_swagger = `{
                 "Name": {
                     "type": "string",
                     "example": "community1"
+                }
+            }
+        },
+        "controller.CommunityResponseMsg": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "data": {
+                    "$ref": "#/definitions/model.Community"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "process successfully"
                 }
             }
         },
@@ -319,6 +383,30 @@ const docTemplate_swagger = `{
                 "Username": {
                     "type": "string",
                     "example": "jamesbond21"
+                }
+            }
+        },
+        "model.Community": {
+            "type": "object",
+            "properties": {
+                "create_Time": {
+                    "type": "string",
+                    "example": "2020-01-01"
+                },
+                "creator": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "num_Member": {
+                    "type": "integer"
                 }
             }
         }

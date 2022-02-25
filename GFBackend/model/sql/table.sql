@@ -25,3 +25,13 @@ CREATE TABLE `casbin_rule` (
     UNIQUE INDEX unique_index (`ptype`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE COMMUNITY (
+    ID INT NOT NULL AUTO_INCREMENT,
+    Creator VARCHAR(20) NOT NULL,
+    Name VARCHAR(20) NOT NULL UNIQUE,
+    Description VARCHAR(500),
+    Num_Member INT NOT NULL DEFAULT '1',
+    Create_Time DATETIME NOT NULL,
+    PRIMARY KEY (ID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

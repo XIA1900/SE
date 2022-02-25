@@ -7,6 +7,7 @@ import (
 
 type ICommunityDAO interface {
 	CreateCommunity(community model.Community, tx *gorm.DB) error
+	GetCommunityByName(community model.Community) (model.Community, error)
 }
 
 type CommunityDAO struct{}
@@ -26,4 +27,15 @@ func (communityDAO *CommunityDAO) CreateCommunity(community model.Community, tx 
 		return result.Error
 	}
 	return nil
+}
+
+func (communityDAO *CommunityDAO) GetCommunityByName(community model.Community) (model.Community, error) {
+	result := model.DB.Select("Creator", "Name", "Description", "Create_Time").Where("Name = ?", community.Name).First(&community)
+	if result.Error != nil {
+		return community, result.Error
+	} else {
+		dbCommunity := model.Community{}
+		model.DB.Take(&dbCommunity, "Name = ?", community.Name)
+		return dbCommunity, nil
+	}
 }

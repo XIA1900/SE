@@ -27,7 +27,7 @@ var CommunityManageSet = wire.NewSet(
 
 // CreateCommunity godoc
 // @Summary Create a new Community
-// @Description need strings creator & community name & description
+// @Description need strings creator & community name & description & create time
 // @Tags Community Manage
 // @Accept json
 // @Produce json
@@ -67,5 +67,51 @@ func (communityManageController *CommunityManageController) CreateCommunity(cont
 	context.JSON(http.StatusCreated, ResponseMsg{
 		Code:    http.StatusCreated,
 		Message: "Create Community Success",
+	})
+}
+
+// GetCommunityByName godoc
+// @Summary Get the Community by Name
+// @Description need strings community name
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Param CommunityInfo body controller.CommunityInfo true "Create a new community needs Creator, Name & Description."
+// @Success 201 {object} controller.CommunityResponseMsg "<b>Success</b>. Create Community Success"
+// @Failure 400 {object} controller.CommunityResponseMsg "<b>Failure</b>. Bad Parameters or Community already exists"
+// @Failure 500 {object} controller.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /community/create [get]
+func (communityManageController *CommunityManageController) GetCommunityByName(context *gin.Context) {
+	var communityInfo CommunityInfo
+	if err := context.ShouldBindJSON(&communityInfo); err != nil {
+		er := CommunityResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
+
+	resCommunity, err := communityManageController.communityManageService.GetCommunityByName(communityInfo.Name)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			er := CommunityResponseMsg{
+				Code:    http.StatusBadRequest,
+				Message: "Community not found",
+			}
+			context.JSON(http.StatusBadRequest, er)
+		} else {
+			er := CommunityResponseMsg{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			}
+			context.JSON(http.StatusInternalServerError, er)
+		}
+		return
+	}
+	context.JSON(http.StatusOK, CommunityResponseMsg{
+		Code:    http.StatusOK,
+		Message: "Get Community Success",
+		Data:    resCommunity,
 	})
 }

@@ -14,16 +14,51 @@ import { createGroup } from '@/services/create';
 import styles from './style.less';
 
 const groupForm = () => {
-  const { run } = useRequest(createGroup, {
-    
-  });
+  const params = [];
+  // const { run } = useRequest(createGroup, {
+  //   manual: true,
+  //   onSuccess: () => {
+  //     history.push('/result/success');
+  //   },
+  // });
+  const { run } = useRequest(
+      () => {
+        return createGroup({
+          params: params,
+        });
+      },
+      {
+        manual: true,
+        onSuccess: () => {
+          history.push('/result/success');
+      },
+    });
 
   const onFinish = async (values) => {
-    run(values);
+    console.log('params:');
+    let newdate = new Date();
+    var date, month;
+    if(newdate.getDate() < 10) 
+      date = '0'+newdate.getDate().toString();
+    else 
+      date = newdate.getDate().toString();
+    if(newdate.getMonth()<10) 
+      month = '0'+newdate.getMonth().toString();
+    else 
+      month = newdate.getMonth().toString();
+    let year = newdate.getFullYear();
+    params.push({
+      groupName: values.title,
+      groupDescription: values.content,
+      time: year+'-'+month+'-'+date,
+    });
+    
+    console.log(params);
+    run(params);
   };
 
   return (
-    <PageContainer content="Please enter group information to create a group.">
+    <PageContainer content="">
       <Card bordered={false}>
         <ProForm
           hideRequiredMark
@@ -41,7 +76,7 @@ const groupForm = () => {
         >
           <ProFormText
             width="md"
-            label="Title"
+            label="Group Name"
             name="title"
             rules={[
               {
@@ -49,20 +84,20 @@ const groupForm = () => {
                 message: 'Please enter a name for your group',
               },
             ]}
-            placeholder=""
+            placeholder="Please enter a name for your group"
           />
 
           <ProFormTextArea
-            label="Content"
+            label="Group Description"
             width="xl"
-            name="goal"
+            name="content"
             rules={[
               {
                 required: true,
-                message: 'Please enter the description for your group',
+                message: 'Please enter a description for your group',
               },
             ]}
-            placeholder=""
+            placeholder="Please enter a description for your group"
           />
         </ProForm>
       </Card>

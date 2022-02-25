@@ -31,12 +31,8 @@ const CardList = () => {
   const onMenuClick = useCallback(
     (event) => {
       const { key } = event;
-      if(key === 'create') {
-        history.push('form/createGroup')
-        return;
-      }
+      history.push('/form/createGroup');
     },
-    
   );
 
   const nullData = {};
@@ -86,7 +82,7 @@ const CardList = () => {
 
             return (
               <List.Item>
-                <Button type="dashed" className={styles.newButton} key="create">
+                <Button type="dashed" className={styles.newButton} key="create" onClick = {onMenuClick}>
                   <PlusOutlined /> Create
                 </Button>
               </List.Item>

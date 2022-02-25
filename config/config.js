@@ -108,6 +108,16 @@ export default defineConfig({
           path: '/form/basic-form',
           component: './form/basic-form',
         },
+        {
+          name: 'Create A Group',
+          path: '/form/createGroup',
+          component: './form/createGroup',
+        },
+        {
+          name: 'Create A Post',
+          path: '/form/createPost',
+          component: './form/createPost',
+        },
         //     // {
         //     //   name: 'step-form',
         //     //   icon: 'smile',

@@ -10,11 +10,12 @@ import ProForm, {
 } from '@ant-design/pro-form';
 import { history, useRequest } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import { fakeSubmitForm } from './service';
+import { createPost } from '@/services/create';
 import styles from './style.less';
+import { create } from 'lodash';
 
 const BasicForm = () => {
-  const { run } = useRequest(fakeSubmitForm, {
+  const { run } = useRequest(createPost, {
     manual: true,
     onSuccess: () => {
       //message.success('提交成功');

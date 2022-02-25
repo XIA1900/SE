@@ -25,6 +25,12 @@ CREATE TABLE `casbin_rule` (
     UNIQUE INDEX unique_index (`ptype`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE Follow (
+    Followee VARCHAR(20) NOT NULL,
+    Follower VARCHAR(20) NOT NULL,
+    FollowDay DATE,
+    PRIMARY KEY (Followee, Follower)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE COMMUNITY (
     ID INT NOT NULL AUTO_INCREMENT,

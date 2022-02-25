@@ -15,7 +15,6 @@ definitions:
         example: community1
         type: string
     type: object
-<<<<<<< HEAD
   controller.CommunityResponseMsg:
     properties:
       code:
@@ -25,7 +24,8 @@ definitions:
         $ref: '#/definitions/model.Community'
       message:
         example: process successfully
-=======
+        type: string
+    type: object
   controller.NewUserInfo:
     properties:
       Birthday:
@@ -42,7 +42,6 @@ definitions:
         type: string
       Username:
         example: jamesbond21
->>>>>>> e793672fc53b0803617e1d1d642dca9d3eda6469
         type: string
     type: object
   controller.ResponseMsg:
@@ -165,7 +164,19 @@ paths:
           type: string
       produces:
       - application/json
-      responses: {}
+      responses:
+        "201":
+          description: <b>Success</b>. Update Password Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Admin delete Users, cannot self delete
@@ -203,6 +214,38 @@ paths:
       security:
       - ApiAuthToken: []
       summary: Register a new Admin User
+      tags:
+      - User Manage
+  /user/follow:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need username who is followed
+      parameters:
+      - description: username in post request body
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Update Password Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: User Follow other users
       tags:
       - User Manage
   /user/login:

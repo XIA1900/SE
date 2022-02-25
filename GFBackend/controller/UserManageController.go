@@ -219,6 +219,9 @@ func (userManageController *UserManageController) UserUpdatePassword(context *gi
 // @Produce json
 // @Security ApiAuthToken
 // @Param username body string true "username in post request body"
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/admin/delete [post]
 func (userManageController *UserManageController) UserDelete(context *gin.Context) {
 	type Info struct {
@@ -247,7 +250,7 @@ func (userManageController *UserManageController) UserDelete(context *gin.Contex
 			er.Code = http.StatusInternalServerError
 			er.Message = "Internal Server Error"
 		}
-		context.JSON(http.StatusBadRequest, er)
+		context.JSON(er.Code, er)
 		return
 	}
 
@@ -270,6 +273,56 @@ func (userManageController *UserManageController) UserDelete(context *gin.Contex
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/update [post]
 func (userManageController *UserManageController) UserUpdate(context *gin.Context) {
+	var newUserInfo NewUserInfo
+	if err1 := context.ShouldBindJSON(&newUserInfo); err1 != nil {
+		er := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
+
+	userInfo := model.User{
+		Username:   newUserInfo.Username,
+		Nickname:   newUserInfo.Nickname,
+		Birthday:   newUserInfo.Birthday,
+		Gender:     newUserInfo.Gender,
+		Department: newUserInfo.Department,
+	}
+
+	err2 := userManageController.userManageService.Update(userInfo)
+	if err2 != nil {
+		er := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+
+	}
+
+	success := ResponseMsg{
+		Code:    http.StatusOK,
+		Message: "Update User Information Successfully",
+	}
+	context.JSON(http.StatusOK, success)
+	return
+}
+
+// UserFollow godoc
+// @Summary User Follow other users
+// @Description need token in cookie, need username who is followed
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param username body string true "username in post request body"
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/follow [post]
+func (userManageController *UserManageController) UserFollow(context *gin.Context) {
 	var newUserInfo NewUserInfo
 	if err1 := context.ShouldBindJSON(&newUserInfo); err1 != nil {
 		er := ResponseMsg{

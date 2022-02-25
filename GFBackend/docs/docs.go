@@ -136,7 +136,26 @@ const docTemplate_swagger = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
             }
         },
         "/user/admin/register": {
@@ -177,6 +196,57 @@ const docTemplate_swagger = `{
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User Has Existed",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/follow": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need username who is followed",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "User Follow other users",
+                "parameters": [
+                    {
+                        "description": "username in post request body",
+                        "name": "username",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseMsg"
                         }
@@ -439,7 +509,6 @@ const docTemplate_swagger = `{
                 }
             }
         },
-<<<<<<< HEAD
         "controller.CommunityResponseMsg": {
             "type": "object",
             "properties": {
@@ -453,7 +522,9 @@ const docTemplate_swagger = `{
                 "message": {
                     "type": "string",
                     "example": "process successfully"
-=======
+                }
+            }
+        },
         "controller.NewUserInfo": {
             "type": "object",
             "properties": {
@@ -476,7 +547,6 @@ const docTemplate_swagger = `{
                 "Username": {
                     "type": "string",
                     "example": "jamesbond21"
->>>>>>> e793672fc53b0803617e1d1d642dca9d3eda6469
                 }
             }
         },

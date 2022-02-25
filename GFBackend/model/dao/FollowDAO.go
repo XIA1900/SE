@@ -3,8 +3,12 @@ package dao
 import (
 	"GFBackend/model"
 	"errors"
+	"sync"
 	"time"
 )
+
+var followDAOLock sync.Mutex
+var followDAO *FollowDAO
 
 type IFollowDAO interface {
 	UserFollow(followee, follower string) error
@@ -13,7 +17,14 @@ type IFollowDAO interface {
 type FollowDAO struct{}
 
 func NewFollowDAO() *FollowDAO {
-	return new(FollowDAO)
+	if followDAO == nil {
+		followDAOLock.Lock()
+		if followDAO == nil {
+			followDAO = new(FollowDAO)
+		}
+		followDAOLock.Unlock()
+	}
+	return followDAO
 }
 
 func (followDAO *FollowDAO) UserFollow(followee, follower string) error {

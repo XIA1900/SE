@@ -11,7 +11,11 @@ import (
 	"fmt"
 	"github.com/google/wire"
 	"gorm.io/gorm"
+	"sync"
 )
+
+var userManageServiceLock sync.Mutex
+var userManageService *UserManageService
 
 type IUserManageService interface {
 	Register(username, password string, forAdmin bool) error
@@ -29,10 +33,17 @@ type UserManageService struct {
 }
 
 func NewUserManageService(userDAO dao.IUserDAO, followDAO dao.IFollowDAO) *UserManageService {
-	return &UserManageService{
-		userDAO:   userDAO,
-		followDAO: followDAO,
+	if userManageService == nil {
+		userManageServiceLock.Lock()
+		if userManageService == nil {
+			userManageService = &UserManageService{
+				userDAO:   userDAO,
+				followDAO: followDAO,
+			}
+		}
+		userManageServiceLock.Unlock()
 	}
+	return userManageService
 }
 
 var UserManageServiceSet = wire.NewSet(

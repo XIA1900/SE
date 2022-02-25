@@ -9,14 +9,27 @@ import (
 	"github.com/google/wire"
 	"net/http"
 	"strings"
+	"sync"
 )
+
+var userManageControllerLock sync.Mutex
+var userManageController *UserManageController
 
 type UserManageController struct {
 	userManageService service.IUserManageService
 }
 
 func NewUserManageController(userManageService service.IUserManageService) *UserManageController {
-	return &UserManageController{userManageService: userManageService}
+	if userManageController == nil {
+		userManageControllerLock.Lock()
+		if userManageController == nil {
+			userManageController = &UserManageController{
+				userManageService: userManageService,
+			}
+		}
+		userManageControllerLock.Unlock()
+	}
+	return userManageController
 }
 
 var UserManageControllerSet = wire.NewSet(

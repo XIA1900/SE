@@ -3,7 +3,11 @@ package dao
 import (
 	"GFBackend/model"
 	"gorm.io/gorm"
+	"sync"
 )
+
+var userDAOLock sync.Mutex
+var userDAO *UserDAO
 
 type IUserDAO interface {
 	CreateUser(user model.User, tx *gorm.DB) error
@@ -16,7 +20,12 @@ type IUserDAO interface {
 type UserDAO struct{}
 
 func NewUserDAO() *UserDAO {
-	return new(UserDAO)
+	if userDAO == nil {
+		userDAOLock.Lock()
+		userDAO = new(UserDAO)
+		userDAOLock.Unlock()
+	}
+	return userDAO
 }
 
 func (userDAO *UserDAO) CreateUser(user model.User, tx *gorm.DB) error {

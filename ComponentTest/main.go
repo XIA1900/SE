@@ -15,6 +15,9 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -38,7 +41,100 @@ func main() {
 
 	// fmt.Println(EncodeInMD5("jake16"))
 
-	RedisTest()
+	// RedisTest()
+
+	// UserTest()
+
+	FollowTest()
+}
+
+type Follow struct {
+	Followee   string
+	Follower   string
+	Create_Day string
+}
+
+func (follow Follow) TableName() string {
+	return "Follow"
+}
+
+func FollowTest() {
+	follow := Follow{
+		Followee:   "joey",
+		Follower:   "jerry",
+		Create_Day: "2022-02-22",
+	}
+
+	dsn := "root:admin@tcp(127.0.0.1:3306)/gf_test?charset=utf8&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	db.Create(&follow)
+
+	orgFollow := Follow{}
+	db.Where("followee = ?", "tom").First(&orgFollow)
+	fmt.Println(orgFollow)
+}
+
+type Point struct {
+	X int
+	Y int
+}
+
+type Circle struct {
+	Point
+	Radius int
+}
+
+func EmbeddedStructTest() {
+	var circle Circle
+	circle.X = 1
+	circle.Y = 2
+	circle.Radius = 3
+	fmt.Println(circle)
+}
+
+type User struct {
+	ID         int
+	Username   string
+	Password   string
+	Salt       string
+	Nickname   string
+	Birthday   string
+	Gender     string
+	Department string
+}
+
+func (u User) TableName() string {
+	return "User"
+}
+
+func UserTest() {
+	dsn := "root:admin@tcp(127.0.0.1:3306)/gf_test?charset=utf8&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	//date, _ := time.Parse("2006-01-02", "1997-12-16")
+	//user := User{
+	//	Username: "test123",
+	//	Password: "test1234",
+	//	Salt:     "23452",
+	//	Birthday: date.Format("2006-01-02"),
+	//}
+	//
+	//db.Select("Username", "Password", "Salt", "Birthday").Create(&user)
+
+	orgUser := User{}
+	db.Where("Username = ?", "test123").Find(&orgUser)
+	fmt.Println()
 }
 
 func logTest() {

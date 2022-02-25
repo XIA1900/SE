@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"GFBackend/controller"
 	"GFBackend/model"
 	"gorm.io/gorm"
 )
@@ -10,6 +11,7 @@ type IUserDAO interface {
 	GetUserByUsername(username string) model.User
 	DeleteUserByUsername(username string, tx *gorm.DB) error
 	UpdateUserPassword(username string, newPassword string) error
+	UpdateUserByUsername(userInfo controller.NewUserInfo) error
 }
 
 type UserDAO struct{}
@@ -58,4 +60,9 @@ func (userDAO *UserDAO) UpdateUserPassword(username string, newPassword string) 
 	} else {
 		return nil
 	}
+}
+
+func (userDAO *UserDAO) UpdateUserByUsername(userInfo controller.NewUserInfo) error {
+
+	return nil
 }

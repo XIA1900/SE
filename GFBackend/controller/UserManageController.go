@@ -147,8 +147,6 @@ func (userManageController *UserManageController) UserLogin(context *gin.Context
 // @Param username body string true "username in post request body"
 // @Router /user/logout [post]
 func (userManageController *UserManageController) UserLogout(context *gin.Context) {
-	context.SetCookie("token", "", -1, config.AppConfig.Server.BasePath, "localhost", false, true)
-
 	type Info struct {
 		Username string `json:"username"`
 	}
@@ -158,12 +156,7 @@ func (userManageController *UserManageController) UserLogout(context *gin.Contex
 		return
 	}
 
-	token, err := context.Cookie("token")
-	if err != nil {
-		return
-	}
-
-	err = userManageController.userManageService.Logout(info.Username, token)
+	err = userManageController.userManageService.Logout(info.Username)
 	if err != nil {
 		return
 	}
@@ -180,7 +173,7 @@ func (userManageController *UserManageController) UserLogout(context *gin.Contex
 // @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Password Successfully"
 // @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Password not match"
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
-// @Router /user/register [post]
+// @Router /user/password [post]
 func (userManageController *UserManageController) UserUpdatePassword(context *gin.Context) {
 	var userInfo UserInfo
 	if err1 := context.ShouldBindJSON(&userInfo); err1 != nil {
@@ -207,6 +200,13 @@ func (userManageController *UserManageController) UserUpdatePassword(context *gi
 		context.JSON(http.StatusBadRequest, errMsg)
 		return
 	}
+
+	success := ResponseMsg{
+		Code:    http.StatusOK,
+		Message: "Update User Password Successfully",
+	}
+	context.JSON(http.StatusOK, success)
+	return
 
 }
 
@@ -256,6 +256,45 @@ func (userManageController *UserManageController) UserDelete(context *gin.Contex
 	})
 }
 
+// UserUpdate godoc
+// @Summary Update user information including Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department
+// @Description need token in cookie, need Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param NewUserInfo body controller.NewUserInfo true "need Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department"
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/update [post]
 func (userManageController *UserManageController) UserUpdate(context *gin.Context) {
+	var userInfo NewUserInfo
+	if err1 := context.ShouldBindJSON(&userInfo); err1 != nil {
+		er := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
 
+	err2 := userManageController.userManageService.Update(userInfo)
+	if err2 != nil {
+		er := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+
+		context.JSON(http.StatusBadRequest, er)
+		return
+
+	}
+
+	success := ResponseMsg{
+		Code:    http.StatusOK,
+		Message: "Update User Information Successfully",
+	}
+	context.JSON(http.StatusOK, success)
+	return
 }

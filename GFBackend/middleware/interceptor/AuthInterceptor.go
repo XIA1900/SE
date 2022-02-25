@@ -19,7 +19,6 @@ func InitNonAuthReq() {
 	nonAuthReqs := [...]string{
 		"/user/register",
 		"/user/login",
-		"/user/logout",
 		"/community/create", //TODO: add security
 	}
 	NonAuthReqs = make(map[string]bool)

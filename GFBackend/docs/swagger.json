@@ -217,7 +217,7 @@
                 "responses": {}
             }
         },
-        "/user/register": {
+        "/user/password": {
             "post": {
                 "security": [
                     {
@@ -267,6 +267,103 @@
                     }
                 }
             }
+        },
+        "/user/register": {
+            "post": {
+                "description": "only need strings username \u0026 password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "Register a new Regular User",
+                "parameters": [
+                    {
+                        "description": "Regular User Register only needs Username, Password(encoded by md5) \u0026 ForAdmin with false.",
+                        "name": "UserInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.UserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Register Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User Has Existed",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "Update user information including Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department",
+                "parameters": [
+                    {
+                        "description": "need Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department",
+                        "name": "NewUserInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.NewUserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -288,6 +385,31 @@
                 "Name": {
                     "type": "string",
                     "example": "community1"
+                }
+            }
+        },
+        "controller.NewUserInfo": {
+            "type": "object",
+            "properties": {
+                "Birthday": {
+                    "type": "string",
+                    "example": "2022-02-30"
+                },
+                "Department": {
+                    "type": "string",
+                    "example": "CS:GO"
+                },
+                "Gender": {
+                    "type": "string",
+                    "example": "male/female/unknown"
+                },
+                "Nickname": {
+                    "type": "string",
+                    "example": "Peter Park"
+                },
+                "Username": {
+                    "type": "string",
+                    "example": "jamesbond21"
                 }
             }
         },

@@ -15,6 +15,24 @@ definitions:
         example: community1
         type: string
     type: object
+  controller.NewUserInfo:
+    properties:
+      Birthday:
+        example: 2022-02-30
+        type: string
+      Department:
+        example: CS:GO
+        type: string
+      Gender:
+        example: male/female/unknown
+        type: string
+      Nickname:
+        example: Peter Park
+        type: string
+      Username:
+        example: jamesbond21
+        type: string
+    type: object
   controller.ResponseMsg:
     properties:
       code:
@@ -180,7 +198,7 @@ paths:
       summary: Admin / Regular User logout
       tags:
       - User Manage
-  /user/register:
+  /user/password:
     post:
       consumes:
       - application/json
@@ -210,6 +228,72 @@ paths:
       security:
       - ApiAuthToken: []
       summary: Admin & Regular Update Password
+      tags:
+      - User Manage
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: only need strings username & password
+      parameters:
+      - description: Regular User Register only needs Username, Password(encoded by
+          md5) & ForAdmin with false.
+        in: body
+        name: UserInfo
+        required: true
+        schema:
+          $ref: '#/definitions/controller.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. User Register Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or User Has Existed
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      summary: Register a new Regular User
+      tags:
+      - User Manage
+  /user/update:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need Nickname, Birthday(yyyy-mm-dd), Gender(male
+        / female / unknown), Department
+      parameters:
+      - description: need Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown),
+          Department
+        in: body
+        name: NewUserInfo
+        required: true
+        schema:
+          $ref: '#/definitions/controller.NewUserInfo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Update Password Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Update user information including Nickname, Birthday(yyyy-mm-dd), Gender(male
+        / female / unknown), Department
       tags:
       - User Manage
 securityDefinitions:

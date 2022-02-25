@@ -171,17 +171,42 @@ func (userManageController *UserManageController) UserLogout(context *gin.Contex
 
 // UserUpdatePassword godoc
 // @Summary Admin & Regular Update Password
-// @Description need token in cookie, need username, password, newpassword
+// @Description need token in cookie, need Username, Password, NewPassword
 // @Tags User Manage
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param UserInfo body controller.UserInfo true "need username, password, newpassword"
+// @Param UserInfo body controller.UserInfo true "need Username, Password, NewPassword"
 // @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Password Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User Has Existed"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Password not match"
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/register [post]
 func (userManageController *UserManageController) UserUpdatePassword(context *gin.Context) {
+	var userInfo UserInfo
+	if err1 := context.ShouldBindJSON(&userInfo); err1 != nil {
+		er := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
+
+	err2 := userManageController.userManageService.UpdatePassword(userInfo.Username, userInfo.Password, userInfo.NewPassword)
+	if err2 != nil {
+		errMsg := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+		if strings.Contains(err2.Error(), "400") {
+			errMsg.Message = "User old password not match"
+		} else {
+			errMsg.Code = http.StatusInternalServerError
+			errMsg.Message = "Internal Server Error"
+		}
+		context.JSON(http.StatusBadRequest, errMsg)
+		return
+	}
 
 }
 

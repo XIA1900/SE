@@ -16,7 +16,7 @@ type IUserManageService interface {
 	Register(username, password string, forAdmin bool) error
 	Login(username, password string) (string, error)
 	Logout(username, token string) error
-	UpdatePassword()
+	UpdatePassword(username, password, newPassword string) error
 	Delete(username string) error
 }
 
@@ -102,8 +102,20 @@ func (userManageService *UserManageService) Logout(username, token string) error
 	return nil
 }
 
-func (userManageService *UserManageService) UpdatePassword() {
+func (userManageService *UserManageService) UpdatePassword(username, password, newPassword string) error {
+	user := userManageService.userDAO.GetUserByUsername(username)
 
+	if utils.EncodeInMD5(password+user.Salt) != user.Password {
+		return errors.New("400")
+	}
+
+	err := userManageService.userDAO.UpdateUserPassword(username, newPassword)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return errors.New("500")
+	}
+
+	return nil
 }
 
 func (userManageService *UserManageService) Delete(username string) error {

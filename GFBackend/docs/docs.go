@@ -231,7 +231,7 @@ const docTemplate_swagger = `{
                         "ApiAuthToken": []
                     }
                 ],
-                "description": "need token in cookie, need username, password, newpassword",
+                "description": "need token in cookie, need Username, Password, NewPassword",
                 "consumes": [
                     "application/json"
                 ],
@@ -244,7 +244,7 @@ const docTemplate_swagger = `{
                 "summary": "Admin \u0026 Regular Update Password",
                 "parameters": [
                     {
-                        "description": "need username, password, newpassword",
+                        "description": "need Username, Password, NewPassword",
                         "name": "UserInfo",
                         "in": "body",
                         "required": true,
@@ -261,7 +261,7 @@ const docTemplate_swagger = `{
                         }
                     },
                     "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User Has Existed",
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Password not match",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseMsg"
                         }

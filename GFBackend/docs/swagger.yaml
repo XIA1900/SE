@@ -184,9 +184,9 @@ paths:
     post:
       consumes:
       - application/json
-      description: need token in cookie, need username, password, newpassword
+      description: need token in cookie, need Username, Password, NewPassword
       parameters:
-      - description: need username, password, newpassword
+      - description: need Username, Password, NewPassword
         in: body
         name: UserInfo
         required: true
@@ -200,7 +200,7 @@ paths:
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "400":
-          description: <b>Failure</b>. Bad Parameters or User Has Existed
+          description: <b>Failure</b>. Bad Parameters or Password not match
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "500":

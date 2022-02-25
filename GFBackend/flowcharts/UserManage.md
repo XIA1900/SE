@@ -73,3 +73,22 @@ flowchart LR
 
 
 
+### Update User Password
+
+```mermaid
+flowchart LR
+	Start([Request]) --> Params[/Request Params/] --> ParamsCheck{Check Params} --> |No| Error[Return Error] --> End([End])
+	ParamsCheck --> |Yes| MatchOldPassword --> |No| Error
+	MatchOldPassword --> |Yes| UpdatePassword --> Success[Return Success] --> End
+```
+
+
+
+### Update User
+
+```mermaid
+flowchart LR
+	Start([Request]) --> Params[/Request Params/] --> ParamsCheck{Check Params} --> |No| Error[Return Error] --> End([End])
+	ParamsCheck --> |Yes| UpdateUserInfo -->  End
+```
+

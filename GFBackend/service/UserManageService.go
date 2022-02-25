@@ -2,7 +2,6 @@ package service
 
 import (
 	"GFBackend/cache"
-	"GFBackend/controller"
 	"GFBackend/logger"
 	"GFBackend/middleware/auth"
 	"GFBackend/model"
@@ -19,7 +18,7 @@ type IUserManageService interface {
 	Logout(username string) error
 	UpdatePassword(username, password, newPassword string) error
 	Delete(username string) error
-	Update(userInfo controller.NewUserInfo) error
+	Update(userInfo model.User) error
 }
 
 type UserManageService struct {
@@ -149,7 +148,11 @@ func (userManageService *UserManageService) Delete(username string) error {
 
 }
 
-func (userManageService *UserManageService) Update(userInfo controller.NewUserInfo) error {
-
+func (userManageService *UserManageService) Update(userInfo model.User) error {
+	err := userManageService.userDAO.UpdateUserByUsername(userInfo)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return errors.New("500")
+	}
 	return nil
 }

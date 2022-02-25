@@ -3,6 +3,7 @@ package controller
 import (
 	"GFBackend/config"
 	"GFBackend/middleware/auth"
+	"GFBackend/model"
 	"GFBackend/model/dao"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
@@ -269,8 +270,8 @@ func (userManageController *UserManageController) UserDelete(context *gin.Contex
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/update [post]
 func (userManageController *UserManageController) UserUpdate(context *gin.Context) {
-	var userInfo NewUserInfo
-	if err1 := context.ShouldBindJSON(&userInfo); err1 != nil {
+	var newUserInfo NewUserInfo
+	if err1 := context.ShouldBindJSON(&newUserInfo); err1 != nil {
 		er := ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters.",
@@ -279,13 +280,20 @@ func (userManageController *UserManageController) UserUpdate(context *gin.Contex
 		return
 	}
 
+	userInfo := model.User{
+		Username:   newUserInfo.Username,
+		Nickname:   newUserInfo.Nickname,
+		Birthday:   newUserInfo.Birthday,
+		Gender:     newUserInfo.Gender,
+		Department: newUserInfo.Department,
+	}
+
 	err2 := userManageController.userManageService.Update(userInfo)
 	if err2 != nil {
 		er := ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters.",
 		}
-
 		context.JSON(http.StatusBadRequest, er)
 		return
 

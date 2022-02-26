@@ -41,3 +41,14 @@ type Community struct {
 func (c Community) TableName() string {
 	return "Community"
 }
+
+type Space struct {
+	ID        int
+	Username  string
+	Capacity  float32
+	Remaining float32
+}
+
+func (space Space) TableName() string {
+	return "Space"
+}

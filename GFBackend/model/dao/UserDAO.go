@@ -22,7 +22,9 @@ type UserDAO struct{}
 func NewUserDAO() *UserDAO {
 	if userDAO == nil {
 		userDAOLock.Lock()
-		userDAO = new(UserDAO)
+		if userDAO == nil {
+			userDAO = new(UserDAO)
+		}
 		userDAOLock.Unlock()
 	}
 	return userDAO

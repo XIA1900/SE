@@ -21,16 +21,16 @@ func InitializeUserManageController() (*controller.UserManageController, error) 
 	return userManageController, nil
 }
 
-func InitializeFileManageController() (*controller.FileManageController, error) {
-	followDAO := dao.NewFollowDAO()
-	fileManageService := service.NewFileManageService(followDAO)
-	fileManageController := controller.NewFileManageController(fileManageService)
-	return fileManageController, nil
-}
-
 func InitializeCommunityManageController() (*controller.CommunityManageController, error) {
 	communityDAO := dao.NewCommunityDAO()
 	communityManageService := service.NewCommunityManageService(communityDAO)
 	communityManageController := controller.NewCommunityManageController(communityManageService)
 	return communityManageController, nil
+}
+
+func InitializeFileManageController() (*controller.FileManageController, error) {
+	spaceDAO := dao.NewSpaceDAO()
+	fileManageService := service.NewFileManageService(spaceDAO)
+	fileManageController := controller.NewFileManageController(fileManageService)
+	return fileManageController, nil
 }

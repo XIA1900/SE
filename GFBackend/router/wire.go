@@ -12,10 +12,10 @@ func InitializeUserManageController() (*controller.UserManageController, error) 
 	panic(wire.Build(controller.UserManageControllerSet))
 }
 
-func InitializeFileManageController() (*controller.FileManageController, error) {
-	panic(wire.Build(controller.FileManageControllerSet))
-}
-
 func InitializeCommunityManageController() (*controller.CommunityManageController, error) {
 	panic(wire.Build(controller.CommunityManageSet))
+}
+
+func InitializeFileManageController() (*controller.FileManageController, error) {
+	panic(wire.Build(controller.FileManageControllerSet))
 }

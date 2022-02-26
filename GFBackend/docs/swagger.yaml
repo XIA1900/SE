@@ -150,6 +150,31 @@ paths:
       summary: Create a new Community
       tags:
       - Community Manage
+  /file/upload:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, only get self files
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Scan Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or No Enough Space
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Scan User files
+      tags:
+      - Static Resource
   /resources/userfiles/{username}/{filename}:
     get:
       consumes:

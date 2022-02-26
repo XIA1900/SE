@@ -43,10 +43,10 @@ CREATE TABLE COMMUNITY (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- User Private Space Info
-CREATE TABLE SPACE (
+CREATE TABLE Space (
     ID INT NOT NULL AUTO_INCREMENT,
     Username VARCHAR(20) NOT NULL,
     Capacity FLOAT(6,2) DEFAULT '10.00',      -- MB
-    Remaining FLOAT(6,2) DEFAULT '0.00',      -- MB
+    Remaining FLOAT(6,2) DEFAULT '10.00',      -- MB
     PRIMARY KEY (ID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

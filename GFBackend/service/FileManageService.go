@@ -2,6 +2,7 @@ package service
 
 import (
 	"GFBackend/model/dao"
+	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"sync"
 )
@@ -10,18 +11,25 @@ var fileManageServiceLock sync.Mutex
 var fileManageService *FileManageService
 
 type IFileManageService interface {
+	GetSpaceInfo(username string) (float64, error)
+	RegisterSpaceInfo(username string) error
+	UpdateRemaining(username string) error
+	ExpandSize(username string, newSize float64) error
+	FreeSpace(username string) error
+	Upload(context *gin.Context) error
+	Download(context *gin.Context) error
 }
 
 type FileManageService struct {
-	followDAO dao.IFollowDAO
+	spaceDAO dao.ISpaceDAO
 }
 
-func NewFileManageService(followDAO dao.IFollowDAO) *FileManageService {
+func NewFileManageService(spaceDAO dao.ISpaceDAO) *FileManageService {
 	if fileManageService == nil {
 		fileManageServiceLock.Lock()
 		if fileManageService == nil {
 			fileManageService = &FileManageService{
-				followDAO: followDAO,
+				spaceDAO: spaceDAO,
 			}
 		}
 		fileManageServiceLock.Unlock()
@@ -30,7 +38,35 @@ func NewFileManageService(followDAO dao.IFollowDAO) *FileManageService {
 }
 
 var FileManageServiceSet = wire.NewSet(
-	dao.NewFollowDAO,
-	wire.Bind(new(dao.IFollowDAO), new(*dao.FollowDAO)),
+	dao.NewSpaceDAO,
+	wire.Bind(new(dao.ISpaceDAO), new(*dao.SpaceDAO)),
 	NewFileManageService,
 )
+
+func (fileManageService FileManageService) GetSpaceInfo(username string) (float64, error) {
+	return 0.0, nil
+}
+
+func (fileManageService FileManageService) RegisterSpaceInfo(username string) error {
+	return nil
+}
+
+func (fileManageService FileManageService) UpdateRemaining(username string) error {
+	return nil
+}
+
+func (fileManageService FileManageService) ExpandSize(username string, newSize float64) error {
+	return nil
+}
+
+func (fileManageService FileManageService) FreeSpace(username string) error {
+	return nil
+}
+
+func (fileManageService FileManageService) Upload(context *gin.Context) error {
+	return nil
+}
+
+func (fileManageService FileManageService) Download(context *gin.Context) error {
+	return nil
+}

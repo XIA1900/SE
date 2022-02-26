@@ -150,6 +150,18 @@ paths:
       summary: Create a new Community
       tags:
       - Community Manage
+  /resources/userfiles/{username}/{filename}:
+    get:
+      consumes:
+      - application/json
+      description: Static files request, need to claim the username and filename in
+        the url
+      produces:
+      - application/json
+      responses: {}
+      summary: Request User Files
+      tags:
+      - Static Resource
   /user/admin/delete:
     post:
       consumes:

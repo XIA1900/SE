@@ -4,9 +4,9 @@ import "github.com/gin-gonic/gin"
 
 func InitFileManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 
-	//fileManageContorller := InitializeFileManageController()
+	//fileManageContorller, _ := InitializeFileManageController()
 	//
-	//fileManageContorller := baseGroup.Group("/file")
+	//fileManageContorller = baseGroup.Group("/file")
 	//{
 	//
 	//}

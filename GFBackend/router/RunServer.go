@@ -19,6 +19,7 @@ func RunServer() {
 
 	interceptor.InitNonAuthReq()
 	AppRouter = gin.Default()
+	AppRouter.Static("/resources", "./resources")
 	AppRouter.Use(interceptor.AuthInterceptor())
 
 	docs.SwaggerInfo_swagger.BasePath = appConfig.Server.BasePath

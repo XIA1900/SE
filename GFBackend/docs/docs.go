@@ -107,6 +107,22 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/resources/userfiles/{username}/{filename}": {
+            "get": {
+                "description": "Static files request, need to claim the username and filename in the url",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Static Resource"
+                ],
+                "summary": "Request User Files",
+                "responses": {}
+            }
+        },
         "/user/admin/delete": {
             "post": {
                 "security": [

@@ -44,7 +44,7 @@ func (fileManageController *FileManageController) StaticResourcesReqs() {}
 
 // UploadFile godoc
 // @Summary User Uploads files including images, video etc.
-// @Description need token in cookie, html file type input element include name attribute with value "uploadFile"
+// @Description need token in cookie, html file type input element include name attribute with value "uploadFilename"
 // @Tags Static Resource
 // @Accept json
 // @Produce json

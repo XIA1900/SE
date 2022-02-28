@@ -7,10 +7,10 @@ import (
 	"strconv"
 )
 
-var dirBasePath = "./resources/userfiles/"
+var DirBasePath = "./resources/userfiles/"
 
 func IsDirExists(username string) bool {
-	info, err := os.Stat(dirBasePath + username)
+	info, err := os.Stat(DirBasePath + username)
 	if err != nil {
 		return false
 	}
@@ -18,7 +18,7 @@ func IsDirExists(username string) bool {
 }
 
 func IsFileExists(username, filename string) bool {
-	info, err := os.Stat(dirBasePath + username + "/" + filename)
+	info, err := os.Stat(DirBasePath + username + "/" + filename)
 	if err != nil {
 		return false
 	}
@@ -26,7 +26,7 @@ func IsFileExists(username, filename string) bool {
 }
 
 func CreateDir(username string) bool {
-	err := os.Mkdir(dirBasePath+username, 755)
+	err := os.Mkdir(DirBasePath+username, 755)
 	if err != nil {
 		return false
 	}
@@ -34,7 +34,7 @@ func CreateDir(username string) bool {
 }
 
 func DeleteDir(username string) bool {
-	err := os.RemoveAll(dirBasePath + username)
+	err := os.RemoveAll(DirBasePath + username)
 	if err != nil {
 		return false
 	}
@@ -42,7 +42,7 @@ func DeleteDir(username string) bool {
 }
 
 func DeleteFile(username, filename string) bool {
-	err := os.Remove(dirBasePath + username + "/" + filename)
+	err := os.Remove(DirBasePath + username + "/" + filename)
 	if err != nil {
 		return false
 	}
@@ -51,7 +51,7 @@ func DeleteFile(username, filename string) bool {
 
 func DirSize(username string) (float64, error) {
 	var size int64
-	err := filepath.Walk(dirBasePath+username, func(_ string, info os.FileInfo, err error) error {
+	err := filepath.Walk(DirBasePath+username, func(_ string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -63,4 +63,8 @@ func DirSize(username string) (float64, error) {
 	float64Size := float64(size) / (1024 * 1024)
 	value, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", float64Size), 64)
 	return value, err
+}
+
+func GetFilesInDir(username string) ([]string, error) {
+	return nil, nil
 }

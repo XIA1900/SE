@@ -4,6 +4,7 @@ import (
 	docs "ComponentTest/docs"
 	"ComponentTest/es"
 	"ComponentTest/log"
+	"ComponentTest/resources"
 	"ComponentTest/role"
 	"context"
 	"crypto/md5"
@@ -21,6 +22,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -45,7 +47,82 @@ func main() {
 
 	// UserTest()
 
-	FollowTest()
+	// FollowTest()
+
+	//go TestSingleton()
+	//go TestSingleton()
+	//time.Sleep(time.Second)
+
+	//StaticTest()
+
+	// SpaceTest()
+
+	FileRelatedOperation()
+}
+
+func FileRelatedOperation() {
+	files, err := resources.GetFilesInDir("admin")
+	if err != nil {
+		return
+	}
+	for _, file := range files {
+		fmt.Println(file)
+	}
+}
+
+type Space struct {
+	ID        int
+	Username  string
+	Capacity  float32
+	Remaining float32
+}
+
+func (space Space) TableName() string {
+	return "Space"
+}
+
+func SpaceTest() {
+	space := Space{
+		Username: "jake16",
+	}
+
+	dsn := "root:admin@tcp(127.0.0.1:3306)/gf_test?charset=utf8&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	db.Select("Username").Create(&space)
+
+}
+
+func StaticTest() {
+	router := gin.Default()
+	router.Static("/resources", "./resources")
+
+	// Listen and serve on 0.0.0.0:8080
+	router.Run(":8080")
+}
+
+type SingleDog struct{}
+
+var lock sync.Mutex
+var singleDog *SingleDog
+
+func NewSingleDog() *SingleDog {
+	lock.Lock()
+	if singleDog == nil {
+		singleDog = new(SingleDog)
+	}
+	lock.Unlock()
+	return singleDog
+}
+
+func TestSingleton() {
+	dog := NewSingleDog()
+	fmt.Printf("%p\n", &*dog)
 }
 
 type Follow struct {

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -66,5 +67,19 @@ func DirSize(username string) (float64, error) {
 }
 
 func GetFilesInDir(username string) ([]string, error) {
-	return nil, nil
+	var files []string
+	path := DirBasePath + username
+	err := filepath.Walk(path, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
 }

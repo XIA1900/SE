@@ -1,9 +1,12 @@
 package controller
 
 import (
+	"GFBackend/middleware/auth"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
+	"net/http"
+	"strings"
 	"sync"
 )
 
@@ -49,7 +52,6 @@ func (fileManageController *FileManageController) StaticResourcesReqs() {}
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param username body string true "username in post request body"
 // @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Upload Successfully"
 // @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or No Enough Space"
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
@@ -65,10 +67,32 @@ func (fileManageController *FileManageController) UploadFile(context *gin.Contex
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Scan Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or No Enough Space"
+// @Success 201 {object} controller.UserFiles "<b>Success</b>. Scan Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters."
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
-// @Router /file/upload [post]
+// @Router /file/scan [post]
 func (fileManageController *FileManageController) ScanFiles(context *gin.Context) {
-	// define struct including list in DTO as return data type
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+	userFiles, err1 := fileManageController.fileManageService.GetUserFiles(username)
+	if err1 != nil {
+		errMsg := ResponseMsg{
+			Code:    400,
+			Message: "Bad Parameters",
+		}
+		if strings.Contains(err1.Error(), "500") {
+			errMsg.Code = http.StatusInternalServerError
+			errMsg.Message = "Internal Server Error"
+		}
+		context.JSON(errMsg.Code, errMsg)
+		return
+	}
+	respMsg := UserFiles{
+		ResponseMsg: ResponseMsg{
+			Code:    200,
+			Message: "Scan Successfully",
+		},
+		Filenames: userFiles,
+	}
+	context.JSON(200, respMsg)
 }

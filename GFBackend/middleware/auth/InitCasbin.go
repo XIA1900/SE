@@ -31,11 +31,18 @@ func addInitialPolicy() {
 	basePath := config.AppConfig.Server.BasePath
 
 	// regular
+
+	// /user/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/logout", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/password", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/update", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/follow", "POST")
+
+	// /community/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/create", "POST")
+
+	// /file/...
+	CasbinEnforcer.AddPolicy("regular", basePath+"/file/scan", "POST")
 
 	// admin
 	CasbinEnforcer.AddGroupingPolicy("admin", "regular") // admin extends regular

@@ -63,8 +63,12 @@ func (fileManageService FileManageService) GetSpaceInfo(username string) (model.
 }
 
 func (fileManageService FileManageService) GetUserFiles(username string) ([]string, error) {
-
-	return nil, nil
+	filenames, err := utils.GetFilesInDir(username)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return nil, errors.New("500")
+	}
+	return filenames, nil
 }
 
 func (fileManageService FileManageService) RegisterSpaceInfo(username string) error {

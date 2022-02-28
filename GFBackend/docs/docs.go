@@ -107,7 +107,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "/file/upload": {
+        "/file/scan": {
             "post": {
                 "security": [
                     {
@@ -128,6 +128,46 @@ const docTemplate_swagger = `{
                 "responses": {
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Scan Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.UserFiles"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/file/upload": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, html file type input element include name attribute with value \"uploadFilename\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Static Resource"
+                ],
+                "summary": "User Uploads files including images, video etc.",
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Upload Successfully",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseMsg"
                         }
@@ -491,6 +531,57 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/user/unfollow": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need username who is followed",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "User Unfollow other users",
+                "parameters": [
+                    {
+                        "description": "username in post request body",
+                        "name": "username",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Unfollow Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/user/update": {
             "post": {
                 "security": [
@@ -609,6 +700,30 @@ const docTemplate_swagger = `{
         "controller.ResponseMsg": {
             "type": "object",
             "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "message": {
+                    "type": "string",
+                    "example": "process successfully"
+                }
+            }
+        },
+        "controller.UserFiles": {
+            "type": "object",
+            "properties": {
+                "Filenames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "\"xxx.jpg\"",
+                        "\"xxx.png\"",
+                        "\"xxx.gif\""
+                    ]
+                },
                 "code": {
                     "type": "integer",
                     "example": 200

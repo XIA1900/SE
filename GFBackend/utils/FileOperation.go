@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 var DirBasePath = "./resources/userfiles/"
@@ -74,7 +75,7 @@ func GetFilesInDir(username string) ([]string, error) {
 			return err
 		}
 		if !info.IsDir() {
-			files = append(files, path)
+			files = append(files, path[strings.LastIndex(path, string(filepath.Separator))+1:len(path)-1])
 		}
 		return nil
 	})

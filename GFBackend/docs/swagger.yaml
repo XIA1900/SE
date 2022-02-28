@@ -53,6 +53,23 @@ definitions:
         example: process successfully
         type: string
     type: object
+  controller.UserFiles:
+    properties:
+      Filenames:
+        example:
+        - '"xxx.jpg"'
+        - '"xxx.png"'
+        - '"xxx.gif"'
+        items:
+          type: string
+        type: array
+      code:
+        example: 200
+        type: integer
+      message:
+        example: process successfully
+        type: string
+    type: object
   controller.UserInfo:
     properties:
       ForAdmin:
@@ -150,7 +167,7 @@ paths:
       summary: Create a new Community
       tags:
       - Community Manage
-  /file/upload:
+  /file/scan:
     post:
       consumes:
       - application/json
@@ -160,6 +177,32 @@ paths:
       responses:
         "201":
           description: <b>Success</b>. Scan Successfully
+          schema:
+            $ref: '#/definitions/controller.UserFiles'
+        "400":
+          description: <b>Failure</b>. Bad Parameters.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Scan User files
+      tags:
+      - Static Resource
+  /file/upload:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, html file type input element include name
+        attribute with value "uploadFilename"
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Upload Successfully
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "400":
@@ -172,7 +215,7 @@ paths:
             $ref: '#/definitions/controller.ResponseMsg'
       security:
       - ApiAuthToken: []
-      summary: Scan User files
+      summary: User Uploads files including images, video etc.
       tags:
       - Static Resource
   /resources/userfiles/{username}/{filename}:
@@ -396,6 +439,38 @@ paths:
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
       summary: Register a new Regular User
+      tags:
+      - User Manage
+  /user/unfollow:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need username who is followed
+      parameters:
+      - description: username in post request body
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Unfollow Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or User not exist.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: User Unfollow other users
       tags:
       - User Manage
   /user/update:

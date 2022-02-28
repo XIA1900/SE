@@ -37,3 +37,8 @@ type CommunityInfo struct {
 	Description string           `json:"Description" example:"this is a test community"`
 	Create_Time *utils.LocalTime `json:"Create_Time" example:"2020-01-01"`
 }
+
+type UserFiles struct {
+	ResponseMsg
+	Filenames []string `json:"Filenames" example:"\"xxx.jpg\",\"xxx.png\",\"xxx.gif\""`
+}

@@ -370,3 +370,20 @@ func (userManageController *UserManageController) UserFollow(context *gin.Contex
 	context.JSON(http.StatusOK, success)
 	return
 }
+
+// UserUnfollow godoc
+// @Summary User Unfollow other users
+// @Description need token in cookie, need username who is followed
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param username body string true "username in post request body"
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Unfollow Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exist."
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/unfollow [post]
+func (userManageController *UserManageController) UserUnfollow(context *gin.Context) {
+
+	return
+}

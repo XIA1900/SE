@@ -4,12 +4,12 @@ import "github.com/gin-gonic/gin"
 
 func InitFileManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 
-	//fileManageContorller, _ := InitializeFileManageController()
-	//
-	//fileManageContorller = baseGroup.Group("/file")
-	//{
-	//
-	//}
+	fileManageController, _ := InitializeFileManageController()
+
+	fileManageReqsGroup := baseGroup.Group("/file")
+	{
+		fileManageReqsGroup.POST("/scan", fileManageController.ScanFiles)
+	}
 
 	return nil
 }

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"GFBackend/model"
 	"GFBackend/model/dao"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -11,7 +12,7 @@ var fileManageServiceLock sync.Mutex
 var fileManageService *FileManageService
 
 type IFileManageService interface {
-	GetSpaceInfo(username string) (float64, error)
+	GetSpaceInfo(username string) (model.Space, error)
 	RegisterSpaceInfo(username string) error
 	UpdateRemaining(username string) error
 	ExpandSize(username string, newSize float64) error
@@ -43,8 +44,8 @@ var FileManageServiceSet = wire.NewSet(
 	NewFileManageService,
 )
 
-func (fileManageService FileManageService) GetSpaceInfo(username string) (float64, error) {
-	return 0.0, nil
+func (fileManageService FileManageService) GetSpaceInfo(username string) (model.Space, error) {
+	return model.Space{}, nil
 }
 
 func (fileManageService FileManageService) RegisterSpaceInfo(username string) error {

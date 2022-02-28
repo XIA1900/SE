@@ -3,7 +3,7 @@
 //go:generate go run github.com/google/wire/cmd/wire
 //+build !wireinject
 
-package router
+package reqs
 
 import (
 	"GFBackend/controller"

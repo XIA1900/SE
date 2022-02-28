@@ -1,7 +1,7 @@
 //go:build wireinject
 // +build wireinject
 
-package router
+package reqs
 
 import (
 	"GFBackend/controller"

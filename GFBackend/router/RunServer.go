@@ -5,6 +5,7 @@ import (
 	"GFBackend/docs"
 	"GFBackend/logger"
 	"GFBackend/middleware/interceptor"
+	"GFBackend/router/reqs"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -27,9 +28,9 @@ func RunServer() {
 
 	baseGroup := AppRouter.Group(appConfig.Server.BasePath)
 	{
-		InitUserManageReqs(baseGroup)
-		InitCommunityManageReqs(baseGroup)
-		InitFileManageReqs(baseGroup)
+		reqs.InitUserManageReqs(baseGroup)
+		reqs.InitCommunityManageReqs(baseGroup)
+		reqs.InitFileManageReqs(baseGroup)
 	}
 
 	err := AppRouter.Run(":" + strconv.Itoa(appConfig.Server.Port))

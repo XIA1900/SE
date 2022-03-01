@@ -342,7 +342,7 @@ const docTemplate_swagger = `{
                         }
                     },
                     "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exist.",
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exist or User has followed.",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseMsg"
                         }

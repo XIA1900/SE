@@ -16,7 +16,8 @@ import (
 func InitializeUserManageController() (*controller.UserManageController, error) {
 	userDAO := dao.NewUserDAO()
 	followDAO := dao.NewFollowDAO()
-	userManageService := service.NewUserManageService(userDAO, followDAO)
+	spaceDAO := dao.NewSpaceDAO()
+	userManageService := service.NewUserManageService(userDAO, followDAO, spaceDAO)
 	userManageController := controller.NewUserManageController(userManageService)
 	return userManageController, nil
 }

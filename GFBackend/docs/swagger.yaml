@@ -316,7 +316,8 @@ paths:
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "400":
-          description: <b>Failure</b>. Bad Parameters or User not exist.
+          description: <b>Failure</b>. Bad Parameters or User not exist or User has
+            followed.
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "500":

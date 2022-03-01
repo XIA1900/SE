@@ -6,7 +6,7 @@ flowchart LR
 	ParamsCheck --> |No| ReturnError[ReturnError] --> End([End])
 	ParamsCheck --> |Yes| SearchUser[SearchUser] --> Existed{Existed}
 	Existed --> |Yes| ReturnError
-	Existed --> |No| InsertUser[InsertUser] --> ReturnSuccess[ReturnSuccess] --> End
+	Existed --> |No| InsertUser[InsertUser] --> CreateSpace[Create Space] --> ReturnSuccess[ReturnSuccess] --> End
 ```
 
 - If there are any server internal errors, it will return 500 to frontend immediately.
@@ -58,7 +58,7 @@ flowchart LR
 	ParamsCheck --> |Yes| AuthCheck{"Check Auth(token & role)"} --> |No| Error
 	AuthCheck --> |Yes| SearchUser[SearchUser] --> Existed{Existed}
 	Existed --> |Yes| Error
-	Existed --> |No| InsertUser[InsertUser] --> Success[ReturnSuccess] --> End
+	Existed --> |No| InsertUser[InsertUser] --> CreateSpace[Create Space] --> Success[ReturnSuccess] --> End
 ```
 
 ### User Delete
@@ -68,7 +68,7 @@ flowchart LR
 	Start([Request]) --> Params[/Request Params/] --> CheckParams{Params Check} --> |No| Error[Return Error] --> End([End])
 	CheckParams --> |Yes| DeleteSelf{Delete Self?} --> |Yes| Error
 	DeleteSelf --> |No| IsExisted{Delete User Existed?} --> |No| Error
-	IsExisted --> |Yes| DeleteUser[Delete User] --> Success[Return Success] --> End
+	IsExisted --> |Yes| DeleteUser[Delete User] --> FreeSpace --> DeleteFollow --> Success[Return Success] --> End
 ```
 
 
@@ -91,4 +91,23 @@ flowchart LR
 	Start([Request]) --> Params[/Request Params/] --> ParamsCheck{Check Params} --> |No| Error[Return Error] --> End([End])
 	ParamsCheck --> |Yes| UpdateUserInfo -->  End
 ```
+
+### User Follow
+
+```mermaid
+flowchart LR
+	Start([Reqeust]) --> ReqParams[/Request Params/] --> ParamsCheck{Check Params} --> |No| Error[Return Error] --> End([End])
+	ParamsCheck --> |Yes| MainCheck{Check User Exist And HasFollow} --> |No| End
+	MainCheck --> |Yes| Insert --> Success[Return Success] --> End
+```
+
+### User Unfollow
+
+```mermaid
+flowchart LR
+	Start([Reqeust]) --> ReqParams[/Request Params/] --> ParamsCheck{Check Params} --> |No| Error[Return Error] --> End([End])
+	ParamsCheck --> Delete[] --> Success[Return Success] --> End
+```
+
+
 

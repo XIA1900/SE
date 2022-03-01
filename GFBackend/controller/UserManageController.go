@@ -254,7 +254,7 @@ func (userManageController *UserManageController) UserDelete(context *gin.Contex
 	if err2 != nil {
 		er := ResponseMsg{
 			Code:    http.StatusBadRequest,
-			Message: "User not exist.",
+			Message: "User not exist or Other Errors.",
 		}
 		if strings.Contains(err2.Error(), "user Policy") {
 			er.Code = http.StatusInternalServerError
@@ -329,7 +329,7 @@ func (userManageController *UserManageController) UserUpdate(context *gin.Contex
 // @Security ApiAuthToken
 // @Param username body string true "username in post request body"
 // @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Follow Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exist."
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exist or User has followed."
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/follow [post]
 func (userManageController *UserManageController) UserFollow(context *gin.Context) {
@@ -353,7 +353,7 @@ func (userManageController *UserManageController) UserFollow(context *gin.Contex
 	if err2 != nil {
 		errMsg := ResponseMsg{
 			Code:    http.StatusBadRequest,
-			Message: "User not exist.",
+			Message: "User not exist or User has followed.",
 		}
 		if strings.Contains(err2.Error(), "500") {
 			errMsg.Code = http.StatusInternalServerError
@@ -384,6 +384,41 @@ func (userManageController *UserManageController) UserFollow(context *gin.Contex
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/unfollow [post]
 func (userManageController *UserManageController) UserUnfollow(context *gin.Context) {
+	type Info struct {
+		Username string `json:"username"`
+	}
+	var info Info
+	err1 := context.ShouldBind(&info)
+	if err1 != nil {
+		errMsg := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+		context.JSON(http.StatusBadRequest, errMsg)
+		return
+	}
+
+	token, _ := context.Cookie("token")
+	follower, _ := auth.GetTokenUsername(token)
+	err2 := userManageController.userManageService.Unfollow(info.Username, follower)
+	if err2 != nil {
+		errMsg := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "User not exist.",
+		}
+		if strings.Contains(err2.Error(), "500") {
+			errMsg.Code = http.StatusInternalServerError
+			errMsg.Message = "Internal Server Error"
+		}
+		context.JSON(http.StatusBadRequest, errMsg)
+		return
+	}
+
+	success := ResponseMsg{
+		Code:    http.StatusOK,
+		Message: "Follow Successfully",
+	}
+	context.JSON(http.StatusOK, success)
 
 	return
 }

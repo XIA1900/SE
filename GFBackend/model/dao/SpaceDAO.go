@@ -33,9 +33,13 @@ func NewSpaceDAO() *SpaceDAO {
 func (spaceDAO *SpaceDAO) CreateSpaceInfo(username string, tx *gorm.DB) error {
 	var result *gorm.DB
 	if tx == nil {
-		result = model.DB.Select("Username").Create(&model.Space{})
+		result = model.DB.Select("Username").Create(&model.Space{
+			Username: username,
+		})
 	} else {
-		result = tx.Select("Username").Create(&model.Space{})
+		result = tx.Select("Username").Create(&model.Space{
+			Username: username,
+		})
 	}
 	if result.Error != nil {
 		return result.Error

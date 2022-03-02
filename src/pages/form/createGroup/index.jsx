@@ -8,53 +8,51 @@ import ProForm, {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { history, useRequest } from 'umi';
+import { history, useRequest, useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { createGroup } from '@/services/create';
 import styles from './style.less';
 
 const groupForm = () => {
-  const params = [];
-  // const { run } = useRequest(createGroup, {
-  //   manual: true,
-  //   onSuccess: () => {
-  //     history.push('/result/success');
-  //   },
-  // });
-  const { run } = useRequest(
-      () => {
-        return createGroup({
-          params: params,
-        });
-      },
-      {
-        manual: true,
-        onSuccess: () => {
-          history.push('/result/success');
-      },
-    });
-
+  const { initialState, setInitialState } = useModel('@@initialState');
+  const { currentUser } = initialState;
+  console.log('currentUser');
+  console.log(currentUser);
   const onFinish = async (values) => {
-    console.log('params:');
+    
     let newdate = new Date();
     var date, month;
     if(newdate.getDate() < 10) 
       date = '0'+newdate.getDate().toString();
     else 
       date = newdate.getDate().toString();
-    if(newdate.getMonth()<10) 
-      month = '0'+newdate.getMonth().toString();
+    if(newdate.getMonth()+1<10) 
+      month = '0'+(newdate.getMonth()+1).toString();
     else 
-      month = newdate.getMonth().toString();
+      month = (newdate.getMonth()+1).toString();
     let year = newdate.getFullYear();
-    params.push({
+
+    const params = {
       groupName: values.title,
       groupDescription: values.content,
       time: year+'-'+month+'-'+date,
-    });
-    
+      userId: currentUser.userId,
+    };
     console.log(params);
-    run(params);
+
+    try {
+      const msg = await createGroup({...params});
+      if(msg.message == 'Ok') {
+        history.push('/result/success');
+      }
+      else {
+
+      }
+
+    }
+    catch(error){
+      message.error("error");
+    }
   };
 
   return (

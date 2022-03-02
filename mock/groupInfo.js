@@ -173,6 +173,7 @@ for(let i=0; i<5; i++) {
   postLists.push(post);
 }
 
+const date = new Date();
 
 function groupInfo(userName) {
   const lists = [];
@@ -185,7 +186,7 @@ function groupInfo(userName) {
       group_href: 'https://www.leagueoflegends.com/en-us/',
       //logo
       groupAvatar: avatars[i],
-      createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
+      createdAt: date.getFullYear()+'-'+date.getMonth()+1+'-'+date.getDate(),
       groupMember: groups_member[i],
       postList: postLists[i],
     });
@@ -196,6 +197,7 @@ function groupInfo(userName) {
 function getGroup(req, res) {
   const params = req.query;
   const userName = params.userName;
+  console.log("group params:");
   const result = groupInfo(userName);
   return res.json({
     data: {
@@ -214,7 +216,7 @@ function createdGroup(userName) {
       groupDescription: descriptions[i],
       group_href: groups_href,
       groupAvatar: avatars[i],
-      createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
+      createdAt: date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate(),
       numberOfMember:Math.ceil(Math.random() * 100) + 100,
       numberOfPost:Math.ceil(Math.random() * 100) + 100,
     });
@@ -224,6 +226,8 @@ function createdGroup(userName) {
 
 function getCreated(req, res) {
   const params = req.query;
+  
+  console.log(params);
   const userName = params.userName;
   console.log(userName);
   const result = createdGroup(userName);

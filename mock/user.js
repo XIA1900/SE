@@ -130,6 +130,7 @@ export default {
     },
   ],
   'POST /api/user/login': async (req, res) => {
+    console.log(req.body);
     const { password, username, type } = req.body;
     await waitTime(2000);
 

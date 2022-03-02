@@ -6,6 +6,9 @@ export async function createGroup(params) {
   return request('/api/createGroup', {
     data: params,
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 }
 

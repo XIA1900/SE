@@ -1,18 +1,27 @@
+const waitTime = (time = 100) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+};
+
+
 export default {
-  'POST  /api/createGroup': (req, res) => {
-    console.log('{{{{{{{{{{{params');
-    console.log(req.query);
+  'POST  /api/createGroup': async (req, res) => {
+   
+    //const { groupName, groupDescription, time } = req.params;
+    await waitTime(2000);
+    console.log(req.body);
+    const params = req.body;
+    console.log(params);
     res.send({
-      data: {
-        message: 'Ok',
-      },
+      message: 'Ok',
     });
   },
   'POST  /api/createPost': (req, res) => {
     res.send({
-      data: {
-        message: 'Ok',
-      },
+      message: 'Ok',
     });
   },
 };

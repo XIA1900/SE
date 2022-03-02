@@ -125,6 +125,8 @@ function postList(count, type, groupName) {
 
 function getPostList(req, res) {
   const params = req.query;
+  console.log("postlists");
+  console.log(params);
   const count = params.count;
   console.log('count=' + count);
   const type = params.type;

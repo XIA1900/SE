@@ -20,6 +20,8 @@ const CardList = () => {
 
   const list = data?.list || [];
 
+  console.log(list);
+
   const content = (
     <div className={styles.pageHeaderContent}>
       <p>

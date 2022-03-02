@@ -8,6 +8,7 @@ func InitFileManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 
 	fileManageReqsGroup := baseGroup.Group("/file")
 	{
+		fileManageReqsGroup.POST("/delete", fileManageController.UserDeleteFile)
 		fileManageReqsGroup.POST("/scan", fileManageController.ScanFiles)
 
 		spaceReqsGroup := fileManageReqsGroup.Group("/space")

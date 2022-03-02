@@ -107,6 +107,57 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/file/delete": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need filename in json",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Static Resource"
+                ],
+                "summary": "Delete User File, only have permission to delete self data",
+                "parameters": [
+                    {
+                        "description": "filename in post request body",
+                        "name": "filename",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Other",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/file/scan": {
             "post": {
                 "security": [
@@ -164,7 +215,7 @@ const docTemplate_swagger = `{
                 "tags": [
                     "Static Resource"
                 ],
-                "summary": "Scan User files",
+                "summary": "Browse User Space Info",
                 "responses": {
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get User Space Info Successfully",

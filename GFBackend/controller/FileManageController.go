@@ -60,6 +60,51 @@ func (fileManageController *FileManageController) UploadFile(context *gin.Contex
 
 }
 
+// UserDeleteFile godoc
+// @Summary Delete User File, only have permission to delete self data
+// @Description need token in cookie, need filename in json
+// @Tags Static Resource
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param filename body string true "filename in post request body"
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Delete Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Other"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /file/delete [post]
+func (fileManageController *FileManageController) UserDeleteFile(context *gin.Context) {
+	type Info struct {
+		Filename string `json:"filename"`
+	}
+	var info Info
+	err1 := context.ShouldBind(&info)
+	if err1 != nil || info.Filename == "" {
+		errMsg := ResponseMsg{
+			Code:    400,
+			Message: "No Filename",
+		}
+		context.JSON(400, errMsg)
+		return
+	}
+
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+	err2 := fileManageController.fileManageService.DeleteUserFile(username, info.Filename)
+	if err2 != nil {
+		errMsg := ResponseMsg{
+			Code:    400,
+			Message: "File not Exists",
+		}
+		context.JSON(400, errMsg)
+		return
+	}
+
+	context.JSON(200, ResponseMsg{
+		Code:    200,
+		Message: "Delete Successfully",
+	})
+}
+
 // ScanFiles godoc
 // @Summary Scan User files
 // @Description need token in cookie, only get self files
@@ -98,7 +143,7 @@ func (fileManageController *FileManageController) ScanFiles(context *gin.Context
 }
 
 // UserSpaceInfo godoc
-// @Summary Scan User files
+// @Summary Browse User Space Info
 // @Description need token in cookie
 // @Tags Static Resource
 // @Accept json

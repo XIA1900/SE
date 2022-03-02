@@ -24,6 +24,7 @@ type IFileManageService interface {
 	FreeSpace(username string) error
 	Upload(context *gin.Context, username string, file *multipart.FileHeader) error
 	Download(context *gin.Context, username string, filename string) error
+	DeleteUserFile(username, filename string) error
 }
 
 type FileManageService struct {
@@ -115,5 +116,13 @@ func (fileManageService FileManageService) Download(context *gin.Context, userna
 	context.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
 	context.Writer.Header().Add("Content-Type", "application/octet-stream")
 	context.File(utils.DirBasePath + username + "/" + filename)
+	return nil
+}
+
+func (fileManageService *FileManageService) DeleteUserFile(username, filename string) error {
+	if !utils.IsDirExists(username) || !utils.IsFileExists(username, filename) {
+		return errors.New("400")
+	}
+	utils.DeleteFile(username, filename)
 	return nil
 }

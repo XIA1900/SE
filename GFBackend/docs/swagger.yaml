@@ -178,6 +178,38 @@ paths:
       summary: Create a new Community
       tags:
       - Community Manage
+  /file/delete:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need filename in json
+      parameters:
+      - description: filename in post request body
+        in: body
+        name: filename
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Delete Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Other
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Delete User File, only have permission to delete self data
+      tags:
+      - Static Resource
   /file/scan:
     post:
       consumes:
@@ -225,7 +257,7 @@ paths:
             $ref: '#/definitions/controller.ResponseMsg'
       security:
       - ApiAuthToken: []
-      summary: Scan User files
+      summary: Browse User Space Info
       tags:
       - Static Resource
   /file/upload:

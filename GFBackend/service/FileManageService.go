@@ -19,9 +19,8 @@ var fileManageService *FileManageService
 type IFileManageService interface {
 	GetSpaceInfo(username string) (model.Space, error)
 	GetUserFiles(username string) ([]string, error)
-	UpdateRemaining(username string) error
-	ExpandSize(username string, newSize float64) error
-	FreeSpace(username string) error
+	UpdateUsed(username string) error
+	UpdateCapacity(username string, newSize float64) error
 	Upload(context *gin.Context, username string, file *multipart.FileHeader) error
 	Download(context *gin.Context, username string, filename string) error
 	DeleteUserFile(username, filename string) error
@@ -71,13 +70,13 @@ func (fileManageService FileManageService) GetUserFiles(username string) ([]stri
 	return filenames, nil
 }
 
-func (fileManageService FileManageService) UpdateRemaining(username string) error {
+func (fileManageService FileManageService) UpdateUsed(username string) error {
 	usedSize, err2 := utils.DirSize(username)
 	if err2 != nil {
 		logger.AppLogger.Error(err2.Error())
 		return errors.New("500")
 	}
-	err3 := fileManageService.spaceDAO.UpdateRemaining(username, usedSize, nil)
+	err3 := fileManageService.spaceDAO.UpdateUsed(username, usedSize, nil)
 	if err3 != nil {
 		logger.AppLogger.Error(err3.Error())
 		return errors.New("500")
@@ -85,21 +84,12 @@ func (fileManageService FileManageService) UpdateRemaining(username string) erro
 	return nil
 }
 
-func (fileManageService FileManageService) ExpandSize(username string, newSize float64) error {
-	err := fileManageService.spaceDAO.UpdateCapacity(username, newSize, nil)
-	if err != nil {
+func (fileManageService FileManageService) UpdateCapacity(username string, newSize float64) error {
+	err1 := fileManageService.spaceDAO.UpdateCapacity(username, newSize, nil)
+	if err1 != nil {
+		logger.AppLogger.Error(err1.Error())
 		return errors.New("500")
 	}
-	return nil
-}
-
-func (fileManageService FileManageService) FreeSpace(username string) error {
-	err := fileManageService.spaceDAO.DeleteSpaceInfo(username, nil)
-	if err != nil {
-		logger.AppLogger.Error(err.Error())
-		return errors.New("500")
-	}
-	utils.DeleteDir(username)
 	return nil
 }
 

@@ -43,10 +43,10 @@ func (c Community) TableName() string {
 }
 
 type Space struct {
-	ID        int
-	Username  string
-	Capacity  float32
-	Remaining float32
+	ID       int
+	Username string
+	Capacity float32
+	Used     float32
 }
 
 func (space Space) TableName() string {

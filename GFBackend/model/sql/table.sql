@@ -47,6 +47,6 @@ CREATE TABLE Space (
     ID INT NOT NULL AUTO_INCREMENT,
     Username VARCHAR(20) NOT NULL,
     Capacity FLOAT(6,2) DEFAULT '10.00',      -- MB
-    Remaining FLOAT(6,2) DEFAULT '10.00',      -- MB
+    Used FLOAT(6,2) DEFAULT '0.00',           -- MB
     PRIMARY KEY (ID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

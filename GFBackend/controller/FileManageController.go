@@ -188,3 +188,48 @@ func (fileManageController *FileManageController) UserSpaceInfo(context *gin.Con
 
 	context.JSON(200, spaceInfo)
 }
+
+// UpdateUserCapacity godoc
+// @Summary Expand User Capacity, only admin user can do this
+// @Description need token in cookie, need target user and  new capacity in json
+// @Tags Static Resource
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param username body string true "username in post request body"
+// @Param capacity body number true "capacity(e.g. 16.8) in post request body"
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Other"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /file/space/update [post]
+func (fileManageController *FileManageController) UpdateUserCapacity(context *gin.Context) {
+	type Info struct {
+		Username string  `json:"username"`
+		Capacity float64 `json:"capacity"`
+	}
+	var info Info
+	err1 := context.ShouldBind(&info)
+	if err1 != nil {
+		errMsg := ResponseMsg{
+			Code:    400,
+			Message: "Bad Parameters",
+		}
+		context.JSON(400, errMsg)
+		return
+	}
+
+	err2 := fileManageController.fileManageService.UpdateCapacity(info.Username, info.Capacity)
+	if err2 != nil {
+		errMsg := ResponseMsg{
+			Code:    400,
+			Message: "Internal Server Error",
+		}
+		context.JSON(500, errMsg)
+		return
+	}
+
+	context.JSON(200, ResponseMsg{
+		Code:    200,
+		Message: "Update Successfully",
+	})
+}

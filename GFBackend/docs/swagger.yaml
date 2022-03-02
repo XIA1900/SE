@@ -106,7 +106,7 @@ definitions:
         type: number
       id:
         type: integer
-      remaining:
+      used:
         type: number
       username:
         type: string
@@ -290,6 +290,44 @@ paths:
       security:
       - ApiAuthToken: []
       summary: Browse User Space Info
+      tags:
+      - Static Resource
+  /file/space/update:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need target user and  new capacity in json
+      parameters:
+      - description: username in post request body
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: capacity(e.g. 16.8) in post request body
+        in: body
+        name: capacity
+        required: true
+        schema:
+          type: number
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Update Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Other
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Expand User Capacity, only admin user can do this
       tags:
       - Static Resource
   /file/upload:

@@ -12,7 +12,7 @@ var spaceDAO *SpaceDAO
 type ISpaceDAO interface {
 	CreateSpaceInfo(username string, tx *gorm.DB) error
 	DeleteSpaceInfo(username string, tx *gorm.DB) error
-	UpdateRemaining(username string, remainingSize float64, tx *gorm.DB) error
+	UpdateUsed(username string, remainingSize float64, tx *gorm.DB) error
 	UpdateCapacity(username string, newCapacity float64, tx *gorm.DB) error
 	GetSpaceInfo(username string) (model.Space, error)
 }
@@ -60,12 +60,12 @@ func (spaceDAO *SpaceDAO) DeleteSpaceInfo(username string, tx *gorm.DB) error {
 	return nil
 }
 
-func (spaceDAO *SpaceDAO) UpdateRemaining(username string, remainingSize float64, tx *gorm.DB) error {
+func (spaceDAO *SpaceDAO) UpdateUsed(username string, usedSize float64, tx *gorm.DB) error {
 	var result *gorm.DB
 	if tx == nil {
-		result = model.DB.Model(&model.Space{}).Where("username = ?", username).Update("Remaining", remainingSize)
+		result = model.DB.Model(&model.Space{}).Where("username = ?", username).Update("Remaining", usedSize)
 	} else {
-		result = tx.Model(&model.Space{}).Where("username = ?", username).Update("Remaining", remainingSize)
+		result = tx.Model(&model.Space{}).Where("username = ?", username).Update("Remaining", usedSize)
 	}
 	if result.Error != nil {
 		return result.Error

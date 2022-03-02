@@ -16,6 +16,7 @@ func InitFileManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 		spaceReqsGroup := fileManageReqsGroup.Group("/space")
 		{
 			spaceReqsGroup.POST("/info", fileManageController.UserSpaceInfo)
+			spaceReqsGroup.POST("/update", fileManageController.UpdateUserCapacity)
 		}
 	}
 

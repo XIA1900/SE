@@ -19,7 +19,6 @@ var fileManageService *FileManageService
 type IFileManageService interface {
 	GetSpaceInfo(username string) (model.Space, error)
 	GetUserFiles(username string) ([]string, error)
-	RegisterSpaceInfo(username string) error
 	UpdateRemaining(username string) error
 	ExpandSize(username string, newSize float64) error
 	FreeSpace(username string) error
@@ -69,15 +68,6 @@ func (fileManageService FileManageService) GetUserFiles(username string) ([]stri
 		return nil, errors.New("500")
 	}
 	return filenames, nil
-}
-
-func (fileManageService FileManageService) RegisterSpaceInfo(username string) error {
-	err := fileManageService.spaceDAO.CreateSpaceInfo(username, nil)
-	if err != nil {
-		logger.AppLogger.Error(err.Error())
-		return errors.New("500")
-	}
-	return nil
 }
 
 func (fileManageService FileManageService) UpdateRemaining(username string) error {

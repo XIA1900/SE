@@ -60,6 +60,22 @@ func (fileManageController *FileManageController) UploadFile(context *gin.Contex
 
 }
 
+// DownloadFile godoc
+// @Summary User Downloads File
+// @Description need token in cookie, need filename in json
+// @Tags Static Resource
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param filename body string true "filename in post request body"
+// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Upload Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or No Enough Space"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /file/download [post]
+func (fileManageController *FileManageController) DownloadFile(context *gin.Context) {
+
+}
+
 // UserDeleteFile godoc
 // @Summary Delete User File, only have permission to delete self data
 // @Description need token in cookie, need filename in json

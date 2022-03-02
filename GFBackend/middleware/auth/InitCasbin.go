@@ -43,6 +43,8 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/create", "POST")
 
 	// /file/...
+	CasbinEnforcer.AddPolicy("regular", basePath+"/file/upload", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/file/download", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/delete", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/scan", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/space/info", "POST")

@@ -210,6 +210,38 @@ paths:
       summary: Delete User File, only have permission to delete self data
       tags:
       - Static Resource
+  /file/download:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need filename in json
+      parameters:
+      - description: filename in post request body
+        in: body
+        name: filename
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Upload Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or No Enough Space
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: User Downloads File
+      tags:
+      - Static Resource
   /file/scan:
     post:
       consumes:

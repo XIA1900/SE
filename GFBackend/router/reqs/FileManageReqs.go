@@ -9,6 +9,11 @@ func InitFileManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 	fileManageReqsGroup := baseGroup.Group("/file")
 	{
 		fileManageReqsGroup.POST("/scan", fileManageController.ScanFiles)
+
+		spaceReqsGroup := fileManageReqsGroup.Group("/space")
+		{
+			spaceReqsGroup.POST("/info", fileManageController.UserSpaceInfo)
+		}
 	}
 
 	return nil

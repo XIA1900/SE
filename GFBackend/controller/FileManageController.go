@@ -96,3 +96,34 @@ func (fileManageController *FileManageController) ScanFiles(context *gin.Context
 	}
 	context.JSON(200, respMsg)
 }
+
+// UserSpaceInfo godoc
+// @Summary Scan User files
+// @Description need token in cookie
+// @Tags Static Resource
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Success 201 {object} model.Space "<b>Success</b>. Get User Space Info Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exists."
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /file/space/info [post]
+func (fileManageController *FileManageController) UserSpaceInfo(context *gin.Context) {
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+
+	spaceInfo, err1 := fileManageController.fileManageService.GetSpaceInfo(username)
+	if err1 != nil {
+		errMsg := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "User not exists",
+		}
+		if strings.Contains(err1.Error(), "500") {
+			errMsg.Code = http.StatusInternalServerError
+			errMsg.Message = "Server Internal Error"
+		}
+		context.JSON(errMsg.Code, errMsg)
+	}
+
+	context.JSON(200, spaceInfo)
+}

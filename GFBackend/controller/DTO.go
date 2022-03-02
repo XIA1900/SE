@@ -42,3 +42,9 @@ type UserFiles struct {
 	ResponseMsg
 	Filenames []string `json:"Filenames" example:"\"xxx.jpg\",\"xxx.png\",\"xxx.gif\""`
 }
+
+type UserSpaceInfo struct {
+	ResponseMsg
+	Capacity  float64 `json:"Capacity" example:"10.0"`
+	Remaining float64 `json:"Remaining" example:"10.0"`
+}

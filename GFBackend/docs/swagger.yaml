@@ -100,6 +100,17 @@ definitions:
       num_Member:
         type: integer
     type: object
+  model.Space:
+    properties:
+      capacity:
+        type: number
+      id:
+        type: integer
+      remaining:
+        type: number
+      username:
+        type: string
+    type: object
 host: http://167.71.166.120:10010
 info:
   contact: {}
@@ -181,6 +192,31 @@ paths:
             $ref: '#/definitions/controller.UserFiles'
         "400":
           description: <b>Failure</b>. Bad Parameters.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Scan User files
+      tags:
+      - Static Resource
+  /file/space/info:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Get User Space Info Successfully
+          schema:
+            $ref: '#/definitions/model.Space'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or User not exists.
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "500":

@@ -147,6 +147,46 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/file/space/info": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Static Resource"
+                ],
+                "summary": "Scan User files",
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get User Space Info Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/model.Space"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exists.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/file/upload": {
             "post": {
                 "security": [
@@ -775,6 +815,23 @@ const docTemplate_swagger = `{
                 },
                 "num_Member": {
                     "type": "integer"
+                }
+            }
+        },
+        "model.Space": {
+            "type": "object",
+            "properties": {
+                "capacity": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "remaining": {
+                    "type": "number"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         }

@@ -44,6 +44,7 @@ func addInitialPolicy() {
 
 	// /file/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/scan", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/file/space/info", "POST")
 
 	// admin
 	CasbinEnforcer.AddGroupingPolicy("admin", "regular") // admin extends regular

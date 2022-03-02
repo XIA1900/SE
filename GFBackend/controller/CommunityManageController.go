@@ -1,26 +1,36 @@
 package controller
 
 import (
-	"GFBackend/model/dao"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"net/http"
 	"strings"
+	"sync"
 )
+
+var communityManageControllerLock sync.Mutex
+var communityManageController *CommunityManageController
 
 type CommunityManageController struct {
 	communityManageService service.ICommunityManageService
 }
 
 func NewCommunityManageController(communityManageService service.ICommunityManageService) *CommunityManageController {
-	return &CommunityManageController{communityManageService: communityManageService}
+	if communityManageController == nil {
+		communityManageControllerLock.Lock()
+		if communityManageController == nil {
+			communityManageController = &CommunityManageController{
+				communityManageService: communityManageService,
+			}
+		}
+		communityManageControllerLock.Unlock()
+	}
+	return communityManageController
 }
 
 var CommunityManageSet = wire.NewSet(
-	dao.NewCommunityDAO,
-	wire.Bind(new(dao.ICommunityDAO), new(*dao.CommunityDAO)),
-	service.NewCommunityManageService,
+	service.CommunityServiceSet,
 	wire.Bind(new(service.ICommunityManageService), new(*service.CommunityManageService)),
 	NewCommunityManageController,
 )

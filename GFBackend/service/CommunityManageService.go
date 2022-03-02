@@ -6,8 +6,13 @@ import (
 	"GFBackend/model/dao"
 	"GFBackend/utils"
 	"fmt"
+	"github.com/google/wire"
 	"gorm.io/gorm"
+	"sync"
 )
+
+var communityManageServiceLock sync.Mutex
+var communityManageService *CommunityManageService
 
 type ICommunityManageService interface {
 	CreateCommunity(creator string, name string, description string, createTime *utils.LocalTime) error
@@ -19,8 +24,23 @@ type CommunityManageService struct {
 }
 
 func NewCommunityManageService(communityDAO dao.ICommunityDAO) *CommunityManageService {
-	return &CommunityManageService{communityDAO: communityDAO}
+	if communityManageService == nil {
+		communityManageServiceLock.Lock()
+		if communityManageService == nil {
+			communityManageService = &CommunityManageService{
+				communityDAO: communityDAO,
+			}
+		}
+		communityManageServiceLock.Unlock()
+	}
+	return communityManageService
 }
+
+var CommunityServiceSet = wire.NewSet(
+	dao.NewCommunityDAO,
+	wire.Bind(new(dao.ICommunityDAO), new(*dao.CommunityDAO)),
+	NewCommunityManageService,
+)
 
 func (communityManageService *CommunityManageService) CreateCommunity(creator string, name string, description string, createTime *utils.LocalTime) error {
 	newCommunity := model.Community{

@@ -45,8 +45,8 @@ func (c Community) TableName() string {
 type Space struct {
 	ID       int
 	Username string
-	Capacity float32
-	Used     float32
+	Capacity float64
+	Used     float64
 }
 
 func (space Space) TableName() string {

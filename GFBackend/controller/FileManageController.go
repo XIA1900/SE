@@ -57,11 +57,39 @@ func (fileManageController *FileManageController) StaticResourcesReqs() {}
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /file/upload [post]
 func (fileManageController *FileManageController) UploadFile(context *gin.Context) {
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+	file, err1 := context.FormFile("uploadFilename")
+	errMsg := ResponseMsg{
+		Code:    http.StatusBadRequest,
+		Message: "Bad Parameters",
+	}
+	if err1 != nil {
+		context.JSON(400, errMsg)
+		return
+	}
+	err2 := fileManageController.fileManageService.Upload(context, username, file)
+	if err2 != nil {
+		if strings.Contains(err2.Error(), "400") {
+			errMsg.Code = 400
+			errMsg.Message = "Not enough space"
+		} else if strings.Contains(err2.Error(), "500") {
+			errMsg.Code = 500
+			errMsg.Message = "Internal Server Error"
+		}
+		context.JSON(errMsg.Code, errMsg)
+		return
+	}
+
+	context.JSON(200, ResponseMsg{
+		Code:    200,
+		Message: "Upload Success",
+	})
 
 }
 
 // DownloadFile godoc
-// @Summary User Downloads File
+// @Summary User Downloads File, only self data for now
 // @Description need token in cookie, need filename in json
 // @Tags Static Resource
 // @Accept json
@@ -73,7 +101,26 @@ func (fileManageController *FileManageController) UploadFile(context *gin.Contex
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /file/download [post]
 func (fileManageController *FileManageController) DownloadFile(context *gin.Context) {
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+	errMsg := ResponseMsg{
+		Code:    http.StatusBadRequest,
+		Message: "Bad Parameters",
+	}
+	type Info struct {
+		Filename string `json:"filename"`
+	}
+	var info Info
+	err1 := context.ShouldBind(&info)
+	if err1 != nil || info.Filename == "" {
+		context.JSON(400, errMsg)
+		return
+	}
 
+	err2 := fileManageController.fileManageService.Download(context, username, info.Filename)
+	if err2 != nil {
+		return
+	}
 }
 
 // UserDeleteFile godoc

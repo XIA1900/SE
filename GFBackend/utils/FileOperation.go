@@ -62,9 +62,7 @@ func DirSize(username string) (float64, error) {
 		}
 		return err
 	})
-	float64Size := float64(size) / (1024 * 1024)
-	value, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", float64Size), 64)
-	return value, err
+	return ChangeSize2Float(size), err
 }
 
 func GetFilesInDir(username string) ([]string, error) {
@@ -83,4 +81,10 @@ func GetFilesInDir(username string) ([]string, error) {
 		return nil, err
 	}
 	return files, nil
+}
+
+func ChangeSize2Float(size int64) float64 {
+	float64Size := float64(size) / (1024 * 1024)
+	value, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", float64Size), 64)
+	return value
 }

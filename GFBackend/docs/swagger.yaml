@@ -239,7 +239,7 @@ paths:
             $ref: '#/definitions/controller.ResponseMsg'
       security:
       - ApiAuthToken: []
-      summary: User Downloads File
+      summary: User Downloads File, only self data for now
       tags:
       - Static Resource
   /file/scan:

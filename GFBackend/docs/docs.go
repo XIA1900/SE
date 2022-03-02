@@ -175,7 +175,7 @@ const docTemplate_swagger = `{
                 "tags": [
                     "Static Resource"
                 ],
-                "summary": "User Downloads File",
+                "summary": "User Downloads File, only self data for now",
                 "parameters": [
                     {
                         "description": "filename in post request body",

@@ -94,11 +94,16 @@ func (fileManageService FileManageService) UpdateCapacity(username string, newSi
 }
 
 func (fileManageService FileManageService) Upload(context *gin.Context, username string, file *multipart.FileHeader) error {
+	spaceInfo, _ := fileManageService.GetSpaceInfo(username)
+	if spaceInfo.Capacity < utils.ChangeSize2Float(file.Size)+spaceInfo.Used {
+		return errors.New("400")
+	}
 	filename := utils.DirBasePath + username + "/" + file.Filename
 	if err1 := context.SaveUploadedFile(file, filename); err1 != nil {
 		logger.AppLogger.Error(err1.Error())
 		return errors.New("500")
 	}
+	_ = fileManageService.UpdateUsed(username)
 	return nil
 }
 

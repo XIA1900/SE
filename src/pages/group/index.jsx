@@ -14,20 +14,24 @@ import React from 'react';
 import { useRequest, history } from 'umi';
 import ArticleListContent from './components';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
-import { queryList } from '@/services/getList';
+import { getGroup } from '@/services/getGroupInfo';
 import styles from './style.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
-const groupName = history.location.search;
+const groupName = history.location.search.substring(1);
+console.log("groupName");
 console.log(groupName);
 
 const Posts = () => {
+  console.log("going");
   const [form] = Form.useForm();
+  
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
     () => {
-      return queryList({
+      console.log("going2");
+      return getGroup({
         count: pageSize,
         type: 'hottest',
         groupName: groupName,
@@ -37,7 +41,17 @@ const Posts = () => {
       loadMore: true,
     },
   );
-  const list = data?.list || [];
+  const lists = data?.list[0] || [];
+  console.log("lists");
+  console.log(lists);
+  const description = lists.groupDesciption;
+  console.log(description);
+  const avatar = lists.groupAvatar;
+  const time = lists.createdAt;
+  const members = lists.groupMember;
+  const list = lists?.postList || [];
+  // const list = lists.postList;
+  // console.log(list);
 
   const IconText = ({ type, text }) => {
     switch (type) {
@@ -132,10 +146,13 @@ const Posts = () => {
           }}
           onValuesChange={reload}
         >
-          <StandardFormRow
-          block
-          > 
+          <StandardFormRow block> 
+            <h1>{groupName}</h1>
+            <p> {members} members</p>
+            <p> Created at {time}</p>
           </StandardFormRow> 
+          <p>{description}</p>
+
         </Form>
       </Card>
       <Card
@@ -158,9 +175,9 @@ const Posts = () => {
             <List.Item
               key={item.id}
               actions={[
-                <IconText key="collection" type="star-o" text={item.star} />,
+                <IconText key="collection" type="star-o" text={item.collection} />,
                 <IconText key="like" type="like-o" text={item.like} />,
-                <IconText key="reply" type="message" text={item.message} />,
+                <IconText key="reply" type="message" text={item.reply} />,
               ]}
               extra={<div className={styles.listItemExtra} />}
             >

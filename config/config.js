@@ -283,10 +283,6 @@ export default defineConfig({
           component: './account/settings',
         },
         {
-          path: '/account/createdGroups',
-          component: './account/createdGroups',
-        },
-        {
           name:'Group Management',
           path: '/account/selectGroups/created',
           component:'./account/selectGroups/created',

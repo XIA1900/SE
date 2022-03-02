@@ -1,7 +1,8 @@
 import { request } from 'umi';
 
-export async function getGroupInfo(params) {   //only for created groups, return entire information
-    return request('/api/getGroupInfo', {
+export async function getGroup(params) {   //only for created groups, return entire information
+  console.log("traveling");
+  return request('/api/getGroupInfo', {
       params,
     });
   }

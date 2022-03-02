@@ -19,8 +19,6 @@ A group has:
   iii. delete group
 */
 
-
-
 const groups_owner = [
   'Soraka',
   'Ashe',
@@ -156,14 +154,9 @@ for(let i=0; i<5; i++) {
     post.push({
       id: i,
       owner: users[i % 10],
-      owner_href: users_href[i % 10],
       title: titles[i % 10],
-      title_href: titles_href[i % 10],
       logo: avatars[i % 10],
-      group: groups,
-      group_href: groups_href,
       updatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
-      //createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
       collection: Math.ceil(Math.random() * 100) + 100,
       like: Math.ceil(Math.random() * 100) + 100,
       reply: Math.ceil(Math.random() * 10) + 10,
@@ -175,30 +168,26 @@ for(let i=0; i<5; i++) {
 
 const date = new Date();
 
-function groupInfo(userName) {
-  const lists = [];
-  const count = 5; //suppose has 5 groups
-  for(let i = 0; i< count; i += 1) {
-    lists.push({
-      id: i,
-      groupName: groups_name[i],
-      groupDescription: descriptions[i],
-      group_href: 'https://www.leagueoflegends.com/en-us/',
-      //logo
-      groupAvatar: avatars[i],
-      createdAt: date.getFullYear()+'-'+date.getMonth()+1+'-'+date.getDate(),
-      groupMember: groups_member[i],
-      postList: postLists[i],
-    });
-  }
+function groupInfo(groupName, pageSize, type) {
+  console.log("getgroupInfo");
+  const lists = {
+    groupName: groupName,
+    groupDescription: descriptions[0],
+    groupAvatar: avatars[0],
+    createdAt: date.getFullYear()+'-'+date.getMonth()+1+'-'+date.getDate(),
+    groupMember: Math.ceil(Math.random() * 100) + 1000,
+    postList: postLists[0],
+  };
+  console.log(lists);
   return lists;
 }
 
 function getGroup(req, res) {
   const params = req.query;
-  const userName = params.userName;
-  console.log("group params:");
-  const result = groupInfo(userName);
+  const groupName = params.groupName;
+  const type = params.type;
+  const pageSize = params.pageSize;
+  const result = groupInfo(groupName, pageSize, type);
   return res.json({
     data: {
       list: result,
@@ -226,10 +215,7 @@ function createdGroup(userName) {
 
 function getCreated(req, res) {
   const params = req.query;
-  
-  console.log(params);
   const userName = params.userName;
-  console.log(userName);
   const result = createdGroup(userName);
   return res.json({
     data: {

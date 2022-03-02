@@ -1,4 +1,4 @@
-import { Card, message } from 'antd';
+import { Card, message, Alert, Tabs } from 'antd';
 import ProForm, {
   ProFormDateRangePicker,
   ProFormDependency,
@@ -8,16 +8,16 @@ import ProForm, {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { history, useRequest, useModel } from 'umi';
+import { useIntl, history, useRequest, useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { createGroup } from '@/services/create';
 import styles from './style.less';
+import { MaskLayer } from '@antv/l7';
 
 const groupForm = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState;
-  console.log('currentUser');
-  console.log(currentUser);
+  const intl = useIntl();
   const onFinish = async (values) => {
     
     let newdate = new Date();
@@ -38,15 +38,28 @@ const groupForm = () => {
       time: year+'-'+month+'-'+date,
       userId: currentUser.userId,
     };
-    console.log(params);
 
     try {
       const msg = await createGroup({...params});
-      if(msg.message == 'Ok') {
-        history.push('/result/success');
+      if(msg.message === 'Ok') { //redirect to group page
+        history.push({
+          pathname: '/group',
+          search: 'params.groupName',
+        });
       }
-      else {
-
+      else if(msg.message === 'Name') {
+        const nameDuplicate = intl.formatMessage({
+          id: 'createGroup.failure.nameDuplicate',
+          defaultMessage: 'Group name duplicate, please change a name and try again!',
+        });
+        message.error(nameDuplicate);
+      }
+      else if(msg.message === 'Count') {
+        const countMaximum = intl.formatMessage({
+          id: 'createGroup.failure.countMaximum',
+          defaultMessage: 'You already own 5 groups.',
+        });
+        message.error(countMaximum);
       }
 
     }

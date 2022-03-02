@@ -314,7 +314,7 @@ export default defineConfig({
       routes: [
         {
           path: '/group',
-          component: './search',
+          component: './group',
         },
       ],
     },

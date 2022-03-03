@@ -4,6 +4,7 @@ import (
 	"GFBackend/logger"
 	"GFBackend/model"
 	"GFBackend/model/dao"
+	"errors"
 	"fmt"
 	"github.com/google/wire"
 	"gorm.io/gorm"
@@ -16,6 +17,7 @@ var communityManageService *CommunityManageService
 type ICommunityManageService interface {
 	CreateCommunity(creator string, name string, description string, createTime string) error
 	GetCommunityByName(name string) (model.Community, model.User, error)
+	UpdateCommunity(communityInfo model.Community) error
 }
 
 type CommunityManageService struct {
@@ -79,4 +81,13 @@ func (communityManageService *CommunityManageService) GetCommunityByName(name st
 		return model.Community{}, model.User{}, err
 	}
 	return resCommunity, resUser, nil
+}
+
+func (communityManageService *CommunityManageService) UpdateCommunity(communityInfo model.Community) error {
+	err := communityManageService.communityDAO.UpdateCommunity(communityInfo)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return errors.New("500")
+	}
+	return nil
 }

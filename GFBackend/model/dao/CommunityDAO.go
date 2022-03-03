@@ -12,6 +12,7 @@ var communityDAOLock sync.Mutex
 type ICommunityDAO interface {
 	CreateCommunity(community model.Community, tx *gorm.DB) error
 	GetCommunityByName(community model.Community) (model.Community, error)
+	UpdateCommunity(community model.Community) error
 }
 
 type CommunityDAO struct {
@@ -53,4 +54,15 @@ func (communityDAO *CommunityDAO) GetCommunityByName(community model.Community) 
 		model.DB.Where("Name = ?", community.Name).First(&dbCommunity)
 		return dbCommunity, nil
 	}
+}
+
+func (communityDAO *CommunityDAO) UpdateCommunity(communityInfo model.Community) error {
+	result := model.DB.Model(&model.Community{}).Where("Creator = ?", communityInfo.Creator).Updates(model.Community{
+		Name:        communityInfo.Name,
+		Description: communityInfo.Description,
+	})
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }

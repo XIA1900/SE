@@ -6,7 +6,6 @@ import (
 	"GFBackend/elasticsearch"
 	"GFBackend/logger"
 	"GFBackend/middleware/auth"
-	"GFBackend/model"
 	"GFBackend/router"
 )
 
@@ -26,7 +25,6 @@ func main() {
 	config.InitConfig()
 	logger.InitAppLogger()
 	defer logger.AppLogger.Sync()
-	model.InitDB()
 	cache.InitRedis()
 	auth.InitCasbin()
 	elasticsearch.InitES()

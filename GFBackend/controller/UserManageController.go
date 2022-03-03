@@ -416,7 +416,7 @@ func (userManageController *UserManageController) UserUnfollow(context *gin.Cont
 
 	success := ResponseMsg{
 		Code:    http.StatusOK,
-		Message: "Follow Successfully",
+		Message: "Unfollow Successfully",
 	}
 	context.JSON(http.StatusOK, success)
 

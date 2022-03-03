@@ -26,7 +26,7 @@ func main() {
 	config.InitConfig()
 	logger.InitAppLogger()
 	defer logger.AppLogger.Sync()
-	model.InitDB()
+	model.NewDB()
 	cache.InitRedis()
 	auth.InitCasbin()
 	elasticsearch.InitES()

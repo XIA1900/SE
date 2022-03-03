@@ -76,7 +76,7 @@ func (fileManageService FileManageService) UpdateUsed(username string) error {
 		logger.AppLogger.Error(err2.Error())
 		return errors.New("500")
 	}
-	err3 := fileManageService.spaceDAO.UpdateUsed(username, usedSize, nil)
+	err3 := fileManageService.spaceDAO.UpdateUsed(username, usedSize)
 	if err3 != nil {
 		logger.AppLogger.Error(err3.Error())
 		return errors.New("500")
@@ -85,7 +85,7 @@ func (fileManageService FileManageService) UpdateUsed(username string) error {
 }
 
 func (fileManageService FileManageService) UpdateCapacity(username string, newSize float64) error {
-	err1 := fileManageService.spaceDAO.UpdateCapacity(username, newSize, nil)
+	err1 := fileManageService.spaceDAO.UpdateCapacity(username, newSize)
 	if err1 != nil {
 		logger.AppLogger.Error(err1.Error())
 		return errors.New("500")

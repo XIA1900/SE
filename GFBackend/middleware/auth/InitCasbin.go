@@ -11,7 +11,7 @@ import (
 var CasbinEnforcer *casbin.Enforcer
 
 func InitCasbin() {
-	a, _ := gormadapter.NewAdapterByDB(model.DB)
+	a, _ := gormadapter.NewAdapterByDB(model.NewDB())
 	e, err := casbin.NewEnforcer("middleware/auth/rbac_model.conf", a)
 	CasbinEnforcer = e
 	if err != nil {

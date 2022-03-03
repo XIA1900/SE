@@ -4,7 +4,6 @@ import (
 	"GFBackend/logger"
 	"GFBackend/model"
 	"GFBackend/model/dao"
-	"GFBackend/utils"
 	"fmt"
 	"github.com/google/wire"
 	"gorm.io/gorm"
@@ -15,7 +14,7 @@ var communityManageServiceLock sync.Mutex
 var communityManageService *CommunityManageService
 
 type ICommunityManageService interface {
-	CreateCommunity(creator string, name string, description string, createTime *utils.LocalTime) error
+	CreateCommunity(creator string, name string, description string, createTime string) error
 	GetCommunityByName(name string) (model.Community, model.User, error)
 }
 
@@ -46,7 +45,7 @@ var CommunityServiceSet = wire.NewSet(
 	NewCommunityManageService,
 )
 
-func (communityManageService *CommunityManageService) CreateCommunity(creator string, name string, description string, createTime *utils.LocalTime) error {
+func (communityManageService *CommunityManageService) CreateCommunity(creator string, name string, description string, createTime string) error {
 	newCommunity := model.Community{
 		Creator:     creator,
 		Name:        name,
@@ -73,6 +72,7 @@ func (communityManageService *CommunityManageService) GetCommunityByName(name st
 		Name: name,
 	}
 	resCommunity, err := communityManageService.communityDAO.GetCommunityByName(newCommunity)
+	resCommunity.Create_Time = resCommunity.Create_Time[:10]
 	resUser := userManageService.userDAO.GetUserByUsername(resCommunity.Creator)
 	if err != nil {
 		logger.AppLogger.Error(fmt.Sprintf("Get Community By Name Error: %s", err.Error()))

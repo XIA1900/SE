@@ -35,7 +35,7 @@ func (communityDAO *CommunityDAO) GetCommunityByName(community model.Community) 
 		return community, result.Error
 	} else {
 		dbCommunity := model.Community{}
-		model.DB.Take(&dbCommunity, "Name = ?", community.Name)
+		model.DB.Where("Name = ?", community.Name).First(&dbCommunity)
 		return dbCommunity, nil
 	}
 }

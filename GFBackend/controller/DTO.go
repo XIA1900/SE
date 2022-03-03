@@ -31,6 +31,7 @@ type NewUserInfo struct {
 }
 
 type CommunityInfo struct {
+	ID          int
 	Creator     string `json:"Creator" example:"test1"`
 	Name        string `json:"Name" example:"community1"`
 	Description string `json:"Description" example:"this is a test community"`

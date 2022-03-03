@@ -23,7 +23,7 @@ func InitNonAuthReq() {
 		//TODO: add security
 		"/community/create",
 		"/community/getcommunity",
-		"/community/create",
+		"/community/updatecommunitybyid",
 	}
 	NonAuthReqs = make(map[string]bool)
 	for _, endpoint := range nonAuthReqs {

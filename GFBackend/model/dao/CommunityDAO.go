@@ -53,7 +53,7 @@ func (communityDAO *CommunityDAO) GetCommunityByName(community model.Community) 
 }
 
 func (communityDAO *CommunityDAO) UpdateCommunity(communityInfo model.Community) error {
-	result := communityDAO.db.Model(&model.Community{}).Where("Creator = ?", communityInfo.Creator).Updates(model.Community{
+	result := communityDAO.db.Model(&communityInfo).Where("ID", communityInfo.ID).Updates(model.Community{
 		Name:        communityInfo.Name,
 		Description: communityInfo.Description,
 	})

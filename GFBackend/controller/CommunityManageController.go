@@ -141,11 +141,12 @@ func (communityManageController *CommunityManageController) UpdateCommunity(cont
 		context.JSON(http.StatusBadRequest, er)
 		return
 	}
-
-	err := communityManageController.communityManageService.UpdateCommunity(model.Community{
+	updateInfo := model.Community{
+		ID:          communityInfo.ID,
 		Name:        communityInfo.Name,
 		Description: communityInfo.Description,
-	})
+	}
+	err := communityManageController.communityManageService.UpdateCommunity(updateInfo)
 	if err != nil {
 		if strings.Contains(err.Error(), "not found") {
 			er := ResponseMsg{

@@ -35,7 +35,7 @@ func NewCommunityDAO() *CommunityDAO {
 func (communityDAO *CommunityDAO) CreateCommunity(community model.Community, tx *gorm.DB) error {
 	var result *gorm.DB
 	if tx == nil {
-		result = model.DB.Select("Creator", "Name", "Description", "Create_Time").Create(&community)
+		result = communityDAO.db.Select("Creator", "Name", "Description", "Create_Time").Create(&community)
 	} else {
 		result = tx.Select("Creator", "Name", "Description", "Create_Time").Create(&community)
 	}
@@ -46,18 +46,18 @@ func (communityDAO *CommunityDAO) CreateCommunity(community model.Community, tx 
 }
 
 func (communityDAO *CommunityDAO) GetCommunityByName(community model.Community) (model.Community, error) {
-	result := model.DB.Select("Creator", "Name", "Description", "Create_Time").Where("Name = ?", community.Name).First(&community)
+	result := communityDAO.db.Select("Creator", "Name", "Description", "Create_Time").Where("Name = ?", community.Name).First(&community)
 	if result.Error != nil {
 		return community, result.Error
 	} else {
 		dbCommunity := model.Community{}
-		model.DB.Where("Name = ?", community.Name).First(&dbCommunity)
+		communityDAO.db.Where("Name = ?", community.Name).First(&dbCommunity)
 		return dbCommunity, nil
 	}
 }
 
 func (communityDAO *CommunityDAO) UpdateCommunity(communityInfo model.Community) error {
-	result := model.DB.Model(&model.Community{}).Where("Creator = ?", communityInfo.Creator).Updates(model.Community{
+	result := communityDAO.db.Model(&model.Community{}).Where("Creator = ?", communityInfo.Creator).Updates(model.Community{
 		Name:        communityInfo.Name,
 		Description: communityInfo.Description,
 	})

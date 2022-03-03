@@ -1,5 +1,5 @@
 import { router } from 'umi';
-import { getGroupInfo, getCreatedGroup, getJoinedGroup } from '@/services/getGroupInfo';
+import { getGroupPosts, getCreatedGroup, getJoinedGroup, getGroupBasic } from '@/services/getGroupInfo';
 
 const Model = {
   namespace: 'getGroupInfo',
@@ -8,7 +8,7 @@ const Model = {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(getGroupInfo, payload);
+      const response = yield call(getGroupPosts, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -24,6 +24,12 @@ const Model = {
       yield put({
         type: 'save3',
         payload: response3,
+      });
+
+      const response4 = yield call(getGroupBasic, payload);
+      yield put({
+        type: 'save4',
+        payload: response4,
       });
     },
   },
@@ -46,5 +52,11 @@ const Model = {
           data: action.payload,
         };
     },
+    save4(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+  },
   },
 };

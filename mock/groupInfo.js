@@ -168,21 +168,11 @@ for(let i=0; i<5; i++) {
 
 const date = new Date();
 
-function groupInfo(groupName, pageSize, type) {
-  console.log("getgroupInfo");
-  const lists = {
-    groupName: groupName,
-    groupDescription: descriptions[0],
-    groupAvatar: avatars[0],
-    createdAt: date.getFullYear()+'-'+date.getMonth()+1+'-'+date.getDate(),
-    groupMember: Math.ceil(Math.random() * 100) + 1000,
-    postList: postLists[0],
-  };
-  console.log(lists);
-  return lists;
+function groupPosts(groupName, type) {
+  return postLists[0];
 }
 
-function getGroup(req, res) {
+function getGroupPosts(req, res) {
   const params = req.query;
   const groupName = params.groupName;
   const type = params.type;
@@ -224,9 +214,33 @@ function getCreated(req, res) {
   });
 }
 
+function groupBasic(name) {
+  const lists = {
+    groupOwner: groups_owner[0],
+    groupName: name,
+    groupDescription: descriptions[0],
+    groupAvatar: avatars[0],
+    createdAt: date.getFullYear()+'-'+date.getMonth()+1+'-'+date.getDate(),
+    groupMember: Math.ceil(Math.random() * 100) + 1000,
+  };
+  return lists;
+}
+
+function getGroupBasic(req, res) {
+  const params = req.query;
+  const name = params.groupName;
+  const result = groupBasic(name);
+  return res.json({
+    data: {
+      list: result,
+    }
+  })
+}
+
 export default {
-  'GET /api/getGroupInfo': getGroup,
+  'GET /api/getGroupPosts': getGroupPosts,
   'GET /api/getCreatedGroup': getCreated,
   'GET /api/getJoinedGroup': getCreated,
+  'GET /api/getGroupBasic': getGroupBasic,
 };
 

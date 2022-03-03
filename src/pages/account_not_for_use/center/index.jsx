@@ -3,25 +3,54 @@ import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Link, useRequest } from 'umi';
-import Hottest from './components/hottest';
-import Latest from './components/latest';
+import Projects from './components/Projects';
+import Articles from './components/Articles';
+import Applications from './components/Applications';
+import { queryCurrent } from './service';
 import styles from './Center.less';
-import { getGroupBasic } from '@/services/getGroupInfo'
-
 const operationTabList = [
   {
-    key: 'hottest',
+    key: 'articles',
     tab: (
       <span>
-        Hottest{' '}
+        文章{' '}
+        <span
+          style={{
+            fontSize: 14,
+          }}
+        >
+          (8)
+        </span>
       </span>
     ),
   },
   {
-    key: 'latest',
+    key: 'applications',
     tab: (
       <span>
-        Latest{' '}
+        应用{' '}
+        <span
+          style={{
+            fontSize: 14,
+          }}
+        >
+          (8)
+        </span>
+      </span>
+    ),
+  },
+  {
+    key: 'projects',
+    tab: (
+      <span>
+        项目{' '}
+        <span
+          style={{
+            fontSize: 14,
+          }}
+        >
+          (8)
+        </span>
       </span>
     ),
   },
@@ -64,15 +93,46 @@ const TagList = ({ tags }) => {
     setInputValue('');
   };
 
-  return null;
+  return (
+    <div className={styles.tags}>
+      <div className={styles.tagsTitle}>标签</div>
+      {(tags || []).concat(newTags).map((item) => (
+        <Tag key={item.key}>{item.label}</Tag>
+      ))}
+      {inputVisible && (
+        <Input
+          ref={ref}
+          type="text"
+          size="small"
+          style={{
+            width: 78,
+          }}
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={handleInputConfirm}
+          onPressEnter={handleInputConfirm}
+        />
+      )}
+      {!inputVisible && (
+        <Tag
+          onClick={showInput}
+          style={{
+            borderStyle: 'dashed',
+          }}
+        >
+          <PlusOutlined />
+        </Tag>
+      )}
+    </div>
+  );
 };
 
 const Center = () => {
-  const [tabKey, setTabKey] = useState('hottest');
+  const [tabKey, setTabKey] = useState('articles'); //  获取用户信息
 
   const { data: currentUser, loading } = useRequest(() => {
-    return getGroupBasic();
-  }); 
+    return queryCurrent();
+  }); //  渲染用户信息
 
   const renderUserInfo = ({ title, group, geographic }) => {
     return (

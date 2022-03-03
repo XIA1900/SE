@@ -2,7 +2,7 @@ import { request } from 'umi';
 
 export async function getGroup(params) {   //only for created groups, return entire information
   console.log("traveling");
-  return request('/api/getGroupInfo', {
+  return request('/api/getGroupPosts', {
       params,
     });
   }
@@ -18,3 +18,9 @@ export async function getJoinedGroup(params) {  //only return group basic inform
     params,
   });
 }
+
+export async function getGroupBasic(params) {   //only for created groups, return entire information
+  return request('/api/getGroupBasic', {
+      params,
+    });
+  }

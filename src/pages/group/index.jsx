@@ -2,12 +2,12 @@ import { PlusOutlined, HomeOutlined, ContactsOutlined, ClusterOutlined } from '@
 import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
-import { Link, useRequest } from 'umi';
+import { Link, useRequest, history } from 'umi';
 import Hottest from './components/hottest';
 import Latest from './components/latest';
 import styles from './Center.less';
 import { getGroupBasic } from '@/services/getGroupInfo'
-
+const groupName = history.location.search.substring(1);
 const operationTabList = [
   {
     key: 'hottest',
@@ -71,7 +71,9 @@ const Center = () => {
   const [tabKey, setTabKey] = useState('hottest');
 
   const { data: currentUser, loading } = useRequest(() => {
-    return getGroupBasic();
+    return getGroupBasic({
+      groupName,
+    });
   }); 
 
   const renderUserInfo = ({ title, group, geographic }) => {

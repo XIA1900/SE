@@ -2,9 +2,9 @@ import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@a
 import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
-import ArticleListContent from './components';
+import ArticleListContent from '@/pages/group/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
-import { getGroup } from '@/services/getGroupInfo';
+import { getGroupPosts } from '@/services/getGroupInfo';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -16,7 +16,7 @@ const Hottest = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
     () => {
-      return getGroup({
+      return getGroupPosts({
         count: pageSize,
         type: 'hottest',
         groupName: groupName,

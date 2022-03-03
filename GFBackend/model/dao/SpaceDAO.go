@@ -17,13 +17,17 @@ type ISpaceDAO interface {
 	GetSpaceInfo(username string) (model.Space, error)
 }
 
-type SpaceDAO struct{}
+type SpaceDAO struct {
+	db *gorm.DB
+}
 
 func NewSpaceDAO() *SpaceDAO {
 	if spaceDAO == nil {
 		spaceDAOLock.Lock()
 		if spaceDAO == nil {
-			spaceDAO = new(SpaceDAO)
+			spaceDAO = &SpaceDAO{
+				db: model.NewDB(),
+			}
 		}
 		spaceDAOLock.Unlock()
 	}
@@ -33,7 +37,7 @@ func NewSpaceDAO() *SpaceDAO {
 func (spaceDAO *SpaceDAO) CreateSpaceInfo(username string, tx *gorm.DB) error {
 	var result *gorm.DB
 	if tx == nil {
-		result = model.DB.Select("Username").Create(&model.Space{
+		result = spaceDAO.db.Select("Username").Create(&model.Space{
 			Username: username,
 		})
 	} else {
@@ -50,7 +54,7 @@ func (spaceDAO *SpaceDAO) CreateSpaceInfo(username string, tx *gorm.DB) error {
 func (spaceDAO *SpaceDAO) DeleteSpaceInfo(username string, tx *gorm.DB) error {
 	var result *gorm.DB
 	if tx == nil {
-		result = model.DB.Where("Username = ?", username).Delete(&model.Space{})
+		result = spaceDAO.db.Where("Username = ?", username).Delete(&model.Space{})
 	} else {
 		result = tx.Where("Username = ?", username).Delete(&model.Space{})
 	}
@@ -63,7 +67,7 @@ func (spaceDAO *SpaceDAO) DeleteSpaceInfo(username string, tx *gorm.DB) error {
 func (spaceDAO *SpaceDAO) UpdateUsed(username string, usedSize float64, tx *gorm.DB) error {
 	var result *gorm.DB
 	if tx == nil {
-		result = model.DB.Model(&model.Space{}).Where("username = ?", username).Update("Remaining", usedSize)
+		result = spaceDAO.db.Model(&model.Space{}).Where("username = ?", username).Update("Remaining", usedSize)
 	} else {
 		result = tx.Model(&model.Space{}).Where("username = ?", username).Update("Remaining", usedSize)
 	}
@@ -76,7 +80,7 @@ func (spaceDAO *SpaceDAO) UpdateUsed(username string, usedSize float64, tx *gorm
 func (spaceDAO *SpaceDAO) UpdateCapacity(username string, newCapacity float64, tx *gorm.DB) error {
 	var result *gorm.DB
 	if tx == nil {
-		result = model.DB.Model(&model.Space{}).Where("username = ?", username).Update("Capacity", newCapacity)
+		result = spaceDAO.db.Model(&model.Space{}).Where("username = ?", username).Update("Capacity", newCapacity)
 	} else {
 		result = tx.Model(&model.Space{}).Where("username = ?", username).Update("Capacity", newCapacity)
 	}
@@ -88,7 +92,7 @@ func (spaceDAO *SpaceDAO) UpdateCapacity(username string, newCapacity float64, t
 
 func (spaceDAO *SpaceDAO) GetSpaceInfo(username string) (model.Space, error) {
 	spaceInfo := model.Space{}
-	result := model.DB.Where("username = ?", username).First(&spaceInfo)
+	result := spaceDAO.db.Where("username = ?", username).First(&spaceInfo)
 	if result.Error != nil {
 		return spaceInfo, result.Error
 	}

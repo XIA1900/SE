@@ -3,17 +3,32 @@ package dao
 import (
 	"GFBackend/model"
 	"gorm.io/gorm"
+	"sync"
 )
+
+var communityDAO *CommunityDAO
+var communityDAOLock sync.Mutex
 
 type ICommunityDAO interface {
 	CreateCommunity(community model.Community, tx *gorm.DB) error
 	GetCommunityByName(community model.Community) (model.Community, error)
 }
 
-type CommunityDAO struct{}
+type CommunityDAO struct {
+	db *gorm.DB
+}
 
 func NewCommunityDAO() *CommunityDAO {
-	return new(CommunityDAO)
+	if communityDAO == nil {
+		communityDAOLock.Lock()
+		if communityDAO == nil {
+			communityDAO = &CommunityDAO{
+				db: model.NewDB(),
+			}
+		}
+		communityDAOLock.Unlock()
+	}
+	return communityDAO
 }
 
 func (communityDAO *CommunityDAO) CreateCommunity(community model.Community, tx *gorm.DB) error {

@@ -44,15 +44,7 @@ func NewDB() *gorm.DB {
 		dbLock.Lock()
 		if db == nil {
 			db = createDB()
-
-			// default admin user
-			salt := utils.GetRandomString(6)
-			defaultAdmin := User{
-				Username: "boss",
-				Password: utils.EncodeInMD5("007" + salt),
-				Salt:     salt,
-			}
-			db.Clauses(clause.OnConflict{DoNothing: true}).Select("Username", "Password", "Salt").Create(&defaultAdmin)
+			dataInit()
 		}
 		dbLock.Unlock()
 	}
@@ -72,4 +64,15 @@ func createDB() *gorm.DB {
 		panic("failed to connect database")
 	}
 	return newDB
+}
+
+func dataInit() {
+	// default admin user
+	salt := utils.GetRandomString(6)
+	defaultAdmin := User{
+		Username: "boss",
+		Password: utils.EncodeInMD5("007" + salt),
+		Salt:     salt,
+	}
+	db.Clauses(clause.OnConflict{DoNothing: true}).Select("Username", "Password", "Salt").Create(&defaultAdmin)
 }

@@ -31,11 +31,11 @@ type NewUserInfo struct {
 }
 
 type CommunityInfo struct {
+	ID          int
 	Creator     string `json:"Creator" example:"test1"`
 	Name        string `json:"Name" example:"community1"`
 	Description string `json:"Description" example:"this is a test community"`
 	Create_Time string `json:"Create_Time" example:"2020-01-01"`
-	NewName     string `json:"NewName" example:"community1"`
 }
 
 type UserFiles struct {

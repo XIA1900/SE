@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"GFBackend/controller"
 	"GFBackend/model"
 	"gorm.io/gorm"
 	"sync"
@@ -13,7 +12,7 @@ var communityDAOLock sync.Mutex
 type ICommunityDAO interface {
 	CreateCommunity(community model.Community) error
 	GetCommunityByName(community model.Community) (model.Community, error)
-	UpdateCommunity(community controller.CommunityInfo) error
+	UpdateCommunity(community model.Community) error
 }
 
 type CommunityDAO struct {
@@ -53,28 +52,13 @@ func (communityDAO *CommunityDAO) GetCommunityByName(community model.Community) 
 	}
 }
 
-<<<<<<< HEAD
-func (communityDAO *CommunityDAO) UpdateCommunity(communityInfo controller.CommunityInfo) error {
-	OldCommunity := model.DB.Where("Creator = ? AND Name = ?", communityInfo.Creator, communityInfo.Name).First(&model.Community{})
-	if OldCommunity.Error != nil {
-		return OldCommunity.Error
-	} else {
-		result := model.DB.Model(&model.Community{}).Updates(map[string]interface{}{
-			"Name":        communityInfo.NewName,
-			"Description": communityInfo.Description,
-		})
-		if result.Error != nil {
-			return result.Error
-		}
-=======
 func (communityDAO *CommunityDAO) UpdateCommunity(communityInfo model.Community) error {
-	result := communityDAO.db.Model(&model.Community{}).Where("Creator = ?", communityInfo.Creator).Updates(model.Community{
+	result := communityDAO.db.Model(&communityInfo).Where("ID", communityInfo.ID).Updates(model.Community{
 		Name:        communityInfo.Name,
 		Description: communityInfo.Description,
 	})
 	if result.Error != nil {
 		return result.Error
->>>>>>> 731b2a190b5a69a94b1b2754e65e4a6d5fc7d70e
 	}
 	return nil
 }

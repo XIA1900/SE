@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"GFBackend/model"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -140,8 +141,12 @@ func (communityManageController *CommunityManageController) UpdateCommunity(cont
 		context.JSON(http.StatusBadRequest, er)
 		return
 	}
-
-	err := communityManageController.communityManageService.UpdateCommunity(communityInfo)
+	updateInfo := model.Community{
+		ID:          communityInfo.ID,
+		Name:        communityInfo.Name,
+		Description: communityInfo.Description,
+	}
+	err := communityManageController.communityManageService.UpdateCommunity(updateInfo)
 	if err != nil {
 		if strings.Contains(err.Error(), "not found") {
 			er := ResponseMsg{

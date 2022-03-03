@@ -1,6 +1,7 @@
 package service
 
 import (
+	"GFBackend/controller"
 	"GFBackend/logger"
 	"GFBackend/model"
 	"GFBackend/model/dao"
@@ -17,7 +18,7 @@ var communityManageService *CommunityManageService
 type ICommunityManageService interface {
 	CreateCommunity(creator string, name string, description string, createTime string) error
 	GetCommunityByName(name string) (model.Community, model.User, error)
-	UpdateCommunity(communityInfo model.Community) error
+	UpdateCommunity(communityInfo controller.CommunityInfo) error
 }
 
 type CommunityManageService struct {
@@ -83,7 +84,7 @@ func (communityManageService *CommunityManageService) GetCommunityByName(name st
 	return resCommunity, resUser, nil
 }
 
-func (communityManageService *CommunityManageService) UpdateCommunity(communityInfo model.Community) error {
+func (communityManageService *CommunityManageService) UpdateCommunity(communityInfo controller.CommunityInfo) error {
 	err := communityManageService.communityDAO.UpdateCommunity(communityInfo)
 	if err != nil {
 		logger.AppLogger.Error(err.Error())

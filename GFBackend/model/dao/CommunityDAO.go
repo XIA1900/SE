@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"GFBackend/controller"
 	"GFBackend/model"
 	"gorm.io/gorm"
 )
@@ -8,7 +9,7 @@ import (
 type ICommunityDAO interface {
 	CreateCommunity(community model.Community, tx *gorm.DB) error
 	GetCommunityByName(community model.Community) (model.Community, error)
-	UpdateCommunity(community model.Community) error
+	UpdateCommunity(community controller.CommunityInfo) error
 }
 
 type CommunityDAO struct{}
@@ -41,13 +42,18 @@ func (communityDAO *CommunityDAO) GetCommunityByName(community model.Community) 
 	}
 }
 
-func (communityDAO *CommunityDAO) UpdateCommunity(communityInfo model.Community) error {
-	result := model.DB.Model(&model.Community{}).Where("Creator = ?", communityInfo.Creator).Updates(model.Community{
-		Name:        communityInfo.Name,
-		Description: communityInfo.Description,
-	})
-	if result.Error != nil {
-		return result.Error
+func (communityDAO *CommunityDAO) UpdateCommunity(communityInfo controller.CommunityInfo) error {
+	OldCommunity := model.DB.Where("Creator = ? AND Name = ?", communityInfo.Creator, communityInfo.Name).First(&model.Community{})
+	if OldCommunity.Error != nil {
+		return OldCommunity.Error
+	} else {
+		result := model.DB.Model(&model.Community{}).Updates(map[string]interface{}{
+			"Name":        communityInfo.NewName,
+			"Description": communityInfo.Description,
+		})
+		if result.Error != nil {
+			return result.Error
+		}
 	}
 	return nil
 }

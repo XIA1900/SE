@@ -36,7 +36,7 @@ func (t LocalTime) Value() (driver.Value, error) {
 }
 
 func (t *LocalTime) Scan(v interface{}) error {
-	tTime, _ := time.Parse("2006-01-02 15:04:05 +0800 CST", v.(time.Time).String())
+	tTime, _ := time.Parse("2006-01-02 15:04:05", v.(time.Time).String())
 	*t = LocalTime(tTime)
 	return nil
 }

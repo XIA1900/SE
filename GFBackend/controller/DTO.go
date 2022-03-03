@@ -1,8 +1,7 @@
 package controller
 
 import (
-	"GFBackend/model"
-	"GFBackend/utils"
+	"time"
 )
 
 type ResponseMsg struct {
@@ -11,9 +10,13 @@ type ResponseMsg struct {
 }
 
 type CommunityResponseMsg struct {
-	Code    int             `json:"code" example:"200"`
-	Message string          `json:"message" example:"process successfully"`
-	Data    model.Community `json:"data"`
+	Code        int       `json:"code" example:"200"`
+	Message     string    `json:"message" example:"process successfully"`
+	Creator     string    `json:"creator" example:"creator"`
+	Name        string    `json:"name" example:"name"`
+	Description string    `json:"description" example:"description"`
+	Num_Member  int       `json:"num_mumber" example:"num_mumber"`
+	Create_Time time.Time `json:"create_time" example:"create_time"`
 }
 
 type UserInfo struct {
@@ -32,10 +35,10 @@ type NewUserInfo struct {
 }
 
 type CommunityInfo struct {
-	Creator     string           `json:"Creator" example:"test1"`
-	Name        string           `json:"Name" example:"community1"`
-	Description string           `json:"Description" example:"this is a test community"`
-	Create_Time *utils.LocalTime `json:"Create_Time" example:"2020-01-01"`
+	Creator     string    `json:"Creator" example:"test1"`
+	Name        string    `json:"Name" example:"community1"`
+	Description string    `json:"Description" example:"this is a test community"`
+	Create_Time time.Time `json:"Create_Time" example:"2020-01-01"`
 }
 
 type UserFiles struct {

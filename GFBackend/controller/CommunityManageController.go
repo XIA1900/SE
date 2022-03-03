@@ -102,7 +102,7 @@ func (communityManageController *CommunityManageController) GetCommunityByName(c
 		return
 	}
 
-	resCommunity, err := communityManageController.communityManageService.GetCommunityByName(communityInfo.Name)
+	resCommunity, resUser, err := communityManageController.communityManageService.GetCommunityByName(communityInfo.Name)
 	if err != nil {
 		if strings.Contains(err.Error(), "not found") {
 			er := CommunityResponseMsg{
@@ -120,8 +120,12 @@ func (communityManageController *CommunityManageController) GetCommunityByName(c
 		return
 	}
 	context.JSON(http.StatusOK, CommunityResponseMsg{
-		Code:    http.StatusOK,
-		Message: "Get Community Success",
-		Data:    resCommunity,
+		Code:        http.StatusOK,
+		Message:     "Get Community Success",
+		Creator:     resUser.Nickname,
+		Name:        resCommunity.Name,
+		Description: resCommunity.Description,
+		Num_Member:  resCommunity.Num_Member,
+		Create_Time: resCommunity.Create_Time,
 	})
 }

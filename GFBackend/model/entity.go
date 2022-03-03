@@ -1,7 +1,7 @@
 package model
 
 import (
-	"GFBackend/utils"
+	"time"
 )
 
 type User struct {
@@ -35,7 +35,7 @@ type Community struct {
 	Name        string
 	Description string
 	Num_Member  int
-	Create_Time *utils.LocalTime
+	Create_Time time.Time
 }
 
 func (c Community) TableName() string {

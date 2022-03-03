@@ -10,7 +10,7 @@ var communityDAO *CommunityDAO
 var communityDAOLock sync.Mutex
 
 type ICommunityDAO interface {
-	CreateCommunity(community model.Community, tx *gorm.DB) error
+	CreateCommunity(community model.Community) error
 	GetCommunityByName(community model.Community) (model.Community, error)
 	UpdateCommunity(community model.Community) error
 }
@@ -32,13 +32,9 @@ func NewCommunityDAO() *CommunityDAO {
 	return communityDAO
 }
 
-func (communityDAO *CommunityDAO) CreateCommunity(community model.Community, tx *gorm.DB) error {
+func (communityDAO *CommunityDAO) CreateCommunity(community model.Community) error {
 	var result *gorm.DB
-	if tx == nil {
-		result = communityDAO.db.Select("Creator", "Name", "Description", "Create_Time").Create(&community)
-	} else {
-		result = tx.Select("Creator", "Name", "Description", "Create_Time").Create(&community)
-	}
+	result = communityDAO.db.Select("Creator", "Name", "Description", "Create_Time").Create(&community)
 	if result.Error != nil {
 		return result.Error
 	}

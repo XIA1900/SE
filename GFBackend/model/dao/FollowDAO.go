@@ -14,7 +14,7 @@ type IFollowDAO interface {
 	GetOneFollow(followee, follower string) (model.Follow, error)
 	UserFollow(followee, follower string) error
 	UserUnfollow(followee, follower string) error
-	DeleteFollow(username string, tx *gorm.DB) error
+	DeleteFollow(username string) error
 }
 
 type FollowDAO struct {
@@ -66,13 +66,9 @@ func (followDAO *FollowDAO) UserUnfollow(followee, follower string) error {
 	return nil
 }
 
-func (followDAO *FollowDAO) DeleteFollow(username string, tx *gorm.DB) error {
+func (followDAO *FollowDAO) DeleteFollow(username string) error {
 	var result *gorm.DB
-	if tx != nil {
-		result = tx.Where("Follower = ?", username).Delete(&model.Follow{})
-	} else {
-		result = followDAO.db.Where("Follower = ?", username).Delete(&model.Follow{})
-	}
+	result = followDAO.db.Where("Follower = ?", username).Delete(&model.Follow{})
 	if result.Error != nil {
 		return result.Error
 	}

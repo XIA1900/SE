@@ -10,7 +10,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/wire"
-	"gorm.io/gorm"
 	"strings"
 	"sync"
 )
@@ -68,40 +67,32 @@ func (userManageService *UserManageService) Register(username, password string, 
 		Salt:     salt,
 	}
 
-	err := model.DB.Transaction(func(tx *gorm.DB) error {
-		createUserError := userManageService.userDAO.CreateUser(newUser, tx)
-		if createUserError != nil {
-			logger.AppLogger.Error(fmt.Sprintf("Create User Error: %s", createUserError.Error()))
-			return createUserError
-		}
+	createUserError := userManageService.userDAO.CreateUser(newUser)
+	if createUserError != nil {
+		logger.AppLogger.Error(fmt.Sprintf("Create User Error: %s", createUserError.Error()))
+		return errors.New("500")
+	}
 
-		registrySpaceError := userManageService.spaceDAO.CreateSpaceInfo(username, tx)
-		if registrySpaceError != nil {
-			logger.AppLogger.Error(fmt.Sprintf("Create Space Info Error: %s", createUserError.Error()))
-			return registrySpaceError
-		}
+	registrySpaceError := userManageService.spaceDAO.CreateSpaceInfo(username)
+	if registrySpaceError != nil {
+		logger.AppLogger.Error(fmt.Sprintf("Create Space Info Error: %s", createUserError.Error()))
+		return errors.New("500")
+	}
 
-		createDirFlag := utils.CreateDir(username)
-		if !createDirFlag {
-			logger.AppLogger.Error("Create Dir Error for user: " + username)
-			return errors.New("500")
-		}
+	createDirFlag := utils.CreateDir(username)
+	if !createDirFlag {
+		logger.AppLogger.Error("Create Dir Error for user: " + username)
+		return errors.New("500")
+	}
 
-		role := "regular"
-		if forAdmin {
-			role = "admin"
-		}
-		_, CasbinAddPolicyError := auth.CasbinEnforcer.AddGroupingPolicy(username, role)
-		if CasbinAddPolicyError != nil {
-			logger.AppLogger.Error(fmt.Sprintf("Add New User Policy Error: %s", CasbinAddPolicyError.Error()))
-			return CasbinAddPolicyError
-		}
-
-		return nil
-	})
-
-	if err != nil {
-		return err
+	role := "regular"
+	if forAdmin {
+		role = "admin"
+	}
+	_, CasbinAddPolicyError := auth.CasbinEnforcer.AddGroupingPolicy(username, role)
+	if CasbinAddPolicyError != nil {
+		logger.AppLogger.Error(fmt.Sprintf("Add New User Policy Error: %s", CasbinAddPolicyError.Error()))
+		return errors.New("500")
 	}
 
 	return nil
@@ -167,41 +158,33 @@ func (userManageService *UserManageService) Delete(username string) error {
 		return errors.New("user does not exist")
 	}
 
-	err := model.DB.Transaction(func(tx *gorm.DB) error {
-		deleteUserError := userManageService.userDAO.DeleteUserByUsername(username, tx)
-		if deleteUserError != nil {
-			logger.AppLogger.Error(fmt.Sprintf("Delete User Error: %s", deleteUserError.Error()))
-			return deleteUserError
-		}
+	deleteUserError := userManageService.userDAO.DeleteUserByUsername(username)
+	if deleteUserError != nil {
+		logger.AppLogger.Error(fmt.Sprintf("Delete User Error: %s", deleteUserError.Error()))
+		return errors.New("500")
+	}
 
-		if !utils.DeleteDir(username) {
-			logger.AppLogger.Error("Delete User Error for user: " + username)
-			return errors.New("500")
-		}
+	if !utils.DeleteDir(username) {
+		logger.AppLogger.Error("Delete User Error for user: " + username)
+		return errors.New("500")
+	}
 
-		DeleteSpaceError := userManageService.spaceDAO.DeleteSpaceInfo(username, tx)
-		if DeleteSpaceError != nil {
-			logger.AppLogger.Error(DeleteSpaceError.Error())
-			return DeleteSpaceError
-		}
+	DeleteSpaceError := userManageService.spaceDAO.DeleteSpaceInfo(username)
+	if DeleteSpaceError != nil {
+		logger.AppLogger.Error(DeleteSpaceError.Error())
+		return errors.New("500")
+	}
 
-		deleteUserFollowError := userManageService.followDAO.DeleteFollow(username, tx)
-		if deleteUserFollowError != nil {
-			logger.AppLogger.Error(fmt.Sprintf("Delete User Error: %s", deleteUserError.Error()))
-			return deleteUserFollowError
-		}
+	deleteUserFollowError := userManageService.followDAO.DeleteFollow(username)
+	if deleteUserFollowError != nil {
+		logger.AppLogger.Error(fmt.Sprintf("Delete User Error: %s", deleteUserError.Error()))
+		return errors.New("500")
+	}
 
-		_, CasbinAddPolicyError := auth.CasbinEnforcer.DeleteUser(username)
-		if CasbinAddPolicyError != nil {
-			logger.AppLogger.Error(fmt.Sprintf("Delete User Policy Error: %s", CasbinAddPolicyError.Error()))
-			return CasbinAddPolicyError
-		}
-
-		return nil
-	})
-
-	if err != nil {
-		return err
+	_, CasbinAddPolicyError := auth.CasbinEnforcer.DeleteUser(username)
+	if CasbinAddPolicyError != nil {
+		logger.AppLogger.Error(fmt.Sprintf("Delete User Policy Error: %s", CasbinAddPolicyError.Error()))
+		return errors.New("500")
 	}
 
 	return nil

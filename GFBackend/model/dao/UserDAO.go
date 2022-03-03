@@ -10,9 +10,9 @@ var userDAOLock sync.Mutex
 var userDAO *UserDAO
 
 type IUserDAO interface {
-	CreateUser(user model.User, tx *gorm.DB) error
+	CreateUser(user model.User) error
 	GetUserByUsername(username string) model.User
-	DeleteUserByUsername(username string, tx *gorm.DB) error
+	DeleteUserByUsername(username string) error
 	UpdateUserPassword(username string, newPassword string) error
 	UpdateUserByUsername(userInfo model.User) error
 }
@@ -34,14 +34,10 @@ func NewUserDAO() *UserDAO {
 	return userDAO
 }
 
-func (userDAO *UserDAO) CreateUser(user model.User, tx *gorm.DB) error {
+func (userDAO *UserDAO) CreateUser(user model.User) error {
 	// strings in Select() must be as same as User field variables name
 	var result *gorm.DB
-	if tx == nil {
-		result = userDAO.db.Select("Username", "Password", "Salt").Create(&user)
-	} else {
-		result = tx.Select("Username", "Password", "Salt").Create(&user)
-	}
+	result = userDAO.db.Select("Username", "Password", "Salt").Create(&user)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -54,13 +50,9 @@ func (userDAO *UserDAO) GetUserByUsername(username string) model.User {
 	return user
 }
 
-func (userDAO *UserDAO) DeleteUserByUsername(username string, tx *gorm.DB) error {
+func (userDAO *UserDAO) DeleteUserByUsername(username string) error {
 	var result *gorm.DB
-	if tx == nil {
-		result = userDAO.db.Where("Username = ?", username).Delete(&model.User{})
-	} else {
-		result = tx.Where("Username = ?", username).Delete(&model.User{})
-	}
+	result = userDAO.db.Where("Username = ?", username).Delete(&model.User{})
 	if result.Error != nil {
 		return result.Error
 	}

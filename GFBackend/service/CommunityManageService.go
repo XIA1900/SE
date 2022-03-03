@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/wire"
-	"gorm.io/gorm"
 	"sync"
 )
 
@@ -55,16 +54,10 @@ func (communityManageService *CommunityManageService) CreateCommunity(creator st
 		Create_Time: createTime,
 	}
 
-	err := model.DB.Transaction(func(tx *gorm.DB) error {
-		createCommunityError := communityManageService.communityDAO.CreateCommunity(newCommunity, tx)
-		if createCommunityError != nil {
-			logger.AppLogger.Error(fmt.Sprintf("Create Community Error: %s", createCommunityError.Error()))
-			return createCommunityError
-		}
-		return nil
-	})
-	if err != nil {
-		return err
+	createCommunityError := communityManageService.communityDAO.CreateCommunity(newCommunity)
+	if createCommunityError != nil {
+		logger.AppLogger.Error(fmt.Sprintf("Create Community Error: %s", createCommunityError.Error()))
+		return createCommunityError
 	}
 	return nil
 }

@@ -14,17 +14,35 @@ definitions:
       Name:
         example: community1
         type: string
+      id:
+        type: integer
     type: object
   controller.CommunityResponseMsg:
     properties:
       code:
         example: 200
         type: integer
-      data:
-        $ref: '#/definitions/model.Community'
+      create_time:
+        example: create_time
+        type: string
+      creator:
+        example: creator
+        type: string
+      description:
+        example: description
+        type: string
+      id:
+        example: 1
+        type: integer
       message:
         example: process successfully
         type: string
+      name:
+        example: name
+        type: string
+      num_member:
+        example: 1
+        type: integer
     type: object
   controller.NewUserInfo:
     properties:
@@ -84,22 +102,6 @@ definitions:
         example: jamesbond21
         type: string
     type: object
-  model.Community:
-    properties:
-      create_Time:
-        example: "2020-01-01"
-        type: string
-      creator:
-        type: string
-      description:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      num_Member:
-        type: integer
-    type: object
   model.Space:
     properties:
       capacity:
@@ -120,6 +122,36 @@ info:
   version: "1.0"
 paths:
   /community/create:
+    post:
+      consumes:
+      - application/json
+      description: need strings creator & community name & description & create time
+      parameters:
+      - description: Create a new community needs Creator, Name & Description.
+        in: body
+        name: CommunityInfo
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CommunityInfo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Create Community Success
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Community already exists
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      summary: Create a new Community
+      tags:
+      - Community Manage
+  /community/getcommunity:
     get:
       consumes:
       - application/json
@@ -149,14 +181,15 @@ paths:
       summary: Get the Community by Name
       tags:
       - Community Manage
+  /community/updatecommunitybyid:
     post:
       consumes:
       - application/json
-      description: need strings creator & community name & description & create time
+      description: need ID, Name, Description
       parameters:
-      - description: Create a new community needs Creator, Name & Description.
+      - description: need ID, Name, Description
         in: body
-        name: CommunityInfo
+        name: communityInfo
         required: true
         schema:
           $ref: '#/definitions/controller.CommunityInfo'
@@ -164,18 +197,18 @@ paths:
       - application/json
       responses:
         "201":
-          description: <b>Success</b>. Create Community Success
+          description: <b>Success</b>. Update Password Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/controller.CommunityResponseMsg'
         "400":
-          description: <b>Failure</b>. Bad Parameters or Community already exists
+          description: <b>Failure</b>. Bad Parameters
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/controller.CommunityResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
-      summary: Create a new Community
+            $ref: '#/definitions/controller.CommunityResponseMsg'
+      summary: Update community information including Name, Description
       tags:
       - Community Manage
   /file/delete:

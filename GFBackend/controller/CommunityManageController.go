@@ -91,7 +91,7 @@ func (communityManageController *CommunityManageController) CreateCommunity(cont
 // @Success 201 {object} controller.CommunityResponseMsg "<b>Success</b>. Create Community Success"
 // @Failure 400 {object} controller.CommunityResponseMsg "<b>Failure</b>. Bad Parameters or Community already exists"
 // @Failure 500 {object} controller.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
-// @Router /community/create [get]
+// @Router /community/getcommunity [get]
 func (communityManageController *CommunityManageController) GetCommunityByName(context *gin.Context) {
 	var communityInfo CommunityInfo
 	if err := context.ShouldBindJSON(&communityInfo); err != nil {
@@ -123,6 +123,7 @@ func (communityManageController *CommunityManageController) GetCommunityByName(c
 	context.JSON(http.StatusOK, CommunityResponseMsg{
 		Code:        http.StatusOK,
 		Message:     "Get Community Success",
+		ID:          resCommunity.ID,
 		Creator:     resUser.Nickname,
 		Name:        resCommunity.Name,
 		Description: resCommunity.Description,
@@ -131,6 +132,17 @@ func (communityManageController *CommunityManageController) GetCommunityByName(c
 	})
 }
 
+// UpdateCommunity godoc
+// @Summary Update community information including Name, Description
+// @Description need ID, Name, Description
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Param communityInfo body controller.CommunityInfo true "need ID, Name, Description"
+// @Success 201 {object} controller.CommunityResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} controller.CommunityResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} controller.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /community/updatecommunitybyid [post]
 func (communityManageController *CommunityManageController) UpdateCommunity(context *gin.Context) {
 	var communityInfo CommunityInfo
 	if err := context.ShouldBindJSON(&communityInfo); err != nil {

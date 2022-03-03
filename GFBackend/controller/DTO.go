@@ -8,10 +8,11 @@ type ResponseMsg struct {
 type CommunityResponseMsg struct {
 	Code        int    `json:"code" example:"200"`
 	Message     string `json:"message" example:"process successfully"`
+	ID          int    `json:"id" example:"1"`
 	Creator     string `json:"creator" example:"creator"`
 	Name        string `json:"name" example:"name"`
 	Description string `json:"description" example:"description"`
-	Num_Member  int    `json:"num_mumber" example:"num_mumber"`
+	Num_Member  int    `json:"num_member" example:"1"`
 	Create_Time string `json:"create_time" example:"create_time"`
 }
 

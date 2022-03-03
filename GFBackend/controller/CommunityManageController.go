@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"GFBackend/model"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -127,5 +128,42 @@ func (communityManageController *CommunityManageController) GetCommunityByName(c
 		Description: resCommunity.Description,
 		Num_Member:  resCommunity.Num_Member,
 		Create_Time: resCommunity.Create_Time,
+	})
+}
+
+func (communityManageController *CommunityManageController) UpdateCommunity(context *gin.Context) {
+	var communityInfo CommunityInfo
+	if err := context.ShouldBindJSON(&communityInfo); err != nil {
+		er := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
+
+	err := communityManageController.communityManageService.UpdateCommunity(model.Community{
+		Name:        communityInfo.Name,
+		Description: communityInfo.Description,
+	})
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			er := ResponseMsg{
+				Code:    http.StatusBadRequest,
+				Message: "Community not found",
+			}
+			context.JSON(http.StatusBadRequest, er)
+		} else {
+			er := ResponseMsg{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			}
+			context.JSON(http.StatusInternalServerError, er)
+		}
+		return
+	}
+	context.JSON(http.StatusOK, ResponseMsg{
+		Code:    http.StatusOK,
+		Message: "Update Community Success",
 	})
 }

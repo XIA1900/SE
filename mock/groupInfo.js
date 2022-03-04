@@ -19,13 +19,9 @@ A group has:
   iii. delete group
 */
 
-const groups_owner = [
-  'Soraka',
-  'Ashe',
-  'Sion',
-  'Riven',
-  'Ahri',
-];
+import { ContactsOutlined } from '@ant-design/icons';
+
+const groups_owner = ['Soraka', 'Ashe', 'Sion', 'Riven', 'Ahri'];
 
 const groups_name = ['Support', 'Ad', 'Tank', 'Soldier', 'Mage'];
 
@@ -37,32 +33,14 @@ const descriptions = [
   'Let me show you some tricks.',
 ];
 
-const groups_avatar = [
-  
-];
+const groups_avatar = [];
 
-
-const groups_member =[
-  [
-    'Sona',
-    'Soraka',
-  ],
-  [
-    'Ashe',
-    'Miss Fortune',
-  ],
-  [
-    'Sion',
-    'Sheep',
-  ],
-  [
-    'Riven',
-    'Fiona',
-  ],
-  [
-    'Ahri',
-    'Raze',
-  ],
+const groups_member = [
+  ['Sona', 'Soraka'],
+  ['Ashe', 'Miss Fortune'],
+  ['Sion', 'Sheep'],
+  ['Riven', 'Fiona'],
+  ['Ahri', 'Raze'],
 ];
 
 const titles = [
@@ -147,26 +125,26 @@ const avatars = [
   '/heroes/Soraka_0.jpeg',
 ];
 
+const date = new Date();
 const postLists = [];
-for(let i=0; i<5; i++) {
+
+for (let i = 0; i < 5; i++) {
   const post = [];
-  for(let k=0; k<2; k++) {
+  for (let k = 0; k < 2; k++) {
     post.push({
-      id: i,
-      owner: users[i % 10],
-      title: titles[i % 10],
-      logo: avatars[i % 10],
-      updatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
+      id: k,
+      owner: users[k % 10],
+      title: titles[k % 10],
+      logo: avatars[k % 10],
+      updatedAt: date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate(),
       collection: Math.ceil(Math.random() * 100) + 100,
       like: Math.ceil(Math.random() * 100) + 100,
       reply: Math.ceil(Math.random() * 10) + 10,
-      content: contents[i % 10],
+      content: contents[k % 10],
     });
   }
   postLists.push(post);
 }
-
-const date = new Date();
 
 function groupPosts(groupName, type) {
   return postLists[0];
@@ -177,7 +155,7 @@ function getGroupPosts(req, res) {
   const groupName = params.groupName;
   const type = params.type;
   const pageSize = params.pageSize;
-  const result = groupInfo(groupName, pageSize, type);
+  const result = groupPosts(groupName, type);
   return res.json({
     data: {
       list: result,
@@ -188,16 +166,16 @@ function getGroupPosts(req, res) {
 function createdGroup(userName) {
   const count = 5;
   const lists = [];
-  for(let i=0; i<count; i++) {
+  for (let i = 0; i < count; i++) {
     lists.push({
-      id: i+1,
+      id: i + 1,
       groupName: groups_name[i],
       groupDescription: descriptions[i],
       group_href: groups_href,
       groupAvatar: avatars[i],
-      createdAt: date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate(),
-      numberOfMember:Math.ceil(Math.random() * 100) + 100,
-      numberOfPost:Math.ceil(Math.random() * 100) + 100,
+      createdAt: date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate(),
+      numberOfMember: Math.ceil(Math.random() * 100) + 100,
+      numberOfPost: Math.ceil(Math.random() * 100) + 100,
     });
   }
   return lists;
@@ -220,7 +198,7 @@ function groupBasic(name) {
     groupName: name,
     groupDescription: descriptions[0],
     groupAvatar: avatars[0],
-    createdAt: date.getFullYear()+'-'+date.getMonth()+1+'-'+date.getDate(),
+    createdAt: date.getFullYear() + '-' + date.getMonth() + 1 + '-' + date.getDate(),
     groupMember: Math.ceil(Math.random() * 100) + 1000,
   };
   return lists;
@@ -233,8 +211,8 @@ function getGroupBasic(req, res) {
   return res.json({
     data: {
       list: result,
-    }
-  })
+    },
+  });
 }
 
 export default {
@@ -243,4 +221,3 @@ export default {
   'GET /api/getJoinedGroup': getCreated,
   'GET /api/getGroupBasic': getGroupBasic,
 };
-

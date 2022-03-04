@@ -6,24 +6,16 @@ import { Link, useRequest, history } from 'umi';
 import Hottest from './components/hottest';
 import Latest from './components/latest';
 import styles from './Center.less';
-import { getGroupBasic } from '@/services/getGroupInfo'
+import { getGroupBasic } from '@/services/getGroupInfo';
 const groupName = history.location.search.substring(1);
 const operationTabList = [
   {
     key: 'hottest',
-    tab: (
-      <span>
-        Hottest{' '}
-      </span>
-    ),
+    tab: <span>Hottest </span>,
   },
   {
     key: 'latest',
-    tab: (
-      <span>
-        Latest{' '}
-      </span>
-    ),
+    tab: <span>Latest </span>,
   },
 ];
 
@@ -70,22 +62,27 @@ const TagList = ({ tags }) => {
 const Center = () => {
   const [tabKey, setTabKey] = useState('hottest');
 
-  const { data: currentUser, loading } = useRequest(() => {
+  const { data, loading } = useRequest(() => {
     return getGroupBasic({
       groupName,
     });
-  }); 
+  });
 
-  const renderUserInfo = ({ title, group, geographic }) => {
+  const list = data?.list || [];
+  console.log(list);
+
+  const renderGroupInfo = ({ data }) => {
     return (
       <div className={styles.detail}>
+        <h>{list.groupName}</h>
+        <p>{list.groupDescription}</p>
         <p>
           <ContactsOutlined
             style={{
               marginRight: 8,
             }}
           />
-          {title}
+          {data.list.groupOwner}
         </p>
         <p>
           <ClusterOutlined
@@ -93,7 +90,7 @@ const Center = () => {
               marginRight: 8,
             }}
           />
-          {group}
+          {data.list.groupMember}
         </p>
         <p>
           <HomeOutlined
@@ -101,40 +98,21 @@ const Center = () => {
               marginRight: 8,
             }}
           />
-          {
-            (
-              geographic || {
-                province: {
-                  label: '',
-                },
-              }
-            ).province.label
-          }
-          {
-            (
-              geographic || {
-                city: {
-                  label: '',
-                },
-              }
-            ).city.label
-          }
+          <p> Created at {data.list.createdAt} </p>
         </p>
       </div>
     );
-  }; // 渲染tab切换
+  };
+
+  // 渲染tab切换
 
   const renderChildrenByTabKey = (tabValue) => {
-    if (tabValue === 'projects') {
-      return <Projects />;
+    if (tabValue === 'hottest') {
+      return <Hottest />;
     }
 
-    if (tabValue === 'applications') {
-      return <Applications />;
-    }
-
-    if (tabValue === 'articles') {
-      return <Articles />;
+    if (tabValue === 'latest') {
+      return <Latest />;
     }
 
     return null;
@@ -143,7 +121,7 @@ const Center = () => {
   return (
     <GridContent>
       <Row gutter={24}>
-        <Col lg={7} md={24}>
+        <Col lg={17} md={24}>
           <Card
             bordered={false}
             style={{
@@ -151,23 +129,23 @@ const Center = () => {
             }}
             loading={loading}
           >
-            {!loading && currentUser && (
+            {!loading && data && (
               <div>
                 <div className={styles.avatarHolder}>
-                  <img alt="" src={currentUser.avatar} />
-                  <div className={styles.name}>{currentUser.name}</div>
-                  <div>{currentUser?.signature}</div>
+                  <img alt="" src={data.list.groupAvatar} />
+                  {/* <div className={styles.name}>{currentUser.name}</div>
+                  <div>{currentUser?.signature}</div> */}
                 </div>
-                {renderUserInfo(currentUser)}
+                {renderGroupInfo(data)}
                 <Divider dashed />
-                <TagList tags={currentUser.tags || []} />
+                {/* <TagList tags={currentUser.tags || []} /> */}
                 <Divider
                   style={{
                     marginTop: 16,
                   }}
                   dashed
                 />
-                <div className={styles.team}>
+                {/* <div className={styles.team}>
                   <div className={styles.teamTitle}>团队</div>
                   <Row gutter={36}>
                     {currentUser.notice &&
@@ -180,12 +158,11 @@ const Center = () => {
                         </Col>
                       ))}
                   </Row>
-                </div>
+                </div> */}
               </div>
             )}
           </Card>
-        </Col>
-        <Col lg={17} md={24}>
+
           <Card
             className={styles.tabsCard}
             bordered={false}

@@ -1,4 +1,10 @@
-import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
+import {
+  ContactsOutlined,
+  LikeOutlined,
+  LoadingOutlined,
+  MessageOutlined,
+  StarOutlined,
+} from '@ant-design/icons';
 import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
@@ -11,6 +17,7 @@ const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
 const groupName = history.location.search.substring(1);
+console.log('groupName:' + groupName);
 
 const Hottest = () => {
   const [form] = Form.useForm();
@@ -27,12 +34,8 @@ const Hottest = () => {
     },
   );
 
-  const lists = data?.list[0] || [];
-  const description = lists.groupDesciption;
-  const avatar = lists.groupAvatar;
-  const time = lists.createdAt;
-  const members = lists.groupMember;
-  const list = lists?.postList || [];
+  const list = data?.list || [];
+  console.log(list);
 
   const IconText = ({ type, text }) => {
     switch (type) {
@@ -116,10 +119,9 @@ const Hottest = () => {
     </div>
   );
 
-
   return (
     <>
-      <Card bordered={false}>
+      {/* <Card bordered={false}>
         <Form
           layout="inline"
           form={form}
@@ -128,24 +130,17 @@ const Hottest = () => {
           }}
           onValuesChange={reload}
         >
-          <StandardFormRow block> 
-            <h1>{groupName}</h1>
-            <p> {members} members</p>
-            <p> Created at {time}</p>
-          </StandardFormRow> 
-          <p>{description}</p>
-
         </Form>
-      </Card>
+      </Card> */}
 
       <Card
-        style={{
-          marginTop: 24,
-        }}
+        // style={{
+        //   marginTop: 24,
+        // }}
         bordered={false}
-        bodyStyle={{
-          padding: '8px 32px 32px 32px',
-        }}
+        // bodyStyle={{
+        //   padding: '8px 32px 32px 32px',
+        // }}
       >
         <List
           size="large"

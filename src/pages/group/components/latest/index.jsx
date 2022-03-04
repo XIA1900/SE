@@ -27,12 +27,7 @@ const Latest = () => {
     },
   );
 
-  const lists = data?.list[0] || [];
-  const description = lists.groupDesciption;
-  const avatar = lists.groupAvatar;
-  const time = lists.createdAt;
-  const members = lists.groupMember;
-  const list = lists?.postList || [];
+  const list = data?.list || [];
 
   const IconText = ({ type, text }) => {
     switch (type) {
@@ -116,26 +111,19 @@ const Latest = () => {
     </div>
   );
 
-
   return (
     <>
       <Card bordered={false}>
         <Form
           layout="inline"
           form={form}
-          initialValues={{
-            //owner: ['wjh', 'zxx'],
-          }}
+          initialValues={
+            {
+              //owner: ['wjh', 'zxx'],
+            }
+          }
           onValuesChange={reload}
-        >
-          <StandardFormRow block> 
-            <h1>{groupName}</h1>
-            <p> {members} members</p>
-            <p> Created at {time}</p>
-          </StandardFormRow> 
-          <p>{description}</p>
-
-        </Form>
+        ></Form>
       </Card>
 
       <Card

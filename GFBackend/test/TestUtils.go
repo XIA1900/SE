@@ -12,8 +12,9 @@ import (
 	"unsafe"
 )
 
-// var IP = "167.71.166.120"
-var IP = "localhost"
+var IP = "167.71.166.120"
+
+//var IP = "localhost"
 
 func userLogin(username, password string) (controller.ResponseMsg, error) {
 	type UserInfo struct {

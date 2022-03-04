@@ -121,18 +121,6 @@ const Hottest = () => {
 
   return (
     <>
-      {/* <Card bordered={false}>
-        <Form
-          layout="inline"
-          form={form}
-          initialValues={{
-            //owner: ['wjh', 'zxx'],
-          }}
-          onValuesChange={reload}
-        >
-        </Form>
-      </Card> */}
-
       <Card
         // style={{
         //   marginTop: 24,
@@ -157,7 +145,7 @@ const Hottest = () => {
                 <IconText key="like" type="like-o" text={item.like} />,
                 <IconText key="reply" type="message" text={item.reply} />,
               ]}
-              extra={<div className={styles.listItemExtra} />}
+              //extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
                 title={

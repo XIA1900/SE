@@ -1,4 +1,4 @@
-import { PlusOutlined, HomeOutlined, ContactsOutlined, ClusterOutlined } from '@ant-design/icons';
+import { PlusOutlined, TeamOutlined, CrownOutlined, CalendarOutlined } from '@ant-design/icons';
 import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
@@ -62,43 +62,41 @@ const TagList = ({ tags }) => {
 const Center = () => {
   const [tabKey, setTabKey] = useState('hottest');
 
-  const { data, loading } = useRequest(() => {
+  const { data: groupBasics, loading } = useRequest(() => {
     return getGroupBasic({
       groupName,
     });
   });
 
-  const list = data?.list || [];
+  const list = groupBasics?.list || [];
   console.log(list);
 
-  const renderGroupInfo = ({ data }) => {
+  const renderGroupInfo = ({ groupOwner, groupName, groupDescription, createdAt, groupMember }) => {
     return (
       <div className={styles.detail}>
-        <h>{list.groupName}</h>
-        <p>{list.groupDescription}</p>
+        <h1>{groupName}</h1>
+        <p>{groupDescription}</p>
         <p>
-          <ContactsOutlined
+          <CrownOutlined
             style={{
               marginRight: 8,
             }}
           />
-          {data.list.groupOwner}
-        </p>
-        <p>
-          <ClusterOutlined
+          {groupOwner}
+          <TeamOutlined
             style={{
               marginRight: 8,
+              marginLeft: 20,
             }}
           />
-          {data.list.groupMember}
-        </p>
-        <p>
-          <HomeOutlined
+          {groupMember}
+          <CalendarOutlined
             style={{
               marginRight: 8,
+              marginLeft: 20,
             }}
           />
-          <p> Created at {data.list.createdAt} </p>
+          Created at {createdAt}
         </p>
       </div>
     );
@@ -129,37 +127,17 @@ const Center = () => {
             }}
             loading={loading}
           >
-            {!loading && data && (
-              <div>
-                <div className={styles.avatarHolder}>
-                  <img alt="" src={data.list.groupAvatar} />
-                  {/* <div className={styles.name}>{currentUser.name}</div>
-                  <div>{currentUser?.signature}</div> */}
-                </div>
-                {renderGroupInfo(data)}
-                <Divider dashed />
-                {/* <TagList tags={currentUser.tags || []} /> */}
-                <Divider
-                  style={{
-                    marginTop: 16,
-                  }}
-                  dashed
+            {!loading && list && (
+              // <div>
+              <div className={styles.avatarHolder}>
+                <img
+                  alt=""
+                  src={list.groupAvatar}
+                  style={{ width: '100px', height: '100px', borderRadius: '100px' }}
                 />
-                {/* <div className={styles.team}>
-                  <div className={styles.teamTitle}>团队</div>
-                  <Row gutter={36}>
-                    {currentUser.notice &&
-                      currentUser.notice.map((item) => (
-                        <Col key={item.id} lg={24} xl={12}>
-                          <Link to={item.href}>
-                            <Avatar size="small" src={item.logo} />
-                            {item.member}
-                          </Link>
-                        </Col>
-                      ))}
-                  </Row>
-                </div> */}
+                {renderGroupInfo(list)}
               </div>
+              // {/* </div> */}
             )}
           </Card>
 

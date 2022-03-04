@@ -26,7 +26,7 @@ SearchCommunity --> |Yes| ReturnCommunity --> End
 
 ```mermaid
 graph LR
-Start([Request]) --> Params[/Params/] --> ParamsCheck{ParamsCheck}
+Start([Request]) --> CommunityInfo[/"JSON Object {ID}"/] --> ParamsCheck{ParamsCheck}
 ParamsCheck --> |NO| ReturnError[ReturnError] --> End([End])
 ParamsCheck --> |Yes| UpdateCommunity[UpdateCommunity] --> End
 ```
@@ -35,7 +35,7 @@ ParamsCheck --> |Yes| UpdateCommunity[UpdateCommunity] --> End
 
 ```mermaid
 graph LR
-Start([Request]) --> Params[/Params/] --> ParamsCheck{ParamsCheck}
+Start([Request]) --> CommunityInfo[/"JSON Object {ID}"/] --> ParamsCheck{ParamsCheck}
 ParamsCheck --> |No| ReturnError[ReturnError] --> End([End])
 ParamsCheck --> |Yes| DeleteCommunity[DeleteCommunity] --> End
 ```

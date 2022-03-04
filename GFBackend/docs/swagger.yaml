@@ -151,6 +151,36 @@ paths:
       summary: Create a new Community
       tags:
       - Community Manage
+  /community/deletecommunitybyid:
+    post:
+      consumes:
+      - application/json
+      description: need ID
+      parameters:
+      - description: need ID
+        in: body
+        name: communityInfo
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CommunityInfo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Update Password Successfully
+          schema:
+            $ref: '#/definitions/controller.CommunityResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            $ref: '#/definitions/controller.CommunityResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.CommunityResponseMsg'
+      summary: Delete community information
+      tags:
+      - Community Manage
   /community/getcommunity:
     get:
       consumes:

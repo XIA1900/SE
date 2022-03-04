@@ -24,6 +24,7 @@ func InitNonAuthReq() {
 		"/community/create",
 		"/community/getcommunity",
 		"/community/updatecommunitybyid",
+		"/community/deletecommunitybyid",
 	}
 	NonAuthReqs = make(map[string]bool)
 	for _, endpoint := range nonAuthReqs {

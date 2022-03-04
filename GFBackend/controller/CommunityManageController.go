@@ -180,3 +180,47 @@ func (communityManageController *CommunityManageController) UpdateCommunity(cont
 		Message: "Update Community Success",
 	})
 }
+
+// DeleteCommunity godoc
+// @Summary Delete community information
+// @Description need ID
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Param communityInfo body controller.CommunityInfo true "need ID"
+// @Success 201 {object} controller.CommunityResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} controller.CommunityResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} controller.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /community/deletecommunitybyid [post]
+func (communityManageController *CommunityManageController) DeleteCommunity(context *gin.Context) {
+	var communityInfo CommunityInfo
+	if err := context.ShouldBindJSON(&communityInfo); err != nil {
+		er := ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters",
+		}
+		context.JSON(http.StatusBadRequest, er)
+		return
+	}
+	err := communityManageController.communityManageService.DeleteCommunity(communityInfo.ID)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			er := ResponseMsg{
+				Code:    http.StatusBadRequest,
+				Message: "Community not found",
+			}
+			context.JSON(http.StatusBadRequest, er)
+		} else {
+			er := ResponseMsg{
+				Code:    http.StatusInternalServerError,
+				Message: "Internal Server Error",
+			}
+			context.JSON(http.StatusInternalServerError, er)
+		}
+		return
+	}
+	context.JSON(http.StatusOK, ResponseMsg{
+		Code:    http.StatusOK,
+		Message: "Delete Community Success",
+	})
+}

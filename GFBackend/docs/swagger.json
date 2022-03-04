@@ -56,6 +56,52 @@
                 }
             }
         },
+        "/community/deletecommunitybyid": {
+            "post": {
+                "description": "need ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Delete community information",
+                "parameters": [
+                    {
+                        "description": "need ID",
+                        "name": "communityInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.CommunityInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/community/getcommunity": {
             "get": {
                 "description": "need strings community name",

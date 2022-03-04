@@ -17,6 +17,7 @@ type ICommunityManageService interface {
 	CreateCommunity(creator string, name string, description string, createTime string) error
 	GetCommunityByName(name string) (model.Community, model.User, error)
 	UpdateCommunity(updateInfo model.Community) error
+	DeleteCommunity(id int) error
 }
 
 type CommunityManageService struct {
@@ -78,6 +79,15 @@ func (communityManageService *CommunityManageService) GetCommunityByName(name st
 
 func (communityManageService *CommunityManageService) UpdateCommunity(updateInfo model.Community) error {
 	err := communityManageService.communityDAO.UpdateCommunity(updateInfo)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return errors.New("500")
+	}
+	return nil
+}
+
+func (communityManageService *CommunityManageService) DeleteCommunity(id int) error {
+	err := communityManageService.communityDAO.DeleteCommunity(id)
 	if err != nil {
 		logger.AppLogger.Error(err.Error())
 		return errors.New("500")

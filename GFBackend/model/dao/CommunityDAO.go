@@ -13,6 +13,7 @@ type ICommunityDAO interface {
 	CreateCommunity(community model.Community) error
 	GetCommunityByName(community model.Community) (model.Community, error)
 	UpdateCommunity(community model.Community) error
+	DeleteCommunity(ID int) error
 }
 
 type CommunityDAO struct {
@@ -57,6 +58,14 @@ func (communityDAO *CommunityDAO) UpdateCommunity(communityInfo model.Community)
 		Name:        communityInfo.Name,
 		Description: communityInfo.Description,
 	})
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (communityDAO *CommunityDAO) DeleteCommunity(ID int) error {
+	result := communityDAO.db.Where("ID = ?", ID).Delete(&model.Community{})
 	if result.Error != nil {
 		return result.Error
 	}

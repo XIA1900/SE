@@ -1,49 +1,101 @@
 package test
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
-	"strings"
+	"net/http/cookiejar"
 	"testing"
-	"unsafe"
 )
 
 func TestUserLogin(t *testing.T) {
-	type UserInfo struct {
-		Username string `json:"Username"`
-		Password string `json:"Password"`
+	loginInfo, err := userLogin("boss", "007")
+	if err != nil {
+		t.Error("Fail to Login. Error Message: " + err.Error())
+		return
 	}
-
-	userInfo := UserInfo{
-		Username: "dog",
-		Password: "007",
+	if loginInfo.Code == 200 {
+		fmt.Println("Login Successfully")
+		fmt.Println(loginInfo)
+	} else {
+		t.Errorf("Fail to Login. Error Message: %v", loginInfo)
+		return
 	}
+}
 
-	requestData, _ := json.Marshal(userInfo)
-
-	response, err1 := http.Post(
-		"http://167.71.166.120:10010/gf/api/user/login",
-		"application/json",
-		bytes.NewBuffer(requestData))
+func TestUserFollowers(t *testing.T) {
+	loginInfo, err := userLogin("lion", "007")
+	if err != nil || loginInfo.Message == "" {
+		t.Error("Fail to Login. Error Message: " + err.Error())
+		return
+	}
+	cookie := &http.Cookie{
+		Name:  "token",
+		Value: loginInfo.Message,
+	}
+	request, err1 := http.NewRequest("POST", "http://"+IP+":10010/gf/api/user/followers", nil)
 	if err1 != nil {
-		t.Error("Failed to Request. " + err1.Error())
+		t.Error("Failed to Generate Request: " + err1.Error())
+		return
+	}
+	request.AddCookie(cookie)
+	jar, err2 := cookiejar.New(nil)
+	if err2 != nil {
+		t.Error("Failed to Set Cookie: " + err2.Error())
+		return
+	}
+	var client http.Client
+	client = http.Client{
+		Jar: jar,
+	}
+	response, err3 := client.Do(request)
+	if err3 != nil {
+		t.Error("Failed to Request: " + err3.Error())
 		return
 	}
 	defer response.Body.Close()
 
-	content, err2 := ioutil.ReadAll(response.Body)
-	if err2 != nil {
-		t.Error("Failed to Request. " + err2.Error())
+	err4 := printResponseContent(response)
+	if err4 != nil {
+		t.Error("Failed to Interpret Response Message: " + err4.Error())
 		return
 	}
+}
 
-	str := (*string)(unsafe.Pointer(&content))
-	if strings.Contains(*str, "400") {
-		t.Error("Failed to Request. " + *str)
+func TestUserFollowees(t *testing.T) {
+	loginInfo, err := userLogin("dog", "007")
+	if err != nil || loginInfo.Message == "" {
+		t.Error("Fail to Login. Error Message: " + err.Error())
 		return
 	}
-	fmt.Println(*str)
+	cookie := &http.Cookie{
+		Name:  "token",
+		Value: loginInfo.Message,
+	}
+	request, err1 := http.NewRequest("POST", "http://"+IP+":10010/gf/api/user/followees", nil)
+	if err1 != nil {
+		t.Error("Failed to Generate Request: " + err1.Error())
+		return
+	}
+	request.AddCookie(cookie)
+	jar, err2 := cookiejar.New(nil)
+	if err2 != nil {
+		t.Error("Failed to Set Cookie: " + err2.Error())
+		return
+	}
+	var client http.Client
+	client = http.Client{
+		Jar: jar,
+	}
+	response, err3 := client.Do(request)
+	if err3 != nil {
+		t.Error("Failed to Request: " + err3.Error())
+		return
+	}
+	defer response.Body.Close()
+
+	err4 := printResponseContent(response)
+	if err4 != nil {
+		t.Error("Failed to Interpret Response Message: " + err4.Error())
+		return
+	}
 }

@@ -38,6 +38,8 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/update", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/follow", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/unfollow", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/user/followers", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/user/followees", "POST")
 
 	// /community/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/create", "POST")

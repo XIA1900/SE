@@ -26,6 +26,8 @@ type IUserManageService interface {
 	Update(userInfo model.User) error
 	Follow(followee, follower string) error
 	Unfollow(followee, follower string) error
+	GetFollowers(username string) ([]string, error)
+	GetFollowees(username string) ([]string, error)
 }
 
 type UserManageService struct {
@@ -239,4 +241,30 @@ func (userManageService UserManageService) Unfollow(followee, follower string) e
 		return errors.New("500")
 	}
 	return nil
+}
+
+func (userManageService UserManageService) GetFollowers(username string) ([]string, error) {
+	follows, err1 := userManageService.followDAO.GetFollowers(username)
+	if err1 != nil {
+		logger.AppLogger.Error(err1.Error())
+		return nil, errors.New("500")
+	}
+	var followers []string
+	for _, follow := range follows {
+		followers = append(followers, follow.Follower)
+	}
+	return followers, nil
+}
+
+func (userManageService UserManageService) GetFollowees(username string) ([]string, error) {
+	follows, err1 := userManageService.followDAO.GetFollowees(username)
+	if err1 != nil {
+		logger.AppLogger.Error(err1.Error())
+		return nil, errors.New("500")
+	}
+	var followees []string
+	for _, follow := range follows {
+		followees = append(followees, follow.Followee)
+	}
+	return followees, nil
 }

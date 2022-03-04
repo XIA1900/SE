@@ -43,3 +43,8 @@ type UserFiles struct {
 	ResponseMsg
 	Filenames []string `form:"Filenames" json:"Filenames" example:"\"xxx.jpg\",\"xxx.png\",\"xxx.gif\""`
 }
+
+type UserFollows struct {
+	ResponseMsg
+	Users []string `form:"Users" json:"Users" example:"\"spriderman\",\"batman\",\"ironman\""`
+}

@@ -12,6 +12,8 @@ var followDAO *FollowDAO
 
 type IFollowDAO interface {
 	GetOneFollow(followee, follower string) (model.Follow, error)
+	GetFollowers(username string) ([]model.Follow, error)
+	GetFollowees(username string) ([]model.Follow, error)
 	UserFollow(followee, follower string) error
 	UserUnfollow(followee, follower string) error
 	DeleteFollow(username string) error
@@ -41,6 +43,24 @@ func (followDAO *FollowDAO) GetOneFollow(followee, follower string) (model.Follo
 		return follow, result.Error
 	}
 	return follow, nil
+}
+
+func (followDAO *FollowDAO) GetFollowers(username string) ([]model.Follow, error) {
+	var follows []model.Follow
+	result := followDAO.db.Where("followee = ?", username).Find(&follows)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return follows, nil
+}
+
+func (followDAO *FollowDAO) GetFollowees(username string) ([]model.Follow, error) {
+	var follows []model.Follow
+	result := followDAO.db.Where("follower = ?", username).Find(&follows)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return follows, nil
 }
 
 func (followDAO *FollowDAO) UserFollow(followee, follower string) error {

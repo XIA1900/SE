@@ -88,6 +88,23 @@ definitions:
         example: process successfully
         type: string
     type: object
+  controller.UserFollows:
+    properties:
+      Users:
+        example:
+        - '"spriderman"'
+        - '"batman"'
+        - '"ironman"'
+        items:
+          type: string
+        type: array
+      code:
+        example: 200
+        type: integer
+      message:
+        example: process successfully
+        type: string
+    type: object
   controller.UserInfo:
     properties:
       ForAdmin:
@@ -528,6 +545,70 @@ paths:
       security:
       - ApiAuthToken: []
       summary: User Follow other users
+      tags:
+      - User Manage
+  /user/followees:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie
+      parameters:
+      - description: username in post request body
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Search Successfully
+          schema:
+            $ref: '#/definitions/controller.UserFollows'
+        "400":
+          description: <b>Failure</b>. Bad Parameters.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Get User's followees
+      tags:
+      - User Manage
+  /user/followers:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie
+      parameters:
+      - description: username in post request body
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Search Successfully
+          schema:
+            $ref: '#/definitions/controller.UserFollows'
+        "400":
+          description: <b>Failure</b>. Bad Parameters.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Get User's followers
       tags:
       - User Manage
   /user/login:

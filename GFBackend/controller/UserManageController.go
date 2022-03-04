@@ -422,3 +422,76 @@ func (userManageController *UserManageController) UserUnfollow(context *gin.Cont
 
 	return
 }
+
+// GetFollowers godoc
+// @Summary Get User's followers
+// @Description need token in cookie
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param username body string true "username in post request body"
+// @Success 201 {object} controller.UserFollows "<b>Success</b>. Search Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters."
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/followers [post]
+func (userManageController *UserManageController) GetFollowers(context *gin.Context) {
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+	followers, err1 := userManageController.userManageService.GetFollowers(username)
+	errMsg := ResponseMsg{
+		Code:    http.StatusBadRequest,
+		Message: "Bad Parameters.",
+	}
+	if err1 != nil {
+		errMsg.Code = 500
+		errMsg.Message = "Internal Server Error"
+		context.JSON(errMsg.Code, errMsg)
+		return
+	}
+	userFollows := UserFollows{
+		ResponseMsg: ResponseMsg{
+			Code:    200,
+			Message: "Search Successfully",
+		},
+		Users: followers,
+	}
+	context.JSON(200, userFollows)
+}
+
+// GetFollowees godoc
+// @Summary Get User's followees
+// @Description need token in cookie
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param username body string true "username in post request body"
+// @Success 201 {object} controller.UserFollows "<b>Success</b>. Search Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters."
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/followees [post]
+func (userManageController *UserManageController) GetFollowees(context *gin.Context) {
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+	followers, err1 := userManageController.userManageService.GetFollowees(username)
+	errMsg := ResponseMsg{
+		Code:    http.StatusBadRequest,
+		Message: "Bad Parameters.",
+	}
+	if err1 != nil {
+		errMsg.Code = 500
+		errMsg.Message = "Internal Server Error"
+		context.JSON(errMsg.Code, errMsg)
+		return
+	}
+	userFollows := UserFollows{
+		ResponseMsg: ResponseMsg{
+			Code:    200,
+			Message: "Search Successfully",
+		},
+		Users: followers,
+	}
+	context.JSON(200, userFollows)
+
+}

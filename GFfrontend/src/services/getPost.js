@@ -5,3 +5,21 @@ export async function getPost(params) {
     params,
   });
 }
+
+export async function getCollection(params) {
+  return request('/api/getCollection', {
+    params,
+  });
+}
+
+export async function getReply(params) {
+  return request('/api/getReply', {
+    params,
+  });
+}
+
+export async function getLike(params) {
+  return request('/api/getLike', {
+    params,
+  });
+}

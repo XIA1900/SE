@@ -44,27 +44,37 @@ const owner = {
   avatar: '/heroes/Lux_0.jpeg',
 };
 const updateAt = date.getMonth() + '-' + date.getDate() + '-' + date.getFullYear();
-const likes_count = Math.ceil(Math.random() * 100) + 100;
-const likes = ['Ashe', 'Janna', 'Karma', 'Ahri', 'Lulu', 'Lux', 'Morgana', 'Neeko', 'Sona'];
-const collections_count = Math.ceil(Math.random() * 100) + 100;
-const collections = ['Lux', 'Morgana', 'Neeko', 'Sona', 'Soraka'];
-const replies_count = Math.ceil(Math.random() * 10) + 1;
 
-const replies = [];
 
-for (let i = 0; i < replies_count; i++) {
-  const post_owner = {
-    name: users[i % 10],
-    avatar: avatars[i % 10],
-  };
-  replies.push({
-    owner: post_owner,
-    content: contents[i % 10],
-    createdAt: date.getMonth() + '-' + date.getDate() + '-' + date.getFullYear(),
-    likes: Math.ceil(Math.random() * 100) + 100,
-    reply: [],
+
+
+function replyContents(postid) {
+  const replies_count = Math.ceil(Math.random() * 10) + 1;
+  const replies = [];
+  for (let i = 0; i < replies_count; i++) {
+    replies.push({
+      owner: users[i % 10],
+      avatar: avatars[i % 10],
+      content: contents[i % 10],
+      createdAt: date.getMonth() + '-' + date.getDate() + '-' + date.getFullYear(),
+      likes: Math.ceil(Math.random() * 100) + 100,
+    });
+  }
+  return replies;
+}
+
+function getReply(req, res) {
+  const params = req.query;
+  const postid = params.postid;
+  const result = replyContents(postid);
+  return res.json({
+    data: {
+      list:result,
+    },
   });
 }
+
+
 
 function postContents(postid) {
   const list = [];
@@ -72,14 +82,9 @@ function postContents(postid) {
     postid: postid,
     title: title,
     content: content,
-    owner: owner,
+    owner: users[8],
+    avatar: avatars[8],
     updatedAt: updateAt,
-    replies: replies,
-    replies_count: replies_count,
-    likes_count: likes_count,
-    likes: likes,
-    collections_count: collections_count,
-    collections: collections,
   });
 }
 
@@ -87,6 +92,7 @@ function getPost(req, res) {
   const params = req.query;
   const postid = params.postid;
   const result = postContents(postid);
+  console.log('postid:'+postid);
   return res.json({
     data: {
       list: result,
@@ -94,6 +100,53 @@ function getPost(req, res) {
   });
 }
 
+
+
+function likeUsers(postid) {
+  const likes_count = 9;
+  const likes = ['Ashe', 'Janna', 'Karma', 'Ahri', 'Lulu', 'Lux', 'Morgana', 'Neeko', 'Sona'];
+  const result = {
+    likes_count: likes_count,
+    likes: likes,
+  };
+  return result;
+}
+
+function getLike(req, res) {
+  const params = req.query;
+  const postid = params.postid;
+  const result = likeUsers(postid);
+  return res.json({
+    data: {
+      list:result,
+    },
+  });
+}
+
+function collectionUsers(postid) {
+  const collections_count = 5;
+  const collections = ['Lux', 'Morgana', 'Neeko', 'Sona', 'Soraka'];
+  const result = {
+    collections_count: collections_count,
+    collections: collections,
+  };
+  return result;
+}
+
+function getCollection(req, res) {
+  const params = req.query;
+  const postid = params.postid;
+  const result = collectionUsers(postid);
+  return res.json({
+    data: {
+      list:result,
+    },
+  });
+}
+
 export default {
   'GET /api/getPost': getPost,
+  'GET /api/getReply': getReply,
+  'GET /api/getCollection': getCollection,
+  'GET /api/getLike': getLike,
 };

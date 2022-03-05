@@ -1,5 +1,5 @@
 import { router } from 'umi';
-import { getPost } from '@/services/getPost';
+import { getPost, getLike, getCollection, getReply } from '@/services/getPost';
 
 const Model = {
   namespace: 'getPost',
@@ -13,10 +13,46 @@ const Model = {
         type: 'save',
         payload: response,
       });
+
+      const response2 = yield call(getLike, payload);
+      yield put({
+        type: 'save2',
+        payload: response2,
+      });
+
+      const response3 = yield call(getCollection, payload);
+      yield put({
+        type: 'save3',
+        payload: response3,
+      });
+
+      const response4 = yield call(getReply, payload);
+      yield put({
+        type: 'save4',
+        payload: response4,
+      });
     },
   },
   reducers: {
     save(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save2(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save3(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save4(state, action) {
       return {
         ...state,
         data: action.payload,

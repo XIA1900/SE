@@ -430,7 +430,6 @@ func (userManageController *UserManageController) UserUnfollow(context *gin.Cont
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param username body string true "username in post request body"
 // @Success 201 {object} controller.UserFollows "<b>Success</b>. Search Successfully"
 // @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters."
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."

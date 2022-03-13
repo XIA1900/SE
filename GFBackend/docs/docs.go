@@ -17,6 +17,43 @@ const docTemplate_swagger = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/articletype/all": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Type Manage"
+                ],
+                "summary": "Get All Article Types",
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Login Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.ArticleType"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Type has existed",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/articletype/create": {
             "post": {
                 "security": [
@@ -24,7 +61,7 @@ const docTemplate_swagger = `{
                         "ApiAuthToken": []
                     }
                 ],
-                "description": "need token in cookie, need new article type information",
+                "description": "need token in cookie, need new article type information, cannot repeat type name",
                 "consumes": [
                     "application/json"
                 ],
@@ -48,13 +85,124 @@ const docTemplate_swagger = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Login Successfully",
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseMsg"
                         }
                     },
                     "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Username / Password incorrect",
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Type has existed",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/articletype/remove": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need type name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Type Manage"
+                ],
+                "summary": "Admin user removes article type",
+                "parameters": [
+                    {
+                        "description": "Type Name",
+                        "name": "TypeName",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Remove Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/articletype/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need type name \u0026 new description",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Type Manage"
+                ],
+                "summary": "Admin user update article type description",
+                "parameters": [
+                    {
+                        "description": "Type Name",
+                        "name": "TypeName",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Description",
+                        "name": "Description",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Type has not existed",
                         "schema": {
                             "$ref": "#/definitions/controller.ResponseMsg"
                         }
@@ -772,17 +920,6 @@ const docTemplate_swagger = `{
                     "User Manage"
                 ],
                 "summary": "Get User's followers",
-                "parameters": [
-                    {
-                        "description": "username in post request body",
-                        "name": "username",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
@@ -1087,14 +1224,6 @@ const docTemplate_swagger = `{
         "controller.ArticleTypeInfo": {
             "type": "object",
             "properties": {
-                "CreateDay": {
-                    "type": "string",
-                    "example": "2020-02-02"
-                },
-                "Creator": {
-                    "type": "string",
-                    "example": "James Bond"
-                },
                 "Description": {
                     "type": "string",
                     "example": "Discussion of Movie"
@@ -1269,6 +1398,26 @@ const docTemplate_swagger = `{
                 "Username": {
                     "type": "string",
                     "example": "jamesbond21"
+                }
+            }
+        },
+        "model.ArticleType": {
+            "type": "object",
+            "properties": {
+                "create_Day": {
+                    "type": "string"
+                },
+                "creator": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "typeName": {
+                    "type": "string"
                 }
             }
         },

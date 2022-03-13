@@ -52,6 +52,4 @@ type UserFollows struct {
 type ArticleTypeInfo struct {
 	TypeName    string `form:"TypeName" json:"TypeName" example:"Movie"`
 	Description string `form:"Description" json:"Description" example:"Discussion of Movie"`
-	Creator     string `form:"Creator" json:"Creator" example:"James Bond"`
-	CreateDay   string `form:"CreateDay" json:"CreateDay" example:"2020-02-02"`
 }

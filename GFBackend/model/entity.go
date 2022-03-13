@@ -51,7 +51,7 @@ func (space Space) TableName() string {
 
 type ArticleType struct {
 	ID          int
-	TypeName    string
+	TypeName    string `gorm:"column:TypeName"`
 	Description string
 	Creator     string
 	Create_Day  string

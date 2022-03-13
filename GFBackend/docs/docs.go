@@ -32,7 +32,7 @@ const docTemplate_swagger = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Manage"
+                    "Article Type Manage"
                 ],
                 "summary": "Create a new article type by admin user",
                 "parameters": [

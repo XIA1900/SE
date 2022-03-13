@@ -36,7 +36,7 @@ var ArticleTypeManageControllerSet = wire.NewSet(
 // CreateArticleType godoc
 // @Summary Create a new article type by admin user
 // @Description need token in cookie, need new article type information
-// @Tags User Manage
+// @Tags Article Type Manage
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken

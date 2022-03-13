@@ -184,7 +184,7 @@ paths:
       - ApiAuthToken: []
       summary: Create a new article type by admin user
       tags:
-      - User Manage
+      - Article Type Manage
   /community/create:
     post:
       consumes:

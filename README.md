@@ -17,8 +17,9 @@ This is SE Projects By Center of the Road Group
 
 
 
-# **Gator-forum**
-## **Introduction**
+# Gator-forum
+
+## Introduction
 Basically, Gator-forum is similar to any other forums, like Stack Overflow, Douban, Quora, Reddit… But we hope it is more student-life related instead of society-related or limited in specific field.
 
 A few gator forums have been discovered:
@@ -29,13 +30,13 @@ A few gator forums have been discovered:
 
 But they seem to be all sports-related. Although lots of students have a huge interest in sports, we do not want to only focus on sports. We want to create a place where people can not only discuss about sports, but also lots of things including their courses, their professors, their daily life, their hobbies and so on. They can share whatever they like and legal on Gator-forum.
 
-## **Potential Users:**
+## Potential Users:
 
 - regular users (UF students/employees)
 - admin (Gator Forum Administrator)
 
 
-## **Possible User Interactions:**
+## Possible User Interactions:
 
 -  If **not** signed in, **visitors** can only view posts and cannot interact with other users.
 - If signed in as **regular users**, he/she can do following: 
@@ -55,7 +56,7 @@ But they seem to be all sports-related. Although lots of students have a huge in
 	4. deal with reports from users
 	5. receive notifications including reports or requests from users
 
-## **Other Functions**
+## Other Functions
 - Can have different groups in which people of similar interests can discuss with each other. Groups can be "sports", "music", "rate-my-professor", "daily life", "courses" ... and so on. Users can join multiple groups and discuss with others in the group. Each group may have a few managers.
 - Can earn points/badge based on their activation. To encourage them to post.
 - Can switch among best/most-recent/hot posts.

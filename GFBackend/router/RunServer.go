@@ -31,6 +31,7 @@ func RunServer() {
 		reqs.InitUserManageReqs(baseGroup)
 		reqs.InitCommunityManageReqs(baseGroup)
 		reqs.InitFileManageReqs(baseGroup)
+		reqs.InitArticleTypeManageReqs(baseGroup)
 	}
 
 	err := AppRouter.Run(":" + strconv.Itoa(appConfig.Server.Port))

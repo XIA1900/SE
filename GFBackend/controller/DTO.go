@@ -48,3 +48,10 @@ type UserFollows struct {
 	ResponseMsg
 	Users []string `form:"Users" json:"Users" example:"\"spriderman\",\"batman\",\"ironman\""`
 }
+
+type ArticleTypeInfo struct {
+	TypeName    string `form:"TypeName" json:"TypeName" example:"Movie"`
+	Description string `form:"Description" json:"Description" example:"Discussion of Movie"`
+	Creator     string `form:"Creator" json:"Creator" example:"James Bond"`
+	CreateDay   string `form:"CreateDay" json:"CreateDay" example:"2020-02-02"`
+}

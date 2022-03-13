@@ -50,3 +50,13 @@ CREATE TABLE Space (
     Used FLOAT(6,2) DEFAULT '0.00',           -- MB
     PRIMARY KEY (ID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Article_Type (
+    ID INT NOT NULL AUTO_INCREMENT,
+    TypeName VARCHAR(20) NOT NULL UNIQUE,
+    Description VARCHAR(500),
+    Creator VARCHAR(20) NOT NULL,
+    Create_Day DATE,
+    PRIMARY KEY (ID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

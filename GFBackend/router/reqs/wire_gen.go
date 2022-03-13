@@ -36,3 +36,10 @@ func InitializeFileManageController() (*controller.FileManageController, error) 
 	fileManageController := controller.NewFileManageController(fileManageService)
 	return fileManageController, nil
 }
+
+func InitializeArticleTypeManageController() (*controller.ArticleTypeManageController, error) {
+	articleTypeDAO := dao.NewArticleTypeDAO()
+	articleTypeManageService := service.NewArticleTypeManageService(articleTypeDAO)
+	articleTypeManageController := controller.NewArticleTypeManageController(articleTypeManageService)
+	return articleTypeManageController, nil
+}

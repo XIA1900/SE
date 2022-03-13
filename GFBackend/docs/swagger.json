@@ -10,6 +10,57 @@
     "host": "http://167.71.166.120:10010",
     "basePath": "/gf/api",
     "paths": {
+        "/articletype/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need new article type information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "Create a new article type by admin user",
+                "parameters": [
+                    {
+                        "description": "New Article Type Information",
+                        "name": "ArticleTypeInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.ArticleTypeInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Login Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Username / Password incorrect",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/community/create": {
             "post": {
                 "description": "need strings creator \u0026 community name \u0026 description \u0026 create time",
@@ -1026,6 +1077,27 @@
         }
     },
     "definitions": {
+        "controller.ArticleTypeInfo": {
+            "type": "object",
+            "properties": {
+                "CreateDay": {
+                    "type": "string",
+                    "example": "2020-02-02"
+                },
+                "Creator": {
+                    "type": "string",
+                    "example": "James Bond"
+                },
+                "Description": {
+                    "type": "string",
+                    "example": "Discussion of Movie"
+                },
+                "TypeName": {
+                    "type": "string",
+                    "example": "Movie"
+                }
+            }
+        },
         "controller.CommunityInfo": {
             "type": "object",
             "properties": {

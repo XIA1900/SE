@@ -1,5 +1,20 @@
 basePath: /gf/api
 definitions:
+  controller.ArticleTypeInfo:
+    properties:
+      CreateDay:
+        example: "2020-02-02"
+        type: string
+      Creator:
+        example: James Bond
+        type: string
+      Description:
+        example: Discussion of Movie
+        type: string
+      TypeName:
+        example: Movie
+        type: string
+    type: object
   controller.CommunityInfo:
     properties:
       Create_Time:
@@ -138,6 +153,38 @@ info:
   title: Gator Forum Backend API
   version: "1.0"
 paths:
+  /articletype/create:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need new article type information
+      parameters:
+      - description: New Article Type Information
+        in: body
+        name: ArticleTypeInfo
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ArticleTypeInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. User Login Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Username / Password incorrect
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Create a new article type by admin user
+      tags:
+      - User Manage
   /community/create:
     post:
       consumes:

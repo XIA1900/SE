@@ -19,3 +19,7 @@ func InitializeCommunityManageController() (*controller.CommunityManageControlle
 func InitializeFileManageController() (*controller.FileManageController, error) {
 	panic(wire.Build(controller.FileManageControllerSet))
 }
+
+func InitializeArticleTypeManageController() (*controller.ArticleTypeManageController, error) {
+	panic(wire.Build(controller.ArticleTypeManageControllerSet))
+}

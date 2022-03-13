@@ -48,3 +48,15 @@ type Space struct {
 func (space Space) TableName() string {
 	return "Space"
 }
+
+type ArticleType struct {
+	ID          int
+	TypeName    string
+	Description string
+	Creator     string
+	Create_Day  string
+}
+
+func (articleType ArticleType) TableName() string {
+	return "Article_Type"
+}

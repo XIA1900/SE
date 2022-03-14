@@ -62,6 +62,13 @@ func (articleType ArticleType) TableName() string {
 }
 
 type Article struct {
+	ID          int
+	Username    string
+	Title       string
+	TypeID      int    `gorm:"column:TypeID"`
+	CommunityID int    `gorm:"column:CommunityID"`
+	CreateDay   string `gorm:"column:CreateDay"`
+	Content     string
 }
 
 func (article Article) TableName() string {

@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "ID": {
+      "type": "long"
+    },
+    "Username": {
+      "type": "keyword"
+    },
+    "Title": {
+      "type": "text"
+    },
+    "Content": {
+      "type": "text"
+    }
+  }
+}

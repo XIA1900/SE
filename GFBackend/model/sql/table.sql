@@ -75,8 +75,9 @@ CREATE TABLE Article_Like (
     ID INT NOT NULL AUTO_INCREMENT,
     Username VARCHAR(20) NOT NULL,
     ArticleID INT NOT NULL,
-    LikeDay DATE,
-    PRIMARY KEY (ID)
+    LikeDay DATE NOT NULL,
+    PRIMARY KEY (ID),
+    UNIQUE KEY LikePair(Username, ArticleID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE Article_Favorite (

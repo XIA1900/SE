@@ -60,3 +60,21 @@ type ArticleType struct {
 func (articleType ArticleType) TableName() string {
 	return "Article_Type"
 }
+
+type Article struct {
+}
+
+func (article Article) TableName() string {
+	return "Article"
+}
+
+type ArticleLike struct {
+	ID        int
+	Username  string
+	ArticleID int    `gorm:"column:ArticleID"`
+	LikeDay   string `gorm:"column:LikeDay"`
+}
+
+func (articleLike ArticleLike) TableName() string {
+	return "Article_Like"
+}

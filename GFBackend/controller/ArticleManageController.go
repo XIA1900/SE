@@ -2,6 +2,7 @@ package controller
 
 import (
 	"GFBackend/service"
+	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"sync"
 )
@@ -31,3 +32,7 @@ var ArticleManageControllerSet = wire.NewSet(
 	wire.Bind(new(service.IArticleManageService), new(*service.ArticleManageService)),
 	NewArticleManageController,
 )
+
+func (articleManageController ArticleManageController) CreateArticle(context *gin.Context) {
+
+}

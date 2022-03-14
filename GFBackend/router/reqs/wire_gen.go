@@ -43,3 +43,10 @@ func InitializeArticleTypeManageController() (*controller.ArticleTypeManageContr
 	articleTypeManageController := controller.NewArticleTypeManageController(articleTypeManageService)
 	return articleTypeManageController, nil
 }
+
+func InitializeArticleManageController() (*controller.ArticleManageController, error) {
+	articleDAO := dao.NewArticleDAO()
+	articleManageService := service.NewArticleManageService(articleDAO)
+	articleManageController := controller.NewArticleManageController(articleManageService)
+	return articleManageController, nil
+}

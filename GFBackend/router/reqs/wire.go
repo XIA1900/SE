@@ -23,3 +23,7 @@ func InitializeFileManageController() (*controller.FileManageController, error) 
 func InitializeArticleTypeManageController() (*controller.ArticleTypeManageController, error) {
 	panic(wire.Build(controller.ArticleTypeManageControllerSet))
 }
+
+func InitializeArticleManageController() (*controller.ArticleManageController, error) {
+	panic(wire.Build(controller.ArticleManageControllerSet))
+}

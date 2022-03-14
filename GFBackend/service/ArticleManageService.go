@@ -13,15 +13,19 @@ type IArticleManageService interface {
 }
 
 type ArticleManageService struct {
-	articleDAO dao.IArticleDAO
+	articleDAO     dao.IArticleDAO
+	articleTypeDAO dao.IArticleTypeDAO
+	communityDAO   dao.ICommunityDAO
 }
 
-func NewArticleManageService(articleDAO dao.IArticleDAO) *ArticleManageService {
+func NewArticleManageService(articleDAO dao.IArticleDAO, articleTypeDAO dao.IArticleTypeDAO, communityDAO dao.ICommunityDAO) *ArticleManageService {
 	if articleManageService == nil {
 		articleManageServiceLock.Lock()
 		if articleManageService == nil {
 			articleManageService = &ArticleManageService{
-				articleDAO: articleDAO,
+				articleDAO:     articleDAO,
+				articleTypeDAO: articleTypeDAO,
+				communityDAO:   communityDAO,
 			}
 		}
 		articleManageServiceLock.Unlock()
@@ -32,5 +36,9 @@ func NewArticleManageService(articleDAO dao.IArticleDAO) *ArticleManageService {
 var ArticleManageServiceSet = wire.NewSet(
 	dao.NewArticleDAO,
 	wire.Bind(new(dao.IArticleDAO), new(*dao.ArticleDAO)),
+	dao.NewArticleTypeDAO,
+	wire.Bind(new(dao.IArticleTypeDAO), new(*dao.ArticleTypeDAO)),
+	dao.NewCommunityDAO,
+	wire.Bind(new(dao.ICommunityDAO), new(*dao.CommunityDAO)),
 	NewArticleManageService,
 )

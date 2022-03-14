@@ -46,7 +46,9 @@ func InitializeArticleTypeManageController() (*controller.ArticleTypeManageContr
 
 func InitializeArticleManageController() (*controller.ArticleManageController, error) {
 	articleDAO := dao.NewArticleDAO()
-	articleManageService := service.NewArticleManageService(articleDAO)
+	articleTypeDAO := dao.NewArticleTypeDAO()
+	communityDAO := dao.NewCommunityDAO()
+	articleManageService := service.NewArticleManageService(articleDAO, articleTypeDAO, communityDAO)
 	articleManageController := controller.NewArticleManageController(articleManageService)
 	return articleManageController, nil
 }

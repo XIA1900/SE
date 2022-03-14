@@ -27,3 +27,7 @@ func InitializeArticleTypeManageController() (*controller.ArticleTypeManageContr
 func InitializeArticleManageController() (*controller.ArticleManageController, error) {
 	panic(wire.Build(controller.ArticleManageControllerSet))
 }
+
+func InitializeArticleLikeController() (*controller.ArticleLikeController, error) {
+	panic(wire.Build(controller.ArticleLikeControllerSet))
+}

@@ -50,3 +50,10 @@ func InitializeArticleManageController() (*controller.ArticleManageController, e
 	articleManageController := controller.NewArticleManageController(articleManageService)
 	return articleManageController, nil
 }
+
+func InitializeArticleLikeController() (*controller.ArticleLikeController, error) {
+	articleLikeDAO := dao.NewArticleLikeDAO()
+	articleLikeService := service.NewArticleLikeService(articleLikeDAO)
+	articleLikeController := controller.NewArticleLikeController(articleLikeService)
+	return articleLikeController, nil
+}

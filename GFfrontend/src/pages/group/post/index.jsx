@@ -93,24 +93,19 @@ const Center = () => {
   });
 
   const list = postContents?.list || [];
-  console.log('posts');
   console.log(list);
 
-  const renderPostInfo = ({ title, content, owner, updatedAt }) => {
-    console.log('title:'+title);
+  const renderPostInfo = ({ avatar, title, content, owner, updatedAt }) => {
     return (
-      <div className={styles.detail}>
-        <h1>{title}</h1>
-        <p> 
-          <CrownOutlined
-            style={{
-              marginRight: 8,
-            }}
+      <div className={styles.listContent}>
+        <div className={styles.title}>{title}</div>
+          <img
+            alt=""
+            src={avatar}
+            style={{ width: '25px', height: '25px', borderRadius: '25px' }}
           />
-          {owner} updated at {updatedAt}
-        </p>
-        <p>{content}</p>
-        
+          <a href=''> {owner}</a> updated at {updatedAt}
+        <div className={styles.description}> {content} </div>
       </div>
     );
   };
@@ -140,21 +135,14 @@ const Center = () => {
           <Card
             bordered={false}
             style={{
-              marginBottom: 24,
+              marginBottom: 0,
             }}
             loading={loading}
           >
             {!loading && list && (
-              // <div>
-              <div className={styles.avatarHolder}>
-                <img
-                  alt=""
-                  src={list.avatar}
-                  style={{ width: '100px', height: '100px', borderRadius: '100px' }}
-                />
+              <div>
                 {renderPostInfo(list)}
               </div>
-              // {/* </div> */}
             )}
           </Card>
 

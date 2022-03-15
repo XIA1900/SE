@@ -117,7 +117,6 @@ const Reply = () => {
   );
 
   return (
-    <>
       <Card
         // style={{
         //   marginTop: 24,
@@ -136,26 +135,15 @@ const Reply = () => {
           dataSource={list}
           renderItem={(item) => (
             <List.Item
-              //key={item.id}
               actions={[
-                //<IconText key="collection" type="star-o" text={item.collection} />,
                 <IconText key="like" type="like-o" text={item.likes} />,
-                //<IconText key="reply" type="message" text={item.reply} />,
               ]}
-              //extra={<div className={styles.listItemExtra} />}
             >
-              {/* <List.Item.Meta
-                title={
-                  <a className={styles.listItemMetaTitle} href={item.href}>
-                  </a>
-                }
-              /> */}
               <ArticleListContent data={item} />
             </List.Item>
           )}
         />
       </Card>
-    </>
   );
 };
 

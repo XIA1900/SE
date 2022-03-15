@@ -36,6 +36,7 @@ type CommunityInfo struct {
 	Creator     string `form:"Creator" json:"Creator" example:"test1"`
 	Name        string `form:"Name" json:"Name" example:"community1"`
 	Description string `form:"Description" json:"Description" example:"this is a test community"`
+	Num_Member  int    `form:"Num_Member" json:"Num_Member" example:"233"`
 	Create_Time string `form:"Create_Time" json:"Create_Time" example:"2020-01-01"`
 }
 

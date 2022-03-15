@@ -175,7 +175,7 @@ const docTemplate_swagger = `{
                 "summary": "Get All Article Types",
                 "responses": {
                     "200": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Login Successfully",
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Successfully",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -362,7 +362,12 @@ const docTemplate_swagger = `{
         },
         "/community/create": {
             "post": {
-                "description": "need strings creator \u0026 community name \u0026 description \u0026 create time",
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community name \u0026 description, no need",
                 "consumes": [
                     "application/json"
                 ],
@@ -1417,6 +1422,10 @@ const docTemplate_swagger = `{
                 "Name": {
                     "type": "string",
                     "example": "community1"
+                },
+                "Num_Member": {
+                    "type": "integer",
+                    "example": 233
                 },
                 "id": {
                     "type": "integer"

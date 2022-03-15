@@ -38,8 +38,15 @@ CREATE TABLE Community (
     Name VARCHAR(20) NOT NULL UNIQUE,
     Description VARCHAR(500),
     Num_Member INT NOT NULL DEFAULT '1',
-    Create_Time DATETIME NOT NULL,
+    Create_Time DATE NOT NULL,
     PRIMARY KEY (ID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Community_Member (
+    CommunityID INT NOT NULL,
+    Member VARCHAR(20) NOT NULL,
+    JoinDay DATE NOT NULL,
+    PRIMARY KEY (CommunityID, Member)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- User Private Space Info

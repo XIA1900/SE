@@ -38,6 +38,9 @@ definitions:
       Name:
         example: community1
         type: string
+      Num_Member:
+        example: 233
+        type: integer
       id:
         type: integer
     type: object
@@ -275,7 +278,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: <b>Success</b>. User Login Successfully
+          description: <b>Success</b>. Get Successfully
           schema:
             items:
               $ref: '#/definitions/model.ArticleType'
@@ -398,7 +401,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: need strings creator & community name & description & create time
+      description: need token in cookie, need community name & description, no need
       parameters:
       - description: Create a new community needs Creator, Name & Description.
         in: body
@@ -421,6 +424,8 @@ paths:
           description: <b>Failure</b>. Server Internal Error.
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
       summary: Create a new Community
       tags:
       - Community Manage

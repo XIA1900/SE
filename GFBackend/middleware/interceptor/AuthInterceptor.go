@@ -23,7 +23,6 @@ func InitNonAuthReq() {
 		"/articletype/all",
 		"/article/search",
 		//TODO: add security
-		"/community/create",
 		"/community/getcommunity",
 		"/community/updatecommunitybyid",
 		"/community/deletecommunitybyid",

@@ -34,8 +34,18 @@ type Community struct {
 	Create_Time string
 }
 
-func (c Community) TableName() string {
+func (community Community) TableName() string {
 	return "Community"
+}
+
+type CommunityMember struct {
+	CommunityID int `gorm:"column:CommunityID"`
+	Member      string
+	JoinDay     string `gorm:"column:JoinDay"`
+}
+
+func (communityMember CommunityMember) TableName() string {
+	return "Community_Member"
 }
 
 type Space struct {

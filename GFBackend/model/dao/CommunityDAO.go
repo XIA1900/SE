@@ -10,11 +10,12 @@ var communityDAO *CommunityDAO
 var communityDAOLock sync.Mutex
 
 type ICommunityDAO interface {
-	CreateCommunity(community model.Community) error
-	GetCommunityByName(community model.Community) (model.Community, error)
-	UpdateCommunity(community model.Community) error
-	DeleteCommunity(ID int) error
-	CheckCommunityByID(ID int) bool
+	CreateCommunity(communityName, username, description string) error
+	DeleteCommunityByID(id int) error
+	UpdateDescriptionByID(id int, newDescription string) error
+	AddNumMemberByID(id int) error
+	GetCommunityByID(id int) (model.Community, error)
+	GetCommunities() ([]model.Community, error)
 }
 
 type CommunityDAO struct {
@@ -34,50 +35,26 @@ func NewCommunityDAO() *CommunityDAO {
 	return communityDAO
 }
 
-func (communityDAO *CommunityDAO) CreateCommunity(community model.Community) error {
-	var result *gorm.DB
-	result = communityDAO.db.Select("Creator", "Name", "Description", "Create_Time").Create(&community)
-	if result.Error != nil {
-		return result.Error
-	}
+func (communityDAO *CommunityDAO) CreateCommunity(communityName, username, description string) error {
 	return nil
 }
 
-func (communityDAO *CommunityDAO) GetCommunityByName(community model.Community) (model.Community, error) {
-	result := communityDAO.db.Select("Creator", "Name", "Description", "Create_Time").Where("Name = ?", community.Name).First(&community)
-	if result.Error != nil {
-		return community, result.Error
-	} else {
-		dbCommunity := model.Community{}
-		communityDAO.db.Where("Name = ?", community.Name).First(&dbCommunity)
-		return dbCommunity, nil
-	}
-}
-
-func (communityDAO *CommunityDAO) UpdateCommunity(communityInfo model.Community) error {
-	result := communityDAO.db.Model(&communityInfo).Where("ID", communityInfo.ID).Updates(model.Community{
-		Name:        communityInfo.Name,
-		Description: communityInfo.Description,
-	})
-	if result.Error != nil {
-		return result.Error
-	}
+func (communityDAO *CommunityDAO) DeleteCommunityByID(id int) error {
 	return nil
 }
 
-func (communityDAO *CommunityDAO) DeleteCommunity(ID int) error {
-	result := communityDAO.db.Where("ID = ?", ID).Delete(&model.Community{})
-	if result.Error != nil {
-		return result.Error
-	}
+func (communityDAO *CommunityDAO) UpdateDescriptionByID(id int, newDescription string) error {
 	return nil
 }
 
-func (communityDAO *CommunityDAO) CheckCommunityByID(ID int) bool {
-	var community model.Community
-	result := communityDAO.db.Where("ID = ?", ID).First(&community)
-	if result.Error != nil || community.Name == "" {
-		return false
-	}
-	return true
+func (communityDAO *CommunityDAO) AddNumMemberByID(id int) error {
+	return nil
+}
+
+func (communityDAO *CommunityDAO) GetCommunityByID(id int) (model.Community, error) {
+	return model.Community{}, nil
+}
+
+func (communityDAO *CommunityDAO) GetCommunities() ([]model.Community, error) {
+	return nil, nil
 }

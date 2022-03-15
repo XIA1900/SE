@@ -72,7 +72,7 @@ func (articleTypeManageController *ArticleTypeManageController) CreateArticleTyp
 	}
 
 	errMsg.Code = 200
-	errMsg.Message = "User Login Successfully"
+	errMsg.Message = "Create Successfully"
 	context.JSON(200, errMsg)
 }
 
@@ -82,7 +82,7 @@ func (articleTypeManageController *ArticleTypeManageController) CreateArticleTyp
 // @Tags Article Type Manage
 // @Accept json
 // @Produce json
-// @Success 200 {object} []model.ArticleType "<b>Success</b>. User Login Successfully"
+// @Success 200 {object} []model.ArticleType "<b>Success</b>. Get Successfully"
 // @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters / Type has existed"
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /articletype/all [get]

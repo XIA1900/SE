@@ -1,8 +1,8 @@
 package service
 
 import (
+	"GFBackend/entity"
 	"GFBackend/logger"
-	"GFBackend/model"
 	"GFBackend/model/dao"
 	"GFBackend/utils"
 	"errors"
@@ -17,7 +17,7 @@ var articleTypeManageService *ArticleTypeManageService
 type IArticleTypeManageService interface {
 	CreateArticleType(username, typeName, description string) error
 	RemoveArticleType(typeName string) error
-	GetArticleTypes() ([]model.ArticleType, error)
+	GetArticleTypes() ([]entity.ArticleType, error)
 	UpdateArticleTypeDescription(typeName, newDescription string) error
 }
 
@@ -45,7 +45,7 @@ var ArticleTypeManageServiceSet = wire.NewSet(
 )
 
 func (articleTypeManageService *ArticleTypeManageService) CreateArticleType(username, typeName, description string) error {
-	var newArticleType = model.ArticleType{
+	var newArticleType = entity.ArticleType{
 		TypeName:    typeName,
 		Description: description,
 		Creator:     username,
@@ -62,7 +62,7 @@ func (articleTypeManageService *ArticleTypeManageService) CreateArticleType(user
 	return nil
 }
 
-func (articleTypeManageService *ArticleTypeManageService) GetArticleTypes() ([]model.ArticleType, error) {
+func (articleTypeManageService *ArticleTypeManageService) GetArticleTypes() ([]entity.ArticleType, error) {
 	articleTypes, err1 := articleTypeManageService.articleTypeDAO.GetArticleTypes()
 	if err1 != nil {
 		logger.AppLogger.Error(err1.Error())

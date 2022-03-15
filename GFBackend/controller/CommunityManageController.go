@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"GFBackend/entity"
 	"GFBackend/middleware/auth"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
@@ -42,18 +43,18 @@ var CommunityManageSet = wire.NewSet(
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param CommunityInfo body controller.CommunityInfo true "Create a new community needs Creator, Name & Description."
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Create Community Success"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Community already exists"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Param CommunityInfo body entity.CommunityInfo true "Create a new community needs Creator, Name & Description."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Create Community Success"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or Community already exists"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /community/create [post]
 func (communityManageController *CommunityManageController) CreateCommunity(context *gin.Context) {
-	respMsg := ResponseMsg{
+	respMsg := entity.ResponseMsg{
 		Code:    400,
 		Message: "Bad Parameters or Community already exists",
 	}
 
-	var communityInfo CommunityInfo
+	var communityInfo entity.CommunityInfo
 	if err1 := context.ShouldBindJSON(&communityInfo); err1 != nil {
 		context.JSON(respMsg.Code, respMsg)
 		return
@@ -86,10 +87,10 @@ func (communityManageController *CommunityManageController) CreateCommunity(cont
 // @Tags Community Manage
 // @Accept json
 // @Produce json
-// @Param CommunityInfo body controller.CommunityInfo true "Create a new community needs Creator, Name & Description."
-// @Success 201 {object} controller.CommunityResponseMsg "<b>Success</b>. Create Community Success"
-// @Failure 400 {object} controller.CommunityResponseMsg "<b>Failure</b>. Bad Parameters or Community already exists"
-// @Failure 500 {object} controller.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Param CommunityInfo body entity.CommunityInfo true "Create a new community needs Creator, Name & Description."
+// @Success 201 {object} entity.CommunityResponseMsg "<b>Success</b>. Create Community Success"
+// @Failure 400 {object} entity.CommunityResponseMsg "<b>Failure</b>. Bad Parameters or Community already exists"
+// @Failure 500 {object} entity.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /community/getcommunity [get]
 func (communityManageController *CommunityManageController) GetCommunityByName(context *gin.Context) {
 
@@ -101,10 +102,10 @@ func (communityManageController *CommunityManageController) GetCommunityByName(c
 // @Tags Community Manage
 // @Accept json
 // @Produce json
-// @Param communityInfo body controller.CommunityInfo true "need ID, Name, Description"
-// @Success 201 {object} controller.CommunityResponseMsg "<b>Success</b>. Update Password Successfully"
-// @Failure 400 {object} controller.CommunityResponseMsg "<b>Failure</b>. Bad Parameters"
-// @Failure 500 {object} controller.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Param communityInfo body entity.CommunityInfo true "need ID, Name, Description"
+// @Success 201 {object} entity.CommunityResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} entity.CommunityResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} entity.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /community/updatecommunitybyid [post]
 func (communityManageController *CommunityManageController) UpdateCommunity(context *gin.Context) {
 
@@ -116,10 +117,10 @@ func (communityManageController *CommunityManageController) UpdateCommunity(cont
 // @Tags Community Manage
 // @Accept json
 // @Produce json
-// @Param communityInfo body controller.CommunityInfo true "need ID"
-// @Success 201 {object} controller.CommunityResponseMsg "<b>Success</b>. Update Password Successfully"
-// @Failure 400 {object} controller.CommunityResponseMsg "<b>Failure</b>. Bad Parameters"
-// @Failure 500 {object} controller.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Param communityInfo body entity.CommunityInfo true "need ID"
+// @Success 201 {object} entity.CommunityResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} entity.CommunityResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} entity.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /community/deletecommunitybyid [post]
 func (communityManageController *CommunityManageController) DeleteCommunity(context *gin.Context) {
 

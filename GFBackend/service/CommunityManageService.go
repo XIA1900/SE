@@ -20,6 +20,7 @@ type ICommunityManageService interface {
 	//DeleteCommunity(id int) error
 
 	CreateCommunity(creator string, name string, description string) error
+	DeleteCommunityByID(id int) error
 }
 
 type CommunityManageService struct {
@@ -65,5 +66,9 @@ func (communityManageService *CommunityManageService) CreateCommunity(creator, n
 		return errors.New("500")
 	}
 
+	return nil
+}
+
+func (communityManageService *CommunityManageService) DeleteCommunityByID(id int) error {
 	return nil
 }

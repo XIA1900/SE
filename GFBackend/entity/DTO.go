@@ -1,4 +1,4 @@
-package controller
+package entity
 
 type ResponseMsg struct {
 	Code    int    `form:"Code" json:"code" example:"200"`

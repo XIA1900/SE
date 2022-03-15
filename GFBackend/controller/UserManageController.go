@@ -2,8 +2,8 @@ package controller
 
 import (
 	"GFBackend/config"
+	"GFBackend/entity"
 	"GFBackend/middleware/auth"
-	"GFBackend/model"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -44,15 +44,15 @@ var UserManageControllerSet = wire.NewSet(
 // @Tags User Manage
 // @Accept json
 // @Produce json
-// @Param UserInfo body controller.UserInfo true "Regular User Register only needs Username, Password(encoded by md5) & ForAdmin with false."
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. User Register Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User Has Existed"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Param UserInfo body entity.UserInfo true "Regular User Register only needs Username, Password(encoded by md5) & ForAdmin with false."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. User Register Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or User Has Existed"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/register [post]
 func (userManageController *UserManageController) RegularRegister(context *gin.Context) {
-	var registerInfo UserInfo
+	var registerInfo entity.UserInfo
 	if err := context.ShouldBindJSON(&registerInfo); err != nil {
-		er := ResponseMsg{
+		er := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters",
 		}
@@ -63,13 +63,13 @@ func (userManageController *UserManageController) RegularRegister(context *gin.C
 	err := userManageController.userManageService.Register(registerInfo.Username, registerInfo.Password, registerInfo.ForAdmin)
 	if err != nil {
 		if strings.Contains(err.Error(), "Duplicate") {
-			er := ResponseMsg{
+			er := entity.ResponseMsg{
 				Code:    http.StatusBadRequest,
 				Message: "User Has Existed.",
 			}
 			context.JSON(http.StatusBadRequest, er)
 		} else {
-			er := ResponseMsg{
+			er := entity.ResponseMsg{
 				Code:    http.StatusInternalServerError,
 				Message: "Server Internal Error.",
 			}
@@ -78,7 +78,7 @@ func (userManageController *UserManageController) RegularRegister(context *gin.C
 		return
 	}
 
-	context.JSON(http.StatusCreated, ResponseMsg{
+	context.JSON(http.StatusCreated, entity.ResponseMsg{
 		Code:    http.StatusCreated,
 		Message: "Create User Successfully",
 	})
@@ -91,10 +91,10 @@ func (userManageController *UserManageController) RegularRegister(context *gin.C
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param UserInfo body controller.UserInfo true "Admin User Register only needs Username, Password(encoded by md5) & ForAdmin with true."
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. User Register Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User Has Existed"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Param UserInfo body entity.UserInfo true "Admin User Register only needs Username, Password(encoded by md5) & ForAdmin with true."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. User Register Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or User Has Existed"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/admin/register [post]
 func (userManageController *UserManageController) AdminRegister(context *gin.Context) {
 	userManageController.RegularRegister(context)
@@ -106,15 +106,15 @@ func (userManageController *UserManageController) AdminRegister(context *gin.Con
 // @Tags User Manage
 // @Accept json
 // @Produce json
-// @Param UserInfo body controller.UserInfo true "only needs username and password"
-// @Success 200 {object} controller.ResponseMsg "<b>Success</b>. User Login Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Username / Password incorrect"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Param UserInfo body entity.UserInfo true "only needs username and password"
+// @Success 200 {object} entity.ResponseMsg "<b>Success</b>. User Login Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or Username / Password incorrect"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/login [post]
 func (userManageController *UserManageController) UserLogin(context *gin.Context) {
-	var userInfo UserInfo
+	var userInfo entity.UserInfo
 	if err := context.ShouldBindJSON(&userInfo); err != nil {
-		er := ResponseMsg{
+		er := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters.",
 		}
@@ -124,13 +124,13 @@ func (userManageController *UserManageController) UserLogin(context *gin.Context
 
 	if token, err := userManageController.userManageService.Login(userInfo.Username, userInfo.Password); err != nil {
 		if strings.Contains(err.Error(), "400") {
-			er := ResponseMsg{
+			er := entity.ResponseMsg{
 				Code:    http.StatusBadRequest,
 				Message: "Username or Password is not correct",
 			}
 			context.JSON(http.StatusBadRequest, er)
 		} else {
-			er := ResponseMsg{
+			er := entity.ResponseMsg{
 				Code:    http.StatusInternalServerError,
 				Message: "Server Internal Error.",
 			}
@@ -138,7 +138,7 @@ func (userManageController *UserManageController) UserLogin(context *gin.Context
 		}
 		return
 	} else {
-		success := ResponseMsg{
+		success := entity.ResponseMsg{
 			Code:    http.StatusOK,
 			Message: token,
 		}
@@ -180,15 +180,15 @@ func (userManageController *UserManageController) UserLogout(context *gin.Contex
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param UserInfo body controller.UserInfo true "need Username, Password, NewPassword"
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Password Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Password not match"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Param UserInfo body entity.UserInfo true "need Username, Password, NewPassword"
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or Password not match"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/password [post]
 func (userManageController *UserManageController) UserUpdatePassword(context *gin.Context) {
-	var userInfo UserInfo
+	var userInfo entity.UserInfo
 	if err1 := context.ShouldBindJSON(&userInfo); err1 != nil {
-		er := ResponseMsg{
+		er := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters.",
 		}
@@ -198,7 +198,7 @@ func (userManageController *UserManageController) UserUpdatePassword(context *gi
 
 	err2 := userManageController.userManageService.UpdatePassword(userInfo.Username, userInfo.Password, userInfo.NewPassword)
 	if err2 != nil {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters.",
 		}
@@ -212,7 +212,7 @@ func (userManageController *UserManageController) UserUpdatePassword(context *gi
 		return
 	}
 
-	success := ResponseMsg{
+	success := entity.ResponseMsg{
 		Code:    http.StatusOK,
 		Message: "Update User Password Successfully",
 	}
@@ -229,9 +229,9 @@ func (userManageController *UserManageController) UserUpdatePassword(context *gi
 // @Produce json
 // @Security ApiAuthToken
 // @Param username body string true "username in post request body"
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Password Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/admin/delete [post]
 func (userManageController *UserManageController) UserDelete(context *gin.Context) {
 	type Info struct {
@@ -242,7 +242,7 @@ func (userManageController *UserManageController) UserDelete(context *gin.Contex
 	token, _ := context.Cookie("token")
 	currentUsername, _ := auth.GetTokenUsername(token)
 	if err1 != nil || info.Username == currentUsername {
-		er := ResponseMsg{
+		er := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters or Current User cannot delete self.",
 		}
@@ -252,7 +252,7 @@ func (userManageController *UserManageController) UserDelete(context *gin.Contex
 
 	err2 := userManageController.userManageService.Delete(info.Username)
 	if err2 != nil {
-		er := ResponseMsg{
+		er := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "User not exist or Other Errors.",
 		}
@@ -264,7 +264,7 @@ func (userManageController *UserManageController) UserDelete(context *gin.Contex
 		return
 	}
 
-	context.JSON(http.StatusCreated, ResponseMsg{
+	context.JSON(http.StatusCreated, entity.ResponseMsg{
 		Code:    http.StatusCreated,
 		Message: "Delete User Successfully",
 	})
@@ -277,15 +277,15 @@ func (userManageController *UserManageController) UserDelete(context *gin.Contex
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param NewUserInfo body controller.NewUserInfo true "need Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department"
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Password Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Param NewUserInfo body entity.NewUserInfo true "need Nickname, Birthday(yyyy-mm-dd), Gender(male / female / unknown), Department"
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Update Password Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/update [post]
 func (userManageController *UserManageController) UserUpdate(context *gin.Context) {
-	var newUserInfo NewUserInfo
+	var newUserInfo entity.NewUserInfo
 	if err1 := context.ShouldBindJSON(&newUserInfo); err1 != nil {
-		er := ResponseMsg{
+		er := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters.",
 		}
@@ -293,7 +293,7 @@ func (userManageController *UserManageController) UserUpdate(context *gin.Contex
 		return
 	}
 
-	userInfo := model.User{
+	userInfo := entity.User{
 		Username:   newUserInfo.Username,
 		Nickname:   newUserInfo.Nickname,
 		Birthday:   newUserInfo.Birthday,
@@ -303,7 +303,7 @@ func (userManageController *UserManageController) UserUpdate(context *gin.Contex
 
 	err2 := userManageController.userManageService.Update(userInfo)
 	if err2 != nil {
-		er := ResponseMsg{
+		er := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters.",
 		}
@@ -312,7 +312,7 @@ func (userManageController *UserManageController) UserUpdate(context *gin.Contex
 
 	}
 
-	success := ResponseMsg{
+	success := entity.ResponseMsg{
 		Code:    http.StatusOK,
 		Message: "Update User Information Successfully",
 	}
@@ -328,9 +328,9 @@ func (userManageController *UserManageController) UserUpdate(context *gin.Contex
 // @Produce json
 // @Security ApiAuthToken
 // @Param username body string true "username in post request body"
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Follow Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exist or User has followed."
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Follow Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exist or User has followed."
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/follow [post]
 func (userManageController *UserManageController) UserFollow(context *gin.Context) {
 	type Info struct {
@@ -339,7 +339,7 @@ func (userManageController *UserManageController) UserFollow(context *gin.Contex
 	var info Info
 	err1 := context.ShouldBind(&info)
 	if err1 != nil {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters.",
 		}
@@ -351,7 +351,7 @@ func (userManageController *UserManageController) UserFollow(context *gin.Contex
 	follower, _ := auth.GetTokenUsername(token)
 	err2 := userManageController.userManageService.Follow(info.Username, follower)
 	if err2 != nil {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "User not exist or User has followed.",
 		}
@@ -363,7 +363,7 @@ func (userManageController *UserManageController) UserFollow(context *gin.Contex
 		return
 	}
 
-	success := ResponseMsg{
+	success := entity.ResponseMsg{
 		Code:    http.StatusOK,
 		Message: "Follow Successfully",
 	}
@@ -379,9 +379,9 @@ func (userManageController *UserManageController) UserFollow(context *gin.Contex
 // @Produce json
 // @Security ApiAuthToken
 // @Param username body string true "username in post request body"
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Unfollow Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exist."
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Unfollow Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exist."
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/unfollow [post]
 func (userManageController *UserManageController) UserUnfollow(context *gin.Context) {
 	type Info struct {
@@ -390,7 +390,7 @@ func (userManageController *UserManageController) UserUnfollow(context *gin.Cont
 	var info Info
 	err1 := context.ShouldBind(&info)
 	if err1 != nil {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters.",
 		}
@@ -402,7 +402,7 @@ func (userManageController *UserManageController) UserUnfollow(context *gin.Cont
 	follower, _ := auth.GetTokenUsername(token)
 	err2 := userManageController.userManageService.Unfollow(info.Username, follower)
 	if err2 != nil {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "User not exist.",
 		}
@@ -414,7 +414,7 @@ func (userManageController *UserManageController) UserUnfollow(context *gin.Cont
 		return
 	}
 
-	success := ResponseMsg{
+	success := entity.ResponseMsg{
 		Code:    http.StatusOK,
 		Message: "Unfollow Successfully",
 	}
@@ -430,15 +430,15 @@ func (userManageController *UserManageController) UserUnfollow(context *gin.Cont
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Success 201 {object} controller.UserFollows "<b>Success</b>. Search Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters."
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.UserFollows "<b>Success</b>. Search Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters."
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/followers [post]
 func (userManageController *UserManageController) GetFollowers(context *gin.Context) {
 	token, _ := context.Cookie("token")
 	username, _ := auth.GetTokenUsername(token)
 	followers, err1 := userManageController.userManageService.GetFollowers(username)
-	errMsg := ResponseMsg{
+	errMsg := entity.ResponseMsg{
 		Code:    http.StatusBadRequest,
 		Message: "Bad Parameters.",
 	}
@@ -448,8 +448,8 @@ func (userManageController *UserManageController) GetFollowers(context *gin.Cont
 		context.JSON(errMsg.Code, errMsg)
 		return
 	}
-	userFollows := UserFollows{
-		ResponseMsg: ResponseMsg{
+	userFollows := entity.UserFollows{
+		ResponseMsg: entity.ResponseMsg{
 			Code:    200,
 			Message: "Search Successfully",
 		},
@@ -466,15 +466,15 @@ func (userManageController *UserManageController) GetFollowers(context *gin.Cont
 // @Produce json
 // @Security ApiAuthToken
 // @Param username body string true "username in post request body"
-// @Success 201 {object} controller.UserFollows "<b>Success</b>. Search Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters."
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.UserFollows "<b>Success</b>. Search Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters."
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/followees [post]
 func (userManageController *UserManageController) GetFollowees(context *gin.Context) {
 	token, _ := context.Cookie("token")
 	username, _ := auth.GetTokenUsername(token)
 	followers, err1 := userManageController.userManageService.GetFollowees(username)
-	errMsg := ResponseMsg{
+	errMsg := entity.ResponseMsg{
 		Code:    http.StatusBadRequest,
 		Message: "Bad Parameters.",
 	}
@@ -484,8 +484,8 @@ func (userManageController *UserManageController) GetFollowees(context *gin.Cont
 		context.JSON(errMsg.Code, errMsg)
 		return
 	}
-	userFollows := UserFollows{
-		ResponseMsg: ResponseMsg{
+	userFollows := entity.UserFollows{
+		ResponseMsg: entity.ResponseMsg{
 			Code:    200,
 			Message: "Search Successfully",
 		},

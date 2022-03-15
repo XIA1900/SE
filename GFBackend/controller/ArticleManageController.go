@@ -40,10 +40,10 @@ var ArticleManageControllerSet = wire.NewSet(
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param ArticleInfo body controller.ArticleInfo true "Create New Article"
-// @Success 200 {object} controller.ResponseMsg "<b>Success</b>. Create Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters / Info Error"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Param ArticleInfo body entity.ArticleInfo true "Create New Article"
+// @Success 200 {object} entity.ResponseMsg "<b>Success</b>. Create Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters / Info Error"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /article/create [post]
 func (articleManageController ArticleManageController) CreateArticle(context *gin.Context) {
 
@@ -56,9 +56,9 @@ func (articleManageController ArticleManageController) CreateArticle(context *gi
 // @Accept json
 // @Produce json
 // @Param SearchWord query string true "Search Word"
-// @Success 200 {object} controller.ResponseMsg "<b>Success</b>. Search Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 200 {object} entity.ResponseMsg "<b>Success</b>. Search Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /article/search/:SearchWord [post]
 func (articleManageController ArticleManageController) SearchArticle(context *gin.Context) {
 

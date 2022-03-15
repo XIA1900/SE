@@ -1,8 +1,8 @@
 package service
 
 import (
+	"GFBackend/entity"
 	"GFBackend/logger"
-	"GFBackend/model"
 	"GFBackend/model/dao"
 	"GFBackend/utils"
 	"errors"
@@ -17,7 +17,7 @@ var fileManageServiceLock sync.Mutex
 var fileManageService *FileManageService
 
 type IFileManageService interface {
-	GetSpaceInfo(username string) (model.Space, error)
+	GetSpaceInfo(username string) (entity.Space, error)
 	GetUserFiles(username string) ([]string, error)
 	UpdateUsed(username string) error
 	UpdateCapacity(username string, newSize float64) error
@@ -49,14 +49,14 @@ var FileManageServiceSet = wire.NewSet(
 	NewFileManageService,
 )
 
-func (fileManageService FileManageService) GetSpaceInfo(username string) (model.Space, error) {
+func (fileManageService FileManageService) GetSpaceInfo(username string) (entity.Space, error) {
 	spaceInfo, err1 := fileManageService.spaceDAO.GetSpaceInfo(username)
 	if err1 != nil {
 		logger.AppLogger.Error(err1.Error())
-		return model.Space{}, errors.New("500")
+		return entity.Space{}, errors.New("500")
 	}
 	if spaceInfo.Username == "" {
-		return model.Space{}, errors.New("400")
+		return entity.Space{}, errors.New("400")
 	}
 	return spaceInfo, nil
 }

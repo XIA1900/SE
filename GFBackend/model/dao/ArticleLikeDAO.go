@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"GFBackend/entity"
 	"GFBackend/model"
 	"gorm.io/gorm"
 	"sync"
@@ -31,7 +32,7 @@ func NewArticleLikeDAO() *ArticleLikeDAO {
 }
 
 func (articleLikeDAO *ArticleLikeDAO) CreateLike(username string, articleID int, likeDay string) error {
-	result := articleLikeDAO.db.Omit("ID").Create(&model.ArticleLike{
+	result := articleLikeDAO.db.Omit("ID").Create(&entity.ArticleLike{
 		Username:  username,
 		ArticleID: articleID,
 		LikeDay:   likeDay,

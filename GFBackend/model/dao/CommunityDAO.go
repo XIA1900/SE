@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"GFBackend/entity"
 	"GFBackend/model"
 	"gorm.io/gorm"
 	"sync"
@@ -14,8 +15,8 @@ type ICommunityDAO interface {
 	DeleteCommunityByID(id int) error
 	UpdateDescriptionByID(id int, newDescription string) error
 	AddNumMemberByID(id int) error
-	GetCommunityByID(id int) (model.Community, error)
-	GetCommunities() ([]model.Community, error)
+	GetCommunityByID(id int) (entity.Community, error)
+	GetCommunities() ([]entity.Community, error)
 }
 
 type CommunityDAO struct {
@@ -36,7 +37,7 @@ func NewCommunityDAO() *CommunityDAO {
 }
 
 func (communityDAO *CommunityDAO) CreateCommunity(communityName, username, description, createDay string) (int, error) {
-	newCommunity := model.Community{
+	newCommunity := entity.Community{
 		Creator:     username,
 		Name:        communityName,
 		Description: description,
@@ -50,6 +51,7 @@ func (communityDAO *CommunityDAO) CreateCommunity(communityName, username, descr
 }
 
 func (communityDAO *CommunityDAO) DeleteCommunityByID(id int) error {
+	communityDAO.db.Delete("ID = ?", id).Delete(&entity.Community{})
 	return nil
 }
 
@@ -61,10 +63,10 @@ func (communityDAO *CommunityDAO) AddNumMemberByID(id int) error {
 	return nil
 }
 
-func (communityDAO *CommunityDAO) GetCommunityByID(id int) (model.Community, error) {
-	return model.Community{}, nil
+func (communityDAO *CommunityDAO) GetCommunityByID(id int) (entity.Community, error) {
+	return entity.Community{}, nil
 }
 
-func (communityDAO *CommunityDAO) GetCommunities() ([]model.Community, error) {
+func (communityDAO *CommunityDAO) GetCommunities() ([]entity.Community, error) {
 	return nil, nil
 }

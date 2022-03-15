@@ -3,7 +3,7 @@ package interceptor
 import (
 	"GFBackend/cache"
 	"GFBackend/config"
-	"GFBackend/controller"
+	"GFBackend/entity"
 	"GFBackend/logger"
 	"GFBackend/middleware/auth"
 	"github.com/gin-gonic/gin"
@@ -88,7 +88,7 @@ func AuthInterceptor() gin.HandlerFunc {
 
 func setAuthFailure(context *gin.Context, code int, message string) {
 	context.Abort()
-	errMsg := controller.ResponseMsg{
+	errMsg := entity.ResponseMsg{
 		Code:    code,
 		Message: message,
 	}

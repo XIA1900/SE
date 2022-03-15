@@ -2,9 +2,9 @@ package service
 
 import (
 	"GFBackend/cache"
+	"GFBackend/entity"
 	"GFBackend/logger"
 	"GFBackend/middleware/auth"
-	"GFBackend/model"
 	"GFBackend/model/dao"
 	"GFBackend/utils"
 	"errors"
@@ -23,7 +23,7 @@ type IUserManageService interface {
 	Logout(username string) error
 	UpdatePassword(username, password, newPassword string) error
 	Delete(username string) error
-	Update(userInfo model.User) error
+	Update(userInfo entity.User) error
 	Follow(followee, follower string) error
 	Unfollow(followee, follower string) error
 	GetFollowers(username string) ([]string, error)
@@ -63,7 +63,7 @@ var UserManageServiceSet = wire.NewSet(
 
 func (userManageService *UserManageService) Register(username, password string, forAdmin bool) error {
 	salt := utils.GetRandomString(6)
-	newUser := model.User{
+	newUser := entity.User{
 		Username: username,
 		Password: utils.EncodeInMD5(password + salt),
 		Salt:     salt,
@@ -193,7 +193,7 @@ func (userManageService *UserManageService) Delete(username string) error {
 
 }
 
-func (userManageService *UserManageService) Update(userInfo model.User) error {
+func (userManageService *UserManageService) Update(userInfo entity.User) error {
 	err := userManageService.userDAO.UpdateUserByUsername(userInfo)
 	if err != nil {
 		logger.AppLogger.Error(err.Error())

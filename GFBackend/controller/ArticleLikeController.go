@@ -41,9 +41,9 @@ var ArticleLikeControllerSet = wire.NewSet(
 // @Produce json
 // @Security ApiAuthToken
 // @Param ArticleID query integer true "233333"
-// @Success 200 {object} controller.ResponseMsg "<b>Success</b>. Create Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 200 {object} entity.ResponseMsg "<b>Success</b>. Create Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /articlelike/create/:ArticleID [get]
 func (articleLikeController ArticleLikeController) CreateLike(context *gin.Context) {
 

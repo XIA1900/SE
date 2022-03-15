@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"GFBackend/entity"
 	"GFBackend/model"
 	"gorm.io/gorm"
 	"sync"
@@ -37,7 +38,7 @@ func NewCommunityMemberDAO() *CommunityMemberDAO {
 func (communityMemberDAO *CommunityMemberDAO) Create(communityID int, member, joinDay string) error {
 	result := communityMemberDAO.db.
 		Select("CommunityID", "Member", "JoinDay").
-		Create(&model.CommunityMember{
+		Create(&entity.CommunityMember{
 			CommunityID: communityID,
 			Member:      member,
 			JoinDay:     joinDay,

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"GFBackend/entity"
 	"GFBackend/middleware/auth"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
@@ -52,15 +53,15 @@ func (fileManageController *FileManageController) StaticResourcesReqs() {}
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Upload Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or No Enough Space"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Upload Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or No Enough Space"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /file/upload [post]
 func (fileManageController *FileManageController) UploadFile(context *gin.Context) {
 	token, _ := context.Cookie("token")
 	username, _ := auth.GetTokenUsername(token)
 	file, err1 := context.FormFile("uploadFilename")
-	errMsg := ResponseMsg{
+	errMsg := entity.ResponseMsg{
 		Code:    http.StatusBadRequest,
 		Message: "Bad Parameters",
 	}
@@ -81,7 +82,7 @@ func (fileManageController *FileManageController) UploadFile(context *gin.Contex
 		return
 	}
 
-	context.JSON(200, ResponseMsg{
+	context.JSON(200, entity.ResponseMsg{
 		Code:    200,
 		Message: "Upload Success",
 	})
@@ -96,14 +97,14 @@ func (fileManageController *FileManageController) UploadFile(context *gin.Contex
 // @Produce json
 // @Security ApiAuthToken
 // @Param filename body string true "filename in post request body"
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Upload Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or No Enough Space"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Upload Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or No Enough Space"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /file/download [post]
 func (fileManageController *FileManageController) DownloadFile(context *gin.Context) {
 	token, _ := context.Cookie("token")
 	username, _ := auth.GetTokenUsername(token)
-	errMsg := ResponseMsg{
+	errMsg := entity.ResponseMsg{
 		Code:    http.StatusBadRequest,
 		Message: "Bad Parameters",
 	}
@@ -131,9 +132,9 @@ func (fileManageController *FileManageController) DownloadFile(context *gin.Cont
 // @Produce json
 // @Security ApiAuthToken
 // @Param filename body string true "filename in post request body"
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Delete Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Other"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Delete Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or Other"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /file/delete [post]
 func (fileManageController *FileManageController) UserDeleteFile(context *gin.Context) {
 	type Info struct {
@@ -142,7 +143,7 @@ func (fileManageController *FileManageController) UserDeleteFile(context *gin.Co
 	var info Info
 	err1 := context.ShouldBind(&info)
 	if err1 != nil || info.Filename == "" {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    400,
 			Message: "No Filename",
 		}
@@ -154,7 +155,7 @@ func (fileManageController *FileManageController) UserDeleteFile(context *gin.Co
 	username, _ := auth.GetTokenUsername(token)
 	err2 := fileManageController.fileManageService.DeleteUserFile(username, info.Filename)
 	if err2 != nil {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    400,
 			Message: "File not Exists",
 		}
@@ -162,7 +163,7 @@ func (fileManageController *FileManageController) UserDeleteFile(context *gin.Co
 		return
 	}
 
-	context.JSON(200, ResponseMsg{
+	context.JSON(200, entity.ResponseMsg{
 		Code:    200,
 		Message: "Delete Successfully",
 	})
@@ -175,16 +176,16 @@ func (fileManageController *FileManageController) UserDeleteFile(context *gin.Co
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Success 201 {object} controller.UserFiles "<b>Success</b>. Scan Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters."
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.UserFiles "<b>Success</b>. Scan Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters."
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /file/scan [post]
 func (fileManageController *FileManageController) ScanFiles(context *gin.Context) {
 	token, _ := context.Cookie("token")
 	username, _ := auth.GetTokenUsername(token)
 	userFiles, err1 := fileManageController.fileManageService.GetUserFiles(username)
 	if err1 != nil {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    400,
 			Message: "Bad Parameters",
 		}
@@ -195,8 +196,8 @@ func (fileManageController *FileManageController) ScanFiles(context *gin.Context
 		context.JSON(errMsg.Code, errMsg)
 		return
 	}
-	respMsg := UserFiles{
-		ResponseMsg: ResponseMsg{
+	respMsg := entity.UserFiles{
+		ResponseMsg: entity.ResponseMsg{
 			Code:    200,
 			Message: "Scan Successfully",
 		},
@@ -212,9 +213,9 @@ func (fileManageController *FileManageController) ScanFiles(context *gin.Context
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Success 201 {object} model.Space "<b>Success</b>. Get User Space Info Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exists."
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.Space "<b>Success</b>. Get User Space Info Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or User not exists."
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /file/space/info [post]
 func (fileManageController *FileManageController) UserSpaceInfo(context *gin.Context) {
 	token, _ := context.Cookie("token")
@@ -222,7 +223,7 @@ func (fileManageController *FileManageController) UserSpaceInfo(context *gin.Con
 
 	spaceInfo, err1 := fileManageController.fileManageService.GetSpaceInfo(username)
 	if err1 != nil {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
 			Message: "User not exists",
 		}
@@ -245,9 +246,9 @@ func (fileManageController *FileManageController) UserSpaceInfo(context *gin.Con
 // @Security ApiAuthToken
 // @Param username body string true "username in post request body"
 // @Param capacity body number true "capacity(e.g. 16.8) in post request body"
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Update Successfully"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Other"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Update Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or Other"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /file/space/update [post]
 func (fileManageController *FileManageController) UpdateUserCapacity(context *gin.Context) {
 	type Info struct {
@@ -257,7 +258,7 @@ func (fileManageController *FileManageController) UpdateUserCapacity(context *gi
 	var info Info
 	err1 := context.ShouldBind(&info)
 	if err1 != nil {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    400,
 			Message: "Bad Parameters",
 		}
@@ -267,7 +268,7 @@ func (fileManageController *FileManageController) UpdateUserCapacity(context *gi
 
 	err2 := fileManageController.fileManageService.UpdateCapacity(info.Username, info.Capacity)
 	if err2 != nil {
-		errMsg := ResponseMsg{
+		errMsg := entity.ResponseMsg{
 			Code:    400,
 			Message: "Internal Server Error",
 		}
@@ -275,7 +276,7 @@ func (fileManageController *FileManageController) UpdateUserCapacity(context *gi
 		return
 	}
 
-	context.JSON(200, ResponseMsg{
+	context.JSON(200, entity.ResponseMsg{
 		Code:    200,
 		Message: "Update Successfully",
 	})

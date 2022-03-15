@@ -42,7 +42,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.ArticleInfo"
+                            "$ref": "#/definitions/entity.ArticleInfo"
                         }
                     }
                 ],
@@ -50,19 +50,19 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -94,19 +94,19 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -143,19 +143,19 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -179,20 +179,20 @@ const docTemplate_swagger = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.ArticleType"
+                                "$ref": "#/definitions/entity.ArticleType"
                             }
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Type has existed",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -223,7 +223,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.ArticleTypeInfo"
+                            "$ref": "#/definitions/entity.ArticleTypeInfo"
                         }
                     }
                 ],
@@ -231,19 +231,19 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Type has existed",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -282,19 +282,19 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Remove Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -342,19 +342,19 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -385,7 +385,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityInfo"
+                            "$ref": "#/definitions/entity.CommunityInfo"
                         }
                     }
                 ],
@@ -393,19 +393,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Community Success",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Community already exists",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -431,7 +431,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityInfo"
+                            "$ref": "#/definitions/entity.CommunityInfo"
                         }
                     }
                 ],
@@ -439,19 +439,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.CommunityResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.CommunityResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.CommunityResponseMsg"
                         }
                     }
                 }
@@ -477,7 +477,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityInfo"
+                            "$ref": "#/definitions/entity.CommunityInfo"
                         }
                     }
                 ],
@@ -485,19 +485,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Community Success",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.CommunityResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Community already exists",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.CommunityResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.CommunityResponseMsg"
                         }
                     }
                 }
@@ -523,7 +523,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityInfo"
+                            "$ref": "#/definitions/entity.CommunityInfo"
                         }
                     }
                 ],
@@ -531,19 +531,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.CommunityResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.CommunityResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.CommunityResponseMsg"
                         }
                     }
                 }
@@ -582,19 +582,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Other",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -633,19 +633,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Upload Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or No Enough Space",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -673,19 +673,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Scan Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.UserFiles"
+                            "$ref": "#/definitions/entity.UserFiles"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -713,19 +713,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get User Space Info Successfully",
                         "schema": {
-                            "$ref": "#/definitions/model.Space"
+                            "$ref": "#/definitions/entity.Space"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exists.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -773,19 +773,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Other",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -813,19 +813,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Upload Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or No Enough Space",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -880,19 +880,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -923,7 +923,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.UserInfo"
+                            "$ref": "#/definitions/entity.UserInfo"
                         }
                     }
                 ],
@@ -931,19 +931,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Register Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User Has Existed",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -982,19 +982,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Follow Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exist or User has followed.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1033,19 +1033,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.UserFollows"
+                            "$ref": "#/definitions/entity.UserFollows"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1073,19 +1073,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.UserFollows"
+                            "$ref": "#/definitions/entity.UserFollows"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1111,7 +1111,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.UserInfo"
+                            "$ref": "#/definitions/entity.UserInfo"
                         }
                     }
                 ],
@@ -1119,19 +1119,19 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Login Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Username / Password incorrect",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1194,7 +1194,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.UserInfo"
+                            "$ref": "#/definitions/entity.UserInfo"
                         }
                     }
                 ],
@@ -1202,19 +1202,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Password not match",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1240,7 +1240,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.UserInfo"
+                            "$ref": "#/definitions/entity.UserInfo"
                         }
                     }
                 ],
@@ -1248,19 +1248,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Register Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User Has Existed",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1299,19 +1299,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Unfollow Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exist.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1342,7 +1342,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.NewUserInfo"
+                            "$ref": "#/definitions/entity.NewUserInfo"
                         }
                     }
                 ],
@@ -1350,19 +1350,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1370,7 +1370,7 @@ const docTemplate_swagger = `{
         }
     },
     "definitions": {
-        "controller.ArticleInfo": {
+        "entity.ArticleInfo": {
             "type": "object",
             "properties": {
                 "CommunityID": {
@@ -1391,7 +1391,27 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.ArticleTypeInfo": {
+        "entity.ArticleType": {
+            "type": "object",
+            "properties": {
+                "create_Day": {
+                    "type": "string"
+                },
+                "creator": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "typeName": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.ArticleTypeInfo": {
             "type": "object",
             "properties": {
                 "Description": {
@@ -1404,7 +1424,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.CommunityInfo": {
+        "entity.CommunityInfo": {
             "type": "object",
             "properties": {
                 "Create_Time": {
@@ -1432,7 +1452,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.CommunityResponseMsg": {
+        "entity.CommunityResponseMsg": {
             "type": "object",
             "properties": {
                 "code": {
@@ -1469,7 +1489,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.NewUserInfo": {
+        "entity.NewUserInfo": {
             "type": "object",
             "properties": {
                 "Birthday": {
@@ -1494,7 +1514,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.ResponseMsg": {
+        "entity.ResponseMsg": {
             "type": "object",
             "properties": {
                 "code": {
@@ -1507,7 +1527,24 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.UserFiles": {
+        "entity.Space": {
+            "type": "object",
+            "properties": {
+                "capacity": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "used": {
+                    "type": "number"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.UserFiles": {
             "type": "object",
             "properties": {
                 "Filenames": {
@@ -1531,7 +1568,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.UserFollows": {
+        "entity.UserFollows": {
             "type": "object",
             "properties": {
                 "Users": {
@@ -1555,7 +1592,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.UserInfo": {
+        "entity.UserInfo": {
             "type": "object",
             "properties": {
                 "ForAdmin": {
@@ -1572,43 +1609,6 @@ const docTemplate_swagger = `{
                 "Username": {
                     "type": "string",
                     "example": "jamesbond21"
-                }
-            }
-        },
-        "model.ArticleType": {
-            "type": "object",
-            "properties": {
-                "create_Day": {
-                    "type": "string"
-                },
-                "creator": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "typeName": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.Space": {
-            "type": "object",
-            "properties": {
-                "capacity": {
-                    "type": "number"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "used": {
-                    "type": "number"
-                },
-                "username": {
-                    "type": "string"
                 }
             }
         }

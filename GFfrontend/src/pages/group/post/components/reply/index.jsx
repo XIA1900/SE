@@ -117,15 +117,7 @@ const Reply = () => {
   );
 
   return (
-      <Card
-        // style={{
-        //   marginTop: 24,
-        // }}
-        bordered={false}
-        // bodyStyle={{
-        //   padding: '8px 32px 32px 32px',
-        // }}
-      >
+      <Card bordered={false}>
         <List
           size="large"
           loading={loading}

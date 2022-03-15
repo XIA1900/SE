@@ -316,6 +316,10 @@ export default defineConfig({
           path: '/group/post',
           component: './group/post',
         },
+        {
+          path: '/group/management',
+          component: './group/management',
+        },
       ],
     },
     {

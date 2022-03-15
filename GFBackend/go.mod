@@ -7,7 +7,6 @@ require (
 	github.com/casbin/gorm-adapter/v3 v3.5.0
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/denisenkom/go-mssqldb v0.12.0 // indirect
-	github.com/elastic/go-elasticsearch/v7 v7.16.1-0.20211220092752-564732cbb96a
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-openapi/swag v0.21.1 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect

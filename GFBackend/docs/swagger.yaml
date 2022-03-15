@@ -1,5 +1,20 @@
 basePath: /gf/api
 definitions:
+  controller.ArticleInfo:
+    properties:
+      CommunityID:
+        example: 12
+        type: integer
+      Content:
+        example: I love UF
+        type: string
+      Title:
+        example: Gator Forum
+        type: string
+      TypeID:
+        example: 12
+        type: integer
+    type: object
   controller.ArticleTypeInfo:
     properties:
       Description:
@@ -160,6 +175,98 @@ info:
   title: Gator Forum Backend API
   version: "1.0"
 paths:
+  /article/create:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need new article info
+      parameters:
+      - description: Create New Article
+        in: body
+        name: ArticleInfo
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ArticleInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Create a new article
+      tags:
+      - Article Manage
+  /article/search/:SearchWord:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need new article search info
+      parameters:
+      - description: Search Word
+        in: query
+        name: SearchWord
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Search Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      summary: Create a new article
+      tags:
+      - Article Manage
+  /articlelike/create/:ArticleID:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need article id
+      parameters:
+      - description: "233333"
+        in: query
+        name: ArticleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/controller.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: User like Article
+      tags:
+      - Article Like Manage
   /articletype/all:
     get:
       consumes:
@@ -275,7 +382,7 @@ paths:
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "400":
-          description: <b>Failure</b>. Bad Parameters / Type has not existed
+          description: <b>Failure</b>. Bad Parameters
           schema:
             $ref: '#/definitions/controller.ResponseMsg'
         "500":

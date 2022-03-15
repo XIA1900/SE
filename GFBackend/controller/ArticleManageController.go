@@ -33,6 +33,33 @@ var ArticleManageControllerSet = wire.NewSet(
 	NewArticleManageController,
 )
 
+// CreateArticle godoc
+// @Summary Create a new article
+// @Description need token in cookie, need new article info
+// @Tags Article Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param ArticleInfo body controller.ArticleInfo true "Create New Article"
+// @Success 200 {object} controller.ResponseMsg "<b>Success</b>. Create Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters / Info Error"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /article/create [post]
 func (articleManageController ArticleManageController) CreateArticle(context *gin.Context) {
+
+}
+
+// SearchArticle godoc
+// @Summary Create a new article
+// @Description need token in cookie, need new article search info
+// @Tags Article Manage
+// @Accept json
+// @Produce json
+// @Param SearchWord query string true "Search Word"
+// @Success 200 {object} controller.ResponseMsg "<b>Success</b>. Search Successfully"
+// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /article/search/:SearchWord [post]
+func (articleManageController ArticleManageController) SearchArticle(context *gin.Context) {
 
 }

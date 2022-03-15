@@ -36,15 +36,15 @@ var ArticleLikeControllerSet = wire.NewSet(
 // CreateLike godoc
 // @Summary User like Article
 // @Description need token in cookie, need article id
-// @Tags Article Type Manage
+// @Tags Article Like Manage
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param articleId query integer true "233333"
+// @Param ArticleID query integer true "233333"
 // @Success 200 {object} controller.ResponseMsg "<b>Success</b>. Create Successfully"
 // @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters"
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
-// @Router /articlelike/create?articleID= [get]
+// @Router /articlelike/create/:ArticleID [get]
 func (articleLikeController ArticleLikeController) CreateLike(context *gin.Context) {
 
 }

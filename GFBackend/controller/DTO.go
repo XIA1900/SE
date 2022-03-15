@@ -60,3 +60,10 @@ type ArticleOfES struct {
 	Title    string `json:"Title"`
 	Content  string `json:"Content"`
 }
+
+type ArticleInfo struct {
+	Title       string `form:"Title" json:"Title" example:"Gator Forum"`
+	TypeID      int    `form:"TypeID" json:"TypeID" example:"12"`
+	CommunityID int    `form:"CommunityID" json:"CommunityID" example:"12"`
+	Content     string `form:"Content" json:"Content" example:"I love UF"`
+}

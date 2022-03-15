@@ -30,8 +30,7 @@ type Community struct {
 	Creator     string
 	Name        string
 	Description string
-	Num_Member  int
-	Create_Time string
+	CreateDay   string `gorm:"column:CreateDay"`
 }
 
 func (community Community) TableName() string {

@@ -1,8 +1,12 @@
 package service
 
 import (
+	"GFBackend/logger"
 	"GFBackend/model/dao"
+	"GFBackend/utils"
+	"errors"
 	"github.com/google/wire"
+	"strings"
 	"sync"
 )
 
@@ -14,6 +18,8 @@ type ICommunityManageService interface {
 	//GetCommunityByName(name string) (model.Community, model.User, error)
 	//UpdateCommunity(updateInfo model.Community) error
 	//DeleteCommunity(id int) error
+
+	CreateCommunity(creator string, name string, description string) error
 }
 
 type CommunityManageService struct {
@@ -42,3 +48,22 @@ var CommunityManageServiceSet = wire.NewSet(
 	wire.Bind(new(dao.ICommunityDAO), new(*dao.CommunityDAO)),
 	NewCommunityManageService,
 )
+
+func (communityManageService *CommunityManageService) CreateCommunity(creator, name, description string) error {
+	newCommunityID, err1 := communityManageService.communityDAO.CreateCommunity(name, creator, description, utils.GetCurrentDate())
+	if err1 != nil {
+		if strings.Contains(err1.Error(), "Duplicate") {
+			return errors.New("400")
+		}
+		logger.AppLogger.Error(err1.Error())
+		return errors.New("500")
+	}
+
+	err2 := communityManageService.communityMemberDAO.Create(newCommunityID, creator, utils.GetCurrentDate())
+	if err2 != nil {
+		logger.AppLogger.Error(err2.Error())
+		return errors.New("500")
+	}
+
+	return nil
+}

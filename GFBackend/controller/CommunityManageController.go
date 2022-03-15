@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"GFBackend/middleware/auth"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
+	"strings"
 	"sync"
 )
 
@@ -35,7 +37,7 @@ var CommunityManageSet = wire.NewSet(
 
 // CreateCommunity godoc
 // @Summary Create a new Community
-// @Description need token in cookie, need community name & description, no need
+// @Description need token in cookie, need community name & description only
 // @Tags Community Manage
 // @Accept json
 // @Produce json
@@ -46,7 +48,36 @@ var CommunityManageSet = wire.NewSet(
 // @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /community/create [post]
 func (communityManageController *CommunityManageController) CreateCommunity(context *gin.Context) {
+	respMsg := ResponseMsg{
+		Code:    400,
+		Message: "Bad Parameters or Community already exists",
+	}
 
+	var communityInfo CommunityInfo
+	if err1 := context.ShouldBindJSON(&communityInfo); err1 != nil {
+		context.JSON(respMsg.Code, respMsg)
+		return
+	}
+
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+
+	err2 := communityManageController.communityManageService.CreateCommunity(username, communityInfo.Name, communityInfo.Description)
+	if err2 != nil {
+		if strings.Contains(err2.Error(), "400") {
+			context.JSON(respMsg.Code, respMsg)
+			return
+		}
+		respMsg.Code = 500
+		respMsg.Message = "Internal Server Error"
+		context.JSON(respMsg.Code, respMsg)
+		return
+	}
+
+	respMsg.Code = 200
+	respMsg.Message = "Create Community Success"
+	context.JSON(respMsg.Code, respMsg)
+	return
 }
 
 // GetCommunityByName godoc

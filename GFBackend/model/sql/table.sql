@@ -37,8 +37,7 @@ CREATE TABLE Community (
     Creator VARCHAR(20) NOT NULL,
     Name VARCHAR(20) NOT NULL UNIQUE,
     Description VARCHAR(500),
-    Num_Member INT NOT NULL DEFAULT '1',
-    Create_Time DATE NOT NULL,
+    CreateDay DATE NOT NULL,
     PRIMARY KEY (ID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

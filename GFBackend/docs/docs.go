@@ -367,7 +367,7 @@ const docTemplate_swagger = `{
                         "ApiAuthToken": []
                     }
                 ],
-                "description": "need token in cookie, need community name \u0026 description, no need",
+                "description": "need token in cookie, need community name \u0026 description only",
                 "consumes": [
                     "application/json"
                 ],

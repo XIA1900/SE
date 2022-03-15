@@ -10,7 +10,7 @@ var communityDAO *CommunityDAO
 var communityDAOLock sync.Mutex
 
 type ICommunityDAO interface {
-	CreateCommunity(communityName, username, description string) error
+	CreateCommunity(communityName, username, description, createDay string) (int, error)
 	DeleteCommunityByID(id int) error
 	UpdateDescriptionByID(id int, newDescription string) error
 	AddNumMemberByID(id int) error
@@ -35,8 +35,18 @@ func NewCommunityDAO() *CommunityDAO {
 	return communityDAO
 }
 
-func (communityDAO *CommunityDAO) CreateCommunity(communityName, username, description string) error {
-	return nil
+func (communityDAO *CommunityDAO) CreateCommunity(communityName, username, description, createDay string) (int, error) {
+	newCommunity := model.Community{
+		Creator:     username,
+		Name:        communityName,
+		Description: description,
+		CreateDay:   createDay,
+	}
+	result := communityDAO.db.Create(&newCommunity)
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	return newCommunity.ID, nil
 }
 
 func (communityDAO *CommunityDAO) DeleteCommunityByID(id int) error {

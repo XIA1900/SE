@@ -401,7 +401,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: need token in cookie, need community name & description, no need
+      description: need token in cookie, need community name & description only
       parameters:
       - description: Create a new community needs Creator, Name & Description.
         in: body

@@ -1,3 +1,5 @@
+import { resourceLimits } from "worker_threads";
+
 const date = new Date();
 const contents = [
   "Iceborn warmother of the Avarosan tribe, Ashe commands the most populous horde in the north. Stoic, intelligent, and idealistic, yet uncomfortable with her role as leader, she taps into the ancestral magics of her lineage to wield a bow of True Ice. With her people's belief that she is the mythological hero Avarosa reincarnated, Ashe hopes to unify the Freljord once more by retaking their ancient, tribal lands.",
@@ -77,15 +79,16 @@ function getReply(req, res) {
 
 
 function postContents(postid) {
-  const list = [];
-  list.push({
+  const list = {
     postid: postid,
     title: title,
     content: content,
     owner: users[8],
     avatar: avatars[8],
     updatedAt: updateAt,
-  });
+  };
+  console.log(list);
+  return list;
 }
 
 function getPost(req, res) {
@@ -104,11 +107,13 @@ function getPost(req, res) {
 
 function likeUsers(postid) {
   const likes_count = 9;
-  const likes = ['Ashe', 'Janna', 'Karma', 'Ahri', 'Lulu', 'Lux', 'Morgana', 'Neeko', 'Sona'];
-  const result = {
-    likes_count: likes_count,
-    likes: likes,
-  };
+  const result = [];
+  for(let i=0; i<likes_count; i++) {
+    result.push({
+      user: users[i%10],
+      avatar: avatars[i%10],
+    });
+  }
   return result;
 }
 
@@ -125,11 +130,13 @@ function getLike(req, res) {
 
 function collectionUsers(postid) {
   const collections_count = 5;
-  const collections = ['Lux', 'Morgana', 'Neeko', 'Sona', 'Soraka'];
-  const result = {
-    collections_count: collections_count,
-    collections: collections,
-  };
+  const result = [];
+  for(let i=0; i<collections_count; i++) {
+    result.push({
+      user: users[i%10],
+      avatar: avatars[i%10],
+    });
+  }
   return result;
 }
 

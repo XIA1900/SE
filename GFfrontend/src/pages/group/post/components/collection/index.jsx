@@ -33,49 +33,6 @@ const Collection = () => {
   const list = data?.list || [];
   console.log(list);
 
-  const IconText = ({ type, text }) => {
-    switch (type) {
-      case 'star-o':
-        return (
-          <span>
-            <StarOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
-
-      case 'like-o':
-        return (
-          <span>
-            <LikeOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
-
-      case 'message':
-        return (
-          <span>
-            <MessageOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
-
-      default:
-        return null;
-    }
-  };
-
   const formItemLayout = {
     wrapperCol: {
       xs: {
@@ -134,24 +91,12 @@ const Collection = () => {
           loadMore={loadMoreDom}
           dataSource={list}
           renderItem={(item) => (
-            <List.Item
-              key={item.id}
-              actions={[
-                <IconText key="collection" type="star-o" text={item.collection} />,
-                <IconText key="like" type="like-o" text={item.like} />,
-                <IconText key="reply" type="message" text={item.reply} />,
-              ]}
-              //extra={<div className={styles.listItemExtra} />}
-            >
-              <List.Item.Meta
-                title={
-                  <a className={styles.listItemMetaTitle} href={item.href}>
-                    {item.title}
-                  </a>
-                }
-              />
-              <ArticleListContent data={item} />
-            </List.Item>
+            <div>
+              <p>
+              <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+              {item.user}
+              </p>
+            </div>
           )}
         />
       </Card>

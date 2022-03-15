@@ -8,7 +8,7 @@ import {
 import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
-import ArticleListContent from '@/pages/group/components/articleContent';
+import ArticleListContent from '@/pages/group/post/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import { getReply } from '@/services/getPost';
 import styles from './style.less';
@@ -18,7 +18,7 @@ const FormItem = Form.Item;
 const pageSize = 10;
 const postid = history.location.search.substring(1);
 
-const Hottest = () => {
+const Reply = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
     () => {
@@ -144,12 +144,12 @@ const Hottest = () => {
               ]}
               //extra={<div className={styles.listItemExtra} />}
             >
-              <List.Item.Meta
+              {/* <List.Item.Meta
                 title={
                   <a className={styles.listItemMetaTitle} href={item.href}>
                   </a>
                 }
-              />
+              /> */}
               <ArticleListContent data={item} />
             </List.Item>
           )}
@@ -159,4 +159,4 @@ const Hottest = () => {
   );
 };
 
-export default Hottest;
+export default Reply;

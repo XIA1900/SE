@@ -97,6 +97,7 @@ const Center = () => {
   console.log(list);
 
   const renderPostInfo = ({ title, content, owner, updatedAt }) => {
+    console.log('title:'+title);
     return (
       <div className={styles.detail}>
         <h1>{title}</h1>
@@ -106,11 +107,10 @@ const Center = () => {
               marginRight: 8,
             }}
           />
-          {content}
-        </p>
-        <p>
           {owner} updated at {updatedAt}
         </p>
+        <p>{content}</p>
+        
       </div>
     );
   };

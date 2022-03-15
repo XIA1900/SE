@@ -106,12 +106,9 @@ function postList(count, type, groupName) {
     list.push({
       id: i,
       owner: users[i % 10],
-      owner_href: users_href[i % 10],
       title: titles[i % 10],
-      title_href: titles_href[i % 10],
       logo: avatars[i % 10],
       group: groups,
-      group_href: groups_href,
       updatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
       //createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
       collection: Math.ceil(Math.random() * 100) + 100,
@@ -125,10 +122,7 @@ function postList(count, type, groupName) {
 
 function getPostList(req, res) {
   const params = req.query;
-  console.log("postlists");
-  console.log(params);
   const count = params.count;
-  console.log('count=' + count);
   const type = params.type;
   const groupName = params.groupName;
   const result = postList(count, type, groupName);

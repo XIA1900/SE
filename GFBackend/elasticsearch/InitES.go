@@ -4,11 +4,14 @@ import (
 	"GFBackend/config"
 	"context"
 	"github.com/olivere/elastic/v7"
+	"log"
+	"os"
 	"strconv"
 )
 
 var ESClient *elastic.Client
 var ctx = context.Background()
+var indexName = "article"
 
 func InitES() {
 	appConfig := config.AppConfig
@@ -17,6 +20,8 @@ func InitES() {
 		elastic.SetURL(url),
 		elastic.SetBasicAuth(appConfig.ElasticSearch.Username, appConfig.ElasticSearch.Password),
 		elastic.SetSniff(false),
+		elastic.SetErrorLog(log.New(os.Stderr, "ELASTIC ", log.LstdFlags)),
+		elastic.SetInfoLog(log.New(os.Stdout, "", log.LstdFlags)),
 	)
 	if err != nil {
 		panic(err.Error())
@@ -27,7 +32,7 @@ func InitES() {
 }
 
 func DataInitialization() {
-	if !IsIndexExisted("article") {
+	if !IsIndexExisted(indexName) {
 		mapping := `
 		{
 			"settings": {},	

@@ -53,3 +53,10 @@ type ArticleTypeInfo struct {
 	TypeName    string `form:"TypeName" json:"TypeName" example:"Movie"`
 	Description string `form:"Description" json:"Description" example:"Discussion of Movie"`
 }
+
+type ArticleOfES struct {
+	ID       int    `json:"ID"`
+	Username string `json:"Username"`
+	Title    string `json:"Title"`
+	Content  string `json:"Content"`
+}

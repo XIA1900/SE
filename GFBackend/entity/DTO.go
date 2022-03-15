@@ -5,17 +5,6 @@ type ResponseMsg struct {
 	Message string `form:"Message" json:"message" example:"process successfully"`
 }
 
-type CommunityResponseMsg struct {
-	Code        int    `json:"code" example:"200"`
-	Message     string `json:"message" example:"process successfully"`
-	ID          int    `json:"id" example:"1"`
-	Creator     string `json:"creator" example:"creator"`
-	Name        string `json:"name" example:"name"`
-	Description string `json:"description" example:"description"`
-	Num_Member  int    `json:"num_member" example:"1"`
-	Create_Time string `json:"create_time" example:"create_time"`
-}
-
 type UserInfo struct {
 	Username    string `form:"Username" json:"Username" example:"jamesbond21" `
 	Password    string `form:"Password" json:"Password" example:"f9ae5f68ae1e7f7f3fc06053e9b9b539"`
@@ -36,8 +25,19 @@ type CommunityInfo struct {
 	Creator     string `form:"Creator" json:"Creator" example:"test1"`
 	Name        string `form:"Name" json:"Name" example:"community1"`
 	Description string `form:"Description" json:"Description" example:"this is a test community"`
-	Num_Member  int    `form:"Num_Member" json:"Num_Member" example:"233"`
-	Create_Time string `form:"Create_Time" json:"Create_Time" example:"2020-01-01"`
+}
+
+type CommunityNameFuzzyMatch struct {
+	Name     string `form:"Name" json:"Name" example:"community1"`
+	PageNO   int    `form:"PageNO" json:"PageNO" example:1`
+	PageSize int    `form:"PageSize" json:"PageSize" example:5`
+}
+
+type CommunitiesInfo struct {
+	PageNO      int         `form:"PageNO" json:"PageNO" example:1`
+	PageSize    int         `form:"PageSize" json:"PageSize" example:5`
+	TotalPageNO int64       `form:"TotalPageNO" json:"TotalPageNO" example:5`
+	Communities []Community `form:"Communities" json:"Communities"`
 }
 
 type UserFiles struct {

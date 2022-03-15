@@ -37,11 +37,21 @@ definitions:
         example: Movie
         type: string
     type: object
+  entity.Community:
+    properties:
+      createDay:
+        type: string
+      creator:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   entity.CommunityInfo:
     properties:
-      Create_Time:
-        example: "2020-01-01"
-        type: string
       Creator:
         example: test1
         type: string
@@ -51,37 +61,17 @@ definitions:
       Name:
         example: community1
         type: string
-      Num_Member:
-        example: 233
-        type: integer
       id:
         type: integer
     type: object
-  entity.CommunityResponseMsg:
+  entity.CommunityNameFuzzyMatch:
     properties:
-      code:
-        example: 200
+      Name:
+        example: community1
+        type: string
+      PageNO:
         type: integer
-      create_time:
-        example: create_time
-        type: string
-      creator:
-        example: creator
-        type: string
-      description:
-        example: description
-        type: string
-      id:
-        example: 1
-        type: integer
-      message:
-        example: process successfully
-        type: string
-      name:
-        example: name
-        type: string
-      num_member:
-        example: 1
+      PageSize:
         type: integer
     type: object
   entity.NewUserInfo:
@@ -429,43 +419,221 @@ paths:
       summary: Create a new Community
       tags:
       - Community Manage
-  /community/deletecommunitybyid:
-    post:
-      consumes:
-      - application/json
-      description: need ID
-      parameters:
-      - description: need ID
-        in: body
-        name: communityInfo
-        required: true
-        schema:
-          $ref: '#/definitions/entity.CommunityInfo'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: <b>Success</b>. Update Password Successfully
-          schema:
-            $ref: '#/definitions/entity.CommunityResponseMsg'
-        "400":
-          description: <b>Failure</b>. Bad Parameters
-          schema:
-            $ref: '#/definitions/entity.CommunityResponseMsg'
-        "500":
-          description: <b>Failure</b>. Server Internal Error.
-          schema:
-            $ref: '#/definitions/entity.CommunityResponseMsg'
-      summary: Delete community information
-      tags:
-      - Community Manage
-  /community/getcommunity:
+  /community/delete/:id:
     get:
       consumes:
       - application/json
-      description: need strings community name
+      description: need token in cookie, need community id only
       parameters:
-      - description: Create a new community needs Creator, Name & Description.
+      - description: Community ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. No matter whether delete successfully, Return
+            Success
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Create a new Community
+      tags:
+      - Community Manage
+  /community/get:
+    get:
+      consumes:
+      - application/json
+      description: 'need token in cookie, need page info: PageNO, pageSize only'
+      parameters:
+      - description: Get Communities Info
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CommunityNameFuzzyMatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Community Success
+          schema:
+            items:
+              $ref: '#/definitions/entity.Community'
+            type: array
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Communities By Name Fuzzy Match
+      tags:
+      - Community Manage
+  /community/getone/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need community ID
+      parameters:
+      - description: Community ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Community Success
+          schema:
+            $ref: '#/definitions/entity.Community'
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get One Community By ID
+      tags:
+      - Community Manage
+  /community/getonebyname:
+    get:
+      consumes:
+      - application/json
+      description: 'need token in cookie, need community Name, page info: PageNO,
+        pageSize'
+      parameters:
+      - description: Community Name Fuzzy Match Info
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CommunityNameFuzzyMatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Community Success
+          schema:
+            items:
+              $ref: '#/definitions/entity.Community'
+            type: array
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Communities By Name Fuzzy Match
+      tags:
+      - Community Manage
+  /community/join/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need community ID
+      parameters:
+      - description: Community ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Join Community Success
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found or Existed
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Join One Community By ID
+      tags:
+      - Community Manage
+  /community/leave/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need community ID
+      parameters:
+      - description: Community ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Leave Community Success
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Join One Community By ID
+      tags:
+      - Community Manage
+  /community/numberofmember/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need community ID
+      parameters:
+      - description: Community ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Return an Integer
+        "400":
+          description: <b>Failure</b>. Return 0
+        "500":
+          description: <b>Failure</b>. Return 0
+      security:
+      - ApiAuthToken: []
+      summary: Get the Number Of Member
+      tags:
+      - Community Manage
+  /community/update:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need community ID & description only, only
+        by creator
+      parameters:
+      - description: Update Community Description.
         in: body
         name: CommunityInfo
         required: true
@@ -475,48 +643,20 @@ paths:
       - application/json
       responses:
         "201":
-          description: <b>Success</b>. Create Community Success
+          description: <b>Success</b>. Update Success
           schema:
-            $ref: '#/definitions/entity.CommunityResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
-          description: <b>Failure</b>. Bad Parameters or Community already exists
+          description: <b>Failure</b>. Bad Parameters or Not Creator or Not Found
           schema:
-            $ref: '#/definitions/entity.CommunityResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/entity.CommunityResponseMsg'
-      summary: Get the Community by Name
-      tags:
-      - Community Manage
-  /community/updatecommunitybyid:
-    post:
-      consumes:
-      - application/json
-      description: need ID, Name, Description
-      parameters:
-      - description: need ID, Name, Description
-        in: body
-        name: communityInfo
-        required: true
-        schema:
-          $ref: '#/definitions/entity.CommunityInfo'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: <b>Success</b>. Update Password Successfully
-          schema:
-            $ref: '#/definitions/entity.CommunityResponseMsg'
-        "400":
-          description: <b>Failure</b>. Bad Parameters
-          schema:
-            $ref: '#/definitions/entity.CommunityResponseMsg'
-        "500":
-          description: <b>Failure</b>. Server Internal Error.
-          schema:
-            $ref: '#/definitions/entity.CommunityResponseMsg'
-      summary: Update community information including Name, Description
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Update Community Description By ID
       tags:
       - Community Manage
   /file/delete:

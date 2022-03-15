@@ -43,6 +43,14 @@ func addInitialPolicy() {
 
 	// /community/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/create", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/delete/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/update", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/numberofmember/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getone/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getbyname", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/get", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/join/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/leave/:id", "GET")
 
 	// /file/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/upload", "POST")
@@ -62,7 +70,6 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("admin", basePath+"/user/admin/register", "POST")
 	CasbinEnforcer.AddPolicy("admin", basePath+"/user/admin/delete", "POST")
 	CasbinEnforcer.AddPolicy("admin", basePath+"/file/space/update", "POST")
-	CasbinEnforcer.AddPolicy("admin", basePath+"/community/create", "POST")
 	CasbinEnforcer.AddPolicy("admin", basePath+"/articletype/create", "POST")
 	CasbinEnforcer.AddPolicy("admin", basePath+"/articletype/remove", "POST")
 	CasbinEnforcer.AddPolicy("admin", basePath+"/articletype/update", "POST")

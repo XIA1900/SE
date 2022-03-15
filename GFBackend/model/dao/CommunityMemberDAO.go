@@ -14,8 +14,10 @@ type ICommunityMemberDAO interface {
 	Create(communityID int, member, joinDay string) error
 	DeleteByCommunityID(id int) error
 	DeleteByMember(member string) error
+	DeleteByCommunityIDAndMember(communityID int, member string) error
 	GetCommunityIDsByMember(member string) ([]int, error)
 	GetMembersByCommunityIDs(id int) ([]string, error)
+	CountMemberByCommunityID(id int) (int64, error)
 }
 
 type CommunityMemberDAO struct {
@@ -50,10 +52,26 @@ func (communityMemberDAO *CommunityMemberDAO) Create(communityID int, member, jo
 }
 
 func (communityMemberDAO *CommunityMemberDAO) DeleteByCommunityID(id int) error {
+	result := communityMemberDAO.db.Where("CommunityID = ?", id).Delete(&entity.CommunityMember{})
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
 
 func (communityMemberDAO *CommunityMemberDAO) DeleteByMember(member string) error {
+	result := communityMemberDAO.db.Where("Member = ?", member).Delete(&entity.CommunityMember{})
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (communityMemberDAO *CommunityMemberDAO) DeleteByCommunityIDAndMember(communityID int, member string) error {
+	result := communityMemberDAO.db.Where("CommunityID = ? AND Member = ?", communityID, member).Delete(&entity.CommunityMember{})
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
 
@@ -63,4 +81,13 @@ func (communityMemberDAO *CommunityMemberDAO) GetCommunityIDsByMember(member str
 
 func (communityMemberDAO *CommunityMemberDAO) GetMembersByCommunityIDs(id int) ([]string, error) {
 	return nil, nil
+}
+
+func (communityMemberDAO *CommunityMemberDAO) CountMemberByCommunityID(id int) (int64, error) {
+	var count int64
+	result := communityMemberDAO.db.Model(&entity.CommunityMember{}).Where("CommunityID = ?", id).Count(&count)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return count, nil
 }

@@ -404,9 +404,14 @@
                 }
             }
         },
-        "/community/deletecommunitybyid": {
-            "post": {
-                "description": "need ID",
+        "/community/delete/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community id only",
                 "consumes": [
                     "application/json"
                 ],
@@ -416,43 +421,34 @@
                 "tags": [
                     "Community Manage"
                 ],
-                "summary": "Delete community information",
+                "summary": "Create a new Community",
                 "parameters": [
                     {
-                        "description": "need ID",
-                        "name": "communityInfo",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entity.CommunityInfo"
-                        }
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. No matter whether delete successfully, Return Success",
                         "schema": {
-                            "$ref": "#/definitions/entity.CommunityResponseMsg"
-                        }
-                    },
-                    "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
-                        "schema": {
-                            "$ref": "#/definitions/entity.CommunityResponseMsg"
-                        }
-                    },
-                    "500": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
-                        "schema": {
-                            "$ref": "#/definitions/entity.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
             }
         },
-        "/community/getcommunity": {
+        "/community/get": {
             "get": {
-                "description": "need strings community name",
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need page info: PageNO, pageSize only",
                 "consumes": [
                     "application/json"
                 ],
@@ -462,10 +458,299 @@
                 "tags": [
                     "Community Manage"
                 ],
-                "summary": "Get the Community by Name",
+                "summary": "Get Communities By Name Fuzzy Match",
                 "parameters": [
                     {
-                        "description": "Create a new community needs Creator, Name \u0026 Description.",
+                        "description": "Get Communities Info",
+                        "name": "name",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.CommunityNameFuzzyMatch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Community Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.Community"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/getone/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get One Community By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Community Success",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Community"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/getonebyname": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community Name, page info: PageNO, pageSize",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get Communities By Name Fuzzy Match",
+                "parameters": [
+                    {
+                        "description": "Community Name Fuzzy Match Info",
+                        "name": "name",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.CommunityNameFuzzyMatch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Community Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.Community"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/join/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Join One Community By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Join Community Success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found or Existed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/leave/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Join One Community By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Leave Community Success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/numberofmember/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get the Number Of Member",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Return an Integer"
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Return 0"
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Return 0"
+                    }
+                }
+            }
+        },
+        "/community/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community ID \u0026 description only, only by creator",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Update Community Description By ID",
+                "parameters": [
+                    {
+                        "description": "Update Community Description.",
                         "name": "CommunityInfo",
                         "in": "body",
                         "required": true,
@@ -476,67 +761,21 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Community Success",
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Success",
                         "schema": {
-                            "$ref": "#/definitions/entity.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Community already exists",
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Creator or Not Found",
                         "schema": {
-                            "$ref": "#/definitions/entity.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/entity.CommunityResponseMsg"
-                        }
-                    }
-                }
-            }
-        },
-        "/community/updatecommunitybyid": {
-            "post": {
-                "description": "need ID, Name, Description",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Community Manage"
-                ],
-                "summary": "Update community information including Name, Description",
-                "parameters": [
-                    {
-                        "description": "need ID, Name, Description",
-                        "name": "communityInfo",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entity.CommunityInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
-                        "schema": {
-                            "$ref": "#/definitions/entity.CommunityResponseMsg"
-                        }
-                    },
-                    "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
-                        "schema": {
-                            "$ref": "#/definitions/entity.CommunityResponseMsg"
-                        }
-                    },
-                    "500": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
-                        "schema": {
-                            "$ref": "#/definitions/entity.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1417,13 +1656,29 @@
                 }
             }
         },
+        "entity.Community": {
+            "type": "object",
+            "properties": {
+                "createDay": {
+                    "type": "string"
+                },
+                "creator": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "entity.CommunityInfo": {
             "type": "object",
             "properties": {
-                "Create_Time": {
-                    "type": "string",
-                    "example": "2020-01-01"
-                },
                 "Creator": {
                     "type": "string",
                     "example": "test1"
@@ -1436,49 +1691,23 @@
                     "type": "string",
                     "example": "community1"
                 },
-                "Num_Member": {
-                    "type": "integer",
-                    "example": 233
-                },
                 "id": {
                     "type": "integer"
                 }
             }
         },
-        "entity.CommunityResponseMsg": {
+        "entity.CommunityNameFuzzyMatch": {
             "type": "object",
             "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 200
-                },
-                "create_time": {
+                "Name": {
                     "type": "string",
-                    "example": "create_time"
+                    "example": "community1"
                 },
-                "creator": {
-                    "type": "string",
-                    "example": "creator"
+                "PageNO": {
+                    "type": "integer"
                 },
-                "description": {
-                    "type": "string",
-                    "example": "description"
-                },
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "message": {
-                    "type": "string",
-                    "example": "process successfully"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "name"
-                },
-                "num_member": {
-                    "type": "integer",
-                    "example": 1
+                "PageSize": {
+                    "type": "integer"
                 }
             }
         },

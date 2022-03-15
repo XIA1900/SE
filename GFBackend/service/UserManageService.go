@@ -31,19 +31,21 @@ type IUserManageService interface {
 }
 
 type UserManageService struct {
-	userDAO   dao.IUserDAO
-	followDAO dao.IFollowDAO
-	spaceDAO  dao.ISpaceDAO
+	communityMemberDAO dao.ICommunityMemberDAO
+	userDAO            dao.IUserDAO
+	followDAO          dao.IFollowDAO
+	spaceDAO           dao.ISpaceDAO
 }
 
-func NewUserManageService(userDAO dao.IUserDAO, followDAO dao.IFollowDAO, spaceDAO dao.ISpaceDAO) *UserManageService {
+func NewUserManageService(userDAO dao.IUserDAO, followDAO dao.IFollowDAO, spaceDAO dao.ISpaceDAO, communityMemberDAO dao.ICommunityMemberDAO) *UserManageService {
 	if userManageService == nil {
 		userManageServiceLock.Lock()
 		if userManageService == nil {
 			userManageService = &UserManageService{
-				userDAO:   userDAO,
-				followDAO: followDAO,
-				spaceDAO:  spaceDAO,
+				userDAO:            userDAO,
+				followDAO:          followDAO,
+				spaceDAO:           spaceDAO,
+				communityMemberDAO: communityMemberDAO,
 			}
 		}
 		userManageServiceLock.Unlock()
@@ -58,6 +60,8 @@ var UserManageServiceSet = wire.NewSet(
 	wire.Bind(new(dao.IFollowDAO), new(*dao.FollowDAO)),
 	dao.NewSpaceDAO,
 	wire.Bind(new(dao.ISpaceDAO), new(*dao.SpaceDAO)),
+	dao.NewCommunityMemberDAO,
+	wire.Bind(new(dao.ICommunityMemberDAO), new(*dao.CommunityMemberDAO)),
 	NewUserManageService,
 )
 
@@ -180,6 +184,12 @@ func (userManageService *UserManageService) Delete(username string) error {
 	deleteUserFollowError := userManageService.followDAO.DeleteFollow(username)
 	if deleteUserFollowError != nil {
 		logger.AppLogger.Error(fmt.Sprintf("Delete User Error: %s", deleteUserError.Error()))
+		return errors.New("500")
+	}
+
+	deleteCommunityMemberError := userManageService.communityMemberDAO.DeleteByMember(username)
+	if deleteCommunityMemberError != nil {
+		logger.AppLogger.Error(deleteCommunityMemberError.Error())
 		return errors.New("500")
 	}
 

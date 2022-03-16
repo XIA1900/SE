@@ -1,5 +1,28 @@
 basePath: /gf/api
 definitions:
+  entity.ArticleDetail:
+    properties:
+      CommunityName:
+        example: big bang theory
+        type: string
+      Content:
+        example: I love UF
+        type: string
+      ID:
+        type: integer
+      NumComment:
+        type: integer
+      NumFavorite:
+        type: integer
+      NumLike:
+        type: integer
+      Title:
+        example: Gator Forum
+        type: string
+      TypeName:
+        example: music
+        type: string
+    type: object
   entity.ArticleInfo:
     properties:
       CommunityID:
@@ -227,6 +250,37 @@ paths:
       summary: Delete Article By ID
       tags:
       - Article Manage
+  /article/getone/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need ID
+      parameters:
+      - description: Article ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticleDetail'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get One Article By ID
+      tags:
+      - Article Manage
   /article/update:
     post:
       consumes:
@@ -259,8 +313,8 @@ paths:
       summary: Update Article Title or Content By ID
       tags:
       - Article Manage
-  /articlelike/create/:ArticleID:
-    get:
+  /articlelike/create/:articleID:
+    post:
       consumes:
       - application/json
       description: need token in cookie, need article id
@@ -276,15 +330,42 @@ paths:
         "200":
           description: <b>Success</b>. Create Successfully
           schema:
-            $ref: '#/definitions/entity.ResponseMsg'
+            type: string
         "400":
-          description: <b>Failure</b>. Bad Parameters
+          description: <b>Failure</b>. Bad Parameters or Not Found
           schema:
-            $ref: '#/definitions/entity.ResponseMsg'
+            type: string
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/entity.ResponseMsg'
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User like Article
+      tags:
+      - Article Like Manage
+  /articlelike/delete/:articleID:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need article id
+      parameters:
+      - description: "233333"
+        in: query
+        name: ArticleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Delete Like Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
       security:
       - ApiAuthToken: []
       summary: User like Article

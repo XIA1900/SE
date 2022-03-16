@@ -134,3 +134,24 @@ func (articleManageController ArticleManageController) UpdateArticleTitleOrConte
 
 	context.JSON(200, "Update Successfully")
 }
+
+// GetOneArticleByID godoc
+// @Summary Get One Article By ID
+// @Description need token in cookie, need ID
+// @Tags Article Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param id query integer true "Article ID"
+// @Success 200 {object} entity.ArticleDetail "<b>Success</b>. Get Successfully"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters / Not Found"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /article/getone/:id [get]
+func (articleManageController ArticleManageController) GetOneArticleByID(context *gin.Context) {
+	//id, err1 := strconv.Atoi(context.Param("id"))
+	//if err1 != nil {
+	//	context.JSON(400, "Bad Parameters")
+	//	return
+	//}
+
+}

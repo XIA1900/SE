@@ -94,3 +94,27 @@ type ArticleLike struct {
 func (articleLike ArticleLike) TableName() string {
 	return "Article_Like"
 }
+
+type ArticleFavorite struct {
+	ID          int
+	Username    string
+	ArticleID   int    `gorm:"column:ArticleID"`
+	FavoriteDay string `gorm:"column:FavoriteDay"`
+}
+
+func (articleFavorite ArticleFavorite) TableName() string {
+	return "Article_Favorite"
+}
+
+type ArticleComment struct {
+	ID        int
+	Username  string
+	ArticleID int    `gorm:"column:ArticleID"`
+	CommentID int    `gorm:"column:CommentID"`
+	Content   string `gorm:"column:Content"`
+	CreateDay string `gorm:"column:CreateDay"`
+}
+
+func (articleComment ArticleComment) TableName() string {
+	return "Article_Favorite"
+}

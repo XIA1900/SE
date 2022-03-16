@@ -31,3 +31,11 @@ func InitializeArticleManageController() (*controller.ArticleManageController, e
 func InitializeArticleLikeController() (*controller.ArticleLikeController, error) {
 	panic(wire.Build(controller.ArticleLikeControllerSet))
 }
+
+func InitializeArticleFavoriteController() (*controller.ArticleFavoriteController, error) {
+	panic(wire.Build(controller.ArticleFavoriteControllerSet))
+}
+
+func InitializeArticleCommentController() (*controller.ArticleCommentController, error) {
+	panic(wire.Build(controller.ArticleCommentControllerSet))
+}

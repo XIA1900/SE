@@ -19,6 +19,7 @@ type IArticleManageService interface {
 	CreateArticle(username string, articleInfo entity.ArticleInfo) error
 	DeleteArticleByID(id int, operator string) error
 	UpdateArticleTitleOrContentByID(articleInfo entity.ArticleInfo, operator string) error
+	GetOneArticleByID(id int) (entity.ArticleDetail, error)
 }
 
 type ArticleManageService struct {
@@ -152,4 +153,8 @@ func (articleManageService *ArticleManageService) UpdateArticleTitleOrContentByI
 	}
 
 	return nil
+}
+
+func (articleManageService *ArticleManageService) GetOneArticleByID(id int) (entity.ArticleDetail, error) {
+	return entity.ArticleDetail{}, nil
 }

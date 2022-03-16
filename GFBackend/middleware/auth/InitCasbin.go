@@ -65,7 +65,8 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/article/update", "POST")
 
 	// /articlelike/..
-	CasbinEnforcer.AddPolicy("regular", basePath+"/articlelike/create", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlelike/create/:articleID", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlelike/delete/:articleID", "POST")
 
 	// admin
 	CasbinEnforcer.AddGroupingPolicy("admin", "regular") // admin extends regular

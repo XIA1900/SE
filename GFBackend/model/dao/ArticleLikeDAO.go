@@ -12,6 +12,8 @@ var articleLikeDAO *ArticleLikeDAO
 
 type IArticleLikeDAO interface {
 	CreateLike(username string, articleID int, likeDay string) error
+	DeleteLike(username string, articleID int) error
+	GetLike(username string, articleID int) (entity.ArticleLike, error)
 }
 
 type ArticleLikeDAO struct {
@@ -41,4 +43,21 @@ func (articleLikeDAO *ArticleLikeDAO) CreateLike(username string, articleID int,
 		return result.Error
 	}
 	return nil
+}
+
+func (articleLikeDAO *ArticleLikeDAO) DeleteLike(username string, articleID int) error {
+	result := articleLikeDAO.db.Where("Username = ? AND ArticleID = ?", username, articleID).Delete(&entity.ArticleLike{})
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (articleLikeDAO *ArticleLikeDAO) GetLike(username string, articleID int) (entity.ArticleLike, error) {
+	var articleLike entity.ArticleLike
+	result := articleLikeDAO.db.Where("Username = ? AND ArticleID = ?", username, articleID).First(&articleLike)
+	if result.Error != nil {
+		return entity.ArticleLike{}, result.Error
+	}
+	return articleLike, nil
 }

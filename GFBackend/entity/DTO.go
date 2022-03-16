@@ -69,3 +69,14 @@ type ArticleInfo struct {
 	CommunityID int    `form:"CommunityID" json:"CommunityID" example:10`
 	Content     string `form:"Content" json:"Content" example:"I love UF"`
 }
+
+type ArticleDetail struct {
+	ID            int    `form:"ID" json:"ID" example:12`
+	Title         string `form:"Title" json:"Title" example:"Gator Forum"`
+	TypeName      string `form:"TypeName" json:"TypeName" example:"music"`
+	CommunityName string `form:"CommunityName" json:"CommunityName" example:"big bang theory"`
+	Content       string `form:"Content" json:"Content" example:"I love UF"`
+	NumLike       int    `form:"NumLike" json:"NumLike" example:78`
+	NumFavorite   int    `form:"NumFavorite" json:"NumFavorite" example:66`
+	NumComment    int    `form:"NumComment" json:"NumComment" example:99`
+}

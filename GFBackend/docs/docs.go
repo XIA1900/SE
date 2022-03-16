@@ -111,6 +111,55 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/article/getone/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Get One Article By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Article ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleDetail"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/article/update": {
             "post": {
                 "security": [
@@ -162,8 +211,8 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "/articlelike/create/:ArticleID": {
-            "get": {
+        "/articlelike/create/:articleID": {
+            "post": {
                 "security": [
                     {
                         "ApiAuthToken": []
@@ -193,19 +242,62 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
                         "schema": {
-                            "$ref": "#/definitions/entity.ResponseMsg"
+                            "type": "string"
                         }
                     },
                     "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
                         "schema": {
-                            "$ref": "#/definitions/entity.ResponseMsg"
+                            "type": "string"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/entity.ResponseMsg"
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlelike/delete/:articleID": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Like Manage"
+                ],
+                "summary": "User like Article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "233333",
+                        "name": "ArticleID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Like Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -1659,6 +1751,39 @@ const docTemplate_swagger = `{
         }
     },
     "definitions": {
+        "entity.ArticleDetail": {
+            "type": "object",
+            "properties": {
+                "CommunityName": {
+                    "type": "string",
+                    "example": "big bang theory"
+                },
+                "Content": {
+                    "type": "string",
+                    "example": "I love UF"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "NumComment": {
+                    "type": "integer"
+                },
+                "NumFavorite": {
+                    "type": "integer"
+                },
+                "NumLike": {
+                    "type": "integer"
+                },
+                "Title": {
+                    "type": "string",
+                    "example": "Gator Forum"
+                },
+                "TypeName": {
+                    "type": "string",
+                    "example": "music"
+                }
+            }
+        },
         "entity.ArticleInfo": {
             "type": "object",
             "properties": {

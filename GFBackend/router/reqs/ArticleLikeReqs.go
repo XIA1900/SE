@@ -8,7 +8,8 @@ func InitArticleLikeReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 
 	articleLikeReqsGroup := baseGroup.Group("/articlelike")
 	{
-		articleLikeReqsGroup.GET("/create/:articleID", articleLikeController.CreateLike)
+		articleLikeReqsGroup.POST("/create/:articleID", articleLikeController.CreateLike)
+		articleLikeReqsGroup.POST("/delete/:articleID", articleLikeController.DeleteLike)
 	}
 
 	return articleLikeReqsGroup

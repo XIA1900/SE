@@ -55,8 +55,23 @@ func InitializeArticleManageController() (*controller.ArticleManageController, e
 }
 
 func InitializeArticleLikeController() (*controller.ArticleLikeController, error) {
+	articleDAO := dao.NewArticleDAO()
 	articleLikeDAO := dao.NewArticleLikeDAO()
-	articleLikeService := service.NewArticleLikeService(articleLikeDAO)
+	articleLikeService := service.NewArticleLikeService(articleDAO, articleLikeDAO)
 	articleLikeController := controller.NewArticleLikeController(articleLikeService)
 	return articleLikeController, nil
+}
+
+func InitializeArticleFavoriteController() (*controller.ArticleFavoriteController, error) {
+	articleFavoriteDAO := dao.NewArticleFavoriteDAO()
+	articleFavoriteService := service.NewArticleFavoriteService(articleFavoriteDAO)
+	articleFavoriteController := controller.NewArticleFavoriteController(articleFavoriteService)
+	return articleFavoriteController, nil
+}
+
+func InitializeArticleCommentController() (*controller.ArticleCommentController, error) {
+	articleCommentDAO := dao.NewArticleCommentDAO()
+	articleCommentService := service.NewArticleCommentService(articleCommentDAO)
+	articleCommentController := controller.NewArticleCommentController(articleCommentService)
+	return articleCommentController, nil
 }

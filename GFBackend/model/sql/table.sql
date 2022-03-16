@@ -100,5 +100,6 @@ CREATE TABLE Article_Comment (
     ArticleID INT NOT NULL,
     CommentID INT,
     Content TEXT NOT NULL,
+    CreateDay DATE NOT NULL,
     PRIMARY KEY (ID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

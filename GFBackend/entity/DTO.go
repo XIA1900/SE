@@ -76,9 +76,9 @@ type ArticleDetail struct {
 	TypeName      string `form:"TypeName" json:"TypeName" example:"music"`
 	CommunityName string `form:"CommunityName" json:"CommunityName" example:"big bang theory"`
 	Content       string `form:"Content" json:"Content" example:"I love UF"`
-	NumLike       int    `form:"NumLike" json:"NumLike" example:78`
-	NumFavorite   int    `form:"NumFavorite" json:"NumFavorite" example:66`
-	NumComment    int    `form:"NumComment" json:"NumComment" example:99`
+	NumLike       int64  `form:"NumLike" json:"NumLike" example:78`
+	NumFavorite   int64  `form:"NumFavorite" json:"NumFavorite" example:66`
+	NumComment    int64  `form:"NumComment" json:"NumComment" example:99`
 }
 
 type ArticleFavoritesInfo struct {
@@ -86,4 +86,17 @@ type ArticleFavoritesInfo struct {
 	PageSize         int               `form:"PageSize" json:"PageSize" example:5`
 	TotalPageNO      int64             `form:"TotalPageNO" json:"TotalPageNO" example:5`
 	ArticleFavorites []ArticleFavorite `form:"ArticleFavorites" json:"ArticleFavorites"`
+}
+
+type NewCommentInfo struct {
+	ArticleID int    `form:"ArticleID" json:"ArticleID" example:1`
+	CommentID int    `form:"CommentID" json:"CommentID" example:1`
+	Content   string `form:"Content" json:"Content" example:"It is true"`
+}
+
+type ArticleCommentsInfo struct {
+	PageNO          int              `form:"PageNO" json:"PageNO" example:1`
+	PageSize        int              `form:"PageSize" json:"PageSize" example:5`
+	TotalPageNO     int64            `form:"TotalPageNO" json:"TotalPageNO" example:5`
+	ArticleComments []ArticleComment `form:"ArticleComments" json:"ArticleComments"`
 }

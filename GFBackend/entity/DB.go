@@ -116,5 +116,5 @@ type ArticleComment struct {
 }
 
 func (articleComment ArticleComment) TableName() string {
-	return "Article_Favorite"
+	return "Article_Comment"
 }

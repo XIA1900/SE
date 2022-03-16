@@ -104,14 +104,14 @@
                 }
             }
         },
-        "/article/getone/:id": {
+        "/article/getone": {
             "get": {
                 "security": [
                     {
                         "ApiAuthToken": []
                     }
                 ],
-                "description": "need token in cookie, need ID",
+                "description": "need token in cookie, need ID, /getone?id=",
                 "consumes": [
                     "application/json"
                 ],
@@ -191,6 +191,233 @@
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlecomment/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need new article comment info, if comment to article, no need CommentID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Comment Manage"
+                ],
+                "summary": "Create a new comment to article or comment",
+                "parameters": [
+                    {
+                        "description": "Create New Comment",
+                        "name": "ArticleInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.NewCommentInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlecomment/delete/:id": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need comment ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Comment Manage"
+                ],
+                "summary": "Delete a comment by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Comment ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlecomment/getbyarticleid": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article id, pageno, pagesize in url: \"/articlecomment/getbyarticleid?id=\u0026pageno=\u0026pagesize=\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Comment Manage"
+                ],
+                "summary": "get direct comments by article id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Article ID",
+                        "name": "articleid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "PageNO",
+                        "name": "pageno",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "PageSize",
+                        "name": "pagesize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleCommentsInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlecomment/getsub": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article id, comment id, pageno, pagesize in url: \"/articlecomment/getbyarticleid?articleid=\u0026commentid=\u0026pageno=\u0026pagesize=\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Comment Manage"
+                ],
+                "summary": "get sub comments by article id and comment id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Article ID",
+                        "name": "articleid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comment ID",
+                        "name": "commentid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "PageNO",
+                        "name": "pageno",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "PageSize",
+                        "name": "pagesize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleCommentsInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
                         "schema": {
                             "type": "string"
                         }
@@ -1892,6 +2119,49 @@
         }
     },
     "definitions": {
+        "entity.ArticleComment": {
+            "type": "object",
+            "properties": {
+                "articleID": {
+                    "type": "integer"
+                },
+                "commentID": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createDay": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.ArticleCommentsInfo": {
+            "type": "object",
+            "properties": {
+                "ArticleComments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.ArticleComment"
+                    }
+                },
+                "PageNO": {
+                    "type": "integer"
+                },
+                "PageSize": {
+                    "type": "integer"
+                },
+                "TotalPageNO": {
+                    "type": "integer"
+                }
+            }
+        },
         "entity.ArticleDetail": {
             "type": "object",
             "properties": {
@@ -2069,6 +2339,21 @@
                 },
                 "PageSize": {
                     "type": "integer"
+                }
+            }
+        },
+        "entity.NewCommentInfo": {
+            "type": "object",
+            "properties": {
+                "ArticleID": {
+                    "type": "integer"
+                },
+                "CommentID": {
+                    "type": "integer"
+                },
+                "Content": {
+                    "type": "string",
+                    "example": "It is true"
                 }
             }
         },

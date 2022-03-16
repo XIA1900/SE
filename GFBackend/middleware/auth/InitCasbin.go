@@ -63,6 +63,7 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/article/create", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/article/delete/:id", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/article/update", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/article/getone", "GET")
 
 	// /articlelike/..
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlelike/create/:articleID", "POST")
@@ -72,6 +73,12 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/create/:articleID", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/delete/:articleID", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/get", "GET")
+
+	// /articlecomment/..
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlecomment/create", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlecomment/delete/:id", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlecomment/getbyarticleid", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlecomment/getsub", "GET")
 
 	// admin
 	CasbinEnforcer.AddGroupingPolicy("admin", "regular") // admin extends regular

@@ -1,5 +1,33 @@
 basePath: /gf/api
 definitions:
+  entity.ArticleComment:
+    properties:
+      articleID:
+        type: integer
+      commentID:
+        type: integer
+      content:
+        type: string
+      createDay:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  entity.ArticleCommentsInfo:
+    properties:
+      ArticleComments:
+        items:
+          $ref: '#/definitions/entity.ArticleComment'
+        type: array
+      PageNO:
+        type: integer
+      PageSize:
+        type: integer
+      TotalPageNO:
+        type: integer
+    type: object
   entity.ArticleDetail:
     properties:
       CommunityName:
@@ -120,6 +148,16 @@ definitions:
         type: integer
       PageSize:
         type: integer
+    type: object
+  entity.NewCommentInfo:
+    properties:
+      ArticleID:
+        type: integer
+      CommentID:
+        type: integer
+      Content:
+        example: It is true
+        type: string
     type: object
   entity.NewUserInfo:
     properties:
@@ -274,11 +312,11 @@ paths:
       summary: Delete Article By ID
       tags:
       - Article Manage
-  /article/getone/:id:
+  /article/getone:
     get:
       consumes:
       - application/json
-      description: need token in cookie, need ID
+      description: need token in cookie, need ID, /getone?id=
       parameters:
       - description: Article ID
         in: query
@@ -337,6 +375,155 @@ paths:
       summary: Update Article Title or Content By ID
       tags:
       - Article Manage
+  /articlecomment/create:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need new article comment info, if comment
+        to article, no need CommentID
+      parameters:
+      - description: Create New Comment
+        in: body
+        name: ArticleInfo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.NewCommentInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Create a new comment to article or comment
+      tags:
+      - Article Comment Manage
+  /articlecomment/delete/:id:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need comment ID
+      parameters:
+      - description: Comment ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Delete Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Delete a comment by id
+      tags:
+      - Article Comment Manage
+  /articlecomment/getbyarticleid:
+    get:
+      consumes:
+      - application/json
+      description: 'need token in cookie, need article id, pageno, pagesize in url:
+        "/articlecomment/getbyarticleid?id=&pageno=&pagesize="'
+      parameters:
+      - description: Article ID
+        in: query
+        name: articleid
+        required: true
+        type: string
+      - description: PageNO
+        in: query
+        name: pageno
+        required: true
+        type: string
+      - description: PageSize
+        in: query
+        name: pagesize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Search Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticleCommentsInfo'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: get direct comments by article id
+      tags:
+      - Article Comment Manage
+  /articlecomment/getsub:
+    get:
+      consumes:
+      - application/json
+      description: 'need token in cookie, need article id, comment id, pageno, pagesize
+        in url: "/articlecomment/getbyarticleid?articleid=&commentid=&pageno=&pagesize="'
+      parameters:
+      - description: Article ID
+        in: query
+        name: articleid
+        required: true
+        type: string
+      - description: Comment ID
+        in: query
+        name: commentid
+        required: true
+        type: string
+      - description: PageNO
+        in: query
+        name: pageno
+        required: true
+        type: string
+      - description: PageSize
+        in: query
+        name: pagesize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Search Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticleCommentsInfo'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: get sub comments by article id and comment id
+      tags:
+      - Article Comment Manage
   /articlefavorite/create/:articleID:
     post:
       consumes:

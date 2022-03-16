@@ -49,7 +49,10 @@ func InitializeArticleManageController() (*controller.ArticleManageController, e
 	articleDAO := dao.NewArticleDAO()
 	articleTypeDAO := dao.NewArticleTypeDAO()
 	communityDAO := dao.NewCommunityDAO()
-	articleManageService := service.NewArticleManageService(articleDAO, articleTypeDAO, communityDAO)
+	articleCommentDAO := dao.NewArticleCommentDAO()
+	articleLikeDAO := dao.NewArticleLikeDAO()
+	articleFavoriteDAO := dao.NewArticleFavoriteDAO()
+	articleManageService := service.NewArticleManageService(articleDAO, articleTypeDAO, communityDAO, articleCommentDAO, articleLikeDAO, articleFavoriteDAO)
 	articleManageController := controller.NewArticleManageController(articleManageService)
 	return articleManageController, nil
 }
@@ -72,7 +75,8 @@ func InitializeArticleFavoriteController() (*controller.ArticleFavoriteControlle
 
 func InitializeArticleCommentController() (*controller.ArticleCommentController, error) {
 	articleCommentDAO := dao.NewArticleCommentDAO()
-	articleCommentService := service.NewArticleCommentService(articleCommentDAO)
+	articleDAO := dao.NewArticleDAO()
+	articleCommentService := service.NewArticleCommentService(articleCommentDAO, articleDAO)
 	articleCommentController := controller.NewArticleCommentController(articleCommentService)
 	return articleCommentController, nil
 }

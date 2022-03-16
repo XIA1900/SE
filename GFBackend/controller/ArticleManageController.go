@@ -49,7 +49,7 @@ var ArticleManageControllerSet = wire.NewSet(
 // @Failure 400 {string} string "<b>Failure</b>. Bad Parameters / Info Error"
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
 // @Router /article/create [post]
-func (articleManageController ArticleManageController) CreateArticle(context *gin.Context) {
+func (articleManageController *ArticleManageController) CreateArticle(context *gin.Context) {
 	var articleInfo entity.ArticleInfo
 	err1 := context.ShouldBindJSON(&articleInfo)
 	if err1 != nil {
@@ -84,7 +84,7 @@ func (articleManageController ArticleManageController) CreateArticle(context *gi
 // @Success 200 {string} string "<b>Success</b>. Delete Successfully no matter what"
 // @Failure 400 {string} string "<b>Failure</b>. Bad Parameters"
 // @Router /article/delete/:id [get]
-func (articleManageController ArticleManageController) DeleteArticle(context *gin.Context) {
+func (articleManageController *ArticleManageController) DeleteArticle(context *gin.Context) {
 	id, err1 := strconv.Atoi(context.Param("id"))
 	if err1 != nil {
 		context.JSON(400, "Bad Parameters")
@@ -111,7 +111,7 @@ func (articleManageController ArticleManageController) DeleteArticle(context *gi
 // @Failure 400 {string} string "<b>Failure</b>. Bad Parameters / Not Found"
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
 // @Router /article/update [post]
-func (articleManageController ArticleManageController) UpdateArticleTitleOrContentByID(context *gin.Context) {
+func (articleManageController *ArticleManageController) UpdateArticleTitleOrContentByID(context *gin.Context) {
 	var articleInfo entity.ArticleInfo
 	err1 := context.ShouldBindJSON(&articleInfo)
 	if err1 != nil {
@@ -137,7 +137,7 @@ func (articleManageController ArticleManageController) UpdateArticleTitleOrConte
 
 // GetOneArticleByID godoc
 // @Summary Get One Article By ID
-// @Description need token in cookie, need ID
+// @Description need token in cookie, need ID, /getone?id=
 // @Tags Article Manage
 // @Accept json
 // @Produce json
@@ -146,12 +146,23 @@ func (articleManageController ArticleManageController) UpdateArticleTitleOrConte
 // @Success 200 {object} entity.ArticleDetail "<b>Success</b>. Get Successfully"
 // @Failure 400 {string} string "<b>Failure</b>. Bad Parameters / Not Found"
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
-// @Router /article/getone/:id [get]
-func (articleManageController ArticleManageController) GetOneArticleByID(context *gin.Context) {
-	//id, err1 := strconv.Atoi(context.Param("id"))
-	//if err1 != nil {
-	//	context.JSON(400, "Bad Parameters")
-	//	return
-	//}
+// @Router /article/getone [get]
+func (articleManageController *ArticleManageController) GetOneArticleByID(context *gin.Context) {
+	id, err1 := strconv.Atoi(context.Query("id"))
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
 
+	articleDetail, err2 := articleManageController.articleManageService.GetOneArticleByID(id)
+	if err2 != nil {
+		if strings.Contains(err2.Error(), "400") {
+			context.JSON(400, "Bad Parameters / Not Found")
+			return
+		}
+		context.JSON(500, "Server Internal Error")
+		return
+	}
+
+	context.JSON(200, articleDetail)
 }

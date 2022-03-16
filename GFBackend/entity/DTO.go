@@ -62,12 +62,25 @@ type ArticleOfES struct {
 	Content  string `json:"Content"`
 }
 
+type ArticlesForSearching struct {
+	PageNO      int           `form:"PageNO" json:"PageNO" example:1`
+	PageSize    int           `form:"PageSize" json:"PageSize" example:5`
+	TotalPageNO int64         `form:"TotalPageNO" json:"TotalPageNO" example:5`
+	Articles    []ArticleOfES `form:"Articles" json:"Articles"`
+}
+
 type ArticleInfo struct {
 	ID          int    `form:"ID" json:"ID" example:12`
 	Title       string `form:"Title" json:"Title" example:"Gator Forum"`
 	TypeID      int    `form:"TypeID" json:"TypeID" example:11`
 	CommunityID int    `form:"CommunityID" json:"CommunityID" example:10`
 	Content     string `form:"Content" json:"Content" example:"I love UF"`
+}
+
+type ArticleSearchInfo struct {
+	PageNO      int    `form:"PageNO" json:"PageNO" example:1`
+	PageSize    int    `form:"PageSize" json:"PageSize" example:5`
+	SearchWords string `form:"SearchWords" json:"SearchWords" example:"Balala Magic Girl"`
 }
 
 type ArticleDetail struct {

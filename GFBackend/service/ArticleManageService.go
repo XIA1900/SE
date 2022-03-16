@@ -20,6 +20,7 @@ type IArticleManageService interface {
 	DeleteArticleByID(id int, operator string) error
 	UpdateArticleTitleOrContentByID(articleInfo entity.ArticleInfo, operator string) error
 	GetOneArticleByID(id int) (entity.ArticleDetail, error)
+	GetArticlesBySearchWords(articleSearchInfo entity.ArticleSearchInfo) (entity.ArticlesForSearching, error)
 }
 
 type ArticleManageService struct {
@@ -236,5 +237,24 @@ func (articleManageService *ArticleManageService) GetOneArticleByID(id int) (ent
 		NumLike:       countLikeOfArticle,
 		NumFavorite:   countFavoriteOfArticle,
 		NumComment:    countCommentsOfArticle,
+	}, nil
+}
+
+func (articleManageService *ArticleManageService) GetArticlesBySearchWords(articleSearchInfo entity.ArticleSearchInfo) (entity.ArticlesForSearching, error) {
+	searchWords := articleSearchInfo.SearchWords
+	from := (articleSearchInfo.PageNO - 1) * articleSearchInfo.PageSize
+	size := articleSearchInfo.PageSize
+	documents, count := elasticsearch.MixSearchDocuments(searchWords, from, size)
+
+	totalPageNO := count / int64(size)
+	if count%int64(size) != 0 {
+		totalPageNO += 1
+	}
+
+	return entity.ArticlesForSearching{
+		PageNO:      articleSearchInfo.PageNO,
+		PageSize:    articleSearchInfo.PageSize,
+		TotalPageNO: totalPageNO,
+		Articles:    documents,
 	}, nil
 }

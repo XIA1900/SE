@@ -166,3 +166,30 @@ func (articleManageController *ArticleManageController) GetOneArticleByID(contex
 
 	context.JSON(200, articleDetail)
 }
+
+// GetArticlesBySearchWords godoc
+// @Summary Get Articles By Search Words
+// @Description need token in cookie, need article search info
+// @Tags Article Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param ArticleSearchInfo body entity.ArticleSearchInfo true "Article ID"
+// @Success 200 {object} entity.ArticlesForSearching "<b>Success</b>. Get Successfully"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters / Not Found"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /article/search [get]
+func (articleManageController *ArticleManageController) GetArticlesBySearchWords(context *gin.Context) {
+	var articleSearchInfo entity.ArticleSearchInfo
+	err1 := context.ShouldBindJSON(&articleSearchInfo)
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	articlesForSearching, err2 := articleManageController.articleManageService.GetArticlesBySearchWords(articleSearchInfo)
+	if err2 != nil {
+		context.JSON(500, "Internal Server Error")
+		return
+	}
+	context.JSON(200, articlesForSearching)
+}

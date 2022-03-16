@@ -153,6 +153,57 @@
                 }
             }
         },
+        "/article/search": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article search info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Get Articles By Search Words",
+                "parameters": [
+                    {
+                        "description": "Article ID",
+                        "name": "ArticleSearchInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleSearchInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticlesForSearching"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/article/update": {
             "post": {
                 "security": [
@@ -2254,6 +2305,38 @@
                 }
             }
         },
+        "entity.ArticleOfES": {
+            "type": "object",
+            "properties": {
+                "Content": {
+                    "type": "string"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "Title": {
+                    "type": "string"
+                },
+                "Username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.ArticleSearchInfo": {
+            "type": "object",
+            "properties": {
+                "PageNO": {
+                    "type": "integer"
+                },
+                "PageSize": {
+                    "type": "integer"
+                },
+                "SearchWords": {
+                    "type": "string",
+                    "example": "Balala Magic Girl"
+                }
+            }
+        },
         "entity.ArticleType": {
             "type": "object",
             "properties": {
@@ -2284,6 +2367,26 @@
                 "TypeName": {
                     "type": "string",
                     "example": "Movie"
+                }
+            }
+        },
+        "entity.ArticlesForSearching": {
+            "type": "object",
+            "properties": {
+                "Articles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.ArticleOfES"
+                    }
+                },
+                "PageNO": {
+                    "type": "integer"
+                },
+                "PageSize": {
+                    "type": "integer"
+                },
+                "TotalPageNO": {
+                    "type": "integer"
                 }
             }
         },

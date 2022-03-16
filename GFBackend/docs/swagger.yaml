@@ -90,6 +90,27 @@ definitions:
       TypeID:
         type: integer
     type: object
+  entity.ArticleOfES:
+    properties:
+      Content:
+        type: string
+      ID:
+        type: integer
+      Title:
+        type: string
+      Username:
+        type: string
+    type: object
+  entity.ArticleSearchInfo:
+    properties:
+      PageNO:
+        type: integer
+      PageSize:
+        type: integer
+      SearchWords:
+        example: Balala Magic Girl
+        type: string
+    type: object
   entity.ArticleType:
     properties:
       create_Day:
@@ -111,6 +132,19 @@ definitions:
       TypeName:
         example: Movie
         type: string
+    type: object
+  entity.ArticlesForSearching:
+    properties:
+      Articles:
+        items:
+          $ref: '#/definitions/entity.ArticleOfES'
+        type: array
+      PageNO:
+        type: integer
+      PageSize:
+        type: integer
+      TotalPageNO:
+        type: integer
     type: object
   entity.Community:
     properties:
@@ -341,6 +375,38 @@ paths:
       security:
       - ApiAuthToken: []
       summary: Get One Article By ID
+      tags:
+      - Article Manage
+  /article/search:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need article search info
+      parameters:
+      - description: Article ID
+        in: body
+        name: ArticleSearchInfo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.ArticleSearchInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticlesForSearching'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Articles By Search Words
       tags:
       - Article Manage
   /article/update:

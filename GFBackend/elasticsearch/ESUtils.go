@@ -57,13 +57,13 @@ func DeleteDocument(articleOfES entity.ArticleOfES) bool {
 	return true
 }
 
-func MixSearchDocuments(searchingWord string, from, size int) []entity.ArticleOfES {
-	multiMatchQuery := elastic.NewMultiMatchQuery(searchingWord, "Username", "Title", "Content")
+func MixSearchDocuments(searchingWords string, from, size int) ([]entity.ArticleOfES, int64) {
+	multiMatchQuery := elastic.NewMultiMatchQuery(searchingWords, "Username", "Title", "Content")
 	searchResult, err1 := ESClient.Search().
 		Index(indexName).Query(multiMatchQuery).From(from).Size(size).Pretty(true).Do(ctx)
 	if err1 != nil {
 		fmt.Println(err1.Error())
-		return nil
+		return nil, 0
 	}
 	var articles []entity.ArticleOfES
 	if searchResult.Hits.TotalHits.Value > 0 {
@@ -72,12 +72,12 @@ func MixSearchDocuments(searchingWord string, from, size int) []entity.ArticleOf
 			err2 := json.Unmarshal(hit.Source, &article)
 			if err2 != nil {
 				fmt.Println(err2.Error())
-				return nil
+				return nil, 0
 			}
 			articles = append(articles, article)
 		}
 	} else {
-		return nil
+		return nil, 0
 	}
-	return articles
+	return articles, searchResult.Hits.TotalHits.Value
 }

@@ -10,101 +10,6 @@
     "host": "http://167.71.166.120:10010",
     "basePath": "/gf/api",
     "paths": {
-        "/article/create": {
-            "post": {
-                "security": [
-                    {
-                        "ApiAuthToken": []
-                    }
-                ],
-                "description": "need token in cookie, need new article info",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Article Manage"
-                ],
-                "summary": "Create a new article",
-                "parameters": [
-                    {
-                        "description": "Create New Article",
-                        "name": "ArticleInfo",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entity.ArticleInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
-                        "schema": {
-                            "$ref": "#/definitions/entity.ResponseMsg"
-                        }
-                    },
-                    "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
-                        "schema": {
-                            "$ref": "#/definitions/entity.ResponseMsg"
-                        }
-                    },
-                    "500": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
-                        "schema": {
-                            "$ref": "#/definitions/entity.ResponseMsg"
-                        }
-                    }
-                }
-            }
-        },
-        "/article/search/:SearchWord": {
-            "post": {
-                "description": "need token in cookie, need new article search info",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Article Manage"
-                ],
-                "summary": "Create a new article",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Search Word",
-                        "name": "SearchWord",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
-                        "schema": {
-                            "$ref": "#/definitions/entity.ResponseMsg"
-                        }
-                    },
-                    "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
-                        "schema": {
-                            "$ref": "#/definitions/entity.ResponseMsg"
-                        }
-                    },
-                    "500": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
-                        "schema": {
-                            "$ref": "#/definitions/entity.ResponseMsg"
-                        }
-                    }
-                }
-            }
-        },
         "/articlelike/create/:ArticleID": {
             "get": {
                 "security": [
@@ -1602,27 +1507,6 @@
         }
     },
     "definitions": {
-        "entity.ArticleInfo": {
-            "type": "object",
-            "properties": {
-                "CommunityID": {
-                    "type": "integer",
-                    "example": 12
-                },
-                "Content": {
-                    "type": "string",
-                    "example": "I love UF"
-                },
-                "Title": {
-                    "type": "string",
-                    "example": "Gator Forum"
-                },
-                "TypeID": {
-                    "type": "integer",
-                    "example": 12
-                }
-            }
-        },
         "entity.ArticleType": {
             "type": "object",
             "properties": {

@@ -15,6 +15,7 @@ type IArticleTypeDAO interface {
 	RemoveArticleType(typeName string) error
 	UpdateDescription(typeName, newDescription string) error
 	GetArticleTypes() ([]entity.ArticleType, error)
+	GetArticleTypeByID(id int) (entity.ArticleType, error)
 }
 
 type ArticleTypeDAO struct {
@@ -65,4 +66,13 @@ func (articleTypeDAO *ArticleTypeDAO) GetArticleTypes() ([]entity.ArticleType, e
 		return nil, result.Error
 	}
 	return articleTypes, nil
+}
+
+func (articleTypeDAO *ArticleTypeDAO) GetArticleTypeByID(id int) (entity.ArticleType, error) {
+	var articleType entity.ArticleType
+	result := articleTypeDAO.db.Where("ID = ?", id).First(&articleType)
+	if result.Error != nil {
+		return entity.ArticleType{}, result.Error
+	}
+	return articleType, nil
 }

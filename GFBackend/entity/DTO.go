@@ -63,6 +63,7 @@ type ArticleOfES struct {
 }
 
 type ArticleInfo struct {
+	ID          int    `form:"ID" json:"ID" example:"Gator Forum"`
 	Title       string `form:"Title" json:"Title" example:"Gator Forum"`
 	TypeID      int    `form:"TypeID" json:"TypeID" example:"12"`
 	CommunityID int    `form:"CommunityID" json:"CommunityID" example:"12"`

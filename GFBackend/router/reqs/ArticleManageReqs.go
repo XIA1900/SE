@@ -9,7 +9,8 @@ func InitArticleManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 	articleTypeManageReqsGroup := baseGroup.Group("/article")
 	{
 		articleTypeManageReqsGroup.POST("/create", articleManageController.CreateArticle)
-		articleTypeManageReqsGroup.GET("/search/:SearchWord", articleManageController.SearchArticle)
+		articleTypeManageReqsGroup.GET("/delete/:id", articleManageController.DeleteArticle)
+		articleTypeManageReqsGroup.POST("/update", articleManageController.UpdateArticleTitleOrContentByID)
 	}
 
 	return articleTypeManageReqsGroup

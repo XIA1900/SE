@@ -17,7 +17,7 @@ This is SE Projects By Center of the Road Group
 
 
 
-# Gator-forum
+# Gator Forum
 
 ## Introduction
 Basically, Gator-forum is similar to any other forums, like Stack Overflow, Douban, Quora, Reddit… But we hope it is more student-life related instead of society-related or limited in specific field.

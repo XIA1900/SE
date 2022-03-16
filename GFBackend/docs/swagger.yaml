@@ -1,5 +1,20 @@
 basePath: /gf/api
 definitions:
+  entity.ArticleInfo:
+    properties:
+      CommunityID:
+        type: integer
+      Content:
+        example: I love UF
+        type: string
+      ID:
+        type: integer
+      Title:
+        example: Gator Forum
+        type: string
+      TypeID:
+        type: integer
+    type: object
   entity.ArticleType:
     properties:
       create_Day:
@@ -153,6 +168,97 @@ info:
   title: Gator Forum Backend API
   version: "1.0"
 paths:
+  /article/create:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need new article info
+      parameters:
+      - description: Create New Article
+        in: body
+        name: ArticleInfo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.ArticleInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Create a new article
+      tags:
+      - Article Manage
+  /article/delete/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need new article id
+      parameters:
+      - description: Article ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Delete Successfully no matter what
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Delete Article By ID
+      tags:
+      - Article Manage
+  /article/update:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need ID, Title, Content in article info only
+      parameters:
+      - description: Update Article Info
+        in: body
+        name: ArticleInfo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.ArticleInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Update Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Update Article Title or Content By ID
+      tags:
+      - Article Manage
   /articlelike/create/:ArticleID:
     get:
       consumes:

@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"GFBackend/entity"
 	"GFBackend/model"
 	"gorm.io/gorm"
 	"sync"
@@ -10,6 +11,7 @@ var articleCommentDAOLock sync.Mutex
 var articleCommentDAO *ArticleCommentDAO
 
 type IArticleCommentDAO interface {
+	CountCommentsOfArticle(articleID int) (int64, error)
 }
 
 type ArticleCommentDAO struct {
@@ -27,4 +29,13 @@ func NewArticleCommentDAO() *ArticleCommentDAO {
 		articleCommentDAOLock.Unlock()
 	}
 	return articleCommentDAO
+}
+
+func (articleCommentDAO *ArticleCommentDAO) CountCommentsOfArticle(articleID int) (int64, error) {
+	var count int64
+	result := articleCommentDAO.db.Model(&entity.ArticleLike{}).Where("ArticleID = ?", articleID).Count(&count)
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	return count, nil
 }

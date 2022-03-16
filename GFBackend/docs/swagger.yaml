@@ -23,6 +23,30 @@ definitions:
         example: music
         type: string
     type: object
+  entity.ArticleFavorite:
+    properties:
+      articleID:
+        type: integer
+      favoriteDay:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  entity.ArticleFavoritesInfo:
+    properties:
+      ArticleFavorites:
+        items:
+          $ref: '#/definitions/entity.ArticleFavorite'
+        type: array
+      PageNO:
+        type: integer
+      PageSize:
+        type: integer
+      TotalPageNO:
+        type: integer
+    type: object
   entity.ArticleInfo:
     properties:
       CommunityID:
@@ -313,6 +337,64 @@ paths:
       summary: Update Article Title or Content By ID
       tags:
       - Article Manage
+  /articlefavorite/create/:articleID:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need article id
+      parameters:
+      - description: "233333"
+        in: query
+        name: ArticleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found or Existed
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User Favorite Article
+      tags:
+      - Article Favorite Manage
+  /articlefavorite/delete/:articleID:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need article id
+      parameters:
+      - description: "233333"
+        in: query
+        name: ArticleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Delete Favorite Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User cancel favorite Article
+      tags:
+      - Article Favorite Manage
   /articlelike/create/:articleID:
     post:
       consumes:
@@ -345,7 +427,7 @@ paths:
       tags:
       - Article Like Manage
   /articlelike/delete/:articleID:
-    get:
+    post:
       consumes:
       - application/json
       description: need token in cookie, need article id
@@ -368,9 +450,45 @@ paths:
             type: string
       security:
       - ApiAuthToken: []
-      summary: User like Article
+      summary: User cancel like Article
       tags:
       - Article Like Manage
+  /articlelike/get:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie
+      parameters:
+      - description: 233333, /articlelike/get?pageno=&pagesize=
+        in: query
+        name: pageno
+        required: true
+        type: integer
+      - description: 233333, /articlelike/get?pageno=&pagesize=
+        in: query
+        name: pagesize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticleFavoritesInfo'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User like Article
+      tags:
+      - Article Favorite Manage
   /articletype/all:
     get:
       consumes:

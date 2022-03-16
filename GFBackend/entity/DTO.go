@@ -80,3 +80,10 @@ type ArticleDetail struct {
 	NumFavorite   int    `form:"NumFavorite" json:"NumFavorite" example:66`
 	NumComment    int    `form:"NumComment" json:"NumComment" example:99`
 }
+
+type ArticleFavoritesInfo struct {
+	PageNO           int               `form:"PageNO" json:"PageNO" example:1`
+	PageSize         int               `form:"PageSize" json:"PageSize" example:5`
+	TotalPageNO      int64             `form:"TotalPageNO" json:"TotalPageNO" example:5`
+	ArticleFavorites []ArticleFavorite `form:"ArticleFavorites" json:"ArticleFavorites"`
+}

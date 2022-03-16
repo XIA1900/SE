@@ -91,7 +91,8 @@ CREATE TABLE Article_Favorite (
     Username VARCHAR(20) NOT NULL,
     ArticleID INT NOT NULL,
     FavoriteDay DATE,
-    PRIMARY KEY (ID)
+    PRIMARY KEY (ID),
+    UNIQUE KEY LikePair(Username, ArticleID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE Article_Comment (

@@ -64,7 +64,8 @@ func InitializeArticleLikeController() (*controller.ArticleLikeController, error
 
 func InitializeArticleFavoriteController() (*controller.ArticleFavoriteController, error) {
 	articleFavoriteDAO := dao.NewArticleFavoriteDAO()
-	articleFavoriteService := service.NewArticleFavoriteService(articleFavoriteDAO)
+	articleDAO := dao.NewArticleDAO()
+	articleFavoriteService := service.NewArticleFavoriteService(articleFavoriteDAO, articleDAO)
 	articleFavoriteController := controller.NewArticleFavoriteController(articleFavoriteService)
 	return articleFavoriteController, nil
 }

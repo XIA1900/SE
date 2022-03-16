@@ -72,7 +72,7 @@ func (articleLikeController ArticleLikeController) CreateLike(context *gin.Conte
 }
 
 // DeleteLike godoc
-// @Summary User like Article
+// @Summary User cancel like Article
 // @Description need token in cookie, need article id
 // @Tags Article Like Manage
 // @Accept json
@@ -81,7 +81,7 @@ func (articleLikeController ArticleLikeController) CreateLike(context *gin.Conte
 // @Param ArticleID query integer true "233333"
 // @Success 200 {string} string "<b>Success</b>. Delete Like Successfully"
 // @Failure 400 {string} string "<b>Failure</b>. Bad Parameters"
-// @Router /articlelike/delete/:articleID [get]
+// @Router /articlelike/delete/:articleID [post]
 func (articleLikeController ArticleLikeController) DeleteLike(context *gin.Context) {
 	id, err1 := strconv.Atoi(context.Param("articleID"))
 	if err1 != nil {

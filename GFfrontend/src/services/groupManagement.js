@@ -27,13 +27,21 @@ export async function getNotification(params) {
 
 export async function updateGroupInfo(params) {
     return request('/api/updateGroupInfo', {
-        params,
+        data: params,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
     });
 }
 
 export async function deleteGroup(params) {
     return request('/api/deleteGroup', {
-        params,
+        data: params,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
     });
 }
   

@@ -80,13 +80,13 @@ function getNotification(req, res) {
 }
 
 function deleteGroup(req, res) {
-    return res.send({
+    res.send({
         msg: 'Ok',
     });
 }
 
 function updateGroupInfo(req, res) {
-    return res.send({
+    res.send({
         msg: 'Ok',
     });
 }
@@ -97,7 +97,15 @@ export default {
     'GET /api/getAnalysis': getAnalysis,
     'GET /api/getMember': getMember,
     'GET /api/getNotification': getNotification,
-    'POST /api/updateGroupInfo': updateGroupInfo,
-    'POST /api/deletGroup': deleteGroup,
+    'POST /api/updateGroupInfo': async (req, res) => {
+        res.send({
+          message: 'Ok',
+        });
+      },
+    'POST /api/deletGroup': async (req, res) => {
+        res.send({
+          message: 'Ok',
+        });
+      },
   };
   

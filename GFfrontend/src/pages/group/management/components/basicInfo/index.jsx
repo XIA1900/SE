@@ -14,7 +14,7 @@ import { getBasicInfo, updateGroupInfo, deleteGroup } from '@/services/groupMana
 import styles from './BaseView.less';
 
 const groupName = history.location.search.substring(1);
-
+const formRef = React.createRef();
 // 头像组件 方便以后独立，增加裁剪之类的功能
 const AvatarView = ({ avatar }) => (
   <>
@@ -40,6 +40,7 @@ const BasicInfo = () => {
     });
   });
   const list = basicInfo?.list || [];
+  
 
   const getAvatarURL = () => {
     if (list) {
@@ -50,8 +51,8 @@ const BasicInfo = () => {
     return '';
   };
 
-  const handleUpdate = async (values) => {
-      console.log(values);
+  const handleUpdate = async () => {
+      console.log(this.formRef.current);
       const msg = "Ok";
       //const msg = updateGroupInfo({values,}).msg;
       if(msg === 'Ok') {
@@ -65,7 +66,7 @@ const BasicInfo = () => {
       }
   };
 
-  const handleDelete = async (values) => {
+  const handleDelete = async () => {
     const msg = deleteGroup({groupName,}).msg;
       if(msg === 'Ok') {
 
@@ -84,16 +85,16 @@ const BasicInfo = () => {
         <>
           <div className={styles.left}>
             <ProForm
+              useRef={formRef}
               layout="vertical"
-              //onFinish={handleFinish}
               submitter={{
                 render: (props, doms) => {
                   return [
-                    ...doms,
-                    <Button htmlType="button" type="primary" onClick={handleUpdate} key="update">
+                    //...doms,
+                    <Button htmlType="button" type="primary" onClick={(e) => handleUpdate(newGroupName, newDescription)} key="update">
                       Update Information
                     </Button>,
-                    <Button htmlType="button" type="primary" danger onClick={handleDelete} key="delete">
+                    <Button htmlType="button" danger onClick={handleDelete} key="delete">
                       Delete Group
                     </Button>,
                   ];

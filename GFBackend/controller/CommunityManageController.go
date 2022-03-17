@@ -341,5 +341,3 @@ func (communityManageController *CommunityManageController) LeaveCommunityByID(c
 	_ = communityManageController.communityManageService.LeaveCommunityByID(id, username)
 	context.JSON(200, "Leave Successfully")
 }
-
-//push test

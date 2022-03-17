@@ -2,6 +2,7 @@ package model
 
 import (
 	"GFBackend/config"
+	"GFBackend/entity"
 	"GFBackend/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -43,7 +44,7 @@ func createDB() *gorm.DB {
 func dataInit() {
 	// default admin user
 	salt := utils.GetRandomString(6)
-	defaultAdmin := User{
+	defaultAdmin := entity.User{
 		Username: "boss",
 		Password: utils.EncodeInMD5("007" + salt),
 		Salt:     salt,

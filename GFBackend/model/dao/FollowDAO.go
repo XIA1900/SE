@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"GFBackend/entity"
 	"GFBackend/model"
 	"gorm.io/gorm"
 	"sync"
@@ -11,9 +12,9 @@ var followDAOLock sync.Mutex
 var followDAO *FollowDAO
 
 type IFollowDAO interface {
-	GetOneFollow(followee, follower string) (model.Follow, error)
-	GetFollowers(username string) ([]model.Follow, error)
-	GetFollowees(username string) ([]model.Follow, error)
+	GetOneFollow(followee, follower string) (entity.Follow, error)
+	GetFollowers(username string) ([]entity.Follow, error)
+	GetFollowees(username string) ([]entity.Follow, error)
 	UserFollow(followee, follower string) error
 	UserUnfollow(followee, follower string) error
 	DeleteFollow(username string) error
@@ -36,8 +37,8 @@ func NewFollowDAO() *FollowDAO {
 	return followDAO
 }
 
-func (followDAO *FollowDAO) GetOneFollow(followee, follower string) (model.Follow, error) {
-	follow := model.Follow{}
+func (followDAO *FollowDAO) GetOneFollow(followee, follower string) (entity.Follow, error) {
+	follow := entity.Follow{}
 	result := followDAO.db.Where("Followee = ? AND Follower = ?", followee, follower).First(&follow)
 	if result.Error != nil {
 		return follow, result.Error
@@ -45,8 +46,8 @@ func (followDAO *FollowDAO) GetOneFollow(followee, follower string) (model.Follo
 	return follow, nil
 }
 
-func (followDAO *FollowDAO) GetFollowers(username string) ([]model.Follow, error) {
-	var follows []model.Follow
+func (followDAO *FollowDAO) GetFollowers(username string) ([]entity.Follow, error) {
+	var follows []entity.Follow
 	result := followDAO.db.Where("followee = ?", username).Find(&follows)
 	if result.Error != nil {
 		return nil, result.Error
@@ -54,8 +55,8 @@ func (followDAO *FollowDAO) GetFollowers(username string) ([]model.Follow, error
 	return follows, nil
 }
 
-func (followDAO *FollowDAO) GetFollowees(username string) ([]model.Follow, error) {
-	var follows []model.Follow
+func (followDAO *FollowDAO) GetFollowees(username string) ([]entity.Follow, error) {
+	var follows []entity.Follow
 	result := followDAO.db.Where("follower = ?", username).Find(&follows)
 	if result.Error != nil {
 		return nil, result.Error
@@ -64,7 +65,7 @@ func (followDAO *FollowDAO) GetFollowees(username string) ([]model.Follow, error
 }
 
 func (followDAO *FollowDAO) UserFollow(followee, follower string) error {
-	follow := model.Follow{
+	follow := entity.Follow{
 		Followee:   followee,
 		Follower:   follower,
 		Create_Day: time.Now().Format("2006-01-02"),
@@ -79,7 +80,7 @@ func (followDAO *FollowDAO) UserFollow(followee, follower string) error {
 }
 
 func (followDAO *FollowDAO) UserUnfollow(followee, follower string) error {
-	result := followDAO.db.Where("Followee = ? and Follower = ?", followee, follower).Delete(&model.Follow{})
+	result := followDAO.db.Where("Followee = ? and Follower = ?", followee, follower).Delete(&entity.Follow{})
 	if result.Error != nil {
 		return result.Error
 	}
@@ -88,7 +89,7 @@ func (followDAO *FollowDAO) UserUnfollow(followee, follower string) error {
 
 func (followDAO *FollowDAO) DeleteFollow(username string) error {
 	var result *gorm.DB
-	result = followDAO.db.Where("Follower = ?", username).Delete(&model.Follow{})
+	result = followDAO.db.Where("Follower = ?", username).Delete(&entity.Follow{})
 	if result.Error != nil {
 		return result.Error
 	}

@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"GFBackend/entity"
 	"GFBackend/model"
 	"gorm.io/gorm"
 	"sync"
@@ -14,7 +15,7 @@ type ISpaceDAO interface {
 	DeleteSpaceInfo(username string) error
 	UpdateUsed(username string, remainingSize float64) error
 	UpdateCapacity(username string, newCapacity float64) error
-	GetSpaceInfo(username string) (model.Space, error)
+	GetSpaceInfo(username string) (entity.Space, error)
 }
 
 type SpaceDAO struct {
@@ -36,7 +37,7 @@ func NewSpaceDAO() *SpaceDAO {
 
 func (spaceDAO *SpaceDAO) CreateSpaceInfo(username string) error {
 	var result *gorm.DB
-	result = spaceDAO.db.Select("Username").Create(&model.Space{
+	result = spaceDAO.db.Select("Username").Create(&entity.Space{
 		Username: username,
 	})
 	if result.Error != nil {
@@ -47,7 +48,7 @@ func (spaceDAO *SpaceDAO) CreateSpaceInfo(username string) error {
 
 func (spaceDAO *SpaceDAO) DeleteSpaceInfo(username string) error {
 	var result *gorm.DB
-	result = spaceDAO.db.Where("Username = ?", username).Delete(&model.Space{})
+	result = spaceDAO.db.Where("Username = ?", username).Delete(&entity.Space{})
 	if result.Error != nil {
 		return result.Error
 	}
@@ -56,7 +57,7 @@ func (spaceDAO *SpaceDAO) DeleteSpaceInfo(username string) error {
 
 func (spaceDAO *SpaceDAO) UpdateUsed(username string, usedSize float64) error {
 	var result *gorm.DB
-	result = spaceDAO.db.Model(&model.Space{}).Where("username = ?", username).Update("Remaining", usedSize)
+	result = spaceDAO.db.Model(&entity.Space{}).Where("username = ?", username).Update("Remaining", usedSize)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -65,15 +66,15 @@ func (spaceDAO *SpaceDAO) UpdateUsed(username string, usedSize float64) error {
 
 func (spaceDAO *SpaceDAO) UpdateCapacity(username string, newCapacity float64) error {
 	var result *gorm.DB
-	result = spaceDAO.db.Model(&model.Space{}).Where("username = ?", username).Update("Capacity", newCapacity)
+	result = spaceDAO.db.Model(&entity.Space{}).Where("username = ?", username).Update("Capacity", newCapacity)
 	if result.Error != nil {
 		return result.Error
 	}
 	return nil
 }
 
-func (spaceDAO *SpaceDAO) GetSpaceInfo(username string) (model.Space, error) {
-	spaceInfo := model.Space{}
+func (spaceDAO *SpaceDAO) GetSpaceInfo(username string) (entity.Space, error) {
+	spaceInfo := entity.Space{}
 	result := spaceDAO.db.Where("username = ?", username).First(&spaceInfo)
 	if result.Error != nil {
 		return spaceInfo, result.Error

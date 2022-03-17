@@ -20,3 +20,7 @@ func EncodeInMD5(s string) string {
 	hasher.Write([]byte(s))
 	return hex.EncodeToString(hasher.Sum(nil))
 }
+
+func GetCurrentDate() string {
+	return time.Now().Format("2006-01-02")
+}

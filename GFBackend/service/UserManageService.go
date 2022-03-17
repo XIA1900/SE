@@ -2,9 +2,9 @@ package service
 
 import (
 	"GFBackend/cache"
+	"GFBackend/entity"
 	"GFBackend/logger"
 	"GFBackend/middleware/auth"
-	"GFBackend/model"
 	"GFBackend/model/dao"
 	"GFBackend/utils"
 	"errors"
@@ -23,7 +23,7 @@ type IUserManageService interface {
 	Logout(username string) error
 	UpdatePassword(username, password, newPassword string) error
 	Delete(username string) error
-	Update(userInfo model.User) error
+	Update(userInfo entity.User) error
 	Follow(followee, follower string) error
 	Unfollow(followee, follower string) error
 	GetFollowers(username string) ([]string, error)
@@ -31,19 +31,21 @@ type IUserManageService interface {
 }
 
 type UserManageService struct {
-	userDAO   dao.IUserDAO
-	followDAO dao.IFollowDAO
-	spaceDAO  dao.ISpaceDAO
+	communityMemberDAO dao.ICommunityMemberDAO
+	userDAO            dao.IUserDAO
+	followDAO          dao.IFollowDAO
+	spaceDAO           dao.ISpaceDAO
 }
 
-func NewUserManageService(userDAO dao.IUserDAO, followDAO dao.IFollowDAO, spaceDAO dao.ISpaceDAO) *UserManageService {
+func NewUserManageService(userDAO dao.IUserDAO, followDAO dao.IFollowDAO, spaceDAO dao.ISpaceDAO, communityMemberDAO dao.ICommunityMemberDAO) *UserManageService {
 	if userManageService == nil {
 		userManageServiceLock.Lock()
 		if userManageService == nil {
 			userManageService = &UserManageService{
-				userDAO:   userDAO,
-				followDAO: followDAO,
-				spaceDAO:  spaceDAO,
+				userDAO:            userDAO,
+				followDAO:          followDAO,
+				spaceDAO:           spaceDAO,
+				communityMemberDAO: communityMemberDAO,
 			}
 		}
 		userManageServiceLock.Unlock()
@@ -58,12 +60,14 @@ var UserManageServiceSet = wire.NewSet(
 	wire.Bind(new(dao.IFollowDAO), new(*dao.FollowDAO)),
 	dao.NewSpaceDAO,
 	wire.Bind(new(dao.ISpaceDAO), new(*dao.SpaceDAO)),
+	dao.NewCommunityMemberDAO,
+	wire.Bind(new(dao.ICommunityMemberDAO), new(*dao.CommunityMemberDAO)),
 	NewUserManageService,
 )
 
 func (userManageService *UserManageService) Register(username, password string, forAdmin bool) error {
 	salt := utils.GetRandomString(6)
-	newUser := model.User{
+	newUser := entity.User{
 		Username: username,
 		Password: utils.EncodeInMD5(password + salt),
 		Salt:     salt,
@@ -183,6 +187,12 @@ func (userManageService *UserManageService) Delete(username string) error {
 		return errors.New("500")
 	}
 
+	deleteCommunityMemberError := userManageService.communityMemberDAO.DeleteByMember(username)
+	if deleteCommunityMemberError != nil {
+		logger.AppLogger.Error(deleteCommunityMemberError.Error())
+		return errors.New("500")
+	}
+
 	_, CasbinAddPolicyError := auth.CasbinEnforcer.DeleteUser(username)
 	if CasbinAddPolicyError != nil {
 		logger.AppLogger.Error(fmt.Sprintf("Delete User Policy Error: %s", CasbinAddPolicyError.Error()))
@@ -193,7 +203,7 @@ func (userManageService *UserManageService) Delete(username string) error {
 
 }
 
-func (userManageService *UserManageService) Update(userInfo model.User) error {
+func (userManageService *UserManageService) Update(userInfo entity.User) error {
 	err := userManageService.userDAO.UpdateUserByUsername(userInfo)
 	if err != nil {
 		logger.AppLogger.Error(err.Error())

@@ -43,6 +43,14 @@ func addInitialPolicy() {
 
 	// /community/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/create", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/delete/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/update", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/numberofmember/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getone/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getbyname", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/get", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/join/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/leave/:id", "GET")
 
 	// /file/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/upload", "POST")
@@ -51,11 +59,35 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/scan", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/space/info", "POST")
 
+	// /article/..
+	CasbinEnforcer.AddPolicy("regular", basePath+"/article/create", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/article/delete/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/article/update", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/article/getone", "GET")
+
+	// /articlelike/..
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlelike/create/:articleID", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlelike/delete/:articleID", "POST")
+
+	// /articlefavorite/..
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/create/:articleID", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/delete/:articleID", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/get", "GET")
+
+	// /articlecomment/..
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlecomment/create", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlecomment/delete/:id", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlecomment/getbyarticleid", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlecomment/getsub", "GET")
+
 	// admin
 	CasbinEnforcer.AddGroupingPolicy("admin", "regular") // admin extends regular
 	CasbinEnforcer.AddPolicy("admin", basePath+"/user/admin/register", "POST")
 	CasbinEnforcer.AddPolicy("admin", basePath+"/user/admin/delete", "POST")
 	CasbinEnforcer.AddPolicy("admin", basePath+"/file/space/update", "POST")
+	CasbinEnforcer.AddPolicy("admin", basePath+"/articletype/create", "POST")
+	CasbinEnforcer.AddPolicy("admin", basePath+"/articletype/remove", "POST")
+	CasbinEnforcer.AddPolicy("admin", basePath+"/articletype/update", "POST")
 
 	// default admin user
 	CasbinEnforcer.AddGroupingPolicy("boss", "admin")

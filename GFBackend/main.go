@@ -30,5 +30,6 @@ func main() {
 	cache.InitRedis()
 	auth.InitCasbin()
 	elasticsearch.InitES()
+	defer elasticsearch.ESClient.Stop()
 	router.RunServer()
 }

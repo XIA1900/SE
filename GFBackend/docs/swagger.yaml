@@ -1,10 +1,166 @@
 basePath: /gf/api
 definitions:
-  controller.CommunityInfo:
+  entity.ArticleComment:
     properties:
-      Create_Time:
-        example: "2020-01-01"
+      articleID:
+        type: integer
+      commentID:
+        type: integer
+      content:
         type: string
+      createDay:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  entity.ArticleCommentsInfo:
+    properties:
+      ArticleComments:
+        items:
+          $ref: '#/definitions/entity.ArticleComment'
+        type: array
+      PageNO:
+        type: integer
+      PageSize:
+        type: integer
+      TotalPageNO:
+        type: integer
+    type: object
+  entity.ArticleDetail:
+    properties:
+      CommunityName:
+        example: big bang theory
+        type: string
+      Content:
+        example: I love UF
+        type: string
+      ID:
+        type: integer
+      NumComment:
+        type: integer
+      NumFavorite:
+        type: integer
+      NumLike:
+        type: integer
+      Title:
+        example: Gator Forum
+        type: string
+      TypeName:
+        example: music
+        type: string
+    type: object
+  entity.ArticleFavorite:
+    properties:
+      articleID:
+        type: integer
+      favoriteDay:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  entity.ArticleFavoritesInfo:
+    properties:
+      ArticleFavorites:
+        items:
+          $ref: '#/definitions/entity.ArticleFavorite'
+        type: array
+      PageNO:
+        type: integer
+      PageSize:
+        type: integer
+      TotalPageNO:
+        type: integer
+    type: object
+  entity.ArticleInfo:
+    properties:
+      CommunityID:
+        type: integer
+      Content:
+        example: I love UF
+        type: string
+      ID:
+        type: integer
+      Title:
+        example: Gator Forum
+        type: string
+      TypeID:
+        type: integer
+    type: object
+  entity.ArticleOfES:
+    properties:
+      Content:
+        type: string
+      ID:
+        type: integer
+      Title:
+        type: string
+      Username:
+        type: string
+    type: object
+  entity.ArticleSearchInfo:
+    properties:
+      PageNO:
+        type: integer
+      PageSize:
+        type: integer
+      SearchWords:
+        example: Balala Magic Girl
+        type: string
+    type: object
+  entity.ArticleType:
+    properties:
+      create_Day:
+        type: string
+      creator:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      typeName:
+        type: string
+    type: object
+  entity.ArticleTypeInfo:
+    properties:
+      Description:
+        example: Discussion of Movie
+        type: string
+      TypeName:
+        example: Movie
+        type: string
+    type: object
+  entity.ArticlesForSearching:
+    properties:
+      Articles:
+        items:
+          $ref: '#/definitions/entity.ArticleOfES'
+        type: array
+      PageNO:
+        type: integer
+      PageSize:
+        type: integer
+      TotalPageNO:
+        type: integer
+    type: object
+  entity.Community:
+    properties:
+      createDay:
+        type: string
+      creator:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  entity.CommunityInfo:
+    properties:
       Creator:
         example: test1
         type: string
@@ -17,34 +173,27 @@ definitions:
       id:
         type: integer
     type: object
-  controller.CommunityResponseMsg:
+  entity.CommunityNameFuzzyMatch:
     properties:
-      code:
-        example: 200
+      Name:
+        example: community1
+        type: string
+      PageNO:
         type: integer
-      create_time:
-        example: create_time
-        type: string
-      creator:
-        example: creator
-        type: string
-      description:
-        example: description
-        type: string
-      id:
-        example: 1
-        type: integer
-      message:
-        example: process successfully
-        type: string
-      name:
-        example: name
-        type: string
-      num_member:
-        example: 1
+      PageSize:
         type: integer
     type: object
-  controller.NewUserInfo:
+  entity.NewCommentInfo:
+    properties:
+      ArticleID:
+        type: integer
+      CommentID:
+        type: integer
+      Content:
+        example: It is true
+        type: string
+    type: object
+  entity.NewUserInfo:
     properties:
       Birthday:
         example: 2022-02-30
@@ -62,7 +211,7 @@ definitions:
         example: jamesbond21
         type: string
     type: object
-  controller.ResponseMsg:
+  entity.ResponseMsg:
     properties:
       code:
         example: 200
@@ -71,7 +220,18 @@ definitions:
         example: process successfully
         type: string
     type: object
-  controller.UserFiles:
+  entity.Space:
+    properties:
+      capacity:
+        type: number
+      id:
+        type: integer
+      used:
+        type: number
+      username:
+        type: string
+    type: object
+  entity.UserFiles:
     properties:
       Filenames:
         example:
@@ -88,7 +248,7 @@ definitions:
         example: process successfully
         type: string
     type: object
-  controller.UserFollows:
+  entity.UserFollows:
     properties:
       Users:
         example:
@@ -105,7 +265,7 @@ definitions:
         example: process successfully
         type: string
     type: object
-  controller.UserInfo:
+  entity.UserInfo:
     properties:
       ForAdmin:
         type: boolean
@@ -119,17 +279,6 @@ definitions:
         example: jamesbond21
         type: string
     type: object
-  model.Space:
-    properties:
-      capacity:
-        type: number
-      id:
-        type: integer
-      used:
-        type: number
-      username:
-        type: string
-    type: object
 host: http://167.71.166.120:10010
 info:
   contact: {}
@@ -138,124 +287,858 @@ info:
   title: Gator Forum Backend API
   version: "1.0"
 paths:
+  /article/create:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need new article info
+      parameters:
+      - description: Create New Article
+        in: body
+        name: ArticleInfo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.ArticleInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Create a new article
+      tags:
+      - Article Manage
+  /article/delete/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need new article id
+      parameters:
+      - description: Article ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Delete Successfully no matter what
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Delete Article By ID
+      tags:
+      - Article Manage
+  /article/getone:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need ID, /getone?id=
+      parameters:
+      - description: Article ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticleDetail'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get One Article By ID
+      tags:
+      - Article Manage
+  /article/search:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need article search info
+      parameters:
+      - description: Article ID
+        in: body
+        name: ArticleSearchInfo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.ArticleSearchInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticlesForSearching'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Articles By Search Words
+      tags:
+      - Article Manage
+  /article/update:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need ID, Title, Content in article info only
+      parameters:
+      - description: Update Article Info
+        in: body
+        name: ArticleInfo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.ArticleInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Update Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Update Article Title or Content By ID
+      tags:
+      - Article Manage
+  /articlecomment/create:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need new article comment info, if comment
+        to article, no need CommentID
+      parameters:
+      - description: Create New Comment
+        in: body
+        name: ArticleInfo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.NewCommentInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Create a new comment to article or comment
+      tags:
+      - Article Comment Manage
+  /articlecomment/delete/:id:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need comment ID
+      parameters:
+      - description: Comment ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Delete Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Delete a comment by id
+      tags:
+      - Article Comment Manage
+  /articlecomment/getbyarticleid:
+    get:
+      consumes:
+      - application/json
+      description: 'need token in cookie, need article id, pageno, pagesize in url:
+        "/articlecomment/getbyarticleid?id=&pageno=&pagesize="'
+      parameters:
+      - description: Article ID
+        in: query
+        name: articleid
+        required: true
+        type: string
+      - description: PageNO
+        in: query
+        name: pageno
+        required: true
+        type: string
+      - description: PageSize
+        in: query
+        name: pagesize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Search Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticleCommentsInfo'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: get direct comments by article id
+      tags:
+      - Article Comment Manage
+  /articlecomment/getsub:
+    get:
+      consumes:
+      - application/json
+      description: 'need token in cookie, need article id, comment id, pageno, pagesize
+        in url: "/articlecomment/getbyarticleid?articleid=&commentid=&pageno=&pagesize="'
+      parameters:
+      - description: Article ID
+        in: query
+        name: articleid
+        required: true
+        type: string
+      - description: Comment ID
+        in: query
+        name: commentid
+        required: true
+        type: string
+      - description: PageNO
+        in: query
+        name: pageno
+        required: true
+        type: string
+      - description: PageSize
+        in: query
+        name: pagesize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Search Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticleCommentsInfo'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Info Error
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: get sub comments by article id and comment id
+      tags:
+      - Article Comment Manage
+  /articlefavorite/create/:articleID:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need article id
+      parameters:
+      - description: "233333"
+        in: query
+        name: ArticleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found or Existed
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User Favorite Article
+      tags:
+      - Article Favorite Manage
+  /articlefavorite/delete/:articleID:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need article id
+      parameters:
+      - description: "233333"
+        in: query
+        name: ArticleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Delete Favorite Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User cancel favorite Article
+      tags:
+      - Article Favorite Manage
+  /articlelike/create/:articleID:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need article id
+      parameters:
+      - description: "233333"
+        in: query
+        name: ArticleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User like Article
+      tags:
+      - Article Like Manage
+  /articlelike/delete/:articleID:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need article id
+      parameters:
+      - description: "233333"
+        in: query
+        name: ArticleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Delete Like Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User cancel like Article
+      tags:
+      - Article Like Manage
+  /articlelike/get:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie
+      parameters:
+      - description: 233333, /articlelike/get?pageno=&pagesize=
+        in: query
+        name: pageno
+        required: true
+        type: integer
+      - description: 233333, /articlelike/get?pageno=&pagesize=
+        in: query
+        name: pagesize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticleFavoritesInfo'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User like Article
+      tags:
+      - Article Favorite Manage
+  /articletype/all:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Successfully
+          schema:
+            items:
+              $ref: '#/definitions/entity.ArticleType'
+            type: array
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Type has existed
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+      summary: Get All Article Types
+      tags:
+      - Article Type Manage
+  /articletype/create:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need new article type information, cannot
+        repeat type name
+      parameters:
+      - description: New Article Type Information
+        in: body
+        name: ArticleTypeInfo
+        required: true
+        schema:
+          $ref: '#/definitions/entity.ArticleTypeInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Type has existed
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Create a new article type by admin user
+      tags:
+      - Article Type Manage
+  /articletype/remove:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need type name
+      parameters:
+      - description: Type Name
+        in: body
+        name: TypeName
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Remove Successfully
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Admin user removes article type
+      tags:
+      - Article Type Manage
+  /articletype/update:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need type name & new description
+      parameters:
+      - description: Type Name
+        in: body
+        name: TypeName
+        required: true
+        schema:
+          type: string
+      - description: Description
+        in: body
+        name: Description
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Update Successfully
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Admin user update article type description
+      tags:
+      - Article Type Manage
   /community/create:
     post:
       consumes:
       - application/json
-      description: need strings creator & community name & description & create time
+      description: need token in cookie, need community name & description only
       parameters:
       - description: Create a new community needs Creator, Name & Description.
         in: body
         name: CommunityInfo
         required: true
         schema:
-          $ref: '#/definitions/controller.CommunityInfo'
+          $ref: '#/definitions/entity.CommunityInfo'
       produces:
       - application/json
       responses:
         "201":
           description: <b>Success</b>. Create Community Success
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or Community already exists
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
       summary: Create a new Community
       tags:
       - Community Manage
-  /community/deletecommunitybyid:
-    post:
-      consumes:
-      - application/json
-      description: need ID
-      parameters:
-      - description: need ID
-        in: body
-        name: communityInfo
-        required: true
-        schema:
-          $ref: '#/definitions/controller.CommunityInfo'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: <b>Success</b>. Update Password Successfully
-          schema:
-            $ref: '#/definitions/controller.CommunityResponseMsg'
-        "400":
-          description: <b>Failure</b>. Bad Parameters
-          schema:
-            $ref: '#/definitions/controller.CommunityResponseMsg'
-        "500":
-          description: <b>Failure</b>. Server Internal Error.
-          schema:
-            $ref: '#/definitions/controller.CommunityResponseMsg'
-      summary: Delete community information
-      tags:
-      - Community Manage
-  /community/getcommunity:
+  /community/delete/:id:
     get:
       consumes:
       - application/json
-      description: need strings community name
+      description: need token in cookie, need community id only
       parameters:
-      - description: Create a new community needs Creator, Name & Description.
+      - description: Community ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. No matter whether delete successfully, Return
+            Success
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Create a new Community
+      tags:
+      - Community Manage
+  /community/get:
+    get:
+      consumes:
+      - application/json
+      description: 'need token in cookie, need page info: PageNO, pageSize only'
+      parameters:
+      - description: Get Communities Info
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CommunityNameFuzzyMatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Community Success
+          schema:
+            items:
+              $ref: '#/definitions/entity.Community'
+            type: array
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Communities By Name Fuzzy Match
+      tags:
+      - Community Manage
+  /community/getone/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need community ID
+      parameters:
+      - description: Community ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Community Success
+          schema:
+            $ref: '#/definitions/entity.Community'
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get One Community By ID
+      tags:
+      - Community Manage
+  /community/getonebyname:
+    get:
+      consumes:
+      - application/json
+      description: 'need token in cookie, need community Name, page info: PageNO,
+        pageSize'
+      parameters:
+      - description: Community Name Fuzzy Match Info
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CommunityNameFuzzyMatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Community Success
+          schema:
+            items:
+              $ref: '#/definitions/entity.Community'
+            type: array
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Communities By Name Fuzzy Match
+      tags:
+      - Community Manage
+  /community/join/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need community ID
+      parameters:
+      - description: Community ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Join Community Success
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found or Existed
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Join One Community By ID
+      tags:
+      - Community Manage
+  /community/leave/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need community ID
+      parameters:
+      - description: Community ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Leave Community Success
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Join One Community By ID
+      tags:
+      - Community Manage
+  /community/numberofmember/:id:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need community ID
+      parameters:
+      - description: Community ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Return an Integer
+        "400":
+          description: <b>Failure</b>. Return 0
+        "500":
+          description: <b>Failure</b>. Return 0
+      security:
+      - ApiAuthToken: []
+      summary: Get the Number Of Member
+      tags:
+      - Community Manage
+  /community/update:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, need community ID & description only, only
+        by creator
+      parameters:
+      - description: Update Community Description.
         in: body
         name: CommunityInfo
         required: true
         schema:
-          $ref: '#/definitions/controller.CommunityInfo'
+          $ref: '#/definitions/entity.CommunityInfo'
       produces:
       - application/json
       responses:
         "201":
-          description: <b>Success</b>. Create Community Success
+          description: <b>Success</b>. Update Success
           schema:
-            $ref: '#/definitions/controller.CommunityResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
-          description: <b>Failure</b>. Bad Parameters or Community already exists
+          description: <b>Failure</b>. Bad Parameters or Not Creator or Not Found
           schema:
-            $ref: '#/definitions/controller.CommunityResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.CommunityResponseMsg'
-      summary: Get the Community by Name
-      tags:
-      - Community Manage
-  /community/updatecommunitybyid:
-    post:
-      consumes:
-      - application/json
-      description: need ID, Name, Description
-      parameters:
-      - description: need ID, Name, Description
-        in: body
-        name: communityInfo
-        required: true
-        schema:
-          $ref: '#/definitions/controller.CommunityInfo'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: <b>Success</b>. Update Password Successfully
-          schema:
-            $ref: '#/definitions/controller.CommunityResponseMsg'
-        "400":
-          description: <b>Failure</b>. Bad Parameters
-          schema:
-            $ref: '#/definitions/controller.CommunityResponseMsg'
-        "500":
-          description: <b>Failure</b>. Server Internal Error.
-          schema:
-            $ref: '#/definitions/controller.CommunityResponseMsg'
-      summary: Update community information including Name, Description
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Update Community Description By ID
       tags:
       - Community Manage
   /file/delete:
@@ -276,15 +1159,15 @@ paths:
         "201":
           description: <b>Success</b>. Delete Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or Other
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Delete User File, only have permission to delete self data
@@ -308,15 +1191,15 @@ paths:
         "201":
           description: <b>Success</b>. Upload Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or No Enough Space
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: User Downloads File, only self data for now
@@ -333,15 +1216,15 @@ paths:
         "201":
           description: <b>Success</b>. Scan Successfully
           schema:
-            $ref: '#/definitions/controller.UserFiles'
+            $ref: '#/definitions/entity.UserFiles'
         "400":
           description: <b>Failure</b>. Bad Parameters.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Scan User files
@@ -358,15 +1241,15 @@ paths:
         "201":
           description: <b>Success</b>. Get User Space Info Successfully
           schema:
-            $ref: '#/definitions/model.Space'
+            $ref: '#/definitions/entity.Space'
         "400":
           description: <b>Failure</b>. Bad Parameters or User not exists.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Browse User Space Info
@@ -396,15 +1279,15 @@ paths:
         "201":
           description: <b>Success</b>. Update Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or Other
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Expand User Capacity, only admin user can do this
@@ -422,15 +1305,15 @@ paths:
         "201":
           description: <b>Success</b>. Upload Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or No Enough Space
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: User Uploads files including images, video etc.
@@ -466,15 +1349,15 @@ paths:
         "201":
           description: <b>Success</b>. Update Password Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Admin delete Users, cannot self delete
@@ -493,22 +1376,22 @@ paths:
         name: UserInfo
         required: true
         schema:
-          $ref: '#/definitions/controller.UserInfo'
+          $ref: '#/definitions/entity.UserInfo'
       produces:
       - application/json
       responses:
         "201":
           description: <b>Success</b>. User Register Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or User Has Existed
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Register a new Admin User
@@ -532,16 +1415,16 @@ paths:
         "201":
           description: <b>Success</b>. Follow Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or User not exist or User has
             followed.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: User Follow other users
@@ -565,15 +1448,15 @@ paths:
         "201":
           description: <b>Success</b>. Search Successfully
           schema:
-            $ref: '#/definitions/controller.UserFollows'
+            $ref: '#/definitions/entity.UserFollows'
         "400":
           description: <b>Failure</b>. Bad Parameters.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Get User's followees
@@ -584,28 +1467,21 @@ paths:
       consumes:
       - application/json
       description: need token in cookie
-      parameters:
-      - description: username in post request body
-        in: body
-        name: username
-        required: true
-        schema:
-          type: string
       produces:
       - application/json
       responses:
         "201":
           description: <b>Success</b>. Search Successfully
           schema:
-            $ref: '#/definitions/controller.UserFollows'
+            $ref: '#/definitions/entity.UserFollows'
         "400":
           description: <b>Failure</b>. Bad Parameters.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Get User's followers
@@ -622,22 +1498,22 @@ paths:
         name: UserInfo
         required: true
         schema:
-          $ref: '#/definitions/controller.UserInfo'
+          $ref: '#/definitions/entity.UserInfo'
       produces:
       - application/json
       responses:
         "200":
           description: <b>Success</b>. User Login Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or Username / Password incorrect
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       summary: Admin / Regular User login
       tags:
       - User Manage
@@ -672,22 +1548,22 @@ paths:
         name: UserInfo
         required: true
         schema:
-          $ref: '#/definitions/controller.UserInfo'
+          $ref: '#/definitions/entity.UserInfo'
       produces:
       - application/json
       responses:
         "201":
           description: <b>Success</b>. Update Password Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or Password not match
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Admin & Regular Update Password
@@ -705,22 +1581,22 @@ paths:
         name: UserInfo
         required: true
         schema:
-          $ref: '#/definitions/controller.UserInfo'
+          $ref: '#/definitions/entity.UserInfo'
       produces:
       - application/json
       responses:
         "201":
           description: <b>Success</b>. User Register Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or User Has Existed
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       summary: Register a new Regular User
       tags:
       - User Manage
@@ -742,15 +1618,15 @@ paths:
         "201":
           description: <b>Success</b>. Unfollow Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters or User not exist.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: User Unfollow other users
@@ -769,22 +1645,22 @@ paths:
         name: NewUserInfo
         required: true
         schema:
-          $ref: '#/definitions/controller.NewUserInfo'
+          $ref: '#/definitions/entity.NewUserInfo'
       produces:
       - application/json
       responses:
         "201":
           description: <b>Success</b>. Update Password Successfully
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "400":
           description: <b>Failure</b>. Bad Parameters
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
         "500":
           description: <b>Failure</b>. Server Internal Error.
           schema:
-            $ref: '#/definitions/controller.ResponseMsg'
+            $ref: '#/definitions/entity.ResponseMsg'
       security:
       - ApiAuthToken: []
       summary: Update user information including Nickname, Birthday(yyyy-mm-dd), Gender(male

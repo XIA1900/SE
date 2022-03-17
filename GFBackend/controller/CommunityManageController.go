@@ -1,11 +1,12 @@
 package controller
 
 import (
-	"GFBackend/model"
+	"GFBackend/entity"
+	"GFBackend/middleware/auth"
 	"GFBackend/service"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
-	"net/http"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -31,196 +32,312 @@ func NewCommunityManageController(communityManageService service.ICommunityManag
 }
 
 var CommunityManageSet = wire.NewSet(
-	service.CommunityServiceSet,
+	service.CommunityManageServiceSet,
 	wire.Bind(new(service.ICommunityManageService), new(*service.CommunityManageService)),
 	NewCommunityManageController,
 )
 
 // CreateCommunity godoc
 // @Summary Create a new Community
-// @Description need strings creator & community name & description & create time
+// @Description need token in cookie, need community name & description only
 // @Tags Community Manage
 // @Accept json
 // @Produce json
-// @Param CommunityInfo body controller.CommunityInfo true "Create a new community needs Creator, Name & Description."
-// @Success 201 {object} controller.ResponseMsg "<b>Success</b>. Create Community Success"
-// @Failure 400 {object} controller.ResponseMsg "<b>Failure</b>. Bad Parameters or Community already exists"
-// @Failure 500 {object} controller.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Security ApiAuthToken
+// @Param CommunityInfo body entity.CommunityInfo true "Create a new community needs Creator, Name & Description."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Create Community Success"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or Community already exists"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /community/create [post]
 func (communityManageController *CommunityManageController) CreateCommunity(context *gin.Context) {
-	var communityInfo CommunityInfo
-	if err := context.ShouldBindJSON(&communityInfo); err != nil {
-		er := ResponseMsg{
-			Code:    http.StatusBadRequest,
-			Message: "Bad Parameters",
-		}
-		context.JSON(http.StatusBadRequest, er)
+	respMsg := entity.ResponseMsg{
+		Code:    400,
+		Message: "Bad Parameters or Community already exists",
+	}
+
+	var communityInfo entity.CommunityInfo
+	if err1 := context.ShouldBindJSON(&communityInfo); err1 != nil {
+		context.JSON(respMsg.Code, respMsg)
 		return
 	}
 
-	err := communityManageController.communityManageService.CreateCommunity(communityInfo.Creator, communityInfo.Name, communityInfo.Description, communityInfo.Create_Time)
-	if err != nil {
-		if strings.Contains(err.Error(), "Duplicate") {
-			er := ResponseMsg{
-				Code:    http.StatusBadRequest,
-				Message: "Community already exists",
-			}
-			context.JSON(http.StatusBadRequest, er)
-		} else {
-			er := ResponseMsg{
-				Code:    http.StatusInternalServerError,
-				Message: "Internal Server Error",
-			}
-			context.JSON(http.StatusInternalServerError, er)
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+
+	err2 := communityManageController.communityManageService.CreateCommunity(username, communityInfo.Name, communityInfo.Description)
+	if err2 != nil {
+		if strings.Contains(err2.Error(), "400") {
+			context.JSON(respMsg.Code, respMsg)
+			return
 		}
+		respMsg.Code = 500
+		respMsg.Message = "Internal Server Error"
+		context.JSON(respMsg.Code, respMsg)
 		return
 	}
-	context.JSON(http.StatusCreated, ResponseMsg{
-		Code:    http.StatusCreated,
-		Message: "Create Community Success",
-	})
+
+	respMsg.Code = 200
+	respMsg.Message = "Create Community Success"
+	context.JSON(respMsg.Code, respMsg)
+	return
 }
 
-// GetCommunityByName godoc
-// @Summary Get the Community by Name
-// @Description need strings community name
+// DeleteCommunityByID godoc
+// @Summary Create a new Community
+// @Description need token in cookie, need community id only
 // @Tags Community Manage
 // @Accept json
 // @Produce json
-// @Param CommunityInfo body controller.CommunityInfo true "Create a new community needs Creator, Name & Description."
-// @Success 201 {object} controller.CommunityResponseMsg "<b>Success</b>. Create Community Success"
-// @Failure 400 {object} controller.CommunityResponseMsg "<b>Failure</b>. Bad Parameters or Community already exists"
-// @Failure 500 {object} controller.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
-// @Router /community/getcommunity [get]
-func (communityManageController *CommunityManageController) GetCommunityByName(context *gin.Context) {
-	var communityInfo CommunityInfo
-	if err := context.ShouldBindJSON(&communityInfo); err != nil {
-		er := CommunityResponseMsg{
-			Code:    http.StatusBadRequest,
-			Message: "Bad Parameters",
-		}
-		context.JSON(http.StatusBadRequest, er)
+// @Security ApiAuthToken
+// @Param id query string true "Community ID"
+// @Success 200 {object} entity.ResponseMsg "<b>Success</b>. No matter whether delete successfully, Return Success"
+// @Router /community/delete/:id [get]
+func (communityManageController *CommunityManageController) DeleteCommunityByID(context *gin.Context) {
+	respMsg := entity.ResponseMsg{
+		Code:    200,
+		Message: "Delete Successfully",
+	}
+	context.JSON(respMsg.Code, respMsg.Message)
+	id, err1 := strconv.Atoi(context.Param("id"))
+	if err1 != nil {
 		return
 	}
 
-	resCommunity, resUser, err := communityManageController.communityManageService.GetCommunityByName(communityInfo.Name)
-	if err != nil {
-		if strings.Contains(err.Error(), "not found") {
-			er := CommunityResponseMsg{
-				Code:    http.StatusBadRequest,
-				Message: "Community not found",
-			}
-			context.JSON(http.StatusBadRequest, er)
-		} else {
-			er := CommunityResponseMsg{
-				Code:    http.StatusInternalServerError,
-				Message: "Internal Server Error",
-			}
-			context.JSON(http.StatusInternalServerError, er)
-		}
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+	err2 := communityManageController.communityManageService.DeleteCommunityByID(id, username)
+	if err2 != nil {
 		return
 	}
-	context.JSON(http.StatusOK, CommunityResponseMsg{
-		Code:        http.StatusOK,
-		Message:     "Get Community Success",
-		ID:          resCommunity.ID,
-		Creator:     resUser.Nickname,
-		Name:        resCommunity.Name,
-		Description: resCommunity.Description,
-		Num_Member:  resCommunity.Num_Member,
-		Create_Time: resCommunity.Create_Time,
-	})
 }
 
-// UpdateCommunity godoc
-// @Summary Update community information including Name, Description
-// @Description need ID, Name, Description
+// UpdateDescriptionByID godoc
+// @Summary Update Community Description By ID
+// @Description need token in cookie, need community ID & description only, only by creator
 // @Tags Community Manage
 // @Accept json
 // @Produce json
-// @Param communityInfo body controller.CommunityInfo true "need ID, Name, Description"
-// @Success 201 {object} controller.CommunityResponseMsg "<b>Success</b>. Update Password Successfully"
-// @Failure 400 {object} controller.CommunityResponseMsg "<b>Failure</b>. Bad Parameters"
-// @Failure 500 {object} controller.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
-// @Router /community/updatecommunitybyid [post]
-func (communityManageController *CommunityManageController) UpdateCommunity(context *gin.Context) {
-	var communityInfo CommunityInfo
-	if err := context.ShouldBindJSON(&communityInfo); err != nil {
-		er := ResponseMsg{
-			Code:    http.StatusBadRequest,
-			Message: "Bad Parameters",
-		}
-		context.JSON(http.StatusBadRequest, er)
+// @Security ApiAuthToken
+// @Param CommunityInfo body entity.CommunityInfo true "Update Community Description."
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Update Success"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or Not Creator or Not Found"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /community/update [post]
+func (communityManageController *CommunityManageController) UpdateDescriptionByID(context *gin.Context) {
+	respMsg := entity.ResponseMsg{
+		Code:    400,
+		Message: "Bad Parameters or Not Creator or Not Found",
+	}
+
+	var communityInfo entity.CommunityInfo
+	if err1 := context.ShouldBindJSON(&communityInfo); err1 != nil {
+		context.JSON(respMsg.Code, respMsg)
 		return
 	}
-	updateInfo := model.Community{
-		ID:          communityInfo.ID,
-		Name:        communityInfo.Name,
-		Description: communityInfo.Description,
-	}
-	err := communityManageController.communityManageService.UpdateCommunity(updateInfo)
-	if err != nil {
-		if strings.Contains(err.Error(), "not found") {
-			er := ResponseMsg{
-				Code:    http.StatusBadRequest,
-				Message: "Community not found",
-			}
-			context.JSON(http.StatusBadRequest, er)
-		} else {
-			er := ResponseMsg{
-				Code:    http.StatusInternalServerError,
-				Message: "Internal Server Error",
-			}
-			context.JSON(http.StatusInternalServerError, er)
+
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+
+	err2 := communityManageController.communityManageService.UpdateDescriptionByID(communityInfo.ID, communityInfo.Description, username)
+	if err2 != nil {
+		if strings.Contains(err2.Error(), "400") {
+			context.JSON(respMsg.Code, respMsg)
+			return
 		}
+		respMsg.Code = 500
+		respMsg.Message = "Internal Server Error"
+		context.JSON(respMsg.Code, respMsg)
 		return
 	}
-	context.JSON(http.StatusOK, ResponseMsg{
-		Code:    http.StatusOK,
-		Message: "Update Community Success",
-	})
+
+	respMsg.Code = 200
+	respMsg.Message = "Create Community Success"
+	context.JSON(respMsg.Code, respMsg)
+	return
 }
 
-// DeleteCommunity godoc
-// @Summary Delete community information
-// @Description need ID
+// GetNumberOfMemberByID godoc
+// @Summary Get the Number Of Member
+// @Description need token in cookie, need community ID
 // @Tags Community Manage
 // @Accept json
 // @Produce json
-// @Param communityInfo body controller.CommunityInfo true "need ID"
-// @Success 201 {object} controller.CommunityResponseMsg "<b>Success</b>. Update Password Successfully"
-// @Failure 400 {object} controller.CommunityResponseMsg "<b>Failure</b>. Bad Parameters"
-// @Failure 500 {object} controller.CommunityResponseMsg "<b>Failure</b>. Server Internal Error."
-// @Router /community/deletecommunitybyid [post]
-func (communityManageController *CommunityManageController) DeleteCommunity(context *gin.Context) {
-	var communityInfo CommunityInfo
-	if err := context.ShouldBindJSON(&communityInfo); err != nil {
-		er := ResponseMsg{
-			Code:    http.StatusBadRequest,
-			Message: "Bad Parameters",
-		}
-		context.JSON(http.StatusBadRequest, er)
+// @Security ApiAuthToken
+// @Param id query string true "Community ID"
+// @Success 200 "<b>Success</b>. Return an Integer"
+// @Failure 400 "<b>Failure</b>. Return 0"
+// @Failure 500 "<b>Failure</b>. Return 0"
+// @Router /community/numberofmember/:id [get]
+func (communityManageController *CommunityManageController) GetNumberOfMemberByID(context *gin.Context) {
+	id, err1 := strconv.Atoi(context.Param("id"))
+	if err1 != nil {
+		context.JSON(400, 0)
 		return
 	}
-	err := communityManageController.communityManageService.DeleteCommunity(communityInfo.ID)
-	if err != nil {
-		if strings.Contains(err.Error(), "not found") {
-			er := ResponseMsg{
-				Code:    http.StatusBadRequest,
-				Message: "Community not found",
-			}
-			context.JSON(http.StatusBadRequest, er)
+
+	number, err2 := communityManageController.communityManageService.GetNumberOfMembersByID(id)
+	if err2 != nil {
+		context.JSON(400, 0)
+		return
+	}
+
+	context.JSON(200, number)
+}
+
+// GetOneCommunityByID godoc
+// @Summary Get One Community By ID
+// @Description need token in cookie, need community ID
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param id query string true "Community ID"
+// @Success 200 {object} entity.Community "<b>Success</b>. Get Community Success"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /community/getone/:id [get]
+func (communityManageController *CommunityManageController) GetOneCommunityByID(context *gin.Context) {
+	id, err1 := strconv.Atoi(context.Param("id"))
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+
+	community, err2 := communityManageController.communityManageService.GetOneCommunityByID(id)
+	if err2 != nil {
+		context.JSON(500, "Internal Server Error")
+		return
+	}
+
+	context.JSON(200, community)
+}
+
+// GetCommunitiesByNameFuzzyMatch godoc
+// @Summary Get Communities By Name Fuzzy Match
+// @Description need token in cookie, need community Name, page info: PageNO, pageSize
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param name body entity.CommunityNameFuzzyMatch true "Community Name Fuzzy Match Info"
+// @Success 200 {object} []entity.Community "<b>Success</b>. Get Community Success"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters or Not Found"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /community/getonebyname [get]
+func (communityManageController *CommunityManageController) GetCommunitiesByNameFuzzyMatch(context *gin.Context) {
+	var communityNameFuzzyMatch entity.CommunityNameFuzzyMatch
+	err1 := context.ShouldBindJSON(&communityNameFuzzyMatch)
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+
+	communities, totalPageNO, err2 := communityManageController.communityManageService.
+		GetCommunitiesByNameFuzzyMatch(communityNameFuzzyMatch.Name, communityNameFuzzyMatch.PageNO, communityNameFuzzyMatch.PageSize)
+	if err2 != nil {
+		return
+	}
+
+	communitiesInfo := entity.CommunitiesInfo{
+		PageNO:      communityNameFuzzyMatch.PageNO,
+		PageSize:    communityNameFuzzyMatch.PageSize,
+		TotalPageNO: totalPageNO,
+		Communities: communities,
+	}
+	context.JSON(200, communitiesInfo)
+}
+
+// GetCommunities godoc
+// @Summary Get Communities By Name Fuzzy Match
+// @Description need token in cookie, need page info: PageNO, pageSize only
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param name body entity.CommunityNameFuzzyMatch true "Get Communities Info"
+// @Success 200 {object} []entity.Community "<b>Success</b>. Get Community Success"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters or Not Found"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /community/get [get]
+func (communityManageController *CommunityManageController) GetCommunities(context *gin.Context) {
+	var communityNameFuzzyMatch entity.CommunityNameFuzzyMatch
+	err1 := context.ShouldBindJSON(&communityNameFuzzyMatch)
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+
+	communities, totalPageNO, err2 := communityManageController.communityManageService.
+		GetCommunities(communityNameFuzzyMatch.PageNO, communityNameFuzzyMatch.PageSize)
+	if err2 != nil {
+		return
+	}
+
+	communitiesInfo := entity.CommunitiesInfo{
+		PageNO:      communityNameFuzzyMatch.PageNO,
+		PageSize:    communityNameFuzzyMatch.PageSize,
+		TotalPageNO: totalPageNO,
+		Communities: communities,
+	}
+	context.JSON(200, communitiesInfo)
+}
+
+// JoinCommunityByID godoc
+// @Summary Join One Community By ID
+// @Description need token in cookie, need community ID
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param id query string true "Community ID"
+// @Success 200 {string} string "<b>Success</b>. Join Community Success"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters or Not Found or Existed"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /community/join/:id [get]
+func (communityManageController *CommunityManageController) JoinCommunityByID(context *gin.Context) {
+	id, err1 := strconv.Atoi(context.Param("id"))
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters or Not Found or Existed")
+		return
+	}
+
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+
+	err2 := communityManageController.communityManageService.JoinCommunityByID(id, username)
+	if err2 != nil {
+		if strings.Contains(err2.Error(), "400") {
+			context.JSON(400, "Bad Parameters or Not Found or Existed")
 		} else {
-			er := ResponseMsg{
-				Code:    http.StatusInternalServerError,
-				Message: "Internal Server Error",
-			}
-			context.JSON(http.StatusInternalServerError, er)
+			context.JSON(500, "Server Internal Error")
 		}
 		return
 	}
-	context.JSON(http.StatusOK, ResponseMsg{
-		Code:    http.StatusOK,
-		Message: "Delete Community Success",
-	})
+
+	context.JSON(200, "Join Successfully")
+}
+
+// LeaveCommunityByID godoc
+// @Summary Join One Community By ID
+// @Description need token in cookie, need community ID
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param id query string true "Community ID"
+// @Success 200 {string} string "<b>Success</b>. Leave Community Success"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters"
+// @Router /community/leave/:id [get]
+func (communityManageController *CommunityManageController) LeaveCommunityByID(context *gin.Context) {
+	id, err1 := strconv.Atoi(context.Param("id"))
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters or Not Found or Existed")
+		return
+	}
+
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+
+	_ = communityManageController.communityManageService.LeaveCommunityByID(id, username)
+	context.JSON(200, "Leave Successfully")
 }

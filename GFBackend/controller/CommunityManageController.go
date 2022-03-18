@@ -341,3 +341,24 @@ func (communityManageController *CommunityManageController) LeaveCommunityByID(c
 	_ = communityManageController.communityManageService.LeaveCommunityByID(id, username)
 	context.JSON(200, "Leave Successfully")
 }
+
+func (communityManageController *CommunityManageController) GetMembersByCommunityIDs(context *gin.Context) {
+	var CommunityMembersInfo entity.CommunityMembersInfo
+	err1 := context.ShouldBindJSON(&CommunityMembersInfo)
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	communityMembers, err2 := communityManageController.communityManageService.
+		GetMembersByCommunityIDs(CommunityMembersInfo.CommunityID, CommunityMembersInfo.PageNO, CommunityMembersInfo.PageSize)
+	if err2 != nil {
+		return
+	}
+	newCommunityMembersInfo := entity.CommunityMembersInfo{
+		PageNO:      CommunityMembersInfo.PageNO,
+		PageSize:    CommunityMembersInfo.PageSize,
+		CommunityID: CommunityMembersInfo.CommunityID,
+		Members:     communityMembers,
+	}
+	context.JSON(200, newCommunityMembersInfo)
+}

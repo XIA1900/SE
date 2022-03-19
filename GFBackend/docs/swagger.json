@@ -1063,6 +1063,58 @@
                 }
             }
         },
+        "/community/getmember": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community IDs",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get Members By Community IDs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Members Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.CommunityMember"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/community/getone/:id": {
             "get": {
                 "security": [
@@ -2427,6 +2479,20 @@
                 },
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "entity.CommunityMember": {
+            "type": "object",
+            "properties": {
+                "communityID": {
+                    "type": "integer"
+                },
+                "joinDay": {
+                    "type": "string"
+                },
+                "member": {
+                    "type": "string"
                 }
             }
         },

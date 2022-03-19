@@ -17,6 +17,7 @@ func InitCommunityManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 		communityManageReqsGroup.GET("/get", communityManageController.GetCommunities)
 		communityManageReqsGroup.GET("/join/:id", communityManageController.JoinCommunityByID)
 		communityManageReqsGroup.GET("/leave/:id", communityManageController.LeaveCommunityByID)
+		communityManageReqsGroup.GET("/getmember", communityManageController.GetMembersByCommunityIDs)
 
 	}
 	return communityManageReqsGroup

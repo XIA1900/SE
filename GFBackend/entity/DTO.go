@@ -40,6 +40,13 @@ type CommunitiesInfo struct {
 	Communities []Community `form:"Communities" json:"Communities"`
 }
 
+type CommunityMembersInfo struct {
+	CommunityID int               `form:"CommunityID" json:"CommunityID" example:1`
+	PageNO      int               `form:"PageNO" json:"PageNO" example:1`
+	PageSize    int               `form:"PageSize" json:"PageSize" example:5`
+	Members     []CommunityMember `form:"Members" json:"Members"`
+}
+
 type UserFiles struct {
 	ResponseMsg
 	Filenames []string `form:"Filenames" json:"Filenames" example:"\"xxx.jpg\",\"xxx.png\",\"xxx.gif\""`

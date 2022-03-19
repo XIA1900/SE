@@ -24,6 +24,7 @@ type ICommunityManageService interface {
 	GetCommunities(pageNO, pageSize int) ([]entity.Community, int64, error)
 	JoinCommunityByID(id int, username string) error
 	LeaveCommunityByID(id int, username string) error
+	GetMembersByCommunityIDs(id int, pageNO, pageSize int) ([]entity.CommunityMember, error)
 }
 
 type CommunityManageService struct {
@@ -199,4 +200,13 @@ func (communityManageService *CommunityManageService) LeaveCommunityByID(id int,
 		logger.AppLogger.Error(err2.Error())
 	}
 	return nil
+}
+
+func (communityManageService *CommunityManageService) GetMembersByCommunityIDs(id int, pageNO, pageSize int) ([]entity.CommunityMember, error) {
+	members, err := communityManageService.communityMemberDAO.GetMembersByCommunityIDs(id, (pageNO-1)*pageSize, pageSize)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return nil, err
+	}
+	return members, nil
 }

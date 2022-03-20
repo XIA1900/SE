@@ -109,7 +109,7 @@ func (articleFavoriteController ArticleFavoriteController) DeleteFavorite(contex
 // @Success 200 {object} entity.ArticleFavoritesInfo "<b>Success</b>. Create Successfully"
 // @Failure 400 {string} string "<b>Failure</b>. Bad Parameters or Not Found"
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
-// @Router /articlelike/get [get]
+// @Router /articlefavorite/get [get]
 func (articleFavoriteController ArticleFavoriteController) GetUserFavorites(context *gin.Context) {
 	pageNO, err1 := strconv.Atoi(context.Query("pageno"))
 	if err1 != nil {

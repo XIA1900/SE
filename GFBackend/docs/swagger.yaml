@@ -657,6 +657,42 @@ paths:
       summary: User cancel favorite Article
       tags:
       - Article Favorite Manage
+  /articlefavorite/get:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie
+      parameters:
+      - description: 233333, /articlelike/get?pageno=&pagesize=
+        in: query
+        name: pageno
+        required: true
+        type: integer
+      - description: 233333, /articlelike/get?pageno=&pagesize=
+        in: query
+        name: pagesize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            $ref: '#/definitions/entity.ArticleFavoritesInfo'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User like Article
+      tags:
+      - Article Favorite Manage
   /articlelike/create/:articleID:
     post:
       consumes:
@@ -715,42 +751,6 @@ paths:
       summary: User cancel like Article
       tags:
       - Article Like Manage
-  /articlelike/get:
-    get:
-      consumes:
-      - application/json
-      description: need token in cookie
-      parameters:
-      - description: 233333, /articlelike/get?pageno=&pagesize=
-        in: query
-        name: pageno
-        required: true
-        type: integer
-      - description: 233333, /articlelike/get?pageno=&pagesize=
-        in: query
-        name: pagesize
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: <b>Success</b>. Create Successfully
-          schema:
-            $ref: '#/definitions/entity.ArticleFavoritesInfo'
-        "400":
-          description: <b>Failure</b>. Bad Parameters or Not Found
-          schema:
-            type: string
-        "500":
-          description: <b>Failure</b>. Server Internal Error.
-          schema:
-            type: string
-      security:
-      - ApiAuthToken: []
-      summary: User like Article
-      tags:
-      - Article Favorite Manage
   /articletype/all:
     get:
       consumes:

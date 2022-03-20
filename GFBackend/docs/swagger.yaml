@@ -968,6 +968,39 @@ paths:
       summary: Get Communities By Name Fuzzy Match
       tags:
       - Community Manage
+  /community/getcommunityidbymember:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need member name
+      parameters:
+      - description: Member Name
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Community IDs Success
+          schema:
+            items:
+              type: integer
+            type: array
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Community IDs By Member
+      tags:
+      - Community Manage
   /community/getmember:
     get:
       consumes:

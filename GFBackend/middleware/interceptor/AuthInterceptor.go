@@ -22,7 +22,6 @@ func InitNonAuthReq() {
 		"/user/logout",
 		"/articletype/all",
 		"/article/search",
-		"/community/getcommunityidbymember",
 	}
 	NonAuthReqs = make(map[string]bool)
 	for _, endpoint := range nonAuthReqs {

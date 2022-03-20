@@ -375,6 +375,18 @@ func (communityManageController *CommunityManageController) GetMembersByCommunit
 	context.JSON(200, newCommunityMembersInfo)
 }
 
+//GetCommunityIDsByMember godoc
+// @Summary Get Community IDs By Member
+// @Description need token in cookie, need member name
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param name query string true "Member Name"
+// @Success 200 {object} []int "<b>Success</b>. Get Community IDs Success"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters or Not Found"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /community/getcommunityidbymember [get]
 func (communityManageController *CommunityManageController) GetCommunityIDsByMember(context *gin.Context) {
 	var CommunityIDsInfo entity.CommunityIDsInfo
 	err1 := context.ShouldBindJSON(&CommunityIDsInfo)

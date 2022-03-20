@@ -374,3 +374,22 @@ func (communityManageController *CommunityManageController) GetMembersByCommunit
 	}
 	context.JSON(200, newCommunityMembersInfo)
 }
+
+func (communityManageController *CommunityManageController) GetCommunityIDsByMember(context *gin.Context) {
+	var CommunityIDsInfo entity.CommunityIDsInfo
+	err1 := context.ShouldBindJSON(&CommunityIDsInfo)
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	communityIDs, err2 := communityManageController.communityManageService.
+		GetCommunityIDsByMember(CommunityIDsInfo.Member, CommunityIDsInfo.PageNO, CommunityIDsInfo.PageSize)
+	if err2 != nil {
+		return
+	}
+	var newCommunityIDsInfo []int
+	for i := 0; i < len(communityIDs); i++ {
+		newCommunityIDsInfo = append(newCommunityIDsInfo, communityIDs[i].CommunityID)
+	}
+	context.JSON(200, newCommunityIDsInfo)
+}

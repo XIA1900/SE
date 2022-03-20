@@ -15,7 +15,7 @@ type ICommunityMemberDAO interface {
 	DeleteByCommunityID(id int) error
 	DeleteByMember(member string) error
 	DeleteByCommunityIDAndMember(communityID int, member string) error
-	GetCommunityIDsByMember(member string) ([]int, error)
+	GetCommunityIDsByMember(member string, pageNO, pageSize int) ([]entity.CommunityMember, error)
 	GetMembersByCommunityIDs(id int, pageNO, pageSize int) ([]entity.CommunityMember, error)
 	CountMemberByCommunityID(id int) (int64, error)
 }
@@ -75,8 +75,18 @@ func (communityMemberDAO *CommunityMemberDAO) DeleteByCommunityIDAndMember(commu
 	return nil
 }
 
-func (communityMemberDAO *CommunityMemberDAO) GetCommunityIDsByMember(member string) ([]int, error) {
-	return nil, nil
+func (communityMemberDAO *CommunityMemberDAO) GetCommunityIDsByMember(member string, pageNO, pageSize int) ([]entity.CommunityMember, error) {
+	var communityMembers []entity.CommunityMember
+	result := communityMemberDAO.db.
+		Select("CommunityID").
+		Where("Member = ?", member).
+		Offset(pageNO).
+		Limit(pageSize).
+		Find(&communityMembers)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return communityMembers, nil
 }
 
 func (communityMemberDAO *CommunityMemberDAO) GetMembersByCommunityIDs(id int, pageNO, pageSize int) ([]entity.CommunityMember, error) {

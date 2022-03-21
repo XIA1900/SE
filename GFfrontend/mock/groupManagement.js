@@ -79,30 +79,18 @@ function getNotification(req, res) {
     });
 }
 
-function deleteGroup(req, res) {
-    res.send({
-        msg: 'Ok',
-    });
-}
-
-function updateGroupInfo(req, res) {
-    res.send({
-        msg: 'Ok',
-    });
-}
-
-
 export default {
     'GET /api/getBasicInfo': getBasicInfo,
     'GET /api/getAnalysis': getAnalysis,
     'GET /api/getMember': getMember,
     'GET /api/getNotification': getNotification,
     'POST /api/updateGroupInfo': async (req, res) => {
+        console.log("copy");
         res.send({
           message: 'Ok',
         });
       },
-    'POST /api/deletGroup': async (req, res) => {
+    'POST /api/deleteGroup': async (req, res) => {
         res.send({
           message: 'Ok',
         });

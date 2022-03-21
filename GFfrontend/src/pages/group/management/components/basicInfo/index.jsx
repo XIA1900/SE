@@ -1,7 +1,6 @@
 /*
 updateGroupInfo, deleteGroup do not work
 */
-
 import React, { useCallback, useRef } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { Form, Button, Input, Upload, message } from 'antd';
@@ -13,7 +12,7 @@ import ProForm, {
   ProFormTextArea,
 } from '@ant-design/pro-form';
 import { ProFormInstance } from '@ant-design/pro-form';
-import { useRequest, history } from 'umi';
+import { useIntl, useRequest, history } from 'umi';
 import { getBasicInfo, updateGroupInfo, deleteGroup } from '@/services/groupManagement';  
 import styles from './BaseView.less';
 
@@ -45,6 +44,7 @@ const BasicInfo = () => {
   });
   const list = basicInfo?.list || [];
   const [form] = Form.useForm();
+  const intl = useIntl();
 
   const getAvatarURL = () => {
     if (list) {
@@ -61,16 +61,22 @@ const BasicInfo = () => {
       values,
       
     });
-    const msg = result.message;
+    const msg = result.message;   //need modification
     if(msg === 'Ok') {
-      console.log("good");
+      const defaultLoginSuccessMessage = intl.formatMessage({
+        id: 'groupUpdate',
+        defaultMessage: 'Group Info Updated',
+      });
+      message.success(defaultLoginSuccessMessage);
     }
+      
   }
 
   const onDelete = async () => {
     const msg = deleteGroup({groupName,}).msg;
       if(msg === 'Ok') {
         console.log('deleted');
+        
       }
       else if(msg === '') {
 
@@ -153,94 +159,3 @@ const BasicInfo = () => {
 };
 
 export default BasicInfo;
-
-
-{/* <ProForm
-              layout="vertical"
-              submitter={false}
-              // submitter={{
-              //   render: (props, doms) => {
-              //     return [
-              //       //...doms,
-              //       <Button htmlType="button" type="primary" onClick={(e) => handleUpdate(newGroupName, newDescription)} key="update">
-              //         Update Information
-              //       </Button>,
-              //       <Button htmlType="button" danger onClick={handleDelete} key="delete">
-              //         Delete Group
-              //       </Button>,
-              //     ];
-              //   },
-              // }}
-              initialValues={{}}
-              //initialValues={{ ...currentUser, phone: currentUser?.phone.split('-') }}
-              hideRequiredMark
-            >
-              <ProFormText
-                width="md"
-                name="id"
-                disabled label="Group ID"
-                rules={[
-                  {
-                    required: true,
-                    message: '',
-                  },
-                ]}
-                initialValue={list.groupId}
-              />
-              <ProFormText
-                width="md"
-                name="owner"
-                disabled label="Group Owner"
-                rules={[
-                  {
-                    required: true,
-                    message: '',
-                  },
-                ]}
-                initialValue={list.owner}
-              />
-              <ProFormText
-                width="md"
-                name="name"
-                label="Group Name"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input a group name!',
-                  },
-                ]}
-                initialValue = {list.name}
-              />
-              <ProFormTextArea
-                name="description"
-                label="Description"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input group description!',
-                  },
-                ]}
-                initialValue={list.description}
-              />
-              <ProFormText
-                width="sm"
-                name="createdAt"
-                disabled label="Created At"
-                rules={[
-                  {
-                    required: true,
-                    message: '',
-                  },
-                ]}
-                initialValue={list.createdAt}
-              />
-              <ProForm.Item>
-                <Button htmlType='button' onClick={handleUpdate}>
-                  Update
-                </Button>
-                <Button htmlType='button' onClick={handleDelete}>
-                  Delete
-                </Button>
-              </ProForm.Item>
-              
-            </ProForm> */}

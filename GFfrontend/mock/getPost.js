@@ -25,6 +25,7 @@ const avatars = [
   '/heroes/Sona_0.jpeg',
   '/heroes/Soraka_0.jpeg',
 ];
+
 const users = [
   'Ashe',
   'Janna',

@@ -8,6 +8,32 @@
   v. createdAt: create time
   vi. group id
 */
+
+const avatars = [
+    '/heroes/Ashe_0.jpeg',
+    '/heroes/Janna_0.jpeg',
+    '/heroes/Karma_0.jpeg',
+    '/heroes/Ahri_0.jpeg',
+    '/heroes/Lulu_0.jpeg',
+    '/heroes/Lux_0.jpeg',
+    '/heroes/Morgana_0.jpeg',
+    '/heroes/Neeko_0.jpeg',
+    '/heroes/Sona_0.jpeg',
+    '/heroes/Soraka_0.jpeg',
+  ];
+  const users = [
+    'Ashe',
+    'Janna',
+    'Karma',
+    'Ahri',
+    'Lulu',
+    'Lux',
+    'Morgana',
+    'Neeko',
+    'Sona',
+    'Soraka',
+  ];
+
 const date = new Date();
 
 
@@ -49,8 +75,15 @@ function getAnalysis(req, res) {
     });
 }
 
-function member(groupName) {
-
+function member(groupName) { 
+    const result = [];
+    for(let i=0; i<10; i++) {
+        result.push({
+            avatar: avatars[i%10],
+            user: users[i%10],
+        });
+    }
+    return result;
 }
 
 function getMember(req, res) {

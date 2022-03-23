@@ -44,4 +44,14 @@ export async function deleteGroup(params) {
         },
     });
 }
+
+export async function deleteMember(params) {
+    return request('/api/deleteMember', {
+        data: params,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+}
   

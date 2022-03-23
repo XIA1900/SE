@@ -1,4 +1,4 @@
-import { getMember } from '@/services/groupManagement'
+import { getMember, deleteMember } from '@/services/groupManagement'
 import {
     ContactsOutlined,
     LikeOutlined,
@@ -32,6 +32,15 @@ const Member = () => {
   
     const list = data?.list || [];
     console.log(list);
+
+    const deleteUser = async (values) => {
+      const user = values;
+      const result = deleteMember(user);
+      if(result.msg === '200') {
+
+      }
+      
+    };
   
     const formItemLayout = {
       wrapperCol: {
@@ -95,6 +104,9 @@ const Member = () => {
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
                 {item.user}
+                  <Button onClick = {(e) => deleteUser(item.user, e)}> 
+                    Delete
+                  </Button>
                 </p>
               </div>
             )}

@@ -170,3 +170,36 @@ func TestDeleteCommunityByID(t *testing.T) {
 	}
 	fmt.Println(*str)
 }
+
+func TestUpdateDescriptionByID(t *testing.T) {
+	type CommunityInfo struct {
+		ID          int    `json:"ID"`
+		Description string `json:"Description"`
+	}
+
+	communityInfo := CommunityInfo{
+		ID:          11,
+		Description: "test11",
+	}
+
+	requestData, _ := json.Marshal(communityInfo)
+	response, err1 := http.NewRequest("POST", "http://localhost:10010/gf/api/community/update",
+		strings.NewReader(string(requestData)))
+	if err1 != nil {
+		t.Error("Failed to Request. " + err1.Error())
+	}
+	defer response.Body.Close()
+
+	content, err2 := ioutil.ReadAll(response.Body)
+	if err2 != nil {
+		t.Error("Failed to Read Response Body. " + err2.Error())
+		return
+	}
+
+	str := (*string)(unsafe.Pointer(&content))
+	if strings.Contains(*str, "400") {
+		t.Error("Failed to Update Description By ID. " + *str)
+		return
+	}
+	fmt.Println(*str)
+}

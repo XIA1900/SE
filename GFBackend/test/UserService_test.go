@@ -22,6 +22,18 @@ func TestUserLogin(t *testing.T) {
 	}
 }
 
+func TestUserRegister(t *testing.T) {
+
+}
+
+func TestUserUpdatePassword(t *testing.T) {
+
+}
+
+func TestUserUpdateInfo(t *testing.T) {
+
+}
+
 func TestUserFollowers(t *testing.T) {
 	loginInfo, err := userLogin("lion", "007")
 	if err != nil || loginInfo.Message == "" {

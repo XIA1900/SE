@@ -54,4 +54,14 @@ export async function deleteMember(params) {
         },
     });
 }
-  
+
+
+export async function deletePost(params) {
+    return request('/api/deletePost', {
+        data: params,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+}

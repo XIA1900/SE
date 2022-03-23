@@ -128,5 +128,10 @@ export default {
           message: 'Ok',
         });
       },
+      'POST /api/deleteMember': async (req, res) => {
+        res.send({
+          message: 'Ok',
+        });
+      },
   };
   

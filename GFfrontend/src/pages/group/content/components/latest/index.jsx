@@ -2,7 +2,7 @@ import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@a
 import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
-import ArticleListContent from '@/pages/group/components/articleContent';
+import ArticleListContent from '@/pages/group/content/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import { getGroupPosts } from '@/services/getGroupInfo';
 import styles from './style.less';

@@ -8,7 +8,7 @@ const ArticleListContent = ({
   data: { content, logo, updatedAt, owner, group },
   
 }) => {
-  const group_href = '/group?' + group;
+  const group_href = '/group/content?' + group;
   return ( 
   <div className={styles.listContent}>
     <div className={styles.description}>{content}</div>

@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"GFBackend/entity"
 	"GFBackend/model"
 	"gorm.io/gorm"
 	"sync"
@@ -10,10 +11,14 @@ var communityDAO *CommunityDAO
 var communityDAOLock sync.Mutex
 
 type ICommunityDAO interface {
-	CreateCommunity(community model.Community) error
-	GetCommunityByName(community model.Community) (model.Community, error)
-	UpdateCommunity(community model.Community) error
-	DeleteCommunity(ID int) error
+	CreateCommunity(communityName, username, description, createDay string) (int, error)
+	DeleteCommunityByID(id int) error
+	UpdateDescriptionByID(id int, newDescription string) error
+	GetOneCommunityByID(id int) (entity.Community, error)
+	GetCommunitiesByNameFuzzyMatch(name string, offset, limit int) ([]entity.Community, error)
+	CountByNameFuzzyMatch(name string) (int64, error)
+	GetCommunities(offset, limit int) ([]entity.Community, error)
+	CountCommunities() (int64, error)
 }
 
 type CommunityDAO struct {
@@ -33,41 +38,78 @@ func NewCommunityDAO() *CommunityDAO {
 	return communityDAO
 }
 
-func (communityDAO *CommunityDAO) CreateCommunity(community model.Community) error {
-	var result *gorm.DB
-	result = communityDAO.db.Select("Creator", "Name", "Description", "Create_Time").Create(&community)
+func (communityDAO *CommunityDAO) CreateCommunity(communityName, username, description, createDay string) (int, error) {
+	newCommunity := entity.Community{
+		Creator:     username,
+		Name:        communityName,
+		Description: description,
+		CreateDay:   createDay,
+	}
+	result := communityDAO.db.Create(&newCommunity)
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	return newCommunity.ID, nil
+}
+
+func (communityDAO *CommunityDAO) DeleteCommunityByID(id int) error {
+	result := communityDAO.db.Where("ID = ?", id).Delete(&entity.Community{})
 	if result.Error != nil {
 		return result.Error
 	}
 	return nil
 }
 
-func (communityDAO *CommunityDAO) GetCommunityByName(community model.Community) (model.Community, error) {
-	result := communityDAO.db.Select("Creator", "Name", "Description", "Create_Time").Where("Name = ?", community.Name).First(&community)
-	if result.Error != nil {
-		return community, result.Error
-	} else {
-		dbCommunity := model.Community{}
-		communityDAO.db.Where("Name = ?", community.Name).First(&dbCommunity)
-		return dbCommunity, nil
-	}
-}
-
-func (communityDAO *CommunityDAO) UpdateCommunity(communityInfo model.Community) error {
-	result := communityDAO.db.Model(&communityInfo).Where("ID", communityInfo.ID).Updates(model.Community{
-		Name:        communityInfo.Name,
-		Description: communityInfo.Description,
-	})
+func (communityDAO *CommunityDAO) UpdateDescriptionByID(id int, newDescription string) error {
+	result := communityDAO.db.Model(&entity.Community{}).
+		Where("id = ?", id).Update("Description", newDescription)
 	if result.Error != nil {
 		return result.Error
 	}
 	return nil
 }
 
-func (communityDAO *CommunityDAO) DeleteCommunity(ID int) error {
-	result := communityDAO.db.Where("ID = ?", ID).Delete(&model.Community{})
+func (communityDAO *CommunityDAO) GetOneCommunityByID(id int) (entity.Community, error) {
+	var community entity.Community
+	result := communityDAO.db.Where("ID = ?", id).First(&community)
 	if result.Error != nil {
-		return result.Error
+		return entity.Community{}, result.Error
 	}
-	return nil
+	return community, nil
+}
+
+func (communityDAO *CommunityDAO) GetCommunitiesByNameFuzzyMatch(name string, offset, limit int) ([]entity.Community, error) {
+	var communities []entity.Community
+	result := communityDAO.db.Limit(limit).Offset(offset).Where("Name LIKE ?", "%"+name+"%").Find(&communities)
+	if result.Error != nil {
+		return communities, result.Error
+	}
+	return communities, nil
+}
+
+func (communityDAO *CommunityDAO) CountByNameFuzzyMatch(name string) (int64, error) {
+	var count int64
+	result := communityDAO.db.Model(&entity.Community{}).Where("Name LIKE ?", "%"+name+"%").Count(&count)
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	return count, nil
+}
+
+func (communityDAO *CommunityDAO) GetCommunities(offset, limit int) ([]entity.Community, error) {
+	var communities []entity.Community
+	result := communityDAO.db.Limit(limit).Offset(offset).Find(&communities)
+	if result.Error != nil {
+		return communities, result.Error
+	}
+	return communities, nil
+}
+
+func (communityDAO *CommunityDAO) CountCommunities() (int64, error) {
+	var count int64
+	result := communityDAO.db.Model(&entity.Community{}).Count(&count)
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	return count, nil
 }

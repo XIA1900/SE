@@ -23,7 +23,7 @@ func RunServer() {
 	AppRouter.Static("/resources", "./resources")
 	AppRouter.Use(interceptor.AuthInterceptor())
 
-	docs.SwaggerInfo_swagger.BasePath = appConfig.Server.BasePath
+	docs.SwaggerInfo.BasePath = appConfig.Server.BasePath
 	AppRouter.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	baseGroup := AppRouter.Group(appConfig.Server.BasePath)
@@ -31,6 +31,11 @@ func RunServer() {
 		reqs.InitUserManageReqs(baseGroup)
 		reqs.InitCommunityManageReqs(baseGroup)
 		reqs.InitFileManageReqs(baseGroup)
+		reqs.InitArticleTypeManageReqs(baseGroup)
+		reqs.InitArticleManageReqs(baseGroup)
+		reqs.InitArticleLikeReqs(baseGroup)
+		reqs.InitArticleFavoriteReqs(baseGroup)
+		reqs.InitArticleCommentReqs(baseGroup)
 	}
 
 	err := AppRouter.Run(":" + strconv.Itoa(appConfig.Server.Port))

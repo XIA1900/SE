@@ -32,14 +32,20 @@ CREATE TABLE Follow (
     PRIMARY KEY (Followee, Follower)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE COMMUNITY (
+CREATE TABLE Community (
     ID INT NOT NULL AUTO_INCREMENT,
     Creator VARCHAR(20) NOT NULL,
     Name VARCHAR(20) NOT NULL UNIQUE,
     Description VARCHAR(500),
-    Num_Member INT NOT NULL DEFAULT '1',
-    Create_Time DATETIME NOT NULL,
+    CreateDay DATE NOT NULL,
     PRIMARY KEY (ID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Community_Member (
+    CommunityID INT NOT NULL,
+    Member VARCHAR(20) NOT NULL,
+    JoinDay DATE NOT NULL,
+    PRIMARY KEY (CommunityID, Member)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- User Private Space Info
@@ -48,5 +54,53 @@ CREATE TABLE Space (
     Username VARCHAR(20) NOT NULL,
     Capacity FLOAT(6,2) DEFAULT '10.00',      -- MB
     Used FLOAT(6,2) DEFAULT '0.00',           -- MB
+    PRIMARY KEY (ID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Article_Type (
+    ID INT NOT NULL AUTO_INCREMENT,
+    TypeName VARCHAR(20) NOT NULL UNIQUE,
+    Description VARCHAR(500),
+    Creator VARCHAR(20) NOT NULL,
+    Create_Day DATE,
+    PRIMARY KEY (ID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Article (
+    ID INT NOT NULL AUTO_INCREMENT,
+    Username VARCHAR(20) NOT NULL,
+    Title VARCHAR(50) NOT NULL,
+    TypeID INT,
+    CommunityID INT,
+    CreateDay DATE NOT NULL,
+    Content TEXT NOT NULL,
+    PRIMARY KEY (ID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Article_Like (
+    ID INT NOT NULL AUTO_INCREMENT,
+    Username VARCHAR(20) NOT NULL,
+    ArticleID INT NOT NULL,
+    LikeDay DATE NOT NULL,
+    PRIMARY KEY (ID),
+    UNIQUE KEY LikePair(Username, ArticleID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Article_Favorite (
+    ID INT NOT NULL AUTO_INCREMENT,
+    Username VARCHAR(20) NOT NULL,
+    ArticleID INT NOT NULL,
+    FavoriteDay DATE,
+    PRIMARY KEY (ID),
+    UNIQUE KEY LikePair(Username, ArticleID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE Article_Comment (
+    ID INT NOT NULL AUTO_INCREMENT,
+    Username VARCHAR(20) NOT NULL,
+    ArticleID INT NOT NULL,
+    CommentID INT,
+    Content TEXT NOT NULL,
+    CreateDay DATE NOT NULL,
     PRIMARY KEY (ID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

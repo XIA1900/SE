@@ -4,7 +4,7 @@ package docs
 
 import "github.com/swaggo/swag"
 
-const docTemplate_swagger = `{
+const docTemplate = `{
     "schemes": {{ marshal .Schemes }},
     "swagger": "2.0",
     "info": {
@@ -17,9 +17,925 @@ const docTemplate_swagger = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/article/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need new article info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Create a new article",
+                "parameters": [
+                    {
+                        "description": "Create New Article",
+                        "name": "ArticleInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/article/delete/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need new article id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Delete Article By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Article ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Successfully no matter what",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/article/getone": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need ID, /getone?id=",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Get One Article By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Article ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleDetail"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/article/search": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article search info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Get Articles By Search Words",
+                "parameters": [
+                    {
+                        "description": "Article ID",
+                        "name": "ArticleSearchInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleSearchInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticlesForSearching"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/article/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need ID, Title, Content in article info only",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Update Article Title or Content By ID",
+                "parameters": [
+                    {
+                        "description": "Update Article Info",
+                        "name": "ArticleInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlecomment/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need new article comment info, if comment to article, no need CommentID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Comment Manage"
+                ],
+                "summary": "Create a new comment to article or comment",
+                "parameters": [
+                    {
+                        "description": "Create New Comment",
+                        "name": "ArticleInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.NewCommentInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlecomment/delete/:id": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need comment ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Comment Manage"
+                ],
+                "summary": "Delete a comment by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Comment ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlecomment/getbyarticleid": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article id, pageno, pagesize in url: \"/articlecomment/getbyarticleid?id=\u0026pageno=\u0026pagesize=\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Comment Manage"
+                ],
+                "summary": "get direct comments by article id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Article ID",
+                        "name": "articleid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "PageNO",
+                        "name": "pageno",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "PageSize",
+                        "name": "pagesize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleCommentsInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlecomment/getsub": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article id, comment id, pageno, pagesize in url: \"/articlecomment/getbyarticleid?articleid=\u0026commentid=\u0026pageno=\u0026pagesize=\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Comment Manage"
+                ],
+                "summary": "get sub comments by article id and comment id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Article ID",
+                        "name": "articleid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comment ID",
+                        "name": "commentid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "PageNO",
+                        "name": "pageno",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "PageSize",
+                        "name": "pagesize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleCommentsInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Info Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlefavorite/create/:articleID": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Favorite Manage"
+                ],
+                "summary": "User Favorite Article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "233333",
+                        "name": "ArticleID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found or Existed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlefavorite/delete/:articleID": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Favorite Manage"
+                ],
+                "summary": "User cancel favorite Article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "233333",
+                        "name": "ArticleID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Favorite Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlefavorite/get": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Favorite Manage"
+                ],
+                "summary": "User like Article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "233333, /articlelike/get?pageno=\u0026pagesize=",
+                        "name": "pageno",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "233333, /articlelike/get?pageno=\u0026pagesize=",
+                        "name": "pagesize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleFavoritesInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlelike/create/:articleID": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Like Manage"
+                ],
+                "summary": "User like Article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "233333",
+                        "name": "ArticleID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlelike/delete/:articleID": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Like Manage"
+                ],
+                "summary": "User cancel like Article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "233333",
+                        "name": "ArticleID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Like Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articletype/all": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Type Manage"
+                ],
+                "summary": "Get All Article Types",
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.ArticleType"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Type has existed",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/articletype/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need new article type information, cannot repeat type name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Type Manage"
+                ],
+                "summary": "Create a new article type by admin user",
+                "parameters": [
+                    {
+                        "description": "New Article Type Information",
+                        "name": "ArticleTypeInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.ArticleTypeInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Type has existed",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/articletype/remove": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need type name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Type Manage"
+                ],
+                "summary": "Admin user removes article type",
+                "parameters": [
+                    {
+                        "description": "Type Name",
+                        "name": "TypeName",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Remove Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/articletype/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need type name \u0026 new description",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Type Manage"
+                ],
+                "summary": "Admin user update article type description",
+                "parameters": [
+                    {
+                        "description": "Type Name",
+                        "name": "TypeName",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Description",
+                        "name": "Description",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/community/create": {
             "post": {
-                "description": "need strings creator \u0026 community name \u0026 description \u0026 create time",
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community name \u0026 description only",
                 "consumes": [
                     "application/json"
                 ],
@@ -37,7 +953,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityInfo"
+                            "$ref": "#/definitions/entity.CommunityInfo"
                         }
                     }
                 ],
@@ -45,27 +961,32 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Community Success",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Community already exists",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
             }
         },
-        "/community/deletecommunitybyid": {
-            "post": {
-                "description": "need ID",
+        "/community/delete/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community id only",
                 "consumes": [
                     "application/json"
                 ],
@@ -75,43 +996,241 @@ const docTemplate_swagger = `{
                 "tags": [
                     "Community Manage"
                 ],
-                "summary": "Delete community information",
+                "summary": "Create a new Community",
                 "parameters": [
                     {
-                        "description": "need ID",
-                        "name": "communityInfo",
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. No matter whether delete successfully, Return Success",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/get": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need page info: PageNO, pageSize only",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get Communities By Name Fuzzy Match",
+                "parameters": [
+                    {
+                        "description": "Get Communities Info",
+                        "name": "name",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityInfo"
+                            "$ref": "#/definitions/entity.CommunityNameFuzzyMatch"
                         }
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Community Success",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.Community"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/getcommunityidbymember": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need member name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get Community IDs By Member",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Member Name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Community IDs Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/getmember": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community IDs",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get Members By Community IDs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Members Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.CommunityMember"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/getone/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get One Community By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Community Success",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Community"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "type": "string"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "type": "string"
                         }
                     }
                 }
             }
         },
-        "/community/getcommunity": {
+        "/community/getonebyname": {
             "get": {
-                "description": "need strings community name",
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community Name, page info: PageNO, pageSize",
                 "consumes": [
                     "application/json"
                 ],
@@ -121,81 +1240,221 @@ const docTemplate_swagger = `{
                 "tags": [
                     "Community Manage"
                 ],
-                "summary": "Get the Community by Name",
+                "summary": "Get Communities By Name Fuzzy Match",
                 "parameters": [
                     {
-                        "description": "Create a new community needs Creator, Name \u0026 Description.",
+                        "description": "Community Name Fuzzy Match Info",
+                        "name": "name",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.CommunityNameFuzzyMatch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Community Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.Community"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/join/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Join One Community By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Join Community Success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found or Existed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/leave/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Join One Community By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Leave Community Success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/community/numberofmember/:id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get the Number Of Member",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Community ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Return an Integer"
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Return 0"
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Return 0"
+                    }
+                }
+            }
+        },
+        "/community/update": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need community ID \u0026 description only, only by creator",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Update Community Description By ID",
+                "parameters": [
+                    {
+                        "description": "Update Community Description.",
                         "name": "CommunityInfo",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityInfo"
+                            "$ref": "#/definitions/entity.CommunityInfo"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Community Success",
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Success",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Community already exists",
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Creator or Not Found",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
-                        }
-                    }
-                }
-            }
-        },
-        "/community/updatecommunitybyid": {
-            "post": {
-                "description": "need ID, Name, Description",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Community Manage"
-                ],
-                "summary": "Update community information including Name, Description",
-                "parameters": [
-                    {
-                        "description": "need ID, Name, Description",
-                        "name": "communityInfo",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controller.CommunityInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
-                        "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
-                        }
-                    },
-                    "400": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
-                        "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
-                        }
-                    },
-                    "500": {
-                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
-                        "schema": {
-                            "$ref": "#/definitions/controller.CommunityResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -234,19 +1493,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Other",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -285,19 +1544,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Upload Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or No Enough Space",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -325,19 +1584,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Scan Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.UserFiles"
+                            "$ref": "#/definitions/entity.UserFiles"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -365,19 +1624,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get User Space Info Successfully",
                         "schema": {
-                            "$ref": "#/definitions/model.Space"
+                            "$ref": "#/definitions/entity.Space"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exists.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -425,19 +1684,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Other",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -465,19 +1724,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Upload Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or No Enough Space",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -532,19 +1791,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -575,7 +1834,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.UserInfo"
+                            "$ref": "#/definitions/entity.UserInfo"
                         }
                     }
                 ],
@@ -583,19 +1842,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Register Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User Has Existed",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -634,19 +1893,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Follow Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exist or User has followed.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -685,19 +1944,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.UserFollows"
+                            "$ref": "#/definitions/entity.UserFollows"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -721,34 +1980,23 @@ const docTemplate_swagger = `{
                     "User Manage"
                 ],
                 "summary": "Get User's followers",
-                "parameters": [
-                    {
-                        "description": "username in post request body",
-                        "name": "username",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.UserFollows"
+                            "$ref": "#/definitions/entity.UserFollows"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -774,7 +2022,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.UserInfo"
+                            "$ref": "#/definitions/entity.UserInfo"
                         }
                     }
                 ],
@@ -782,19 +2030,19 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Login Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Username / Password incorrect",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -857,7 +2105,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.UserInfo"
+                            "$ref": "#/definitions/entity.UserInfo"
                         }
                     }
                 ],
@@ -865,19 +2113,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Password not match",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -903,7 +2151,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.UserInfo"
+                            "$ref": "#/definitions/entity.UserInfo"
                         }
                     }
                 ],
@@ -911,19 +2159,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. User Register Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User Has Existed",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -962,19 +2210,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Unfollow Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or User not exist.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1005,7 +2253,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controller.NewUserInfo"
+                            "$ref": "#/definitions/entity.NewUserInfo"
                         }
                     }
                 ],
@@ -1013,19 +2261,19 @@ const docTemplate_swagger = `{
                     "201": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Update Password Successfully",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     },
                     "500": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseMsg"
+                            "$ref": "#/definitions/entity.ResponseMsg"
                         }
                     }
                 }
@@ -1033,13 +2281,249 @@ const docTemplate_swagger = `{
         }
     },
     "definitions": {
-        "controller.CommunityInfo": {
+        "entity.ArticleComment": {
             "type": "object",
             "properties": {
-                "Create_Time": {
-                    "type": "string",
-                    "example": "2020-01-01"
+                "articleID": {
+                    "type": "integer"
                 },
+                "commentID": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createDay": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.ArticleCommentsInfo": {
+            "type": "object",
+            "properties": {
+                "ArticleComments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.ArticleComment"
+                    }
+                },
+                "PageNO": {
+                    "type": "integer"
+                },
+                "PageSize": {
+                    "type": "integer"
+                },
+                "TotalPageNO": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.ArticleDetail": {
+            "type": "object",
+            "properties": {
+                "CommunityName": {
+                    "type": "string",
+                    "example": "big bang theory"
+                },
+                "Content": {
+                    "type": "string",
+                    "example": "I love UF"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "NumComment": {
+                    "type": "integer"
+                },
+                "NumFavorite": {
+                    "type": "integer"
+                },
+                "NumLike": {
+                    "type": "integer"
+                },
+                "Title": {
+                    "type": "string",
+                    "example": "Gator Forum"
+                },
+                "TypeName": {
+                    "type": "string",
+                    "example": "music"
+                }
+            }
+        },
+        "entity.ArticleFavorite": {
+            "type": "object",
+            "properties": {
+                "articleID": {
+                    "type": "integer"
+                },
+                "favoriteDay": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.ArticleFavoritesInfo": {
+            "type": "object",
+            "properties": {
+                "ArticleFavorites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.ArticleFavorite"
+                    }
+                },
+                "PageNO": {
+                    "type": "integer"
+                },
+                "PageSize": {
+                    "type": "integer"
+                },
+                "TotalPageNO": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.ArticleInfo": {
+            "type": "object",
+            "properties": {
+                "CommunityID": {
+                    "type": "integer"
+                },
+                "Content": {
+                    "type": "string",
+                    "example": "I love UF"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "Title": {
+                    "type": "string",
+                    "example": "Gator Forum"
+                },
+                "TypeID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.ArticleOfES": {
+            "type": "object",
+            "properties": {
+                "Content": {
+                    "type": "string"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "Title": {
+                    "type": "string"
+                },
+                "Username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.ArticleSearchInfo": {
+            "type": "object",
+            "properties": {
+                "PageNO": {
+                    "type": "integer"
+                },
+                "PageSize": {
+                    "type": "integer"
+                },
+                "SearchWords": {
+                    "type": "string",
+                    "example": "Balala Magic Girl"
+                }
+            }
+        },
+        "entity.ArticleType": {
+            "type": "object",
+            "properties": {
+                "create_Day": {
+                    "type": "string"
+                },
+                "creator": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "typeName": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.ArticleTypeInfo": {
+            "type": "object",
+            "properties": {
+                "Description": {
+                    "type": "string",
+                    "example": "Discussion of Movie"
+                },
+                "TypeName": {
+                    "type": "string",
+                    "example": "Movie"
+                }
+            }
+        },
+        "entity.ArticlesForSearching": {
+            "type": "object",
+            "properties": {
+                "Articles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.ArticleOfES"
+                    }
+                },
+                "PageNO": {
+                    "type": "integer"
+                },
+                "PageSize": {
+                    "type": "integer"
+                },
+                "TotalPageNO": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.Community": {
+            "type": "object",
+            "properties": {
+                "createDay": {
+                    "type": "string"
+                },
+                "creator": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.CommunityInfo": {
+            "type": "object",
+            "properties": {
                 "Creator": {
                     "type": "string",
                     "example": "test1"
@@ -1057,44 +2541,51 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.CommunityResponseMsg": {
+        "entity.CommunityMember": {
             "type": "object",
             "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 200
+                "communityID": {
+                    "type": "integer"
                 },
-                "create_time": {
-                    "type": "string",
-                    "example": "create_time"
+                "joinDay": {
+                    "type": "string"
                 },
-                "creator": {
-                    "type": "string",
-                    "example": "creator"
-                },
-                "description": {
-                    "type": "string",
-                    "example": "description"
-                },
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "message": {
-                    "type": "string",
-                    "example": "process successfully"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "name"
-                },
-                "num_member": {
-                    "type": "integer",
-                    "example": 1
+                "member": {
+                    "type": "string"
                 }
             }
         },
-        "controller.NewUserInfo": {
+        "entity.CommunityNameFuzzyMatch": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "example": "community1"
+                },
+                "PageNO": {
+                    "type": "integer"
+                },
+                "PageSize": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.NewCommentInfo": {
+            "type": "object",
+            "properties": {
+                "ArticleID": {
+                    "type": "integer"
+                },
+                "CommentID": {
+                    "type": "integer"
+                },
+                "Content": {
+                    "type": "string",
+                    "example": "It is true"
+                }
+            }
+        },
+        "entity.NewUserInfo": {
             "type": "object",
             "properties": {
                 "Birthday": {
@@ -1119,7 +2610,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.ResponseMsg": {
+        "entity.ResponseMsg": {
             "type": "object",
             "properties": {
                 "code": {
@@ -1132,7 +2623,24 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.UserFiles": {
+        "entity.Space": {
+            "type": "object",
+            "properties": {
+                "capacity": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "used": {
+                    "type": "number"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.UserFiles": {
             "type": "object",
             "properties": {
                 "Filenames": {
@@ -1156,7 +2664,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.UserFollows": {
+        "entity.UserFollows": {
             "type": "object",
             "properties": {
                 "Users": {
@@ -1180,7 +2688,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "controller.UserInfo": {
+        "entity.UserInfo": {
             "type": "object",
             "properties": {
                 "ForAdmin": {
@@ -1199,23 +2707,6 @@ const docTemplate_swagger = `{
                     "example": "jamesbond21"
                 }
             }
-        },
-        "model.Space": {
-            "type": "object",
-            "properties": {
-                "capacity": {
-                    "type": "number"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "used": {
-                    "type": "number"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
         }
     },
     "securityDefinitions": {
@@ -1227,8 +2718,8 @@ const docTemplate_swagger = `{
     }
 }`
 
-// SwaggerInfo_swagger holds exported Swagger Info so clients can modify it
-var SwaggerInfo_swagger = &swag.Spec{
+// SwaggerInfo holds exported Swagger Info so clients can modify it
+var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "http://167.71.166.120:10010",
 	BasePath:         "/gf/api",
@@ -1236,9 +2727,9 @@ var SwaggerInfo_swagger = &swag.Spec{
 	Title:            "Gator Forum Backend API",
 	Description:      "This is the Gator Forum Backend Server",
 	InfoInstanceName: "swagger",
-	SwaggerTemplate:  docTemplate_swagger,
+	SwaggerTemplate:  docTemplate,
 }
 
 func init() {
-	swag.Register(SwaggerInfo_swagger.InstanceName(), SwaggerInfo_swagger)
+	swag.Register(SwaggerInfo.InstanceName(), SwaggerInfo)
 }

@@ -3,7 +3,7 @@ package interceptor
 import (
 	"GFBackend/cache"
 	"GFBackend/config"
-	"GFBackend/controller"
+	"GFBackend/entity"
 	"GFBackend/logger"
 	"GFBackend/middleware/auth"
 	"github.com/gin-gonic/gin"
@@ -20,11 +20,8 @@ func InitNonAuthReq() {
 		"/user/register",
 		"/user/login",
 		"/user/logout",
-		//TODO: add security
-		"/community/create",
-		"/community/getcommunity",
-		"/community/updatecommunitybyid",
-		"/community/deletecommunitybyid",
+		"/articletype/all",
+		"/article/search",
 	}
 	NonAuthReqs = make(map[string]bool)
 	for _, endpoint := range nonAuthReqs {
@@ -87,7 +84,7 @@ func AuthInterceptor() gin.HandlerFunc {
 
 func setAuthFailure(context *gin.Context, code int, message string) {
 	context.Abort()
-	errMsg := controller.ResponseMsg{
+	errMsg := entity.ResponseMsg{
 		Code:    code,
 		Message: message,
 	}

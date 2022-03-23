@@ -27,6 +27,11 @@ const Articles = () => {
     },
   );
   const list = data?.list || [];
+  // const post_href = "/group/post?"+list.id;
+  // list.push({
+  //   post_href: post_href,
+  // });
+  // console.log(list.title);
 
   const IconText = ({ type, text }) => {
     switch (type) {
@@ -123,8 +128,8 @@ const Articles = () => {
           }
           onValuesChange={reload}
         >
-          <StandardFormRow block>
-            <FormItem name="category">
+          {/* <StandardFormRow block> */}
+            {/* <FormItem name="category"> */}
               <TagSelect expandable>
                 <TagSelect.Option value="cat1">Sports</TagSelect.Option>
                 <TagSelect.Option value="cat2">Professors</TagSelect.Option>
@@ -139,13 +144,13 @@ const Articles = () => {
                 <TagSelect.Option value="cat11">类目十一</TagSelect.Option>
                 <TagSelect.Option value="cat12">类目十二</TagSelect.Option> */}
               </TagSelect>
-            </FormItem>
-          </StandardFormRow>
+            {/* </FormItem> */}
+          {/* </StandardFormRow> */}
         </Form>
       </Card>
       <Card
         style={{
-          marginTop: 24,
+          marginTop: 10,
         }}
         bordered={false}
         bodyStyle={{
@@ -167,11 +172,10 @@ const Articles = () => {
                 <IconText key="like" type="like-o" text={item.like} />,
                 <IconText key="reply" type="message" text={item.reply} />,
               ]}
-              //extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={item.title_href}>
+                  <a className={styles.listItemMetaTitle} href={"/group/post?"+item.id}>
                     {item.title}
                   </a>
                 }

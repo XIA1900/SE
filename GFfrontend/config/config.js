@@ -225,6 +225,11 @@ export default defineConfig({
           component: './result/success',
         },
         {
+          name: 'Group Deleted',
+          path: '/result/success/deleteGroup',
+          component: './result/success/deleteGroup',
+        },
+        {
           name: 'fail',
           icon: 'smile',
           path: '/result/fail',
@@ -311,6 +316,14 @@ export default defineConfig({
         {
           path: '/group',
           component: './group',
+        },
+        {
+          path: '/group/post',
+          component: './group/post',
+        },
+        {
+          path: '/group/management',
+          component: './group/management',
         },
       ],
     },

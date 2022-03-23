@@ -1,3 +1,5 @@
+import { resourceLimits } from "worker_threads";
+
 const date = new Date();
 const contents = [
   "Iceborn warmother of the Avarosan tribe, Ashe commands the most populous horde in the north. Stoic, intelligent, and idealistic, yet uncomfortable with her role as leader, she taps into the ancestral magics of her lineage to wield a bow of True Ice. With her people's belief that she is the mythological hero Avarosa reincarnated, Ashe hopes to unify the Freljord once more by retaking their ancient, tribal lands.",
@@ -44,49 +46,56 @@ const owner = {
   avatar: '/heroes/Lux_0.jpeg',
 };
 const updateAt = date.getMonth() + '-' + date.getDate() + '-' + date.getFullYear();
-const likes_count = Math.ceil(Math.random() * 100) + 100;
-const likes = ['Ashe', 'Janna', 'Karma', 'Ahri', 'Lulu', 'Lux', 'Morgana', 'Neeko', 'Sona'];
-const collections_count = Math.ceil(Math.random() * 100) + 100;
-const collections = ['Lux', 'Morgana', 'Neeko', 'Sona', 'Soraka'];
-const replies_count = Math.ceil(Math.random() * 10) + 1;
 
-const replies = [];
 
-for (let i = 0; i < replies_count; i++) {
-  const post_owner = {
-    name: users[i % 10],
-    avatar: avatars[i % 10],
-  };
-  replies.push({
-    owner: post_owner,
-    content: contents[i % 10],
-    createdAt: date.getMonth() + '-' + date.getDate() + '-' + date.getFullYear(),
-    likes: Math.ceil(Math.random() * 100) + 100,
-    reply: [],
+
+
+function replyContents(postid) {
+  const replies_count = Math.ceil(Math.random() * 10) + 1;
+  const replies = [];
+  for (let i = 0; i < replies_count; i++) {
+    replies.push({
+      owner: users[i % 10],
+      avatar: avatars[i % 10],
+      content: contents[i % 10],
+      createdAt: date.getMonth() + '-' + date.getDate() + '-' + date.getFullYear(),
+      likes: Math.ceil(Math.random() * 100) + 100,
+    });
+  }
+  return replies;
+}
+
+function getReply(req, res) {
+  const params = req.query;
+  const postid = params.postid;
+  const result = replyContents(postid);
+  return res.json({
+    data: {
+      list:result,
+    },
   });
 }
 
+
+
 function postContents(postid) {
-  const list = [];
-  list.push({
+  const list = {
     postid: postid,
     title: title,
     content: content,
-    owner: owner,
+    owner: users[8],
+    avatar: avatars[8],
     updatedAt: updateAt,
-    replies: replies,
-    replies_count: replies_count,
-    likes_count: likes_count,
-    likes: likes,
-    collections_count: collections_count,
-    collections: collections,
-  });
+  };
+  console.log(list);
+  return list;
 }
 
 function getPost(req, res) {
   const params = req.query;
   const postid = params.postid;
   const result = postContents(postid);
+  console.log('postid:'+postid);
   return res.json({
     data: {
       list: result,
@@ -94,6 +103,57 @@ function getPost(req, res) {
   });
 }
 
+
+
+function likeUsers(postid) {
+  const likes_count = 9;
+  const result = [];
+  for(let i=0; i<likes_count; i++) {
+    result.push({
+      user: users[i%10],
+      avatar: avatars[i%10],
+    });
+  }
+  return result;
+}
+
+function getLike(req, res) {
+  const params = req.query;
+  const postid = params.postid;
+  const result = likeUsers(postid);
+  return res.json({
+    data: {
+      list:result,
+    },
+  });
+}
+
+function collectionUsers(postid) {
+  const collections_count = 5;
+  const result = [];
+  for(let i=0; i<collections_count; i++) {
+    result.push({
+      user: users[i%10],
+      avatar: avatars[i%10],
+    });
+  }
+  return result;
+}
+
+function getCollection(req, res) {
+  const params = req.query;
+  const postid = params.postid;
+  const result = collectionUsers(postid);
+  return res.json({
+    data: {
+      list:result,
+    },
+  });
+}
+
 export default {
   'GET /api/getPost': getPost,
+  'GET /api/getReply': getReply,
+  'GET /api/getCollection': getCollection,
+  'GET /api/getLike': getLike,
 };

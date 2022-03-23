@@ -69,6 +69,7 @@ const Center = () => {
   });
 
   const list = groupBasics?.list || [];
+  console.log('groups');
   console.log(list);
 
   const renderGroupInfo = ({ groupOwner, groupName, groupDescription, createdAt, groupMember }) => {

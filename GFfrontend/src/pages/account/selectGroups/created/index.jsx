@@ -8,8 +8,8 @@ import React, { useCallback } from 'react';
 
 const { Paragraph } = Typography;
 // a user can create at most 5 groups
-const user = history.location.search;
-const userName = user.substring(1);
+const userName = history.location.search.substring(1);
+
 
 const CardList = () => {
   const { data, loading } = useRequest(() => {
@@ -65,7 +65,7 @@ const CardList = () => {
                   >
                     <Card.Meta
                       avatar={<img alt="" className={styles.cardAvatar} src={item.groupAvatar} />}
-                      title={<a>{item.groupName}</a>}
+                      title={<a href={"/group/management?"+item.groupName}>{item.groupName}</a>}
                       description={
                         <Paragraph
                           className={styles.item}

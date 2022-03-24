@@ -56,7 +56,7 @@ const CardList = () => {
                       avatar={<img alt="" className={styles.cardAvatar} src={item.groupAvatar} />}
                       title={<p key='group' onClick={() => {
                         history.push({
-                          pathname: '/group',
+                          pathname: '/group/content',
                           search: item.groupName,
                         });
                       }}>{item.groupName}</p>}

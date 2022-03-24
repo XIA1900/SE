@@ -221,5 +221,23 @@ export default {
       path: '/base/category/list',
     });
   },
-  'GET  /api/login/captcha': getFakeCaptcha,
+
+  'POST /api/checkMember': (req, res) => {
+    res.send({
+      message: 'Ok',
+    });
+  },
+
+  'POST /api/quitGroup': (req, res) => {
+    res.send({
+      message: 'Ok',
+    });
+  },
+
+  'POST /api/joinGroup': (req, res) => {
+    res.send({
+      message: 'Ok',
+    });
+  }
+  
 };

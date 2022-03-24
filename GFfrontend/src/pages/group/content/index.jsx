@@ -1,13 +1,17 @@
 import { PlusOutlined, TeamOutlined, CrownOutlined, CalendarOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
+import { Button, Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
-import { Link, useRequest, history } from 'umi';
+import { Link, useRequest, history, useModel } from 'umi';
 import Hottest from './components/hottest';
 import Latest from './components/latest';
 import styles from './Center.less';
 import { getGroupBasic } from '@/services/getGroupInfo';
+import { checkMember, quitGroup, joinGroup } from '@/services/user';
+
+
 const groupName = history.location.search.substring(1);
+
 const operationTabList = [
   {
     key: 'hottest',
@@ -24,6 +28,7 @@ const TagList = ({ tags }) => {
   const [newTags, setNewTags] = useState([]);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
+
 
   const showInput = () => {
     setInputVisible(true);
@@ -59,48 +64,115 @@ const TagList = ({ tags }) => {
   return null;
 };
 
+
 const Center = () => {
   const [tabKey, setTabKey] = useState('hottest');
+  const { initialState, setInitialState } = useModel('@@initialState');
+  const { currentUser } = initialState;
 
   const { data: groupBasics, loading } = useRequest(() => {
     return getGroupBasic({
       groupName,
     });
   });
-
   const list = groupBasics?.list || [];
-  console.log('groups');
-  console.log(list);
+
+  const isMember = useRequest(() => {
+    return checkMember({
+      groupName: groupName,
+      user: currentUser.name,
+    });
+  });
+
+  const onJoin = async() => {
+    const result = joinGroup({
+      groupName: groupName,
+      user: currentUser.name
+    });
+    if(result.message === 'Ok') {
+
+    }
+  };
+
+  const onQuit = async() => {
+    const result = quitGroup({
+      groupName: groupName,
+      user: currentUser.name,
+    });
+    if(result.message === 'Ok') {
+
+    }
+  };
+
 
   const renderGroupInfo = ({ groupOwner, groupName, groupDescription, createdAt, groupMember }) => {
-    return (
-      <div className={styles.detail}>
-        <h1>{groupName}</h1>
-        <p>{groupDescription}</p>
-        <p>
-          <CrownOutlined
-            style={{
-              marginRight: 8,
-            }}
-          />
-          {groupOwner}
-          <TeamOutlined
-            style={{
-              marginRight: 8,
-              marginLeft: 20,
-            }}
-          />
-          {groupMember}
-          <CalendarOutlined
-            style={{
-              marginRight: 8,
-              marginLeft: 20,
-            }}
-          />
-          Created at {createdAt}
-        </p>
-      </div>
-    );
+    if(isMember == 'true') {
+      return (
+        <div className={styles.detail}>
+          <h1>{groupName}</h1>
+          <p>{groupDescription}</p>
+          <p>
+            <CrownOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {groupOwner}
+            <TeamOutlined
+              style={{
+                marginRight: 8,
+                marginLeft: 20,
+              }}
+            />
+            {groupMember}
+            <CalendarOutlined
+              style={{
+                marginRight: 8,
+                marginLeft: 20,
+              }}
+            />
+            Created at {createdAt}
+          </p>
+          <Button onClick={onQuit}>
+              Quit
+          </Button> 
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className={styles.detail}>
+          <h1>{groupName}</h1>
+          <p>{groupDescription}</p>
+          <p>
+            <CrownOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {groupOwner}
+            <TeamOutlined
+              style={{
+                marginRight: 8,
+                marginLeft: 20,
+              }}
+            />
+            {groupMember}
+            <CalendarOutlined
+              style={{
+                marginRight: 8,
+                marginLeft: 20,
+              }}
+            />
+            Created at {createdAt}
+          </p>
+          <Button onClick={onJoin}>
+              Join
+          </Button>
+        </div>
+      );
+    }
+    
   };
 
   // 渲染tab切换

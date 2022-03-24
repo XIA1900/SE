@@ -67,25 +67,22 @@ export default defineConfig({
     {
       path: '/form',
       icon: 'form',
-      name: 'form',
       routes: [
         {
           path: '/form',
           redirect: '/form/basic-form',
         },
         {
-          name: 'basic-form',
           icon: 'smile',
           path: '/form/basic-form',
           component: './form/basic-form',
         },
         {
-          name: 'Create A Group',
           path: '/form/createGroup',
           component: './form/createGroup',
         },
         {
-          name: 'Create A Post',
+          name: 'Post',
           path: '/form/createPost',
           component: './form/createPost',
         },

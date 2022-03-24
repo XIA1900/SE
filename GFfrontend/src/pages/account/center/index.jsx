@@ -8,39 +8,26 @@ import Articles from './components/Articles';
 import Applications from './components/Applications';
 import { queryCurrent } from './service';
 import styles from './Center.less';
+
+
+
 const operationTabList = [
   {
-    key: 'articles',
+    key: 'follower',
     tab: (
       <span>
-        Posts{' '}
+        Follower{' '}
         <span
           style={{
             fontSize: 14,
           }}
         >
-          (8)
         </span>
       </span>
     ),
   },
   {
-    key: 'applications',
-    tab: (
-      <span>
-        Followers{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-          (1029)
-        </span>
-      </span>
-    ),
-  },
-  {
-    key: 'projects',
+    key: 'following',
     tab: (
       <span>
         Following{' '}
@@ -49,7 +36,34 @@ const operationTabList = [
             fontSize: 14,
           }}
         >
-          (328)
+        </span>
+      </span>
+    ),
+  },
+  {
+    key: 'collection',
+    tab: (
+      <span>
+        Collection{' '}
+        <span
+          style={{
+            fontSize: 14,
+          }}
+        >
+        </span>
+      </span>
+    ),
+  },
+  {
+    key: 'blacklist',
+    tab: (
+      <span>
+        Blacklist{' '}
+        <span
+          style={{
+            fontSize: 14,
+          }}
+        >
         </span>
       </span>
     ),

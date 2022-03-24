@@ -1,4 +1,4 @@
-import { PlusOutlined, TeamOutlined, CrownOutlined, CalendarOutlined } from '@ant-design/icons';
+import { PlusOutlined, TeamOutlined, CrownOutlined, CalendarOutlined, FormOutlined, FrownOutlined, SmileOutlined  } from '@ant-design/icons';
 import { Button, Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
@@ -77,36 +77,43 @@ const Center = () => {
   });
   const list = groupBasics?.list || [];
 
-  const isMember = useRequest(() => {
-    return checkMember({
+  const isMember = async() => {
+    return await checkMember({
       groupName: groupName,
       user: currentUser.name,
     });
-  });
+  };
 
   const onJoin = async() => {
-    const result = joinGroup({
+    const result = await joinGroup({
       groupName: groupName,
       user: currentUser.name
     });
+    console.log(result);
     if(result.message === 'Ok') {
-
+      location.reload();
     }
   };
 
   const onQuit = async() => {
-    const result = quitGroup({
+    const result = await quitGroup({
       groupName: groupName,
       user: currentUser.name,
     });
     if(result.message === 'Ok') {
-
+      location.reload();
     }
   };
 
+  const onPost = async() => {
+    history.push({
+      pathname: '/form/createPost',
+      search: groupName,
+    })
+  };
 
   const renderGroupInfo = ({ groupOwner, groupName, groupDescription, createdAt, groupMember }) => {
-    if(isMember == 'true') {
+    if(isMember == 'Ok') {
       return (
         <div className={styles.detail}>
           <h1>{groupName}</h1>
@@ -133,9 +140,15 @@ const Center = () => {
             />
             Created at {createdAt}
           </p>
-          <Button onClick={onQuit}>
+          <Button onClick={onQuit} style={{display: 'inline-block'}}>
+            <FrownOutlined/>
               Quit
           </Button> 
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <Button onClick={onPost} style={{display: 'inline-block'}}>
+            <FormOutlined />
+            Post
+          </Button>
         </div>
       );
     }
@@ -167,6 +180,7 @@ const Center = () => {
             Created at {createdAt}
           </p>
           <Button onClick={onJoin}>
+            <SmileOutlined/>
               Join
           </Button>
         </div>

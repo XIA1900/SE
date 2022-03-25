@@ -3,15 +3,30 @@ import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Link, useRequest } from 'umi';
-import Projects from './components/Projects';
-import Articles from './components/Articles';
-import Applications from './components/Applications';
-import { queryCurrent } from './service';
+import Follower from './components/Follower';
+import Following from './components/Following';
+import Collection from './components/Collection';
+import Blacklist from './components/Blacklist';
+import { queryCurrent } from '@/services/user';
 import styles from './Center.less';
 
 
 
 const operationTabList = [
+  {
+    key: 'collection',
+    tab: (
+      <span>
+        Collection{' '}
+        <span
+          style={{
+            fontSize: 14,
+          }}
+        >
+        </span>
+      </span>
+    ),
+  },
   {
     key: 'follower',
     tab: (
@@ -31,20 +46,6 @@ const operationTabList = [
     tab: (
       <span>
         Following{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-        </span>
-      </span>
-    ),
-  },
-  {
-    key: 'collection',
-    tab: (
-      <span>
-        Collection{' '}
         <span
           style={{
             fontSize: 14,
@@ -109,7 +110,7 @@ const TagList = ({ tags }) => {
 
   return (
     <div className={styles.tags}>
-      <div className={styles.tagsTitle}>Bio</div>
+      <div className={styles.tagsTitle}>Courses</div>
       {(tags || []).concat(newTags).map((item) => (
         <Tag key={item.key}>{item.label}</Tag>
       ))}
@@ -142,13 +143,13 @@ const TagList = ({ tags }) => {
 };
 
 const Center = () => {
-  const [tabKey, setTabKey] = useState('articles'); //  获取用户信息
+  const [tabKey, setTabKey] = useState('collection'); //  获取用户信息
 
   const { data: currentUser, loading } = useRequest(() => {
     return queryCurrent();
   }); //  渲染用户信息
 
-  const renderUserInfo = ({ title, group, geographic }) => {
+  const renderUserInfo = ({ age, email, major, grade, country, province, city, phone }) => {
     return (
       <div className={styles.detail}>
         <p>
@@ -157,7 +158,7 @@ const Center = () => {
               marginRight: 8,
             }}
           />
-          {title}
+          {age}
         </p>
         <p>
           <ClusterOutlined
@@ -165,7 +166,15 @@ const Center = () => {
               marginRight: 8,
             }}
           />
-          {group}
+          {email}
+        </p>
+        <p>
+          <ClusterOutlined
+            style={{
+              marginRight: 8,
+            }}
+          />
+          {major+' '}{grade} 
         </p>
         <p>
           <HomeOutlined
@@ -173,40 +182,27 @@ const Center = () => {
               marginRight: 8,
             }}
           />
-          {
-            (
-              geographic || {
-                province: {
-                  label: '',
-                },
-              }
-            ).province.label
-          }
-          {
-            (
-              geographic || {
-                city: {
-                  label: '',
-                },
-              }
-            ).city.label
-          }
+          {country+' '}{province+' '}{city}
         </p>
       </div>
     );
   }; // 渲染tab切换
 
   const renderChildrenByTabKey = (tabValue) => {
-    if (tabValue === 'projects') {
-      return null;
+    if (tabValue === 'collection') {
+      return <Collection />;
     }
 
-    if (tabValue === 'applications') {
-      return null;
+    if (tabValue === 'follower') {
+      return <Follower />;
     }
 
-    if (tabValue === 'articles') {
-      return null;
+    if (tabValue === 'following') {
+      return <Following />;
+    }
+
+    if (tabValue == 'blacklist') {
+      return <Blacklist />
     }
 
     return null;
@@ -240,7 +236,7 @@ const Center = () => {
                   dashed
                 />
                 <div className={styles.team}>
-                  <div className={styles.teamTitle}>group</div>
+                  <div className={styles.teamTitle}>Interests</div>
                   <Row gutter={36}>
                     {currentUser.notice &&
                       currentUser.notice.map((item) => (

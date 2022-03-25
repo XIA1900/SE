@@ -29,3 +29,7 @@ export async function joinGroup(values) {
       method: 'POST',
     });
   }
+
+export async function queryCurrent(values) {
+    return request('/api/currentUserDetail');
+  }

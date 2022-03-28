@@ -1,4 +1,3 @@
-import { getMember, deleteMember } from '@/services/groupManagement'
 import {
     ContactsOutlined,
     LikeOutlined,
@@ -22,8 +21,8 @@ const Follower = () => {
     const [form] = Form.useForm();
     const { data, reload, loading, loadMore, loadingMore } = useRequest(
       () => {
-        return getMember({
-          groupName: groupName,
+        return getPersnalFollower({
+          username: username,
         });
       },
       {
@@ -37,7 +36,7 @@ const Follower = () => {
     const onRemove = async (values) => {
       console.log(values);
       const user = values;
-      const result = removeFollower({
+      const result = await removeFollower({
         username: username,
         followerName: user,
       });

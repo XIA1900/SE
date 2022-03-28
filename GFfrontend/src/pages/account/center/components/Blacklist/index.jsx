@@ -1,4 +1,4 @@
-import { getMember, deleteMember } from '@/services/groupManagement'
+import { getPersonalBlacklist, removeBlacklist } from '@/services/user';
 import {
     ContactsOutlined,
     LikeOutlined,
@@ -15,14 +15,14 @@ import styles from './style.less';
   
 const { Option } = Select;
 const FormItem = Form.Item;
-const groupName = history.location.search.substring(1);
+const username = history.location.search.substring(1);
   
 const Blacklist = () => {
     const [form] = Form.useForm();
     const { data, reload, loading, loadMore, loadingMore } = useRequest(
       () => {
-        return getMember({
-          groupName: groupName,
+        return getPersonalBlacklist({
+          username: username, 
         });
       },
       {
@@ -33,12 +33,12 @@ const Blacklist = () => {
     const list = data?.list || [];
     console.log(list);
 
-    const deleteUser = async (values) => {
+    const onUnblock = async (values) => {
       console.log(values);
       const user = values;
-      const result = deleteMember({
-        user: user,
-        group: groupName,
+      const result = await removeBlacklist({
+        username: username,
+        unblockusername: user,
       });
       if(result.message === 'Ok') {
         location.reload();   //refresh page
@@ -110,8 +110,8 @@ const Blacklist = () => {
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
                 {item.user}
-                  <Button onClick = {(e) => deleteUser(item.user, e)}> 
-                    Delete
+                  <Button onClick = {(e) => onUnblock(item.user, e)} style={{float: 'right'}}> 
+                    Unblock
                   </Button>
                 </p>
               </div>

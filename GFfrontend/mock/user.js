@@ -81,7 +81,7 @@ const groups = [
   'Support',
 ];
 
-const currentUseDetail = {
+const currentUserDetail = {
   name: users[3],
   birthday: '1998-03-18',
   sex: 'Female',
@@ -347,7 +347,7 @@ export default {
 
   'GET  /api/currentUserDetail': (req, res) => {
     return res.json({
-      data: currentUseDetail,
+      data: currentUserDetail,
     });
   },
 
@@ -375,24 +375,63 @@ export default {
   },
 
   'GET  /api/getPersnalFollower': (req, res) => {
+    const result = [];
+    for(let i=0; i<10; i++) {
+      result.push({
+        avatar: avatars[i % 10],
+        user: users[i %  10],
+      });
+    }
     return res.json({
-      data: currentUseDetail,
+      data: {
+        list: result,
+      }
     });
   },
 
   'GET  /api/getPersonalFollowing': (req, res) => {
+    const result = [];
+    for(let i=0; i<10; i++) {
+      result.push({
+        avatar: avatars[i % 10],
+        user: users[i %  10],
+      });
+    }
     return res.json({
-      data: currentUseDetail,
+      data: {
+        list: result,
+      }
     });
   },
 
   'GET  /api/getPersonalBlacklist': (req, res) => {
+    const result = [];
+    for(let i=0; i<10; i++) {
+      result.push({
+        avatar: avatars[i % 10],
+        user: users[i %  10],
+      });
+    }
     return res.json({
-      data: currentUseDetail,
+      data: {
+        list: result,
+      }
     });
   },
 
   'POST /api/removeFollower': (req, res) => {
+    return res.json({
+      message: 'Ok',
+    });
+  },
+
+  'POST /api/removeFollowing': (req, res) => {
+    return res.json({
+      message: 'Ok',
+    });
+  },
+
+  'POST /api/removeBlacklist': (req, res) => {
     return res.json({
       message: 'Ok',
     });

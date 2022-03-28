@@ -179,7 +179,7 @@ const InterestList = ({ tags }) => {
 
   return (
     <div className={styles.tags}>
-      <div className={styles.tagsTitle}> Courses </div>
+      <div className={styles.tagsTitle}> Interests </div>
       {(tags || []).concat(newTags).map((item) => (
         <Tag key={item.key}>{item.label}</Tag>
       ))}

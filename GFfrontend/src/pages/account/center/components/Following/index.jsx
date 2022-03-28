@@ -1,4 +1,4 @@
-import { getMember, deleteMember } from '@/services/groupManagement'
+import { getPersonalFollowing, removeFollowing } from '@/services/user';
 import {
     ContactsOutlined,
     LikeOutlined,
@@ -15,14 +15,14 @@ import styles from './style.less';
   
 const { Option } = Select;
 const FormItem = Form.Item;
-const groupName = history.location.search.substring(1);
+const username = history.location.search.substring(1);
   
 const Following = () => {
     const [form] = Form.useForm();
     const { data, reload, loading, loadMore, loadingMore } = useRequest(
       () => {
-        return getMember({
-          groupName: groupName,
+        return getPersonalFollowing({
+          username: username,
         });
       },
       {
@@ -33,12 +33,12 @@ const Following = () => {
     const list = data?.list || [];
     console.log(list);
 
-    const deleteUser = async (values) => {
+    const onUnfollow = async (values) => {
       console.log(values);
       const user = values;
-      const result = deleteMember({
-        user: user,
-        group: groupName,
+      const result = await removeFollowing({
+        username: username,
+        unfollowinguser: user,
       });
       if(result.message === 'Ok') {
         location.reload();   //refresh page
@@ -110,8 +110,8 @@ const Following = () => {
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
                 {item.user}
-                  <Button onClick = {(e) => deleteUser(item.user, e)}> 
-                    Delete
+                  <Button onClick = {(e) => onUnfollow(item.user, e)} style={{float: 'right'}}> 
+                    Unfollow
                   </Button>
                 </p>
               </div>

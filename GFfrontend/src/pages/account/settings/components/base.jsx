@@ -9,8 +9,7 @@ import ProForm, {
   ProFormTextArea,
 } from '@ant-design/pro-form';
 import { useRequest } from 'umi';
-import { queryCurrent } from '../service';
-import { queryProvince, queryCity } from '../service';
+import { queryCurrent } from '@/services/user';
 import styles from './BaseView.less';
 
 const validatorPhone = (rule, value, callback) => {
@@ -87,41 +86,108 @@ const BaseView = () => {
             >
               <ProFormText
                 width="md"
+                name="username"
+                label="Username"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your username!',
+                  },
+                ]}
+                initialValue={currentUser.name}
+              />
+              <ProFormSelect
+                width="sm"
+                name="gender"
+                label="Gender"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your country!',
+                  },
+                ]}
+                options={[
+                  {
+                    label: 'female',
+                    value: 'Female',
+                  },
+                  {
+                    label: 'male',
+                    value: 'Male',
+                  },
+                  {
+                    label: 'hide',
+                    value: 'Prefer not to say',
+                  }
+                ]}
+                initialValue = {currentUser.sex}
+              />
+              <ProFormText
+                width="md"
                 name="email"
-                label="email"
+                label="Email"
                 rules={[
                   {
                     required: true,
                     message: 'Please input your email address!',
                   },
                 ]}
+                initialValue={currentUser.email}
               />
               <ProFormText
                 width="md"
-                name="name"
-                label="name"
+                name="birthday"
+                label="Birthday"
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your name!',
+                    message: 'Please input your birthday!',
                   },
                 ]}
+                initialValue={currentUser.birthday}
               />
-              <ProFormTextArea
-                name="profile"
-                label="profile"
+              <ProFormText
+                width="md"
+                name="major"
+                label="Major"
                 rules={[
                   {
-                    required: true,
+                    required: false,
+                    message: 'Please input your major!',
+                  },
+                ]}
+                initialValue={currentUser.major}
+                display="inline-block"
+              />
+              <ProFormText
+                width="md"
+                name="grade"
+                label="Grade"
+                rules={[
+                  {
+                    required: false,
+                    message: 'Please input your grade!',
+                  },
+                ]}
+                initialValue={currentUser.grade}
+                display="inline-block"
+              />
+              <ProFormTextArea
+                name="signature"
+                label="Signature"
+                rules={[
+                  {
+                    required: false,
                     message: 'Please input your profile!',
                   },
                 ]}
-                placeholder="profile"
+                placeholder="Tomorrow is another day."
+                initialValue={currentUser.signature}
               />
               <ProFormSelect
                 width="sm"
                 name="country"
-                label="country"
+                label="Country"
                 rules={[
                   {
                     required: true,
@@ -138,82 +204,73 @@ const BaseView = () => {
                     value: 'China',
                   },
                 ]}
+                initialValue={currentUser.country}
               />
-            
 
-              <ProForm.Group title="state" size={8}>
-                <ProFormSelect
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input your state!',
-                    },
-                  ]}
-                  width="sm"
-                  fieldProps={{
-                    labelInValue: true,
-                  }}
-                  name="province"
-                  className={styles.item}
-                  request={async () => {
-                    return queryProvince().then(({ data }) => {
-                      return data.map((item) => {
-                        return {
-                          label: item.name,
-                          value: item.id,
-                        };
-                      });
-                    });
-                  }}
-                />
-                <ProFormDependency name={['province']}>
-                  {({ province }) => {
-                    return (
-                      <ProFormSelect
-                        params={{
-                          key: province?.value,
-                        }}
-                        name="city"
-                        width="sm"
-                        rules={[
-                          {
-                            required: true,
-                            message: 'please input your city!',
-                          },
-                        ]}
-                        disabled={!province}
-                        className={styles.item}
-                        request={async () => {
-                          if (!province?.key) {
-                            return [];
-                          }
-
-                          return queryCity(province.key || '').then(({ data }) => {
-                            return data.map((item) => {
-                              return {
-                                label: item.name,
-                                value: item.id,
-                              };
-                            });
-                          });
-                        }}
-                      />
-                    );
-                  }}
-                </ProFormDependency>
-              </ProForm.Group>
-              <ProFormText
-                width="md"
-                name="address"
-                label="Street address"
+              <ProFormSelect
+                width="sm"
+                name="state"
+                label="State"
                 rules={[
                   {
                     required: true,
-                    message: 'please input your street address!',
+                    message: 'Please input your state!',
                   },
                 ]}
+                options={[
+                  {
+                    label: 'Florida',
+                    value: 'Florida',
+                  },
+                  {
+                    label: 'Texas',
+                    value: 'Texas',
+                  },
+                ]}
+                initialValue={currentUser.province}
               />
-              <ProFormFieldSet
+
+              <ProFormSelect
+                width="sm"
+                name="city"
+                label="City"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your city!',
+                  },
+                ]}
+                options={[
+                  {
+                    label: 'Gainesville',
+                    value: 'Gainesville',
+                  },
+                  {
+                    label: 'New York',
+                    value: 'New York',
+                  },
+                  {
+                    labe: 'Atalanta',
+                    value: 'Atalanta',
+                  },
+                ]}
+                initialValue={currentUser.city}
+              />    
+              
+              <ProFormText
+                width="md"
+                name="phone"
+                label="phone"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your phone number!',
+                  },
+                ]}
+                initialValue={currentUser.phone}
+              />
+
+              {/* <ProFormFieldSet
                 name="phone"
                 label="phone"
                 rules={[
@@ -228,7 +285,7 @@ const BaseView = () => {
               >
                 <Input className={styles.area_code} />
                 <Input className={styles.phone_number} />
-              </ProFormFieldSet>
+              </ProFormFieldSet> */}
             </ProForm>
           </div>
           <div className={styles.right}>

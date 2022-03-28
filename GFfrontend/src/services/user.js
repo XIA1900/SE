@@ -42,17 +42,32 @@ export async function getPersnalFollower(values) {
     return request('/api/getPersnalFollower');
   }
 
-export async function getPersonalFollowing(values) {
-    return request('/api/getPersonalFollowing');
-  }
-
-export async function getPersonalBlacklist(values) {
-    return request('/api/getPersonalBlacklist');
-  }
-
 export async function removeFollower(values) {
     return request('/api/removeFollower', {
       params: values,
       method: 'POST',
     });
   }
+
+export async function getPersonalFollowing(values) {
+    return request('/api/getPersonalFollowing');
+  }
+  
+export async function removeFollowing(values) {
+  return request('/api/removeFollowing', {
+    params: values,
+    method: 'POST',
+  });
+}
+
+export async function getPersonalBlacklist(values) {
+  return request('/api/getPersonalBlacklist');
+}
+
+export async function removeBlacklist(values) {
+  return request('/api/removeBlacklist', {
+    params: values,
+    method: 'POST',
+  });
+}
+

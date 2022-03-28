@@ -358,3 +358,65 @@ func TestLeaveCommunityByID(t *testing.T) {
 	}
 	fmt.Println(*str)
 }
+
+func TestGetMembersByCommunityIDs(t *testing.T) {
+	type CommunityIDs struct {
+		IDs []int `json:"IDs"`
+	}
+
+	communityInfo := CommunityIDs{
+		IDs: []int{11},
+	}
+
+	requestData, _ := json.Marshal(communityInfo)
+	response, err1 := http.NewRequest("POST", "http://localhost:10010/gf/api/community/getmember",
+		strings.NewReader(string(requestData)))
+	if err1 != nil {
+		t.Error("Failed to Request. " + err1.Error())
+	}
+	defer response.Body.Close()
+
+	content, err2 := ioutil.ReadAll(response.Body)
+	if err2 != nil {
+		t.Error("Failed to Read Response Body. " + err2.Error())
+		return
+	}
+
+	str := (*string)(unsafe.Pointer(&content))
+	if strings.Contains(*str, "400") {
+		t.Error("Failed to Get Members By Community IDs. " + *str)
+		return
+	}
+	fmt.Println(*str)
+}
+
+func TestGetCommunityIDsByMember(t *testing.T) {
+	type Member struct {
+		Username string `json:"Username"`
+	}
+
+	communityInfo := Member{
+		Username: "test",
+	}
+
+	requestData, _ := json.Marshal(communityInfo)
+	response, err1 := http.NewRequest("POST", "http://localhost:10010/gf/api/community/getcommunityidbymember",
+		strings.NewReader(string(requestData)))
+	if err1 != nil {
+		t.Error("Failed to Request. " + err1.Error())
+	}
+	defer response.Body.Close()
+
+	content, err2 := ioutil.ReadAll(response.Body)
+	if err2 != nil {
+		t.Error("Failed to Read Response Body. " + err2.Error())
+		return
+	}
+
+	str := (*string)(unsafe.Pointer(&content))
+	if strings.Contains(*str, "400") {
+		t.Error("Failed to Get Community IDs By Member. " + *str)
+		return
+	}
+	fmt.Println(*str)
+}

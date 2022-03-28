@@ -53,7 +53,11 @@ const AvatarDropdown = ({ menu }) => {
         return;
       }
 
-      history.push(`/account/${key}`);
+      history.push({
+        pathname: `/account/${key}`,
+        search: currentUser.name,
+      });
+      return;
     },
     [setInitialState],
   );

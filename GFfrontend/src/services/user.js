@@ -33,3 +33,26 @@ export async function joinGroup(values) {
 export async function queryCurrent(values) {
     return request('/api/currentUserDetail');
   }
+
+export async function getPersonalCollection(values) {
+    return request('/api/getPersonalCollection');
+  }
+
+export async function getPersnalFollower(values) {
+    return request('/api/getPersnalFollower');
+  }
+
+export async function getPersonalFollowing(values) {
+    return request('/api/getPersonalFollowing');
+  }
+
+export async function getPersonalBlacklist(values) {
+    return request('/api/getPersonalBlacklist');
+  }
+
+export async function removeFollower(values) {
+    return request('/api/removeFollower', {
+      params: values,
+      method: 'POST',
+    });
+  }

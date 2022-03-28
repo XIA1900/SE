@@ -8,25 +8,21 @@ import {
 import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
-import ArticleListContent from '@/pages/group/content/components/articleContent';
-import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
-import { getGroupPosts } from '@/services/getGroupInfo';
+import ArticleListContent from './articleContent/index';
+import { getPersonalCollection } from '@/services/user';
 import styles from './style.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
-const groupName = history.location.search.substring(1);
-console.log('groupName:' + groupName);
+const username = history.location.search.substring(1);
 
 const Collection = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
     () => {
-      return getGroupPosts({
-        count: pageSize,
-        type: 'hottest',
-        groupName: groupName,
+      return getPersonalCollection({
+        username: username,
       });
     },
     {
@@ -149,7 +145,7 @@ const Collection = () => {
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={item.href}>
+                  <a className={styles.listItemMetaTitle} href={'/group/post?'+item.id}>
                     {item.title}
                   </a>
                 }

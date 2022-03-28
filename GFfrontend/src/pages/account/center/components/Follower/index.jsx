@@ -12,10 +12,11 @@ import { useRequest, history } from 'umi';
 import ArticleListContent from '@/pages/group/content/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import styles from './style.less';
+import { getPersnalFollower, removeFollower } from '@/services/user';
   
 const { Option } = Select;
 const FormItem = Form.Item;
-const groupName = history.location.search.substring(1);
+const username = history.location.search.substring(1);
   
 const Follower = () => {
     const [form] = Form.useForm();
@@ -33,12 +34,12 @@ const Follower = () => {
     const list = data?.list || [];
     console.log(list);
 
-    const deleteUser = async (values) => {
+    const onRemove = async (values) => {
       console.log(values);
       const user = values;
-      const result = deleteMember({
-        user: user,
-        group: groupName,
+      const result = removeFollower({
+        username: username,
+        followerName: user,
       });
       if(result.message === 'Ok') {
         location.reload();   //refresh page
@@ -110,8 +111,8 @@ const Follower = () => {
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
                 {item.user}
-                  <Button onClick = {(e) => deleteUser(item.user, e)}> 
-                    Delete
+                  <Button onClick = {(e) => onRemove(item.user, e)} style={{float: 'right'}}> 
+                    Remove
                   </Button>
                 </p>
               </div>

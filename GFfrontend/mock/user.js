@@ -10,7 +10,7 @@ A user has:
 7. likes, collections, replies
 8.
 */
-
+const date = new Date();
 const titles = [
   'I hold a bow of true ice. I hold my heart.',
   'Heavy winds approaching!',
@@ -68,9 +68,23 @@ const users = [
   'Soraka',
 ]; // 当前用户信息
 
+const groups = [
+  'ADC',
+  'Support',
+  'Support',
+  'Assasin',
+  'Support',
+  'Mage',
+  'Support',
+  'Mage',
+  'Support',
+  'Support',
+];
+
 const currentUseDetail = {
   name: users[3],
-  age: 500,
+  birthday: '1998-03-18',
+  sex: 'Female',
   avatar: avatars[3],
   email: users[3] + '@lol.uni',
   signature: titles[3],
@@ -80,7 +94,12 @@ const currentUseDetail = {
   city:'',
   grade: 'Difficulty',
   phone: '123456789',
-  interests: 'Essence theft',
+  interests: [
+    {
+      key: '0',
+      label: 'Essence theft',
+    },
+  ],
   courses: [
     {
       key: '0',
@@ -330,6 +349,52 @@ export default {
     return res.json({
       data: currentUseDetail,
     });
-  }
-  
+  },
+
+  'GET /api/getPersonalCollection': (req, res) => {
+    const result = [];
+    for(let i=0; i<10; i++) {
+      result.push({
+        id: i,
+        owner: users[i % 10],
+        title: titles[i % 10],
+        logo: avatars[i % 10],
+        group: groups[i % 10],
+        updatedAt: date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate(),
+        collection: Math.ceil(Math.random() * 100) + 100,
+        like: Math.ceil(Math.random() * 100) + 100,
+        reply: Math.ceil(Math.random() * 10) + 10,
+        content: contents[i % 10],
+      });
+    }
+    return res.json({
+      data: {
+        list: result,
+      },
+    });
+  },
+
+  'GET  /api/getPersnalFollower': (req, res) => {
+    return res.json({
+      data: currentUseDetail,
+    });
+  },
+
+  'GET  /api/getPersonalFollowing': (req, res) => {
+    return res.json({
+      data: currentUseDetail,
+    });
+  },
+
+  'GET  /api/getPersonalBlacklist': (req, res) => {
+    return res.json({
+      data: currentUseDetail,
+    });
+  },
+
+  'POST /api/removeFollower': (req, res) => {
+    return res.json({
+      message: 'Ok',
+    });
+  },
 };

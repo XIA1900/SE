@@ -4,12 +4,13 @@ import {
   LoadingOutlined,
   MessageOutlined,
   StarOutlined,
+  StarTwoTone,
 } from '@ant-design/icons';
 import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
 import ArticleListContent from './articleContent/index';
-import { getPersonalCollection } from '@/services/user';
+import { getPersonalCollection, removeCollection } from '@/services/user';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -33,20 +34,25 @@ const Collection = () => {
   const list = data?.list || [];
   console.log(list);
 
-  const IconText = ({ type, text }) => {
+  const IconText = ({ type, text, value }) => {
+    const icon = {
+      type: type,
+      text: text,
+      value: value,
+    };
     switch (type) {
       case 'star-o':
         return (
           <span>
-            <StarOutlined
+            <StarTwoTone
               style={{
                 marginRight: 8,
               }}
+              onClick={(e) => onCollection(icon, e)}
             />
             {text}
           </span>
         );
-
       case 'like-o':
         return (
           <span>
@@ -75,6 +81,21 @@ const Collection = () => {
         return null;
     }
   };
+
+  const onCollection = async(values) => {
+    console.log(values);
+    const id = values.value;
+    const result = await removeCollection({
+      username: username,
+      postid: id,
+    });
+    if(result.message === 'Ok') {
+      location. reload();
+    }
+    else {
+      
+    }
+  }
 
   const formItemLayout = {
     wrapperCol: {
@@ -132,12 +153,12 @@ const Collection = () => {
           rowKey="id"
           itemLayout="vertical"
           loadMore={loadMoreDom}
-          dataSource={list}
+          dataSource={list} 
           renderItem={(item) => (
             <List.Item
               key={item.id}
               actions={[
-                <IconText key="collection" type="star-o" text={item.collection} />,
+                <IconText key="collection" type="star-o" value={item.id} text={item.collection} />,
                 <IconText key="like" type="like-o" text={item.like} />,
                 <IconText key="reply" type="message" text={item.reply} />,
               ]}

@@ -87,6 +87,11 @@ function postContents(postid) {
     owner: users[8],
     avatar: avatars[8],
     updatedAt: updateAt,
+    liked: '1',
+    collected: '1',
+    likes: 100,
+    replies: 100,
+    collections: 100,
   };
   console.log(list);
   return list;

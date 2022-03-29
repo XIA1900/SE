@@ -35,8 +35,16 @@ export async function queryCurrent(values) {
   }
 
 export async function getPersonalCollection(values) {
-    return request('/api/getPersonalCollection');
-  }
+  return request('/api/getPersonalCollection');
+}
+
+export async function removeCollection(values) {
+  return request('/api/removeCollection', {
+    params: values,
+    method: 'POST',
+  });
+}
+
 
 export async function getPersnalFollower(values) {
     return request('/api/getPersnalFollower');
@@ -75,5 +83,17 @@ export async function changePassword(values) {
   return request('/api/changePassword', {
     params: values,
     method: 'POST',
+  });
+}
+
+export async function removeLike(values) {
+  return request('/api/removeLike', {
+    params: values,
+    method: 'POST',
+  });
+}
+
+export async function getRelation(values) {
+  return request('/api/getRelation', {
   });
 }

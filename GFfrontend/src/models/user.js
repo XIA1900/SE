@@ -1,5 +1,5 @@
 import { router } from 'umi';
-import { changePassword, checkMember, queryCurrent, quitGroup, joinGroup, getPersnalFollower, getPersonalBlacklist, getPersonalCollection, getPersonalFollowing, removeFollower, removeFollowing, removeBlacklist } from '@/services/user';
+import { getRelation, removeLike, removeCollection, changePassword, checkMember, queryCurrent, quitGroup, joinGroup, getPersnalFollower, getPersonalBlacklist, getPersonalCollection, getPersonalFollowing, removeFollower, removeFollowing, removeBlacklist } from '@/services/user';
 
 const Model = {
   namespace: 'user',
@@ -74,10 +74,28 @@ const Model = {
         payload: response11,
       });
 
-      const response12 = yield call(removeBlacklist, payload);
+      const response12 = yield call(changePassword, payload);
       yield put({
         type: 'save12',
         payload: response12,
+      });
+
+      const response13 = yield call(removeCollection, payload);
+      yield put({
+        type: 'save13',
+        payload: response13,
+      });
+
+      const response14 = yield call(removeLike, payload);
+      yield put({
+        type: 'save14',
+        payload: response14,
+      });
+
+      const response15 = yield call(getRelation, payload);
+      yield put({
+        type: 'save15',
+        payload: response15,
       });
     },
   },
@@ -143,6 +161,24 @@ const Model = {
       };
     },
     save12(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save13(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save14(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save15(state, action) {
       return {
         ...state,
         data: action.payload,

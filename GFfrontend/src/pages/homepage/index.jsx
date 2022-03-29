@@ -33,6 +33,22 @@ const Articles = () => {
   // });
   // console.log(list.title);
 
+  const onCCollection = async(values) => {
+    console.log(values);
+    if(values.type === 'star-o') {
+      if(values.value === '1') {
+        return (
+          <IconText key="collection" type="star-o" value="0" text={values.text--} />
+        );
+      }
+      else {
+        return (
+          <IconText key="collection" type="star-o" value="1" text={item.collection} />
+        )
+      }
+    }
+  }
+
   const IconText = ({ type, text }) => {
     switch (type) {
       case 'star-o':
@@ -42,7 +58,6 @@ const Articles = () => {
               style={{
                 marginRight: 8,
               }}
-              onClick={(e) => onCollection(text, e)}
             />
             {text}
           </span>

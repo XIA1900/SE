@@ -442,4 +442,28 @@ export default {
       message: 'Ok',
     });
   },
+
+  'POST /api/removeCollection': (req, res) => {
+    return res.json({
+      message: 'Ok',
+    });
+  },
+
+  'POST /api/removeLike': (req, res) => {
+    return res.json({
+      message: 'Ok',
+    });
+  },
+
+  'GET /api/getRelation': (req, res) => {
+    const result = {
+      like: '1',
+      collect: '1',
+    }
+    return res.json({
+      data:{
+        list: result,
+      }
+    });
+  }
 };

@@ -288,6 +288,14 @@ definitions:
         example: jamesbond21
         type: string
     type: object
+  entity.UserNewCapacity:
+    properties:
+      Capacity:
+        type: number
+      Username:
+        example: boss
+        type: string
+    type: object
 host: http://167.71.166.120:10010
 info:
   contact: {}
@@ -1348,6 +1356,12 @@ paths:
         required: true
         schema:
           type: number
+      - description: Username & New File Total Capacity
+        in: body
+        name: UserNewCapacity
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UserNewCapacity'
       produces:
       - application/json
       responses:

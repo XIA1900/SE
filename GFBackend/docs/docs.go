@@ -1678,6 +1678,15 @@ const docTemplate = `{
                         "schema": {
                             "type": "number"
                         }
+                    },
+                    {
+                        "description": "Username \u0026 New File Total Capacity",
+                        "name": "UserNewCapacity",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.UserNewCapacity"
+                        }
                     }
                 ],
                 "responses": {
@@ -2705,6 +2714,18 @@ const docTemplate = `{
                 "Username": {
                     "type": "string",
                     "example": "jamesbond21"
+                }
+            }
+        },
+        "entity.UserNewCapacity": {
+            "type": "object",
+            "properties": {
+                "Capacity": {
+                    "type": "number"
+                },
+                "Username": {
+                    "type": "string",
+                    "example": "boss"
                 }
             }
         }

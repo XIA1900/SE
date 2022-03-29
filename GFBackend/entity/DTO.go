@@ -59,6 +59,10 @@ type UserNewCapacity struct {
 	Capacity float64 `form:"Capacity" json:"Capacity" example:16.6`
 }
 
+type UserFilename struct {
+	Filename string `form:"Filename" json:"Filename" example:"gator.jpg"`
+}
+
 type UserFiles struct {
 	ResponseMsg
 	Filenames []string `form:"Filenames" json:"Filenames" example:"\"xxx.jpg\",\"xxx.png\",\"xxx.gif\""`

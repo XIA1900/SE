@@ -1485,7 +1485,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/entity.UserFilename"
                         }
                     }
                 ],
@@ -2628,6 +2628,15 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "entity.UserFilename": {
+            "type": "object",
+            "properties": {
+                "Filename": {
+                    "type": "string",
+                    "example": "gator.jpg"
                 }
             }
         },

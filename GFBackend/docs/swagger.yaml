@@ -240,6 +240,12 @@ definitions:
       username:
         type: string
     type: object
+  entity.UserFilename:
+    properties:
+      Filename:
+        example: gator.jpg
+        type: string
+    type: object
   entity.UserFiles:
     properties:
       Filenames:
@@ -1235,7 +1241,7 @@ paths:
         name: filename
         required: true
         schema:
-          type: string
+          $ref: '#/definitions/entity.UserFilename'
       produces:
       - application/json
       responses:

@@ -131,17 +131,14 @@ func (fileManageController *FileManageController) DownloadFile(context *gin.Cont
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param filename body string true "filename in post request body"
+// @Param filename body entity.UserFilename true "filename in post request body"
 // @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Delete Successfully"
 // @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or Other"
 // @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /file/delete [post]
 func (fileManageController *FileManageController) UserDeleteFile(context *gin.Context) {
-	type Info struct {
-		Filename string `json:"filename"`
-	}
-	var info Info
-	err1 := context.ShouldBind(&info)
+	var info entity.UserFilename
+	err1 := context.ShouldBindJSON(&info)
 	if err1 != nil || info.Filename == "" {
 		errMsg := entity.ResponseMsg{
 			Code:    400,

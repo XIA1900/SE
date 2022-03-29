@@ -161,14 +161,14 @@ func TestDeleteFile(t *testing.T) {
 		Value: loginInfo.Message,
 	}
 	info := entity.UserFilename{
-		Filename: "Gundam.jpg",
+		Filename: "soh.jpg",
 	}
 
 	requestData, _ := json.Marshal(info)
 
 	request, err1 := http.NewRequest(
 		"POST",
-		"http://"+"localhost"+":10010/gf/api/file/delete",
+		"http://"+IP+":10010/gf/api/file/delete",
 		bytes.NewBuffer(requestData))
 	if err1 != nil {
 		t.Error("Failed to Generate Request: " + err1.Error())

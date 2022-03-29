@@ -1344,18 +1344,6 @@ paths:
       - application/json
       description: need token in cookie, need target user and  new capacity in json
       parameters:
-      - description: username in post request body
-        in: body
-        name: username
-        required: true
-        schema:
-          type: string
-      - description: capacity(e.g. 16.8) in post request body
-        in: body
-        name: capacity
-        required: true
-        schema:
-          type: number
       - description: Username & New File Total Capacity
         in: body
         name: UserNewCapacity

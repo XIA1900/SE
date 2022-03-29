@@ -1662,24 +1662,6 @@ const docTemplate = `{
                 "summary": "Expand User Capacity, only admin user can do this",
                 "parameters": [
                     {
-                        "description": "username in post request body",
-                        "name": "username",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "capacity(e.g. 16.8) in post request body",
-                        "name": "capacity",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "number"
-                        }
-                    },
-                    {
                         "description": "Username \u0026 New File Total Capacity",
                         "name": "UserNewCapacity",
                         "in": "body",

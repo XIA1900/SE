@@ -86,6 +86,10 @@ export default defineConfig({
           path: '/form/createPost',
           component: './form/createPost',
         },
+        {
+          path: '/form/changePassword',
+          component: './form/changePassword',
+        },
       ],
     },
     {

@@ -71,3 +71,9 @@ export async function removeBlacklist(values) {
   });
 }
 
+export async function changePassword(values) {
+  return request('/api/changePassword', {
+    params: values,
+    method: 'POST',
+  });
+}

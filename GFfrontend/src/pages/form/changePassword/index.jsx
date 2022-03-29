@@ -10,50 +10,56 @@ import ProForm, {
 } from '@ant-design/pro-form';
 import { history, useRequest, useModel, useIntl } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import { createPost } from '@/services/create';
+import { changePassword } from '@/services/user';
 import styles from './style.less';
 
 const username = history.location.search.substring(1);
 
-const BasicForm = () => {
+const Password = () => {
 
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState;
   const intl = useIntl();
 
   const onFinish = async (values) => {
-    const date = new Date();
+    const password = values.newpassword;
+    const passwordRepeat = values.passwordRepeat;
     
-    const result = await createPost({
-      groupName: groupName,
-      userName: currentUser.name,
-      title: values.title,
-      content: values.content,
-      time: date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate(),
-    });
-
-    console.log(result);
-
-
-    if(result.message === 'Ok') {
-      const defaultLoginSuccessMessage = intl.formatMessage({
-        id: 'createPost',
-        defaultMessage: 'Post submitted successfully!',
+    if(password === passwordRepeat) {
+      const result = await changePassword({
+        username: username,
+        password: password,
       });
-      message.success(defaultLoginSuccessMessage);
-
-      const postid = result.postid;
-
-      history.push({
-        pathname: '/group/post',
-        search: postid,
-      });
+  
+      console.log(result);
+  
+  
+      if(result.message === 'Ok') {
+        const defaultChangePasswordMessage = intl.formatMessage({
+          id: 'changePassword',
+          defaultMessage: 'Password changed successfully!',
+        });
+        message.success(defaultChangePasswordMessage);
+  
+        history.push({
+          pathname: '/account/settings',
+          search: username,
+        });
+      }
     }
+    else {
+      const defaultChangePasswordFailedMessage = intl.formatMessage({
+        id: 'changePasswordFailed',
+        defaultMessage: 'Password doens\' match, please try again',
+      });
+      message.success(defaultChangePasswordFailedMessage);
+    }
+    
     
   };
 
   return (
-    <PageContainer content="What's in your mind?">
+    <PageContainer content="Change a password.">
       <Card bordered={false}>
         <ProForm
           hideRequiredMark
@@ -69,27 +75,27 @@ const BasicForm = () => {
           }}
           onFinish={onFinish}
         >
-          <ProFormText
+          <ProFormText.Password
             width="md"
-            label="Title"
-            name="title"
+            label="Password"
+            name="newpassword"
             rules={[
               {
                 required: true,
-                message: 'Please input a title for your post.',
+                message: 'Please input a new password.',
               },
             ]}
             placeholder=""
           />
 
-          <ProFormTextArea
-            label="Content"
-            width="xl"
-            name="content"
+          <ProFormText.Password
+            label="Repeat password"
+            width="md"
+            name="passwordRepeat"
             rules={[
               {
                 required: true,
-                message: 'Please add content for your post.',
+                message: 'Please input your new password again.',
               },
             ]}
             placeholder=""
@@ -100,4 +106,4 @@ const BasicForm = () => {
   );
 };
 
-export default BasicForm;
+export default Password;

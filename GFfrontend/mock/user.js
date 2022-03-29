@@ -436,4 +436,10 @@ export default {
       message: 'Ok',
     });
   },
+
+  'POST /api/changePassword': (req, res) => {
+    return res.json({
+      message: 'Ok',
+    });
+  },
 };

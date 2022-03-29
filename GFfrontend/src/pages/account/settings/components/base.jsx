@@ -26,7 +26,7 @@ const validatorPhone = (rule, value, callback) => {
 
 const AvatarView = ({ avatar }) => (
   <>
-    <div className={styles.avatar_title}>avatar</div>
+    <div className={styles.avatar_title}></div>
     <div className={styles.avatar}>
       <img src={avatar} alt="avatar" />
     </div>
@@ -84,20 +84,38 @@ const BaseView = () => {
               initialValues={{ ...currentUser, phone: currentUser?.phone.split('-') }}
               hideRequiredMark
             >
-              <ProFormText
-                width="md"
-                name="username"
-                label="Username"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your username!',
-                  },
-                ]}
-                initialValue={currentUser.name}
-              />
+              <ProForm.Group>
+                <ProFormText
+                  width="md"
+                  name="username"
+                  label="Username"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input your username!',
+                    },
+                  ]}
+                  initialValue={currentUser.name}
+                  layout="inline"
+                />
+                <ProFormText
+                  width="md"
+                  name="email"
+                  label="Email"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input your email address!',
+                    },
+                  ]}
+                  initialValue={currentUser.email}
+                  layout="inline"
+                />
+                
+              </ProForm.Group>
+              
               <ProFormSelect
-                width="sm"
+                width="md"
                 name="gender"
                 label="Gender"
                 rules={[
@@ -121,19 +139,9 @@ const BaseView = () => {
                   }
                 ]}
                 initialValue = {currentUser.sex}
+                layout="inline"
               />
-              <ProFormText
-                width="md"
-                name="email"
-                label="Email"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your email address!',
-                  },
-                ]}
-                initialValue={currentUser.email}
-              />
+
               <ProFormText
                 width="md"
                 name="birthday"

@@ -1,10 +1,16 @@
 package test
 
 import (
+	"GFBackend/entity"
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
+	"strings"
 	"testing"
+	"unsafe"
 )
 
 func TestUserLogin(t *testing.T) {
@@ -23,6 +29,37 @@ func TestUserLogin(t *testing.T) {
 }
 
 func TestUserRegister(t *testing.T) {
+	userInfo := entity.UserInfo{
+		Username: "kirby",
+		Password: "007",
+	}
+
+	requestData, _ := json.Marshal(userInfo)
+
+	response, err1 := http.Post(
+		"http://"+IP+":10010/gf/api/user/register",
+		"application/json",
+		bytes.NewBuffer(requestData))
+	if err1 != nil {
+		t.Error("Failed to Request: " + err1.Error())
+		return
+	}
+	defer response.Body.Close()
+
+	content, err2 := ioutil.ReadAll(response.Body)
+	if err2 != nil {
+		t.Error("Failed to Interpret Response Message: " + err2.Error())
+		return
+	}
+
+	str := (*string)(unsafe.Pointer(&content))
+	if strings.Contains(*str, "400") {
+		t.Error("Register Parameters Error:")
+		return
+	} else if strings.Contains(*str, "500") {
+		t.Error("Internal Server Error:")
+		return
+	}
 
 }
 

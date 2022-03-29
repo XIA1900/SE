@@ -244,8 +244,6 @@ func (fileManageController *FileManageController) UserSpaceInfo(context *gin.Con
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Param username body string true "username in post request body"
-// @Param capacity body number true "capacity(e.g. 16.8) in post request body"
 // @Param UserNewCapacity body entity.UserNewCapacity true "Username & New File Total Capacity"
 // @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Update Successfully"
 // @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or Other"

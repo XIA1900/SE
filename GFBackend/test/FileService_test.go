@@ -1,6 +1,8 @@
 package test
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/http/cookiejar"
 	"testing"
@@ -51,6 +53,57 @@ func TestGetSpaceInfo(t *testing.T) {
 }
 
 func TestExpandSpace(t *testing.T) {
+	loginInfo, err := userLogin("boss", "007")
+	if err != nil || loginInfo.Message == "" {
+		t.Error("Fail to Login. Error Message: " + err.Error())
+		return
+	}
+	cookie := &http.Cookie{
+		Name:  "token",
+		Value: loginInfo.Message,
+	}
+	type Info struct {
+		Username string  `json:"username"`
+		Capacity float32 `json:"capacity"`
+	}
+
+	info := Info{
+		Username: "kirby",
+		Capacity: 36.6,
+	}
+
+	requestData, _ := json.Marshal(info)
+
+	request, err1 := http.NewRequest(
+		"POST",
+		"http://"+"localhost"+":10010/gf/api/file/space/update",
+		bytes.NewBuffer(requestData))
+	if err1 != nil {
+		t.Error("Failed to Generate Request: " + err1.Error())
+		return
+	}
+	request.AddCookie(cookie)
+	jar, err2 := cookiejar.New(nil)
+	if err2 != nil {
+		t.Error("Failed to Set Cookie: " + err2.Error())
+		return
+	}
+	var client http.Client
+	client = http.Client{
+		Jar: jar,
+	}
+	response, err3 := client.Do(request)
+	if err3 != nil {
+		t.Error("Failed to Request: " + err3.Error())
+		return
+	}
+	defer response.Body.Close()
+
+	err4 := printResponseContent(response)
+	if err4 != nil {
+		t.Error("Failed to Interpret Response Message: " + err4.Error())
+		return
+	}
 }
 
 func TestUploadFile(t *testing.T) {

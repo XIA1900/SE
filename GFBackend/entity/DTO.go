@@ -54,6 +54,11 @@ type CommunityIDsInfo struct {
 	CommunityIDs []int  `form:"CommunityIDs" json:"CommunityIDs"`
 }
 
+type UserNewCapacity struct {
+	Username string  `form:"Username" json:"Username" example:"boss"`
+	Capacity float64 `form:"Capacity" json:"Capacity" example:16.6`
+}
+
 type UserFiles struct {
 	ResponseMsg
 	Filenames []string `form:"Filenames" json:"Filenames" example:"\"xxx.jpg\",\"xxx.png\",\"xxx.gif\""`

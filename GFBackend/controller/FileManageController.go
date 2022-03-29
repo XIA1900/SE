@@ -246,27 +246,23 @@ func (fileManageController *FileManageController) UserSpaceInfo(context *gin.Con
 // @Security ApiAuthToken
 // @Param username body string true "username in post request body"
 // @Param capacity body number true "capacity(e.g. 16.8) in post request body"
+// @Param UserNewCapacity body entity.UserNewCapacity true "Username & New File Total Capacity"
 // @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Update Successfully"
 // @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or Other"
 // @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /file/space/update [post]
 func (fileManageController *FileManageController) UpdateUserCapacity(context *gin.Context) {
-	type Info struct {
-		Username string  `json:"username"`
-		Capacity float64 `json:"capacity"`
-	}
-	var info Info
-	err1 := context.ShouldBind(&info)
-	if err1 != nil {
-		errMsg := entity.ResponseMsg{
-			Code:    400,
+	var userNewCapacity entity.UserNewCapacity
+	if err1 := context.ShouldBindJSON(&userNewCapacity); err1 != nil {
+		er := entity.ResponseMsg{
+			Code:    http.StatusBadRequest,
 			Message: "Bad Parameters",
 		}
-		context.JSON(400, errMsg)
+		context.JSON(http.StatusBadRequest, er)
 		return
 	}
 
-	err2 := fileManageController.fileManageService.UpdateCapacity(info.Username, info.Capacity)
+	err2 := fileManageController.fileManageService.UpdateCapacity(userNewCapacity.Username, userNewCapacity.Capacity)
 	if err2 != nil {
 		errMsg := entity.ResponseMsg{
 			Code:    400,

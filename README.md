@@ -21,6 +21,4 @@
 
 ## File Structure
 
-- Directory "SmallDemo" is used for test when adding new components or features
-- Directory "GFBackend" is pre-version for this project backend, when some features or functions have been accomplished, we will merge to main branch
-- "tables.sql" is the database schema for this project backend
+- Directory `GFBackend` is this project backend, when some features or functions have been accomplished, we will merge it to main branch

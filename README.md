@@ -22,3 +22,12 @@
 ## File Structure
 
 - Directory `GFBackend` is this project backend, when some features or functions have been accomplished, we will merge it to main branch
+
+
+
+## Docker
+
+### Initial Deployment
+
+- Database Deployment Steps
+  - 

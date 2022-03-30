@@ -208,16 +208,20 @@ func (articleManageController *ArticleManageController) GetArticlesBySearchWords
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
 // @Router /article/getarticlelist [get]
 func (articleManageController *ArticleManageController) GetArticleList(context *gin.Context) {
-	var articleListInfo entity.ArticleListInfo
-	err1 := context.ShouldBindJSON(&articleListInfo)
+	pageNO, err1 := strconv.Atoi(context.Query("PageNO"))
+	pageSize, err2 := strconv.Atoi(context.Query("PageSize"))
 	if err1 != nil {
 		context.JSON(400, "Bad Parameters")
 		return
 	}
-	articlesList, err2 := articleManageController.articleManageService.GetArticleList(articleListInfo.PageNO, articleListInfo.PageSize)
 	if err2 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	articleList, err3 := articleManageController.articleManageService.GetArticleList(pageNO, pageSize)
+	if err3 != nil {
 		context.JSON(500, "Internal Server Error")
 		return
 	}
-	context.JSON(200, articlesList)
+	context.JSON(200, articleList)
 }

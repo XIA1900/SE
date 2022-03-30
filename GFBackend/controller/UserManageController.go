@@ -122,7 +122,7 @@ func (userManageController *UserManageController) UserLogin(context *gin.Context
 		return
 	}
 
-	if token, err := userManageController.userManageService.Login(userInfo.Username, userInfo.Password); err != nil {
+	if nickname, token, err := userManageController.userManageService.Login(userInfo.Username, userInfo.Password); err != nil {
 		if strings.Contains(err.Error(), "400") {
 			er := entity.ResponseMsg{
 				Code:    http.StatusBadRequest,
@@ -139,8 +139,9 @@ func (userManageController *UserManageController) UserLogin(context *gin.Context
 		return
 	} else {
 		success := entity.ResponseMsg{
-			Code:    http.StatusOK,
-			Message: token,
+			Code:     http.StatusOK,
+			Message:  token,
+			Nickname: nickname,
 		}
 		context.SetCookie("token", token, config.AppConfig.JWT.Expires*60, config.AppConfig.Server.BasePath, "localhost", false, true)
 		context.JSON(http.StatusOK, success)

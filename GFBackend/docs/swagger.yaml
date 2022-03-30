@@ -1,5 +1,22 @@
 basePath: /gf/api
 definitions:
+  entity.Article:
+    properties:
+      communityID:
+        type: integer
+      content:
+        type: string
+      createDay:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      typeID:
+        type: integer
+      username:
+        type: string
+    type: object
   entity.ArticleComment:
     properties:
       articleID:
@@ -222,6 +239,9 @@ definitions:
     type: object
   entity.ResponseMsg:
     properties:
+      Nickname:
+        example: James Bond
+        type: string
       code:
         example: 200
         type: integer
@@ -256,6 +276,9 @@ definitions:
         items:
           type: string
         type: array
+      Nickname:
+        example: James Bond
+        type: string
       code:
         example: 200
         type: integer
@@ -265,6 +288,9 @@ definitions:
     type: object
   entity.UserFollows:
     properties:
+      Nickname:
+        example: James Bond
+        type: string
       Users:
         example:
         - '"spriderman"'
@@ -367,6 +393,42 @@ paths:
       security:
       - ApiAuthToken: []
       summary: Delete Article By ID
+      tags:
+      - Article Manage
+  /article/getarticlelist:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need page and page size
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Page Size
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Successfully
+          schema:
+            $ref: '#/definitions/entity.Article'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Article List
       tags:
       - Article Manage
   /article/getone:

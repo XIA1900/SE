@@ -111,6 +111,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/article/getarticlelist": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need page and page size",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Get Article List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page Size",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Article"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/article/getone": {
             "get": {
                 "security": [
@@ -2272,6 +2328,32 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "entity.Article": {
+            "type": "object",
+            "properties": {
+                "communityID": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createDay": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "typeID": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "entity.ArticleComment": {
             "type": "object",
             "properties": {
@@ -2604,6 +2686,10 @@ const docTemplate = `{
         "entity.ResponseMsg": {
             "type": "object",
             "properties": {
+                "Nickname": {
+                    "type": "string",
+                    "example": "James Bond"
+                },
                 "code": {
                     "type": "integer",
                     "example": 200
@@ -2654,6 +2740,10 @@ const docTemplate = `{
                         "\"xxx.gif\""
                     ]
                 },
+                "Nickname": {
+                    "type": "string",
+                    "example": "James Bond"
+                },
                 "code": {
                     "type": "integer",
                     "example": 200
@@ -2667,6 +2757,10 @@ const docTemplate = `{
         "entity.UserFollows": {
             "type": "object",
             "properties": {
+                "Nickname": {
+                    "type": "string",
+                    "example": "James Bond"
+                },
                 "Users": {
                     "type": "array",
                     "items": {

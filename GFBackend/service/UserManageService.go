@@ -19,7 +19,7 @@ var userManageService *UserManageService
 
 type IUserManageService interface {
 	Register(username, password string, forAdmin bool) error
-	Login(username, password string) (string, error)
+	Login(username, password string) (string, string, error)
 	Logout(username string) error
 	UpdatePassword(username, password, newPassword string) error
 	Delete(username string) error
@@ -104,31 +104,31 @@ func (userManageService *UserManageService) Register(username, password string, 
 	return nil
 }
 
-func (userManageService *UserManageService) Login(username, password string) (string, error) {
+func (userManageService *UserManageService) Login(username, password string) (string, string, error) {
 	dbUser := userManageService.userDAO.GetUserByUsername(username)
 	if dbUser.Username == "" {
-		return "", errors.New("400")
+		return "", "", errors.New("400")
 	}
 
 	inputPassword := utils.EncodeInMD5(password + dbUser.Salt)
 	if inputPassword != dbUser.Password {
-		return "", errors.New("400")
+		return "", "", errors.New("400")
 	}
 
 	token, err := auth.TokenGenerate(username)
 	if err != nil {
 		logger.AppLogger.Error(err.Error())
-		return "", errors.New("500")
+		return "", "", errors.New("500")
 	}
 
 	sign, _ := auth.GetTokenSign(token.Token)
 	err = cache.AddLoginUserWithSign(username, sign)
 	if err != nil {
 		logger.AppLogger.Error(err.Error())
-		return "", errors.New("500")
+		return "", "", errors.New("500")
 	}
 
-	return token.Token, nil
+	return dbUser.Nickname, token.Token, nil
 }
 
 func (userManageService *UserManageService) Logout(username string) error {

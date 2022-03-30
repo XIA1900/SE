@@ -1,8 +1,9 @@
 package entity
 
 type ResponseMsg struct {
-	Code    int    `form:"Code" json:"code" example:"200"`
-	Message string `form:"Message" json:"message" example:"process successfully"`
+	Code     int    `form:"Code" json:"code" example:"200"`
+	Message  string `form:"Message" json:"message" example:"process successfully"`
+	Nickname string `form:"Nickname" json:"Nickname" example:"James Bond"`
 }
 
 type UserInfo struct {
@@ -98,6 +99,11 @@ type ArticleInfo struct {
 	TypeID      int    `form:"TypeID" json:"TypeID" example:11`
 	CommunityID int    `form:"CommunityID" json:"CommunityID" example:10`
 	Content     string `form:"Content" json:"Content" example:"I love UF"`
+}
+
+type ArticleListInfo struct {
+	PageNO   int `form:"PageNO" json:"PageNO" example:1`
+	PageSize int `form:"PageSize" json:"PageSize" example:5`
 }
 
 type ArticleSearchInfo struct {

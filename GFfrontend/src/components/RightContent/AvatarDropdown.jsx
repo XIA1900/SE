@@ -33,7 +33,8 @@ const AvatarDropdown = ({ menu }) => {
 
       if (key === 'logout') {
         setInitialState((s) => ({ ...s, currentUser: undefined }));
-        loginOut();
+        //loginOut();
+        history.push('/user/login');
         return;
       }
 

@@ -35,7 +35,8 @@ const Login = () => {
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
-
+    console.log('userInfo:');
+    console.log(userInfo);
     if (userInfo) {
       await setInitialState((s) => ({ ...s, currentUser: userInfo }));
     }
@@ -45,16 +46,24 @@ const Login = () => {
     try {
       // 登录
       const msg = await login({ ...values, type }); //后端
-      console.log(msg.Nickname);
+      console.log(msg);
       if (msg.code == 200) {
+        //nickname = msg.Nickname;
+        console.log(msg.Nickname);
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo(); //successful, wait for user info; this was not implemented
-        /** 此方法会跳转到 redirect 参数所在的位置 */
 
+        const userInfo = {
+          name: msg.Nickname,
+        };
+        console.log(userInfo);
+        //await fetchUserInfo(); //successful, wait for user info; this was not implemented
+        await setInitialState((s) => ({ ...s, currentUser: userInfo}));
+        
+        /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;
         const { query } = history.location;
         const { redirect } = query;
@@ -63,7 +72,6 @@ const Login = () => {
       }
 
       console.log(msg); // 如果失败去设置用户错误信息
-
       setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({

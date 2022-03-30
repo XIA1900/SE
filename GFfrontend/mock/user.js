@@ -244,6 +244,7 @@ export default {
         status: 'ok',
         type,
         currentAuthority: 'admin',
+        Nickname: 'Tommy',
       });
       access = 'admin';
       return;

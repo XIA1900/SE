@@ -15,6 +15,7 @@ type IArticleDAO interface {
 	DeleteArticleByID(id int) error
 	UpdateArticleTitleOrContentByID(id int, newTitle, newContent string) error
 	GetArticleByID(id int) (entity.Article, error)
+	GetArticleList(offset, limit int) ([]entity.Article, error)
 }
 
 type ArticleDAO struct {
@@ -66,4 +67,13 @@ func (articleDAO *ArticleDAO) GetArticleByID(id int) (entity.Article, error) {
 		return entity.Article{}, result.Error
 	}
 	return article, nil
+}
+
+func (articleDAO *ArticleDAO) GetArticleList(offset, limit int) ([]entity.Article, error) {
+	var articles []entity.Article
+	result := articleDAO.db.Offset(offset).Limit(limit).Find(&articles)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return articles, nil
 }

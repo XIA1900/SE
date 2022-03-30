@@ -21,6 +21,7 @@ type IArticleManageService interface {
 	UpdateArticleTitleOrContentByID(articleInfo entity.ArticleInfo, operator string) error
 	GetOneArticleByID(id int) (entity.ArticleDetail, error)
 	GetArticlesBySearchWords(articleSearchInfo entity.ArticleSearchInfo) (entity.ArticlesForSearching, error)
+	GetArticleList(pageNO, pageSize int) ([]entity.Article, error)
 }
 
 type ArticleManageService struct {
@@ -257,4 +258,13 @@ func (articleManageService *ArticleManageService) GetArticlesBySearchWords(artic
 		TotalPageNO: totalPageNO,
 		Articles:    documents,
 	}, nil
+}
+
+func (articleManageService *ArticleManageService) GetArticleList(pageNO, pageSize int) ([]entity.Article, error) {
+	articles, err1 := articleManageService.articleDAO.GetArticleList((pageNO-1)*pageSize, pageSize)
+	if err1 != nil {
+		logger.AppLogger.Error(err1.Error())
+		return nil, err1
+	}
+	return articles, nil
 }

@@ -101,6 +101,11 @@ type ArticleInfo struct {
 	Content     string `form:"Content" json:"Content" example:"I love UF"`
 }
 
+type ArticleListInfo struct {
+	PageNO   int `form:"PageNO" json:"PageNO" example:1`
+	PageSize int `form:"PageSize" json:"PageSize" example:5`
+}
+
 type ArticleSearchInfo struct {
 	PageNO      int    `form:"PageNO" json:"PageNO" example:1`
 	PageSize    int    `form:"PageSize" json:"PageSize" example:5`

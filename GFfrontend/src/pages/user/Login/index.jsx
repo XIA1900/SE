@@ -11,8 +11,8 @@ import React, { useState } from 'react';
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
 import { useIntl, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
-import { login } from '@/services/ant-design-pro/api';
-//import { login } from '@/services/login';
+//import { login } from '@/services/ant-design-pro/api';
+import { login } from '@/services/login';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import styles from './index.less';
 
@@ -45,8 +45,8 @@ const Login = () => {
     try {
       // 登录
       const msg = await login({ ...values, type }); //后端
-
-      if (msg.status === 'ok') {
+      console.log(msg.Nickname);
+      if (msg.code == 200) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',

@@ -1,8 +1,9 @@
 package entity
 
 type ResponseMsg struct {
-	Code    int    `form:"Code" json:"code" example:"200"`
-	Message string `form:"Message" json:"message" example:"process successfully"`
+	Code     int    `form:"Code" json:"code" example:"200"`
+	Message  string `form:"Message" json:"message" example:"process successfully"`
+	Nickname string `form:"Nickname" json:"Nickname" example:"James Bond"`
 }
 
 type UserInfo struct {

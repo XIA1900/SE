@@ -202,9 +202,20 @@ func (communityManageController *CommunityManageController) GetOneCommunityByID(
 		context.JSON(400, "Bad Parameters")
 		return
 	}
+	username := context.Query("username")
+	pageNO, err3 := strconv.Atoi(context.Query("pageNO"))
+	if err3 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	pageSize, err4 := strconv.Atoi(context.Query("pageSize"))
+	if err4 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
 
-	community, count, err2 := communityManageController.communityManageService.GetOneCommunityByID(id)
-	if err2 != nil {
+	community, count, ifexit, err5 := communityManageController.communityManageService.GetOneCommunityByID(id, username, pageNO, pageSize)
+	if err5 != nil {
 		context.JSON(500, "Internal Server Error")
 		return
 	}
@@ -212,6 +223,7 @@ func (communityManageController *CommunityManageController) GetOneCommunityByID(
 	context.JSON(200, gin.H{
 		"community": community,
 		"count":     count,
+		"ifexit":    ifexit,
 	})
 }
 

@@ -96,3 +96,17 @@ func (articleLikeController ArticleLikeController) DeleteLike(context *gin.Conte
 
 	context.JSON(200, "Delete Like Successfully")
 }
+
+func (articleLikeController *ArticleLikeController) GetLikeList(context *gin.Context) {
+	articleID, err1 := strconv.Atoi(context.Query("articleID"))
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	articleLikeList, err2 := articleLikeController.articleLikeService.GetLikeList(articleID)
+	if err2 != nil {
+		context.JSON(500, "Server Internal Error.")
+		return
+	}
+	context.JSON(200, articleLikeList)
+}

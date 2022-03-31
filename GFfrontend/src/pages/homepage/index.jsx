@@ -1,6 +1,6 @@
 import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'umi';
 import ArticleListContent from './components/ArticleListContent';
 import StandardFormRow from './components/StandardFormRow';
@@ -10,25 +10,59 @@ import styles from './style.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
-const pageSize = 10;
+const pageSize = 20;
+const pageNumber = 1;
 
 const Articles = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return queryList({
-        count: pageSize,
-        type: 'hottest',
-        groupName: null,
+    async() => {
+      const result = await queryList({
+        PageNO: pageNumber,
+        PageSize: pageSize,
       });
+      console.log(result);
+      return result;
     },
     {
+      formatResult: result => result,
       loadMore: true,
-    },
+    }    
   );
-  const list = data?.list || [];
+  
+  console.log(data);
+  // async function getArticleList() {
+  //   console.log("getting data about articles")
+  //   let result = []
+  //   const {data} =  await fetch(
+  //     '/api/article/getarticlelist?PageNO=1&PageSize=20',
+  //     {
+  //       method: 'GET',
+  //       credentials: 'include'
+  //     }
+  //   ).then(response => response.json())
+  //   console.log(data)
+  // }
+  // console.log("====== getting async")
+  // getArticleList()
+  // console.log("====== data")
+  
+//  response.then((data) => {
+//    console.log(data)
+//  })
+
+    // const list = data;
+    // console.log("--");
+    // console.log(list);
+  //const list = data?.list || [];
+
+  const list = [];
+  for(let i=0; i<data.length; i++) {
+    list.push(data[i]);
+  }
+  console.log(list);
   // const post_href = "/group/post?"+list.id;
-  // list.push({
+  // list.push({21
   //   post_href: post_href,
   // });
   // console.log(list.title);
@@ -178,7 +212,7 @@ const Articles = () => {
           dataSource={list}
           renderItem={(item) => (
             <List.Item
-              key={item.id}
+              key={item.ID}
               actions={[
                 <IconText key="collection" type="star-o" text={item.collection}  />,
                 <IconText key="like" type="like-o" text={item.like} />,
@@ -187,8 +221,8 @@ const Articles = () => {
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={"/group/post?"+item.id}>
-                    {item.title}
+                  <a className={styles.listItemMetaTitle} href={"/group/post?"+item.ID}>
+                    {item.Title}
                   </a>
                 }
               />

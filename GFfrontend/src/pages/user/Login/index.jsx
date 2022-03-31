@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
+import cookie from "react-cookies";
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
 import { useIntl, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
@@ -43,19 +44,19 @@ const Login = () => {
   };
 
   const handleSubmit = async (values) => {
+    console.log(values);
     try {
       // 登录
       const msg = await login({ ...values, type }); //后端
       console.log(msg);
       if (msg.code == 200) {
         //nickname = msg.Nickname;
-        console.log(msg.Nickname);
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-
+        cookie.save('token', msg.message);
         const userInfo = {
           name: msg.Nickname,
         };

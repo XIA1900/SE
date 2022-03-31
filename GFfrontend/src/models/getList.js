@@ -12,7 +12,7 @@ const Model = {
       yield put({
         type: 'save',
         payload: response,
-      });
+      })
     },
   },
   reducers: {

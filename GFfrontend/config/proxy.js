@@ -32,6 +32,7 @@ export default {
       pathRewrite: {
         '^/api': '', //  '/api': ''
       },
+      credentials: 'include',
     },
   },
 };

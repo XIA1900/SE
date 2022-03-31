@@ -18,6 +18,7 @@ type IArticleFavoriteService interface {
 	CreateFavorite(username string, articleID int) error
 	DeleteFavorite(username string, articleID int) error
 	GetUserFavorites(username string, pageNO, pageSize int) (entity.ArticleFavoritesInfo, error)
+	GetFavoriteOfArticle(articleID int) ([]entity.ArticleFavorite, error)
 }
 
 type ArticleFavoriteService struct {
@@ -120,4 +121,17 @@ func (articleFavoriteService *ArticleFavoriteService) GetUserFavorites(username 
 		TotalPageNO:      totalPageNO,
 		ArticleFavorites: favorites,
 	}, nil
+}
+
+func (articleFavoriteService *ArticleFavoriteService) GetFavoriteOfArticle(articleID int) ([]entity.ArticleFavorite, error) {
+	favorites, err1 := articleFavoriteService.articleFavoriteDAO.GetFavoriteOfArticle(articleID)
+	if err1 != nil {
+		if strings.Contains(err1.Error(), "not found") {
+			return []entity.ArticleFavorite{}, errors.New("400")
+		}
+		logger.AppLogger.Error(err1.Error())
+		return []entity.ArticleFavorite{}, errors.New("500")
+	}
+
+	return favorites, nil
 }

@@ -17,6 +17,7 @@ type IArticleFavoriteDAO interface {
 	GetFavoritesByUsername(username string, offset, limit int) ([]entity.ArticleFavorite, error)
 	CountFavoritesByUsername(username string) (int64, error)
 	CountFavoriteOfArticle(articleID int) (int64, error)
+	GetFavoriteOfArticle(articleID int) ([]entity.ArticleFavorite, error)
 }
 
 type ArticleFavoriteDAO struct {
@@ -90,4 +91,13 @@ func (articleFavoriteDAO *ArticleFavoriteDAO) CountFavoriteOfArticle(articleID i
 		return -1, result.Error
 	}
 	return count, nil
+}
+
+func (articleFavoriteDAO *ArticleFavoriteDAO) GetFavoriteOfArticle(articleID int) ([]entity.ArticleFavorite, error) {
+	var articleFavorites []entity.ArticleFavorite
+	result := articleFavoriteDAO.db.Where("ArticleID = ?", articleID).Find(&articleFavorites)
+	if result.Error != nil {
+		return articleFavorites, result.Error
+	}
+	return articleFavorites, nil
 }

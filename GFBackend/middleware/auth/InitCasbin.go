@@ -77,6 +77,7 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/create/:articleID", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/delete/:articleID", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/get", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/getfavoriteofarticle", "GET")
 
 	// /articlecomment/..
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlecomment/create", "POST")

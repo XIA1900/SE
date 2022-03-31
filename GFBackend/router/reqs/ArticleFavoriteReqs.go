@@ -11,6 +11,7 @@ func InitArticleFavoriteReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 		articleFavoriteReqsGroup.POST("/create/:articleID", articleFavoriteController.CreateFavorite)
 		articleFavoriteReqsGroup.POST("/delete/:articleID", articleFavoriteController.DeleteFavorite)
 		articleFavoriteReqsGroup.GET("/get", articleFavoriteController.GetUserFavorites)
+		articleFavoriteReqsGroup.GET("/getfavoriteofarticle", articleFavoriteController.GetFavoriteOfArticle)
 	}
 
 	return articleFavoriteReqsGroup

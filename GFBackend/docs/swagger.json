@@ -778,6 +778,49 @@
                 }
             }
         },
+        "/articlelike/getlikelist": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Like Manage"
+                ],
+                "summary": "Get User's Like List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "233333",
+                        "name": "articleID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Like List Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/articletype/all": {
             "get": {
                 "consumes": [

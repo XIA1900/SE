@@ -23,7 +23,7 @@ func RunServer() {
 	AppRouter.Static("/resources", "./resources")
 	AppRouter.Use(interceptor.AuthInterceptor())
 
-	docs.SwaggerInfo.BasePath = appConfig.Server.BasePath
+	docs.SwaggerInfo_swagger.BasePath = appConfig.Server.BasePath
 	AppRouter.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	baseGroup := AppRouter.Group(appConfig.Server.BasePath)

@@ -4,7 +4,7 @@ package docs
 
 import "github.com/swaggo/swag"
 
-const docTemplate = `{
+const docTemplate_swagger = `{
     "schemes": {{ marshal .Schemes }},
     "swagger": "2.0",
     "info": {
@@ -772,6 +772,49 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Like Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlelike/getlikelist": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Like Manage"
+                ],
+                "summary": "Get User's Like List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "233333",
+                        "name": "articleID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Like List Successfully",
                         "schema": {
                             "type": "string"
                         }
@@ -2824,8 +2867,8 @@ const docTemplate = `{
     }
 }`
 
-// SwaggerInfo holds exported Swagger Info so clients can modify it
-var SwaggerInfo = &swag.Spec{
+// SwaggerInfo_swagger holds exported Swagger Info so clients can modify it
+var SwaggerInfo_swagger = &swag.Spec{
 	Version:          "1.0",
 	Host:             "http://167.71.166.120:10010",
 	BasePath:         "/gf/api",
@@ -2833,9 +2876,9 @@ var SwaggerInfo = &swag.Spec{
 	Title:            "Gator Forum Backend API",
 	Description:      "This is the Gator Forum Backend Server",
 	InfoInstanceName: "swagger",
-	SwaggerTemplate:  docTemplate,
+	SwaggerTemplate:  docTemplate_swagger,
 }
 
 func init() {
-	swag.Register(SwaggerInfo.InstanceName(), SwaggerInfo)
+	swag.Register(SwaggerInfo_swagger.InstanceName(), SwaggerInfo_swagger)
 }

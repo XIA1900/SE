@@ -97,6 +97,17 @@ func (articleLikeController ArticleLikeController) DeleteLike(context *gin.Conte
 	context.JSON(200, "Delete Like Successfully")
 }
 
+// GetLikeList godoc
+// @Summary Get User's Like List
+// @Description need token in cookie
+// @Param articleID query integer true "233333"
+// @Tags Article Like Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Success 200 {string} string "<b>Success</b>. Get Like List Successfully"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters"
+// @Router /articlelike/getlikelist [get]
 func (articleLikeController *ArticleLikeController) GetLikeList(context *gin.Context) {
 	articleID, err1 := strconv.Atoi(context.Query("articleID"))
 	if err1 != nil {

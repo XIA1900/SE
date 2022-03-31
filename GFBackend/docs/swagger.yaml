@@ -827,6 +827,33 @@ paths:
       summary: User cancel like Article
       tags:
       - Article Like Manage
+  /articlelike/getlikelist:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie
+      parameters:
+      - description: "233333"
+        in: query
+        name: articleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Like List Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get User's Like List
+      tags:
+      - Article Like Manage
   /articletype/all:
     get:
       consumes:

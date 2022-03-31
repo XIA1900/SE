@@ -64,8 +64,7 @@ const Articles = () => {
 
   if(typeof(data[0])!='undefined') {
     var size = Object.keys(data).length;
-    console.log(size);
-    list.push(data[0]);
+
     for(let i=0; i<size-1; i++) {
       console.log(data[i]);
       list.push(data[i]);

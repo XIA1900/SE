@@ -20,18 +20,28 @@ const postid = history.location.search.substring(1);
 const Collection = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return getCollection({
-        postid: postid,
+    async() => {
+      const result = await getCollection({
+        ID: postid,
       });
+      return result;
     },
     {
       loadMore: true,
+      formatResult: result => result,
     },
   );
 
-  const list = data?.list || [];
-  console.log(list);
+  console.log(data);
+  const list = [];
+  if(typeof(data[0])!='undefined') {
+    var size = Object.keys(data).length;
+    for(let i=0; i<size-1; i++) {
+      list.push(data[i]);
+    }
+  }
+  // const list = data?.list || [];
+ console.log(list);
 
   const formItemLayout = {
     wrapperCol: {

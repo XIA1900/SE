@@ -17,22 +17,22 @@ export async function checkMember(values) {
 
 
 export async function quitGroup(values) {
-    return request('/api/quitGroup', {
-      params: values,
-      method: 'POST',
-    });
-  }
+  return request('/api/quitGroup', {
+    params: values,
+    method: 'POST',
+  });
+}
 
 export async function joinGroup(values) {
-    return request('/api/joinGroup', {
-      params: values,
-      method: 'POST',
-    });
-  }
+  return request('/api/joinGroup', {
+    params: values,
+    method: 'POST',
+  });
+}
 
 export async function queryCurrent(values) {
-    return request('/api/currentUserDetail');
-  }
+  return request('/api/currentUserDetail');
+}
 
 export async function getPersonalCollection(values) {
   return request('/api/getPersonalCollection');
@@ -47,19 +47,19 @@ export async function removeCollection(values) {
 
 
 export async function getPersnalFollower(values) {
-    return request('/api/getPersnalFollower');
-  }
+  return request('/api/getPersnalFollower');
+}
 
 export async function removeFollower(values) {
-    return request('/api/removeFollower', {
-      params: values,
-      method: 'POST',
-    });
-  }
+  return request('/api/removeFollower', {
+    params: values,
+    method: 'POST',
+  });
+}
 
 export async function getPersonalFollowing(values) {
-    return request('/api/getPersonalFollowing');
-  }
+  return request('/api/getPersonalFollowing');
+}
   
 export async function removeFollowing(values) {
   return request('/api/removeFollowing', {

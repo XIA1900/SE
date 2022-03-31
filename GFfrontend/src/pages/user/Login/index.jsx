@@ -58,7 +58,7 @@ const Login = () => {
         message.success(defaultLoginSuccessMessage);
         cookie.save('token', msg.message);
         const userInfo = {
-          name: msg.Nickname,
+          name: values.username,
         };
         console.log(userInfo);
         //await fetchUserInfo(); //successful, wait for user info; this was not implemented

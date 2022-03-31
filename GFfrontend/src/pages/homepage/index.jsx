@@ -1,7 +1,7 @@
 import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
 import React, { useState } from 'react';
-import { useRequest } from 'umi';
+import { useRequest, useModel, history } from 'umi';
 import ArticleListContent from './components/ArticleListContent';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
@@ -13,23 +13,18 @@ const FormItem = Form.Item;
 const pageSize = 20;
 const pageNumber = 1;
 
-const waitTime = (time = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
 
 const Articles = () => {
   const [form] = Form.useForm();
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
     async() => {
       const result = await queryList({
         PageNO: pageNumber,
         PageSize: pageSize,
       });
-      console.log(result);
       return result;
     },
     {
@@ -58,25 +53,13 @@ const Articles = () => {
 //    console.log(data)
 //  })
 
-  console.log(data);
   const list = [];
-  
-
   if(typeof(data[0])!='undefined') {
     var size = Object.keys(data).length;
-
     for(let i=0; i<size-1; i++) {
-      console.log(data[i]);
       list.push(data[i]);
     }
   }
-  
-  // for(let i=0; i<10; i++) {
-  //   console.log(data[i]);
-  //   list.push(data[i]);
-  // }
- console.log(list);
-
 
   const onCCollection = async(values) => {
     console.log(values);
@@ -183,6 +166,14 @@ const Articles = () => {
     </div>
   );
 
+  const clickPost = (values) => {
+    history.push({
+      pathname: '/group/post',
+      search: values.toString(),
+    });
+    return;
+  }
+
   return (
     <>
       <Card bordered={false}>
@@ -232,7 +223,7 @@ const Articles = () => {
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={"/group/post?"+item.ID}>
+                  <a className={styles.listItemMetaTitle}  onClick={(e) => clickPost(item.ID, e)}>
                     {item.Title}
                   </a>
                 }

@@ -24,25 +24,26 @@ import Reply from './components/reply';
 import Collection from './components/collection';
 import styles from './Center.less';
 import { getPost } from '@/services/getPost';
-import { currentUser } from '@/services/ant-design-pro/api';
+//import { currentUser } from '@/services/ant-design-pro/api';
 import { removeLike, getRelation } from '@/services/user';
 
 const postid = history.location.search.substring(1);
 console.log(postid);
 
-const operationTabList = ({replies, likes, collections}) => {
+const operationTabList = ({NumComment, NumLike, NumFavorite}) => {
+  if(typeof(NumComment) === 'undefined') return;
   const tabList = [
     {
       key: 'reply',
-      tab: <span> Replies{' '+replies} </span>,
+      tab: <span> Replies{' '+NumComment} </span>,
     },
     {
       key: 'like',
-      tab: <span> Likes{' '+likes}</span>,
+      tab: <span> Likes{' '+NumLike}</span>,
     },
     {
       key: 'collection',
-      tab: <span> Collections{' '+collections}</span>
+      tab: <span> Collections{' '+NumFavorite}</span>
     },
   ];
   return tabList;
@@ -137,15 +138,30 @@ const Center = () => {
   const { currentUser } = initialState || {};
   const [visible, setVisible] = useState(false);
 
-  const { data: postContents, loading } = useRequest(() => {
-    return getPost({
-      username: currentUser.name,
-      postid: postid,
-    });
-  });
+  const { data: postContents, reload, loading, loadMore, loadingMore } = useRequest(
+    async() => {
+      const result = await getPost({
+        //username: currentUser.username,
+        ID: postid,
+      });
+      //console.log(result);
+      return result;
+    },
+    {
+      formatResult: result => result,
+      loadMore: true,
+    }
+  );
+  //console.log(postContents);
+  const list = postContents || [];
+  //console.log(list);
 
-  const list = postContents?.list || [];
-  console.log(list);
+  // if(typeof(postContents[0])!='undefined') {
+  //   list = postContents;
+  // }
+
+  // console.log(list);
+
 
   const onReply = (values) => {
     console.log(values);
@@ -170,17 +186,17 @@ const Center = () => {
 
   }
 
-  const renderPostInfo = ({ avatar, title, content, owner, updatedAt}) => {
+  const renderPostInfo = ({ avatar, Title, Content, owner, updatedAt}) => {
     return (
       <div className={styles.listContent}>
-        <div className={styles.title}>{title}</div>
+        <div className={styles.title}>{Title}</div>
           <img
             alt=""
             src={avatar}
             style={{ width: '25px', height: '25px', borderRadius: '25px' }}
           />
           <a href=''> {owner}</a> updated at {updatedAt}
-        <div className={styles.description}> {content} 
+        <div className={styles.description}> {Content} 
         </div>
       </div>
     );

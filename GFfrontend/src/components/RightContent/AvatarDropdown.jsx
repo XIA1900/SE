@@ -27,6 +27,8 @@ const loginOut = async () => {
 
 const AvatarDropdown = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
+  const { currentUser } = initialState;
+
   const onMenuClick = useCallback(
     (event) => {
       const { key } = event;
@@ -62,6 +64,7 @@ const AvatarDropdown = ({ menu }) => {
     },
     [setInitialState],
   );
+
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
       <Spin
@@ -78,7 +81,7 @@ const AvatarDropdown = ({ menu }) => {
     return loading;
   }
 
-  const { currentUser } = initialState;
+  
 
   if (!currentUser || !currentUser.name) {
     return loading;

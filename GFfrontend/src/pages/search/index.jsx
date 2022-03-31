@@ -11,7 +11,7 @@ import { wrapConstructor } from 'lodash-decorators/utils';
 
 
 const query = history.location.search;
-const values = query.substr(1);
+const values = query.substring(1);
 console.log(values);
 
 const searchResults = () => {

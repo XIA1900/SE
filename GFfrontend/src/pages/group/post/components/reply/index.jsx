@@ -17,22 +17,28 @@ const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
 const postid = history.location.search.substring(1);
+const pageNo = 1;
 
 const Reply = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return getReply({
-        postid: postid,
+    async() => {
+      const result = await getReply({
+        PageNO: pageNo,
+        PageSize: pageSize,
+        ID: postid,
       });
+      return result;
     },
     {
       loadMore: true,
+      formatResult: result => result,
     },
   );
-
-  const list = data?.list || [];
-  console.log(list);
+  console.log(data)
+  const list = data?.ArticleComments || [];
+  //const list = data || [];
+  //console.log(list);
 
   const IconText = ({ type, text }) => {
     switch (type) {

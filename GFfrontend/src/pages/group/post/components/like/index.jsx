@@ -20,18 +20,28 @@ const postid = history.location.search.substring(1);
 const Like = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return getLike({
-        postid: postid,
+    async() => {
+      const result = await getLike({
+        ID: postid,
       });
+      return result;
     },
     {
       loadMore: true,
+      formatResult: result => result,
     },
   );
-
-  const list = data?.list || [];
-  console.log(list);
+  
+  console.log(data);
+  const list = [];
+  if(typeof(data[0])!='undefined') {
+    var size = Object.keys(data).length;
+    for(let i=0; i<size-1; i++) {
+      list.push(data[i]);
+    }
+  }
+  // const list = data?.list || [];
+ console.log(list);
 
   const formItemLayout = {
     wrapperCol: {
@@ -94,7 +104,7 @@ const Like = () => {
             <div>
               <p>
               <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-              {item.user}
+              {item.Username}
               </p>
             </div>
           )}

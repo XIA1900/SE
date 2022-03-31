@@ -203,13 +203,16 @@ func (communityManageController *CommunityManageController) GetOneCommunityByID(
 		return
 	}
 
-	community, err2 := communityManageController.communityManageService.GetOneCommunityByID(id)
+	community, count, err2 := communityManageController.communityManageService.GetOneCommunityByID(id)
 	if err2 != nil {
 		context.JSON(500, "Internal Server Error")
 		return
 	}
 
-	context.JSON(200, community)
+	context.JSON(200, gin.H{
+		"community": community,
+		"count":     count,
+	})
 }
 
 // GetCommunitiesByNameFuzzyMatch godoc

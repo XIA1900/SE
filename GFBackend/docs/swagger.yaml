@@ -769,6 +769,37 @@ paths:
       summary: User like Article
       tags:
       - Article Favorite Manage
+  /articlefavorite/getfavoriteofarticle:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need article id
+      parameters:
+      - description: "233333"
+        in: query
+        name: ArticleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found or Existed
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User Favorite Article
+      tags:
+      - Article Favorite Manage
   /articlelike/create/:articleID:
     post:
       consumes:

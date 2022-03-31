@@ -140,16 +140,17 @@ func (articleFavoriteController ArticleFavoriteController) GetUserFavorites(cont
 }
 
 // GetFavoriteOfArticle godoc
-// @Summary Get User's Like List
-// @Description need token in cookie
-// @Param articleID query integer true "233333"
-// @Tags Article Like Manage
+// @Summary User Favorite Article
+// @Description need token in cookie, need article id
+// @Tags Article Favorite Manage
 // @Accept json
 // @Produce json
 // @Security ApiAuthToken
-// @Success 200 {string} string "<b>Success</b>. Get Like List Successfully"
-// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters"
-// @Router /articlelike/getlikelist [get]
+// @Param ArticleID query integer true "233333"
+// @Success 200 {string} string "<b>Success</b>. Create Successfully"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters or Not Found or Existed"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /articlefavorite/getfavoriteofarticle [get]
 func (articleFavoriteController ArticleFavoriteController) GetFavoriteOfArticle(context *gin.Context) {
 	articleID, err1 := strconv.Atoi(context.Query("articleID"))
 	if err1 != nil {

@@ -218,10 +218,16 @@ func (articleManageController *ArticleManageController) GetArticleList(context *
 		context.JSON(400, "Bad Parameters")
 		return
 	}
-	articleList, err3 := articleManageController.articleManageService.GetArticleList(pageNO, pageSize)
+	articleList, communityList, countLike, countFavorite, countComment, err3 := articleManageController.articleManageService.GetArticleList(pageNO, pageSize)
 	if err3 != nil {
 		context.JSON(500, "Internal Server Error")
 		return
 	}
-	context.JSON(200, articleList)
+	context.JSON(200, gin.H{
+		"ArticleList":   articleList,
+		"CommunityList": communityList,
+		"CountLike":     countLike,
+		"CountFavorite": countFavorite,
+		"CountComment":  countComment,
+	})
 }

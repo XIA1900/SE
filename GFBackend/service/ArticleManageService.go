@@ -21,7 +21,7 @@ type IArticleManageService interface {
 	UpdateArticleTitleOrContentByID(articleInfo entity.ArticleInfo, operator string) error
 	GetOneArticleByID(id int) (entity.ArticleDetail, error)
 	GetArticlesBySearchWords(articleSearchInfo entity.ArticleSearchInfo) (entity.ArticlesForSearching, error)
-	GetArticleList(pageNO, pageSize int) ([]entity.Article, error)
+	GetArticleList(pageNO, pageSize int) ([]entity.Article, []entity.Community, []int64, []int64, []int64, error)
 }
 
 type ArticleManageService struct {
@@ -260,11 +260,47 @@ func (articleManageService *ArticleManageService) GetArticlesBySearchWords(artic
 	}, nil
 }
 
-func (articleManageService *ArticleManageService) GetArticleList(pageNO, pageSize int) ([]entity.Article, error) {
+func (articleManageService *ArticleManageService) GetArticleList(pageNO, pageSize int) ([]entity.Article, []entity.Community, []int64, []int64, []int64, error) {
 	articles, err1 := articleManageService.articleDAO.GetArticleList((pageNO-1)*pageSize, pageSize)
 	if err1 != nil {
 		logger.AppLogger.Error(err1.Error())
-		return nil, err1
+		return nil, nil, nil, nil, nil, err1
 	}
-	return articles, nil
+	var communities []entity.Community
+	for i := 0; i < len(articles); i++ {
+		community, err2 := articleManageService.communityDAO.GetOneCommunityByID(articles[i].CommunityID)
+		if err2 != nil {
+			logger.AppLogger.Error(err2.Error())
+			return nil, nil, nil, nil, nil, err2
+		}
+		communities = append(communities, community)
+	}
+	var likes []int64
+	for i := 0; i < len(articles); i++ {
+		like, err3 := articleManageService.articleLikeDAO.CountLikeOfArticle(articles[i].ID)
+		if err3 != nil {
+			logger.AppLogger.Error(err3.Error())
+			return nil, nil, nil, nil, nil, err3
+		}
+		likes = append(likes, like)
+	}
+	var favorites []int64
+	for i := 0; i < len(articles); i++ {
+		favorite, err4 := articleManageService.articleFavoriteDAO.CountFavoriteOfArticle(articles[i].ID)
+		if err4 != nil {
+			logger.AppLogger.Error(err4.Error())
+			return nil, nil, nil, nil, nil, err4
+		}
+		favorites = append(favorites, favorite)
+	}
+	var comments []int64
+	for i := 0; i < len(articles); i++ {
+		comment, err5 := articleManageService.articleCommentDAO.CountCommentsOfArticle(articles[i].ID)
+		if err5 != nil {
+			logger.AppLogger.Error(err5.Error())
+			return nil, nil, nil, nil, nil, err5
+		}
+		comments = append(comments, comment)
+	}
+	return articles, communities, likes, favorites, comments, nil
 }

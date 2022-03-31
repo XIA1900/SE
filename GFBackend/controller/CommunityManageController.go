@@ -197,7 +197,7 @@ func (communityManageController *CommunityManageController) GetNumberOfMemberByI
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
 // @Router /community/getone/:id [get]
 func (communityManageController *CommunityManageController) GetOneCommunityByID(context *gin.Context) {
-	id, err1 := strconv.Atoi(context.Param("id"))
+	id, err1 := strconv.Atoi(context.Query("id"))
 	if err1 != nil {
 		context.JSON(400, "Bad Parameters")
 		return

@@ -169,7 +169,7 @@ func (communityManageController *CommunityManageController) UpdateDescriptionByI
 // @Failure 500 "<b>Failure</b>. Return 0"
 // @Router /community/numberofmember/:id [get]
 func (communityManageController *CommunityManageController) GetNumberOfMemberByID(context *gin.Context) {
-	id, err1 := strconv.Atoi(context.Param("id"))
+	id, err1 := strconv.Atoi(context.Query("id"))
 	if err1 != nil {
 		context.JSON(400, 0)
 		return

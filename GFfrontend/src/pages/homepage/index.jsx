@@ -13,6 +13,14 @@ const FormItem = Form.Item;
 const pageSize = 20;
 const pageNumber = 1;
 
+const waitTime = (time = 100) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+};
+
 const Articles = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
@@ -29,8 +37,7 @@ const Articles = () => {
       loadMore: true,
     }    
   );
-  
-  console.log(data);
+
   // async function getArticleList() {
   //   console.log("getting data about articles")
   //   let result = []
@@ -51,21 +58,26 @@ const Articles = () => {
 //    console.log(data)
 //  })
 
-    // const list = data;
-    // console.log("--");
-    // console.log(list);
-  //const list = data?.list || [];
-
+  console.log(data);
   const list = [];
-  for(let i=0; i<data.length; i++) {
-    list.push(data[i]);
+  
+
+  if(typeof(data[0])!='undefined') {
+    var size = Object.keys(data).length;
+    console.log(size);
+    list.push(data[0]);
+    for(let i=0; i<size-1; i++) {
+      console.log(data[i]);
+      list.push(data[i]);
+    }
   }
-  console.log(list);
-  // const post_href = "/group/post?"+list.id;
-  // list.push({21
-  //   post_href: post_href,
-  // });
-  // console.log(list.title);
+  
+  // for(let i=0; i<10; i++) {
+  //   console.log(data[i]);
+  //   list.push(data[i]);
+  // }
+ console.log(list);
+
 
   const onCCollection = async(values) => {
     console.log(values);

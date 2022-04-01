@@ -101,7 +101,7 @@
     "carlo": "^0.9.46",
     "cross-env": "^7.0.0",
     "cross-port-killer": "^1.1.1",
-    "cypress": "^9.5.1",
+    "cypress": "^9.5.3",
     "detect-installer": "^1.0.1",
     "enzyme": "^3.11.0",
     "eslint": "^7.1.0",

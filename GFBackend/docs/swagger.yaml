@@ -1,5 +1,22 @@
 basePath: /gf/api
 definitions:
+  entity.Article:
+    properties:
+      communityID:
+        type: integer
+      content:
+        type: string
+      createDay:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      typeID:
+        type: integer
+      username:
+        type: string
+    type: object
   entity.ArticleComment:
     properties:
       articleID:
@@ -36,19 +53,29 @@ definitions:
       Content:
         example: I love UF
         type: string
+      Favorited:
+        type: boolean
       ID:
         type: integer
+      Liked:
+        type: boolean
       NumComment:
         type: integer
       NumFavorite:
         type: integer
       NumLike:
         type: integer
+      Owner:
+        example: Owner1
+        type: string
       Title:
         example: Gator Forum
         type: string
       TypeName:
         example: music
+        type: string
+      UpdatedAt:
+        example: "2018-01-01"
         type: string
     type: object
   entity.ArticleFavorite:
@@ -222,6 +249,9 @@ definitions:
     type: object
   entity.ResponseMsg:
     properties:
+      Nickname:
+        example: James Bond
+        type: string
       code:
         example: 200
         type: integer
@@ -240,6 +270,12 @@ definitions:
       username:
         type: string
     type: object
+  entity.UserFilename:
+    properties:
+      Filename:
+        example: gator.jpg
+        type: string
+    type: object
   entity.UserFiles:
     properties:
       Filenames:
@@ -250,6 +286,9 @@ definitions:
         items:
           type: string
         type: array
+      Nickname:
+        example: James Bond
+        type: string
       code:
         example: 200
         type: integer
@@ -259,6 +298,9 @@ definitions:
     type: object
   entity.UserFollows:
     properties:
+      Nickname:
+        example: James Bond
+        type: string
       Users:
         example:
         - '"spriderman"'
@@ -286,6 +328,14 @@ definitions:
         type: string
       Username:
         example: jamesbond21
+        type: string
+    type: object
+  entity.UserNewCapacity:
+    properties:
+      Capacity:
+        type: number
+      Username:
+        example: boss
         type: string
     type: object
 host: http://167.71.166.120:10010
@@ -353,6 +403,83 @@ paths:
       security:
       - ApiAuthToken: []
       summary: Delete Article By ID
+      tags:
+      - Article Manage
+  /article/getarticlelist:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need page and page size
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Page Size
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Successfully
+          schema:
+            $ref: '#/definitions/entity.Article'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Article List
+      tags:
+      - Article Manage
+  /article/getarticlelistbycommunityid:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need page and page size
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Page Size
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      - description: Community ID
+        in: query
+        name: communityID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Successfully
+          schema:
+            $ref: '#/definitions/entity.Article'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Article List By Community ID
       tags:
       - Article Manage
   /article/getone:
@@ -693,6 +820,37 @@ paths:
       summary: User like Article
       tags:
       - Article Favorite Manage
+  /articlefavorite/getfavoriteofarticle:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need article id
+      parameters:
+      - description: "233333"
+        in: query
+        name: ArticleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Create Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found or Existed
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: User Favorite Article
+      tags:
+      - Article Favorite Manage
   /articlelike/create/:articleID:
     post:
       consumes:
@@ -749,6 +907,33 @@ paths:
       security:
       - ApiAuthToken: []
       summary: User cancel like Article
+      tags:
+      - Article Like Manage
+  /articlelike/getlikelist:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie
+      parameters:
+      - description: "233333"
+        in: query
+        name: articleID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Like List Successfully
+          schema:
+            type: string
+        "400":
+          description: <b>Failure</b>. Bad Parameters
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get User's Like List
       tags:
       - Article Like Manage
   /articletype/all:
@@ -1227,7 +1412,7 @@ paths:
         name: filename
         required: true
         schema:
-          type: string
+          $ref: '#/definitions/entity.UserFilename'
       produces:
       - application/json
       responses:
@@ -1336,18 +1521,12 @@ paths:
       - application/json
       description: need token in cookie, need target user and  new capacity in json
       parameters:
-      - description: username in post request body
+      - description: Username & New File Total Capacity
         in: body
-        name: username
+        name: UserNewCapacity
         required: true
         schema:
-          type: string
-      - description: capacity(e.g. 16.8) in post request body
-        in: body
-        name: capacity
-        required: true
-        schema:
-          type: number
+          $ref: '#/definitions/entity.UserNewCapacity'
       produces:
       - application/json
       responses:
@@ -1406,6 +1585,31 @@ paths:
       summary: Request User Files
       tags:
       - Static Resource
+  /user/GetUserInfoByUsername:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Search Successfully
+          schema:
+            $ref: '#/definitions/entity.UserInfo'
+        "400":
+          description: <b>Failure</b>. Bad Parameters.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Get User's Info
+      tags:
+      - User Manage
   /user/admin/delete:
     post:
       consumes:

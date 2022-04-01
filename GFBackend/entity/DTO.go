@@ -1,8 +1,9 @@
 package entity
 
 type ResponseMsg struct {
-	Code    int    `form:"Code" json:"code" example:"200"`
-	Message string `form:"Message" json:"message" example:"process successfully"`
+	Code     int    `form:"Code" json:"code" example:"200"`
+	Message  string `form:"Message" json:"message" example:"process successfully"`
+	Nickname string `form:"Nickname" json:"Nickname" example:"James Bond"`
 }
 
 type UserInfo struct {
@@ -54,6 +55,15 @@ type CommunityIDsInfo struct {
 	CommunityIDs []int  `form:"CommunityIDs" json:"CommunityIDs"`
 }
 
+type UserNewCapacity struct {
+	Username string  `form:"Username" json:"Username" example:"boss"`
+	Capacity float64 `form:"Capacity" json:"Capacity" example:16.6`
+}
+
+type UserFilename struct {
+	Filename string `form:"Filename" json:"Filename" example:"gator.jpg"`
+}
+
 type UserFiles struct {
 	ResponseMsg
 	Filenames []string `form:"Filenames" json:"Filenames" example:"\"xxx.jpg\",\"xxx.png\",\"xxx.gif\""`
@@ -91,6 +101,11 @@ type ArticleInfo struct {
 	Content     string `form:"Content" json:"Content" example:"I love UF"`
 }
 
+type ArticleListInfo struct {
+	PageNO   int `form:"PageNO" json:"PageNO" example:1`
+	PageSize int `form:"PageSize" json:"PageSize" example:5`
+}
+
 type ArticleSearchInfo struct {
 	PageNO      int    `form:"PageNO" json:"PageNO" example:1`
 	PageSize    int    `form:"PageSize" json:"PageSize" example:5`
@@ -99,13 +114,17 @@ type ArticleSearchInfo struct {
 
 type ArticleDetail struct {
 	ID            int    `form:"ID" json:"ID" example:12`
+	Owner         string `form:"Owner" json:"Owner" example:"Owner1"`
 	Title         string `form:"Title" json:"Title" example:"Gator Forum"`
 	TypeName      string `form:"TypeName" json:"TypeName" example:"music"`
 	CommunityName string `form:"CommunityName" json:"CommunityName" example:"big bang theory"`
 	Content       string `form:"Content" json:"Content" example:"I love UF"`
+	Liked         bool   `form:"Liked" json:"Liked" example:true`
+	Favorited     bool   `form:"Favorited" json:"Favorited" example:true`
 	NumLike       int64  `form:"NumLike" json:"NumLike" example:78`
 	NumFavorite   int64  `form:"NumFavorite" json:"NumFavorite" example:66`
 	NumComment    int64  `form:"NumComment" json:"NumComment" example:99`
+	UpdatedAt     string `form:"UpdatedAt" json:"UpdatedAt" example:"2018-01-01"`
 }
 
 type ArticleFavoritesInfo struct {

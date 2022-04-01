@@ -19,7 +19,7 @@ type ICommunityManageService interface {
 	DeleteCommunityByID(id int, operator string) error
 	UpdateDescriptionByID(id int, newDescription, operator string) error
 	GetNumberOfMembersByID(id int) (int64, error)
-	GetOneCommunityByID(id int) (entity.Community, error)
+	GetOneCommunityByID(id int, username string, pageNO, pageSize int) (entity.Community, int64, bool, error)
 	GetCommunitiesByNameFuzzyMatch(name string, pageNO, pageSize int) ([]entity.Community, int64, error)
 	GetCommunities(pageNO, pageSize int) ([]entity.Community, int64, error)
 	JoinCommunityByID(id int, username string) error
@@ -125,13 +125,30 @@ func (communityManageService *CommunityManageService) GetNumberOfMembersByID(id 
 	return count, nil
 }
 
-func (communityManageService *CommunityManageService) GetOneCommunityByID(id int) (entity.Community, error) {
+func (communityManageService *CommunityManageService) GetOneCommunityByID(id int, username string, pageNO, pageSize int) (entity.Community, int64, bool, error) {
 	community, err1 := communityManageService.communityDAO.GetOneCommunityByID(id)
 	if err1 != nil {
 		logger.AppLogger.Error(err1.Error())
-		return entity.Community{}, err1
+		return entity.Community{}, 0, false, err1
 	}
-	return community, nil
+	count, err2 := communityManageService.communityMemberDAO.CountMemberByCommunityID(id)
+	if err2 != nil {
+		logger.AppLogger.Error(err2.Error())
+		return entity.Community{}, 0, false, err2
+	}
+	memberList, err3 := communityManageService.communityMemberDAO.GetMembersByCommunityIDs(id, (pageNO-1)*pageSize, pageSize)
+	if err3 != nil {
+		logger.AppLogger.Error(err3.Error())
+		return entity.Community{}, 0, false, err3
+	}
+	for i := 0; i < len(memberList); i++ {
+		if memberList[i].Member == username {
+			return community, count, true, nil
+		} else {
+			return community, count, false, nil
+		}
+	}
+	return community, count, false, nil
 }
 
 func (communityManageService *CommunityManageService) GetCommunitiesByNameFuzzyMatch(name string, pageNO, pageSize int) ([]entity.Community, int64, error) {

@@ -16,6 +16,7 @@ type IArticleLikeDAO interface {
 	DeleteLikeByArticleID(articleID int) error
 	GetLike(username string, articleID int) (entity.ArticleLike, error)
 	CountLikeOfArticle(articleID int) (int64, error)
+	GetLikeList(articleID int) ([]entity.ArticleLike, error)
 }
 
 type ArticleLikeDAO struct {
@@ -79,4 +80,13 @@ func (articleLikeDAO *ArticleLikeDAO) CountLikeOfArticle(articleID int) (int64, 
 		return -1, result.Error
 	}
 	return count, nil
+}
+
+func (articleLikeDAO *ArticleLikeDAO) GetLikeList(articleID int) ([]entity.ArticleLike, error) {
+	var articleLikeList []entity.ArticleLike
+	result := articleLikeDAO.db.Where("ArticleID = ?", articleID).Find(&articleLikeList)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return articleLikeList, nil
 }

@@ -16,6 +16,7 @@ type IUserDAO interface {
 	DeleteUserByUsername(username string) error
 	UpdateUserPassword(username string, newPassword string) error
 	UpdateUserByUsername(userInfo entity.User) error
+	GetUserInfoByUsername(username string) (entity.User, error)
 }
 
 type UserDAO struct {
@@ -80,4 +81,13 @@ func (userDAO *UserDAO) UpdateUserByUsername(userInfo entity.User) error {
 		return result.Error
 	}
 	return nil
+}
+
+func (userDAO *UserDAO) GetUserInfoByUsername(username string) (entity.User, error) {
+	var userInfo entity.User
+	result := userDAO.db.Where("Username = ?", username).Find(&userInfo)
+	if result.Error != nil {
+		return entity.User{}, result.Error
+	}
+	return userInfo, nil
 }

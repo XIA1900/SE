@@ -19,7 +19,7 @@ var userManageService *UserManageService
 
 type IUserManageService interface {
 	Register(username, password string, forAdmin bool) error
-	Login(username, password string) (string, error)
+	Login(username, password string) (string, string, error)
 	Logout(username string) error
 	UpdatePassword(username, password, newPassword string) error
 	Delete(username string) error
@@ -28,6 +28,7 @@ type IUserManageService interface {
 	Unfollow(followee, follower string) error
 	GetFollowers(username string) ([]string, error)
 	GetFollowees(username string) ([]string, error)
+	GetUserInfoByUsername(username string) (entity.User, error)
 }
 
 type UserManageService struct {
@@ -104,31 +105,31 @@ func (userManageService *UserManageService) Register(username, password string, 
 	return nil
 }
 
-func (userManageService *UserManageService) Login(username, password string) (string, error) {
+func (userManageService *UserManageService) Login(username, password string) (string, string, error) {
 	dbUser := userManageService.userDAO.GetUserByUsername(username)
 	if dbUser.Username == "" {
-		return "", errors.New("400")
+		return "", "", errors.New("400")
 	}
 
 	inputPassword := utils.EncodeInMD5(password + dbUser.Salt)
 	if inputPassword != dbUser.Password {
-		return "", errors.New("400")
+		return "", "", errors.New("400")
 	}
 
 	token, err := auth.TokenGenerate(username)
 	if err != nil {
 		logger.AppLogger.Error(err.Error())
-		return "", errors.New("500")
+		return "", "", errors.New("500")
 	}
 
 	sign, _ := auth.GetTokenSign(token.Token)
 	err = cache.AddLoginUserWithSign(username, sign)
 	if err != nil {
 		logger.AppLogger.Error(err.Error())
-		return "", errors.New("500")
+		return "", "", errors.New("500")
 	}
 
-	return token.Token, nil
+	return dbUser.Nickname, token.Token, nil
 }
 
 func (userManageService *UserManageService) Logout(username string) error {
@@ -277,4 +278,13 @@ func (userManageService UserManageService) GetFollowees(username string) ([]stri
 		followees = append(followees, follow.Followee)
 	}
 	return followees, nil
+}
+
+func (userManageService *UserManageService) GetUserInfoByUsername(username string) (entity.User, error) {
+	userInfo, err := userManageService.userDAO.GetUserInfoByUsername(username)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return entity.User{}, errors.New("500")
+	}
+	return userInfo, nil
 }

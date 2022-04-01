@@ -4,7 +4,7 @@ package docs
 
 import "github.com/swaggo/swag"
 
-const docTemplate = `{
+const docTemplate_swagger = `{
     "schemes": {{ marshal .Schemes }},
     "swagger": "2.0",
     "info": {
@@ -104,6 +104,125 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/article/getarticlelist": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need page and page size",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Get Article List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page Size",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Article"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/article/getarticlelistbycommunityid": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need page and page size",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Get Article List By Community ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page Size",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Community ID",
+                        "name": "communityID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Article"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
                         "schema": {
                             "type": "string"
                         }
@@ -637,6 +756,55 @@ const docTemplate = `{
                 }
             }
         },
+        "/articlefavorite/getfavoriteofarticle": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need article id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Favorite Manage"
+                ],
+                "summary": "User Favorite Article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "233333",
+                        "name": "ArticleID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Create Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found or Existed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/articlelike/create/:articleID": {
             "post": {
                 "security": [
@@ -716,6 +884,49 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Delete Like Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articlelike/getlikelist": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Like Manage"
+                ],
+                "summary": "Get User's Like List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "233333",
+                        "name": "articleID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Like List Successfully",
                         "schema": {
                             "type": "string"
                         }
@@ -1485,7 +1696,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/entity.UserFilename"
                         }
                     }
                 ],
@@ -1662,21 +1873,12 @@ const docTemplate = `{
                 "summary": "Expand User Capacity, only admin user can do this",
                 "parameters": [
                     {
-                        "description": "username in post request body",
-                        "name": "username",
+                        "description": "Username \u0026 New File Total Capacity",
+                        "name": "UserNewCapacity",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "capacity(e.g. 16.8) in post request body",
-                        "name": "capacity",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "number"
+                            "$ref": "#/definitions/entity.UserNewCapacity"
                         }
                     }
                 ],
@@ -1756,6 +1958,46 @@ const docTemplate = `{
                 ],
                 "summary": "Request User Files",
                 "responses": {}
+            }
+        },
+        "/user/GetUserInfoByUsername": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "Get User's Info",
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.UserInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    }
+                }
             }
         },
         "/user/admin/delete": {
@@ -2281,6 +2523,32 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "entity.Article": {
+            "type": "object",
+            "properties": {
+                "communityID": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createDay": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "typeID": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "entity.ArticleComment": {
             "type": "object",
             "properties": {
@@ -2335,8 +2603,14 @@ const docTemplate = `{
                     "type": "string",
                     "example": "I love UF"
                 },
+                "Favorited": {
+                    "type": "boolean"
+                },
                 "ID": {
                     "type": "integer"
+                },
+                "Liked": {
+                    "type": "boolean"
                 },
                 "NumComment": {
                     "type": "integer"
@@ -2347,6 +2621,10 @@ const docTemplate = `{
                 "NumLike": {
                     "type": "integer"
                 },
+                "Owner": {
+                    "type": "string",
+                    "example": "Owner1"
+                },
                 "Title": {
                     "type": "string",
                     "example": "Gator Forum"
@@ -2354,6 +2632,10 @@ const docTemplate = `{
                 "TypeName": {
                     "type": "string",
                     "example": "music"
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "example": "2018-01-01"
                 }
             }
         },
@@ -2613,6 +2895,10 @@ const docTemplate = `{
         "entity.ResponseMsg": {
             "type": "object",
             "properties": {
+                "Nickname": {
+                    "type": "string",
+                    "example": "James Bond"
+                },
                 "code": {
                     "type": "integer",
                     "example": 200
@@ -2640,6 +2926,15 @@ const docTemplate = `{
                 }
             }
         },
+        "entity.UserFilename": {
+            "type": "object",
+            "properties": {
+                "Filename": {
+                    "type": "string",
+                    "example": "gator.jpg"
+                }
+            }
+        },
         "entity.UserFiles": {
             "type": "object",
             "properties": {
@@ -2654,6 +2949,10 @@ const docTemplate = `{
                         "\"xxx.gif\""
                     ]
                 },
+                "Nickname": {
+                    "type": "string",
+                    "example": "James Bond"
+                },
                 "code": {
                     "type": "integer",
                     "example": 200
@@ -2667,6 +2966,10 @@ const docTemplate = `{
         "entity.UserFollows": {
             "type": "object",
             "properties": {
+                "Nickname": {
+                    "type": "string",
+                    "example": "James Bond"
+                },
                 "Users": {
                     "type": "array",
                     "items": {
@@ -2707,6 +3010,18 @@ const docTemplate = `{
                     "example": "jamesbond21"
                 }
             }
+        },
+        "entity.UserNewCapacity": {
+            "type": "object",
+            "properties": {
+                "Capacity": {
+                    "type": "number"
+                },
+                "Username": {
+                    "type": "string",
+                    "example": "boss"
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -2718,8 +3033,8 @@ const docTemplate = `{
     }
 }`
 
-// SwaggerInfo holds exported Swagger Info so clients can modify it
-var SwaggerInfo = &swag.Spec{
+// SwaggerInfo_swagger holds exported Swagger Info so clients can modify it
+var SwaggerInfo_swagger = &swag.Spec{
 	Version:          "1.0",
 	Host:             "http://167.71.166.120:10010",
 	BasePath:         "/gf/api",
@@ -2727,9 +3042,9 @@ var SwaggerInfo = &swag.Spec{
 	Title:            "Gator Forum Backend API",
 	Description:      "This is the Gator Forum Backend Server",
 	InfoInstanceName: "swagger",
-	SwaggerTemplate:  docTemplate,
+	SwaggerTemplate:  docTemplate_swagger,
 }
 
 func init() {
-	swag.Register(SwaggerInfo.InstanceName(), SwaggerInfo)
+	swag.Register(SwaggerInfo_swagger.InstanceName(), SwaggerInfo_swagger)
 }

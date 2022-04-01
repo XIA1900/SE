@@ -40,13 +40,14 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/unfollow", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/followers", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/followees", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/user/getuserinfo", "GET")
 
 	// /community/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/create", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/delete/:id", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/update", "POST")
-	CasbinEnforcer.AddPolicy("regular", basePath+"/community/numberofmember/:id", "GET")
-	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getone/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/numberofmember", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getone", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getbyname", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/get", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/join/:id", "GET")
@@ -66,15 +67,19 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/article/delete/:id", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/article/update", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/article/getone", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/article/getarticlelist", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/article/getarticlelistbycommunityid", "GET")
 
 	// /articlelike/..
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlelike/create/:articleID", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlelike/delete/:articleID", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlelike/getlikelist", "GET")
 
 	// /articlefavorite/..
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/create/:articleID", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/delete/:articleID", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/get", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/articlefavorite/getfavoriteofarticle", "GET")
 
 	// /articlecomment/..
 	CasbinEnforcer.AddPolicy("regular", basePath+"/articlecomment/create", "POST")

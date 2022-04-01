@@ -1,6 +1,7 @@
 package service
 
 import (
+	"GFBackend/entity"
 	"GFBackend/logger"
 	"GFBackend/model/dao"
 	"GFBackend/utils"
@@ -16,6 +17,7 @@ var articleLikeService *ArticleLikeService
 type IArticleLikeService interface {
 	CreateLike(username string, articleID int) error
 	DeleteLike(username string, articleID int) error
+	GetLikeList(articleID int) ([]entity.ArticleLike, error)
 }
 
 type ArticleLikeService struct {
@@ -83,4 +85,14 @@ func (articleLikeService *ArticleLikeService) DeleteLike(username string, articl
 	}
 
 	return nil
+}
+
+func (articleLikeService *ArticleLikeService) GetLikeList(articleID int) ([]entity.ArticleLike, error) {
+	articleLikeList, err := articleLikeService.articleLikeDAO.GetLikeList(articleID)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return nil, errors.New("500")
+	}
+
+	return articleLikeList, nil
 }

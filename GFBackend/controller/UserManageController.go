@@ -122,7 +122,7 @@ func (userManageController *UserManageController) UserLogin(context *gin.Context
 		return
 	}
 
-	if token, err := userManageController.userManageService.Login(userInfo.Username, userInfo.Password); err != nil {
+	if nickname, token, err := userManageController.userManageService.Login(userInfo.Username, userInfo.Password); err != nil {
 		if strings.Contains(err.Error(), "400") {
 			er := entity.ResponseMsg{
 				Code:    http.StatusBadRequest,
@@ -139,8 +139,9 @@ func (userManageController *UserManageController) UserLogin(context *gin.Context
 		return
 	} else {
 		success := entity.ResponseMsg{
-			Code:    http.StatusOK,
-			Message: token,
+			Code:     http.StatusOK,
+			Message:  token,
+			Nickname: nickname,
 		}
 		context.SetCookie("token", token, config.AppConfig.JWT.Expires*60, config.AppConfig.Server.BasePath, "localhost", false, true)
 		context.JSON(http.StatusOK, success)
@@ -493,4 +494,33 @@ func (userManageController *UserManageController) GetFollowees(context *gin.Cont
 	}
 	context.JSON(200, userFollows)
 
+}
+
+// GetUserInfoByUsername godoc
+// @Summary Get User's Info
+// @Description need token in cookie
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Success 200 {object} entity.UserInfo "<b>Success</b>. Search Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters."
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/GetUserInfoByUsername [get]
+func (userManageController *UserManageController) GetUserInfoByUsername(context *gin.Context) {
+	username := context.Query("username")
+	userInfo, err := userManageController.userManageService.GetUserInfoByUsername(username)
+	if err != nil {
+		errMsg := entity.ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+		if strings.Contains(err.Error(), "500") {
+			errMsg.Code = http.StatusInternalServerError
+			errMsg.Message = "Internal Server Error"
+		}
+		context.JSON(errMsg.Code, errMsg)
+		return
+	}
+	context.JSON(http.StatusOK, userInfo)
 }

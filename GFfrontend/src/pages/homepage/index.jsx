@@ -33,33 +33,31 @@ const Articles = () => {
     }    
   );
 
-  // async function getArticleList() {
-  //   console.log("getting data about articles")
-  //   let result = []
-  //   const {data} =  await fetch(
-  //     '/api/article/getarticlelist?PageNO=1&PageSize=20',
-  //     {
-  //       method: 'GET',
-  //       credentials: 'include'
-  //     }
-  //   ).then(response => response.json())
-  //   console.log(data)
-  // }
-  // console.log("====== getting async")
-  // getArticleList()
-  // console.log("====== data")
-  
-//  response.then((data) => {
-//    console.log(data)
-//  })
-
+  //console.log(data);
   const list = [];
-  if(typeof(data[0])!='undefined') {
-    var size = Object.keys(data).length;
-    for(let i=0; i<size-1; i++) {
-      list.push(data[i]);
+  if(typeof(data.ArticleList)!='undefined') {
+    const articleList = data.ArticleList;
+    const communityList = data.CommunityList;
+    const collection = data.CountFavorite;
+    const like = data.CountLike;
+    const reply = data.CountComment;
+    const size = Object.keys(articleList).length;
+    for(let i=0; i<size; i++) {
+      list.push({
+        id: articleList[i].ID,
+        name: articleList[i].Username,
+        title: articleList[i].Title,
+        group: communityList[i].Name,
+        createdAt: articleList[i].CreateDay,
+        content: articleList[i].Content,
+        collection: collection[i],
+        like: like[i],
+        reply: reply[i],
+        groupID: communityList[i].ID,
+      });
     }
   }
+  console.log(list);
 
   const onCCollection = async(values) => {
     console.log(values);
@@ -214,7 +212,7 @@ const Articles = () => {
           dataSource={list}
           renderItem={(item) => (
             <List.Item
-              key={item.ID}
+              key={item.id}
               actions={[
                 <IconText key="collection" type="star-o" text={item.collection}  />,
                 <IconText key="like" type="like-o" text={item.like} />,
@@ -223,8 +221,8 @@ const Articles = () => {
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle}  onClick={(e) => clickPost(item.ID, e)}>
-                    {item.Title}
+                  <a className={styles.listItemMetaTitle}  onClick={(e) => clickPost(item.id, e)}>
+                    {item.title}
                   </a>
                 }
               />

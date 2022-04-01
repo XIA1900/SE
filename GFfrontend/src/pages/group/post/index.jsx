@@ -154,7 +154,7 @@ const Center = () => {
   );
   //console.log(postContents);
   const list = postContents || [];
-  //console.log(list);
+  console.log(list);
 
   // if(typeof(postContents[0])!='undefined') {
   //   list = postContents;
@@ -186,7 +186,7 @@ const Center = () => {
 
   }
 
-  const renderPostInfo = ({ avatar, Title, Content, owner, updatedAt}) => {
+  const renderPostInfo = ({ avatar, Title, Content, Owner, UpdatedAt}) => {
     return (
       <div className={styles.listContent}>
         <div className={styles.title}>{Title}</div>
@@ -195,15 +195,15 @@ const Center = () => {
             src={avatar}
             style={{ width: '25px', height: '25px', borderRadius: '25px' }}
           />
-          <a href=''> {owner}</a> updated at {updatedAt}
+          <a href=''> {Owner}</a> updated at {UpdatedAt}
         <div className={styles.description}> {Content} 
         </div>
       </div>
     );
   };
   
-  const renderButtonInfo = ({liked, collected}) => {
-    if(liked === '1' && collected === '1') {
+  const renderButtonInfo = ({Liked, Favorited}) => {
+    if(Liked === true && Favorited === true) {
       return (
         <div className={styles.listContent}>
           <div className={styles.description}>
@@ -226,40 +226,40 @@ const Center = () => {
                   }}
                 />
                 
-                <LikeTwoTone style={{marginRight: '20px'}} onClick={(e) => onLike(liked, e)}/>
+                <LikeTwoTone style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
                 
-                <StarTwoTone onClick={(e) => onCollection(collected, e)}/>
+                <StarTwoTone onClick={(e) => onCollection(Favorited, e)}/>
               </p>
           </div>
         </div>
       );
     }
-    else if(liked === '1' && collected ==='0') {
+    else if(Liked === true && Favorited === false) {
       return (
         <div className={styles.listContent}>
           <div className={styles.description} >
             <p style={{float:'right'}}>
               <MessageOutlined style={{marginRight: '20px'}}  onClick={onReply}/>
               
-              <LikeTwoTone style={{marginRight: '20px'}} onClick={(e) => onLike(liked, e)}/>
+              <LikeTwoTone style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
               
-              <StarOutlined onClick={(e) => onCollection(collected, e)}/>
+              <StarOutlined onClick={(e) => onCollection(Favorited, e)}/>
             </p>
             
           </div>
         </div>
       );
     }
-    else if(liked === '0' && collected === '1') {
+    else if(Liked === false && Favorited === true) {
       return (
         <div className={styles.listContent}>
           <div className={styles.description} >
             <p style={{float:'right'}}>
               <MessageOutlined style={{marginRight: '20px'}} onClick={onReply}/>
               
-              <LikeOutlined style={{marginRight: '20px'}} onClick={(e) => onLike(liked, e)} />
+              <LikeOutlined style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)} />
               
-              <StarTwoTone onClick={(e) => onCollection(collected, e)}/>
+              <StarTwoTone onClick={(e) => onCollection(Favorited, e)}/>
             </p>
           </div>
         </div>
@@ -272,9 +272,9 @@ const Center = () => {
             <p style={{float:'right'}}>
               <MessageOutlined style={{marginRight: '20px'}} onClick={onReply}/>
               
-              <LikeOutlined style={{marginRight: '20px'}} onClick={(e) => onLike(liked, e)}/>
+              <LikeOutlined style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
               
-              <StarOutlined onClick={(e) => onCollection(collected, e)}/>
+              <StarOutlined onClick={(e) => onCollection(Favorited, e)}/>
             </p>
             
           </div>

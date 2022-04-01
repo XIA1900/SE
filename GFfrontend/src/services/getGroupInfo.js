@@ -23,7 +23,11 @@ export async function getJoinedGroup(params) {
 
 export async function getGroupBasic(params) {
   //only for created groups, return entire information
-  return request('/api/getGroupBasic', {
-    params,
+  return request('/api/community/getone?id='+params.groupID+'&username='+params.username+'&pageNO='+params.pageNO+'&pageSize='+params.pageSize, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
   });
 }

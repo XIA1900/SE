@@ -8,9 +8,12 @@ import Latest from './components/latest';
 import styles from './Center.less';
 import { getGroupBasic } from '@/services/getGroupInfo';
 import { checkMember, quitGroup, joinGroup } from '@/services/user';
+import { countReset } from 'console';
 
 
-const groupName = history.location.search.substring(1);
+const groupID = history.location.search.substring(1);
+const pageNo = 1;
+const pageSize = 10;
 
 const operationTabList = [
   {
@@ -70,12 +73,39 @@ const Center = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState;
 
-  const { data: groupBasics, loading } = useRequest(() => {
-    return getGroupBasic({
-      groupName,
+  const { data, loading } = useRequest( async() => {
+    const result = await getGroupBasic({
+      groupID: groupID,
+      username: currentUser.name,
+      pageNO: pageNo,
+      pageSize: pageSize,
     });
-  });
-  const list = groupBasics?.list || [];
+    return result;
+    },
+    {
+      formatResult: result => result,
+      loadMore: true,
+    }
+  );
+
+  console.log(data);
+  let list = [];
+  if(typeof(data.community) != 'undefined') {
+    const community = data.community;
+    list = {
+      id: community.ID,
+      groupOwner: community.Creator,
+      groupName: community.Name,
+      groupDescription: community.Description, 
+      createdAt: community.CreateDay, 
+      groupMember: data.count,
+      ifexit: data.ifexit,
+    };
+  }
+
+  //console.log(list);
+  
+  //const list = groupBasics?.list || [];
 
   const isMember = async() => {
     return await checkMember({
@@ -112,8 +142,8 @@ const Center = () => {
     })
   };
 
-  const renderGroupInfo = ({ groupOwner, groupName, groupDescription, createdAt, groupMember }) => {
-    if(isMember == 'Ok') {
+  const renderGroupInfo = ({ groupOwner, groupName, groupDescription, createdAt, groupMember, ifexit }) => {
+    if(ifexit === true) {
       return (
         <div className={styles.detail}>
           <h1>{groupName}</h1>

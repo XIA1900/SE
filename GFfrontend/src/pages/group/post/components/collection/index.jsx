@@ -104,7 +104,7 @@ const Collection = () => {
             <div>
               <p>
               <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-              { item.user} 
+              {item.Username} 
               </p>
               
             </div>

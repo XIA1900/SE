@@ -10,24 +10,30 @@ import styles from './style.less';
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
-const groupName = history.location.search.substring(1);
+const pageNO = 1;
+const groupID = history.location.search.substring(1);
 
 const Latest = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return getGroupPosts({
-        count: pageSize,
+    async() => {
+      const result = await getGroupPosts({
+        id: groupID,
         type: 'lattest',
-        groupName: groupName,
+        pageNO: pageNO,
+        pageSize: pageSize,
       });
+      return result;
     },
     {
+      formatResult: result => result,
       loadMore: true,
     },
   );
 
-  const list = data?.list || [];
+  const list = [];
+
+  //const list = data?.list || [];
 
   const IconText = ({ type, text }) => {
     switch (type) {

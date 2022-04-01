@@ -15,7 +15,7 @@ export async function getPost(params) {
 }
 
 export async function getCollection(params) {
-  return request('/api/getCollection', {
+  return request('/api/articlefavorite/getfavoriteofarticle?articleID='+params.ID, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

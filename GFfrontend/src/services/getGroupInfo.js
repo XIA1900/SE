@@ -2,8 +2,12 @@ import { request } from 'umi';
 
 export async function getGroupPosts(params) {
   //only for created groups, return entire information
-  return request('/api/getGroupPosts', {
-    params,
+  return request('/api/article/getarticlelistbycommunityid?CommunityID='+params.id+'&PageNO='+params.pageNO+'&PageSize='+params.pageSize, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
   });
 }
 

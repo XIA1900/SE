@@ -30,8 +30,14 @@ export async function joinGroup(values) {
   });
 }
 
-export async function queryCurrent(values) {
-  return request('/api/currentUserDetail');
+export async function queryCurrent(params) {
+  return request('/api/user/getuserinfo?username='+params.username, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
 }
 
 export async function getPersonalCollection(values) {

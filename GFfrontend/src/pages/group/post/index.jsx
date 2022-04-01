@@ -154,7 +154,7 @@ const Center = () => {
   );
   //console.log(postContents);
   const list = postContents || [];
-  console.log(list);
+  //console.log(list);
 
   // if(typeof(postContents[0])!='undefined') {
   //   list = postContents;

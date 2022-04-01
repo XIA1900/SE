@@ -69,7 +69,7 @@ const TagList = ({ tags }) => {
 
 
 const Center = () => {
-  const [tabKey, setTabKey] = useState('hottest');
+  const [tabKey, setTabKey] = useState('latest');
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState;
 

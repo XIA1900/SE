@@ -2,13 +2,16 @@ import { CalendarOutlined, PlusOutlined, HomeOutlined, ContactsOutlined, Cluster
 import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
-import { Link, useRequest } from 'umi';
+import { Link, useRequest, history } from 'umi';
 import Follower from './components/Follower';
 import Following from './components/Following';
 import Collection from './components/Collection';
 import Blacklist from './components/Blacklist';
 import { queryCurrent } from '@/services/user';
 import styles from './Center.less';
+import { domainToASCII } from 'url';
+
+const username = history.location.search.substring(1);
 
 const operationTabList = [
   {
@@ -214,12 +217,31 @@ const InterestList = ({ tags }) => {
 const Center = () => {
   const [tabKey, setTabKey] = useState('collection'); //  获取用户信息
 
-  const { data: currentUser, loading } = useRequest(() => {
-    return queryCurrent();
-  }); //  渲染用户信息
+  const { data, loading } = useRequest(
+    async() => {
+      const result = await queryCurrent({
+        username: username,
+      });
+      return result;
+    },
+    {
+      formatResult: result => result,
+    }
+  ); //  渲染用户信息
+  
+  console.log(data);
+  let currentUser = [];
+  if(typeof(data) != 'undefined') {
+    currentUser = {
+      name: data.Username,
+      birthday: data.Birthday,
+      gender: data.Gender,
+      major: data.Department,
+    };
+  }
 
-  const renderUserInfo = ({ birthday, sex, email, major, grade, country, province, city, phone }) => {
-    if(sex === 'Female') {
+  const renderUserInfo = ({ birthday, gender, email, major, grade, country, province, city, phone }) => {
+    if(gender === 'Female') {
       return (
         <div className={styles.detail}>
           <p>
@@ -267,7 +289,7 @@ const Center = () => {
         </div>
       );
     }
-    else {
+    else if (gender === 'Male') {
       return (
         <div className={styles.detail}>
           <p>
@@ -315,7 +337,53 @@ const Center = () => {
         </div>
       );
     }
-    
+    else {
+      return (
+        <div className={styles.detail}>
+          <p>
+            <CalendarOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {birthday+'    '} 
+          </p>
+          
+          <p>
+            <MailOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {email}
+          </p>
+          <p>
+            <PhoneOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {phone} 
+          </p>
+          <p>
+            <ClusterOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {major+' '}{grade} 
+          </p>
+          <p>
+            <HomeOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {country+' '}{province+' '}{city}
+          </p>
+        </div>
+      );
+    }
   }; // 渲染tab切换
 
   const renderChildrenByTabKey = (tabValue) => {

@@ -31,7 +31,27 @@ const Latest = () => {
     },
   );
 
+  console.log(data);
   const list = [];
+  if(typeof(data.ArticleList)!='undefined') {
+    const articleList = data.ArticleList;
+    const countComment = data.CountComment;
+    const countFavorite = data.CountFavorite;
+    const countLike = data.CountLike;
+    const size = Object.keys(articleList).length;
+    for(let i=0; i<size; i++) {
+      list.push({
+        id: articleList[i].ID,
+        name: articleList[i].Username,
+        title: articleList[i].Title,
+        createdAt: articleList[i].CreateDay,
+        content: articleList[i].Content,
+        collection: countFavorite[i],
+        like: countLike[i],
+        reply: countComment[i],
+      });
+    }
+  }
 
   //const list = data?.list || [];
 

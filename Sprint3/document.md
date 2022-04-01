@@ -49,20 +49,20 @@ By click this tab, a user can create a new group by entering basic information a
 This page displays all groups this user joined. User can click a group and enter the group page.
 
 ## 1.6 Group 
-### 1.6.1 Group Basic Information
+### 1.6.1 Group Basic Information (+)
 This part displays some of group information that should be available to all users, including "name", "owner", "createdAt", "avatar", "description" and "number of group members". Normal users will not be able to see members of this group. They will also not be able to delete a post or member.
-### 1.6.2 Latest Posts
+### 1.6.2 Latest Posts (+)
 This tab shows posts in the order of created time.
 ### 1.6.3 Hottest Posts
 This tab shows posts in the order of popular.
 ## 1.7 Post
-### 1.7.1 Post Basic Information
+### 1.7.1 Post Basic Information (+)
 A post includes "post id", "title", "content", "owner", "createdAt", "group", "number of likes", "number of replies", "number of collections". 
-### 1.7.2 Collection
+### 1.7.2 Collection (+)
 This tab shows list of users who have favourited this post.
-### 1.7.3 Like
+### 1.7.3 Like (+)
 This tab shows list of users who have liked this post. 
-### 1.7.4 Reply
+### 1.7.4 Reply (+)
 This tab shows all replies of this post. Each reply has a "createdAt", "content", "owner", "number of likes". 
 
 # 2 Backend

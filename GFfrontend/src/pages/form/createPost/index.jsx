@@ -8,27 +8,52 @@ import ProForm, {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { history, useRequest } from 'umi';
+import { history, useRequest, useModel, useIntl } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { createPost } from '@/services/create';
 import styles from './style.less';
-import { create } from 'lodash';
+
+const groupName = history.location.search.substring(1);
 
 const BasicForm = () => {
-  const { run } = useRequest(createPost, {
-    manual: true,
-    onSuccess: () => {
-      //message.success('提交成功');
-      history.push('/result/success');
-    },
-  });
+
+  const { initialState, setInitialState } = useModel('@@initialState');
+  const { currentUser } = initialState;
+  const intl = useIntl();
 
   const onFinish = async (values) => {
-    run(values);
+    const date = new Date();
+    
+    const result = await createPost({
+      groupName: groupName,
+      userName: currentUser.name,
+      title: values.title,
+      content: values.content,
+      time: date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate(),
+    });
+
+    console.log(result);
+
+
+    if(result.message === 'Ok') {
+      const defaultLoginSuccessMessage = intl.formatMessage({
+        id: 'createPost',
+        defaultMessage: 'Post submitted successfully!',
+      });
+      message.success(defaultLoginSuccessMessage);
+
+      const postid = result.postid;
+
+      history.push({
+        pathname: '/group/post',
+        search: postid,
+      });
+    }
+    
   };
 
   return (
-    <PageContainer content="What do you want to share?">
+    <PageContainer content="What's in your mind?">
       <Card bordered={false}>
         <ProForm
           hideRequiredMark
@@ -51,7 +76,7 @@ const BasicForm = () => {
             rules={[
               {
                 required: true,
-                message: '请输入标题',
+                message: 'Please input a title for your post.',
               },
             ]}
             placeholder=""
@@ -60,31 +85,16 @@ const BasicForm = () => {
           <ProFormTextArea
             label="Content"
             width="xl"
-            name="goal"
+            name="content"
             rules={[
               {
                 required: true,
-                message: '请输入目标描述',
+                message: 'Please add content for your post.',
               },
             ]}
             placeholder=""
           />
-          <ProFormRadio.Group
-            options={[
-              {
-                value: '1',
-                label: 'Public',
-              },
-              {
-                value: '2',
-                label: 'Private',
-              },
-            ]}
-            label="Share with"
-            help=""
-            name="publicType"
-          />
-        </ProForm>
+          </ProForm>
       </Card>
     </PageContainer>
   );

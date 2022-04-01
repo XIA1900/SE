@@ -1,46 +1,49 @@
-import { PlusOutlined, HomeOutlined, ContactsOutlined, ClusterOutlined } from '@ant-design/icons';
+import { CalendarOutlined, PlusOutlined, HomeOutlined, ContactsOutlined, ClusterOutlined, PhoneOutlined, MailOutlined, WomanOutlined, ManOutlined } from '@ant-design/icons';
 import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
-import { Link, useRequest } from 'umi';
-import Projects from './components/Projects';
-import Articles from './components/Articles';
-import Applications from './components/Applications';
-import { queryCurrent } from './service';
+import { Link, useRequest, history } from 'umi';
+import Follower from './components/Follower';
+import Following from './components/Following';
+import Collection from './components/Collection';
+import Blacklist from './components/Blacklist';
+import { queryCurrent } from '@/services/user';
 import styles from './Center.less';
+import { domainToASCII } from 'url';
+
+const username = history.location.search.substring(1);
+
 const operationTabList = [
   {
-    key: 'articles',
+    key: 'collection',
     tab: (
       <span>
-        Posts{' '}
+        Collection{' '}
         <span
           style={{
             fontSize: 14,
           }}
         >
-          (8)
         </span>
       </span>
     ),
   },
   {
-    key: 'applications',
+    key: 'follower',
     tab: (
       <span>
-        Followers{' '}
+        Follower{' '}
         <span
           style={{
             fontSize: 14,
           }}
         >
-          (1029)
         </span>
       </span>
     ),
   },
   {
-    key: 'projects',
+    key: 'following',
     tab: (
       <span>
         Following{' '}
@@ -49,14 +52,27 @@ const operationTabList = [
             fontSize: 14,
           }}
         >
-          (328)
+        </span>
+      </span>
+    ),
+  },
+  {
+    key: 'blacklist',
+    tab: (
+      <span>
+        Blacklist{' '}
+        <span
+          style={{
+            fontSize: 14,
+          }}
+        >
         </span>
       </span>
     ),
   },
 ];
 
-const TagList = ({ tags }) => {
+const CourseList = ({ tags }) => {
   const ref = useRef(null);
   const [newTags, setNewTags] = useState([]);
   const [inputVisible, setInputVisible] = useState(false);
@@ -95,7 +111,78 @@ const TagList = ({ tags }) => {
 
   return (
     <div className={styles.tags}>
-      <div className={styles.tagsTitle}>Bio</div>
+      <div className={styles.tagsTitle}> Courses </div>
+      {(tags || []).concat(newTags).map((item) => (
+        <Tag key={item.key}>{item.label}</Tag>
+      ))}
+      {inputVisible && (
+        <Input
+          ref={ref}
+          type="text"
+          size="small"
+          style={{
+            width: 78,
+          }}
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={handleInputConfirm}
+          onPressEnter={handleInputConfirm}
+        />
+      )}
+      {!inputVisible && (
+        <Tag
+          onClick={showInput}
+          style={{
+            borderStyle: 'dashed',
+          }}
+        >
+          <PlusOutlined />
+        </Tag>
+      )}
+    </div>
+  );
+};
+
+const InterestList = ({ tags }) => {
+  const ref = useRef(null);
+  const [newTags, setNewTags] = useState([]);
+  const [inputVisible, setInputVisible] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+
+  const showInput = () => {
+    setInputVisible(true);
+
+    if (ref.current) {
+      // eslint-disable-next-line no-unused-expressions
+      ref.current?.focus();
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputConfirm = () => {
+    let tempsTags = [...newTags];
+
+    if (inputValue && tempsTags.filter((tag) => tag.label === inputValue).length === 0) {
+      tempsTags = [
+        ...tempsTags,
+        {
+          key: `new-${tempsTags.length}`,
+          label: inputValue,
+        },
+      ];
+    }
+
+    setNewTags(tempsTags);
+    setInputVisible(false);
+    setInputValue('');
+  };
+
+  return (
+    <div className={styles.tags}>
+      <div className={styles.tagsTitle}> Interests </div>
       {(tags || []).concat(newTags).map((item) => (
         <Tag key={item.key}>{item.label}</Tag>
       ))}
@@ -128,71 +215,193 @@ const TagList = ({ tags }) => {
 };
 
 const Center = () => {
-  const [tabKey, setTabKey] = useState('articles'); //  获取用户信息
+  const [tabKey, setTabKey] = useState('collection'); //  获取用户信息
 
-  const { data: currentUser, loading } = useRequest(() => {
-    return queryCurrent();
-  }); //  渲染用户信息
+  const { data, loading } = useRequest(
+    async() => {
+      const result = await queryCurrent({
+        username: username,
+      });
+      return result;
+    },
+    {
+      formatResult: result => result,
+    }
+  ); //  渲染用户信息
+  
+  console.log(data);
+  let currentUser = [];
+  if(typeof(data) != 'undefined') {
+    currentUser = {
+      name: data.Username,
+      birthday: data.Birthday,
+      gender: data.Gender,
+      major: data.Department,
+      avatar: 'http://192.168.3.132:10010/resources/userfiles/'+ data.Username+'/avatar.png',
+    };
+  }
 
-  const renderUserInfo = ({ title, group, geographic }) => {
-    return (
-      <div className={styles.detail}>
-        <p>
-          <ContactsOutlined
-            style={{
-              marginRight: 8,
-            }}
-          />
-          {title}
-        </p>
-        <p>
-          <ClusterOutlined
-            style={{
-              marginRight: 8,
-            }}
-          />
-          {group}
-        </p>
-        <p>
-          <HomeOutlined
-            style={{
-              marginRight: 8,
-            }}
-          />
-          {
-            (
-              geographic || {
-                province: {
-                  label: '',
-                },
-              }
-            ).province.label
-          }
-          {
-            (
-              geographic || {
-                city: {
-                  label: '',
-                },
-              }
-            ).city.label
-          }
-        </p>
-      </div>
-    );
+  const renderUserInfo = ({ birthday, gender, email, major, grade, country, province, city, phone }) => {
+    if(gender === 'Female') {
+      return (
+        <div className={styles.detail}>
+          <p>
+            <CalendarOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {birthday+'    '}
+            <WomanOutlined/>
+          </p>
+          
+          <p>
+            <MailOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {email}
+          </p>
+          <p>
+            <PhoneOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {phone} 
+          </p>
+          <p>
+            <ClusterOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {major+' '}{grade} 
+          </p>
+          <p>
+            <HomeOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {country+' '}{province+' '}{city}
+          </p>
+        </div>
+      );
+    }
+    else if (gender === 'Male') {
+      return (
+        <div className={styles.detail}>
+          <p>
+            <CalendarOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {birthday+'    '} 
+            <ManOutlined/>
+          </p>
+          
+          <p>
+            <MailOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {email}
+          </p>
+          <p>
+            <PhoneOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {phone} 
+          </p>
+          <p>
+            <ClusterOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {major+' '}{grade} 
+          </p>
+          <p>
+            <HomeOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {country+' '}{province+' '}{city}
+          </p>
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className={styles.detail}>
+          <p>
+            <CalendarOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {birthday+'    '} 
+          </p>
+          
+          <p>
+            <MailOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {email}
+          </p>
+          <p>
+            <PhoneOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {phone} 
+          </p>
+          <p>
+            <ClusterOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {major+' '}{grade} 
+          </p>
+          <p>
+            <HomeOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {country+' '}{province+' '}{city}
+          </p>
+        </div>
+      );
+    }
   }; // 渲染tab切换
 
   const renderChildrenByTabKey = (tabValue) => {
-    if (tabValue === 'projects') {
-      return null;
+    if (tabValue === 'collection') {
+      return <Collection />;
     }
 
-    if (tabValue === 'applications') {
-      return null;
+    if (tabValue === 'follower') {
+      return <Follower />;
     }
 
-    if (tabValue === 'articles') {
-      return null;
+    if (tabValue === 'following') {
+      return <Following />;
+    }
+
+    if (tabValue == 'blacklist') {
+      return <Blacklist />
     }
 
     return null;
@@ -218,27 +427,14 @@ const Center = () => {
                 </div>
                 {renderUserInfo(currentUser)}
                 <Divider dashed />
-                <TagList tags={currentUser.tags || []} />
+                <CourseList tags={currentUser.courses || []} />
                 <Divider
                   style={{
                     marginTop: 16,
                   }}
                   dashed
                 />
-                <div className={styles.team}>
-                  <div className={styles.teamTitle}>group</div>
-                  <Row gutter={36}>
-                    {currentUser.notice &&
-                      currentUser.notice.map((item) => (
-                        <Col key={item.id} lg={24} xl={12}>
-                          <Link to={item.href}>
-                            <Avatar size="small" src={item.logo} />
-                            {item.member}
-                          </Link>
-                        </Col>
-                      ))}
-                  </Row>
-                </div>
+                <InterestList tags={currentUser.interests || []} />
               </div>
             )}
           </Card>

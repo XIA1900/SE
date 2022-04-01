@@ -1,5 +1,9 @@
 import React from 'react';
 import { List } from 'antd';
+import { history } from 'umi';
+
+const username = history.location.search.substring(1);
+
 const passwordStrength = {
   strong: <span className="strong">strong</span>,
   medium: <span className="medium">medium</span>,
@@ -7,6 +11,13 @@ const passwordStrength = {
 };
 
 const SecurityView = () => {
+  const onEdit = async() => {
+    history.push({
+      pathname: '/form/changePassword',
+      search: username,
+    });
+  }
+
   const getData = () => [
     {
       title: 'password',
@@ -16,7 +27,7 @@ const SecurityView = () => {
           {passwordStrength.strong}
         </>
       ),
-      actions: [<a key="Modify">edit</a>],
+      actions: [<a key="Modify" onClick={onEdit}>edit</a>],
     },
     {
       title: 'phone',

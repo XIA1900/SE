@@ -5,7 +5,7 @@ import { history, useModel, SelectLang } from 'umi';
 import Avatar from './AvatarDropdown';
 import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
-import NoticeIconView from '../NoticeIcon';
+//import NoticeIconView from '../NoticeIcon';
 import { search } from '@/services/search';
 
 const GlobalHeaderRight = () => {
@@ -44,7 +44,7 @@ const GlobalHeaderRight = () => {
          <EditOutlined />
       </span>
      
-      <NoticeIconView />
+      {/* <NoticeIconView /> */}
       <Avatar menu />
       <SelectLang className={styles.action} />
     </Space>

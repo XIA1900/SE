@@ -27,13 +27,16 @@ const loginOut = async () => {
 
 const AvatarDropdown = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
+  const { currentUser } = initialState;
+
   const onMenuClick = useCallback(
     (event) => {
       const { key } = event;
 
       if (key === 'logout') {
         setInitialState((s) => ({ ...s, currentUser: undefined }));
-        loginOut();
+        //loginOut();
+        history.push('/user/login');
         return;
       }
 
@@ -53,10 +56,15 @@ const AvatarDropdown = ({ menu }) => {
         return;
       }
 
-      history.push(`/account/${key}`);
+      history.push({
+        pathname: `/account/${key}`,
+        search: currentUser.name,
+      });
+      return;
     },
     [setInitialState],
   );
+
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
       <Spin
@@ -73,7 +81,7 @@ const AvatarDropdown = ({ menu }) => {
     return loading;
   }
 
-  const { currentUser } = initialState;
+  
 
   if (!currentUser || !currentUser.name) {
     return loading;
@@ -116,7 +124,8 @@ const AvatarDropdown = ({ menu }) => {
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
-        <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+        {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" /> */}
+        <img style={{ width: '25px', height: '25px', borderRadius: '25px' }} src='http://192.168.3.132:10010/resources/userfiles/exia/avatar.png'/>
         <span className={`${styles.name} anticon`}>{currentUser.name}</span>
       </span>
     </HeaderDropdown>

@@ -1,5 +1,5 @@
 import { router } from 'umi';
-import { getBasicInfo, getAnalysis, getMember, getNotification, updateGroupInfo, deleteGroup } from '@/services/login';
+import { getBasicInfo, getAnalysis, getMember, getNotification, updateGroupInfo, deleteGroup, deleteMember, deletePost } from '@/services/login';
 
 const Model = {
   namespace: 'getGroup',
@@ -43,6 +43,18 @@ const Model = {
         type: 'save6',
         payload: response6,
       });
+
+      const response7 = yield call(deleteMember, payload);
+      yield put({
+        type: 'save7',
+        payload: response7,
+      });
+
+      const response8 = yield call(deletePost, payload);
+      yield put({
+        type: 'save8',
+        payload: response8,
+      });
     },
   },
   reducers: {
@@ -71,6 +83,18 @@ const Model = {
         };
       },
     save6(state, action) {
+        return {
+          ...state,
+          data: action.payload,
+        };
+      },
+    save7(state, action) {
+        return {
+          ...state,
+          data: action.payload,
+        };
+      },
+    save8(state, action) {
         return {
           ...state,
           data: action.payload,

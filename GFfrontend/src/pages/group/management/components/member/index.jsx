@@ -1,4 +1,4 @@
-import { getMember } from '@/services/groupManagement'
+import { getMember, deleteMember } from '@/services/groupManagement'
 import {
     ContactsOutlined,
     LikeOutlined,
@@ -9,7 +9,7 @@ import {
 import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
-import ArticleListContent from '@/pages/group/components/articleContent';
+import ArticleListContent from '@/pages/group/content/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import styles from './style.less';
   
@@ -32,6 +32,21 @@ const Member = () => {
   
     const list = data?.list || [];
     console.log(list);
+
+    const deleteUser = async (values) => {
+      console.log(values);
+      const user = values;
+      const result = deleteMember({
+        user: user,
+        group: groupName,
+      });
+      if(result.message === 'Ok') {
+        location.reload();   //refresh page
+      }
+      else {
+
+      }
+    };
   
     const formItemLayout = {
       wrapperCol: {
@@ -95,6 +110,9 @@ const Member = () => {
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
                 {item.user}
+                  <Button onClick = {(e) => deleteUser(item.user, e)}> 
+                    Delete
+                  </Button>
                 </p>
               </div>
             )}

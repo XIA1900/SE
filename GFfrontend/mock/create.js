@@ -20,6 +20,7 @@ export default {
   'POST  /api/createPost': async (req, res) => {
     res.send({
       message: 'Ok',
+      postid: '123',
     });
   },
 };

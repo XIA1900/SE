@@ -55,13 +55,14 @@ const BasicInfo = () => {
     return '';
   };
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log(values);
-    const result = updateGroupInfo({
+    const result = await updateGroupInfo({
       values,
       
     });
-    const msg = result.message;   //need modification
+    //console.log(result);
+    const msg = result.message;   
     if(msg === 'Ok') {
       const defaultLoginSuccessMessage = intl.formatMessage({
         id: 'groupUpdate',

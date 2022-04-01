@@ -1,8 +1,8 @@
 This is SE Projects By Center of the Road Group
 
 **Group members:**
-- Frontend: Yuwei Xia(XIA1900), Kaiyue Wang(kywithsweet)
-- Backend: Bowei Wu(TOMBowei), Yingjie Chen(fongziyjun16)
+- Frontend: Yuwei Xia, Kaiyue Wang
+- Backend: Bowei Wu, Yingjie Chen
 
 **Technological stack:**
 - Frontend: React etc.
@@ -41,7 +41,7 @@ But they seem to be all sports-related. Although lots of students have a huge in
 	7. block/report/like/dislike/follow others users/posts
 	8. setting personal information
 	9. receive notifications, such as new followers, new posts, new replies etc
--   If signed as **group admin**:
+-   If signed as **managers**:
 	1. can close/delete a post
 	2. can mute a user if he/she violates certain rules
 	3. post rules

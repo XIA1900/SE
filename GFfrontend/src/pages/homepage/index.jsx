@@ -1,7 +1,7 @@
 import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
-import React from 'react';
-import { useRequest } from 'umi';
+import React, { useState } from 'react';
+import { useRequest, useModel, history } from 'umi';
 import ArticleListContent from './components/ArticleListContent';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
@@ -10,28 +10,71 @@ import styles from './style.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
-const pageSize = 10;
+const pageSize = 20;
+const pageNumber = 1;
+
 
 const Articles = () => {
   const [form] = Form.useForm();
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return queryList({
-        count: pageSize,
-        type: 'hottest',
-        groupName: null,
+    async() => {
+      const result = await queryList({
+        PageNO: pageNumber,
+        PageSize: pageSize,
       });
+      return result;
     },
     {
+      formatResult: result => result,
       loadMore: true,
-    },
+    }    
   );
-  const list = data?.list || [];
-  // const post_href = "/group/post?"+list.id;
-  // list.push({
-  //   post_href: post_href,
-  // });
-  // console.log(list.title);
+
+  //console.log(data);
+  const list = [];
+  if(typeof(data.ArticleList)!='undefined') {
+    const articleList = data.ArticleList;
+    const communityList = data.CommunityList;
+    const collection = data.CountFavorite;
+    const like = data.CountLike;
+    const reply = data.CountComment;
+    const size = Object.keys(articleList).length;
+    for(let i=0; i<size; i++) {
+      list.push({
+        id: articleList[i].ID,
+        name: articleList[i].Username,
+        title: articleList[i].Title,
+        group: communityList[i].Name,
+        createdAt: articleList[i].CreateDay,
+        content: articleList[i].Content,
+        collection: collection[i],
+        like: like[i],
+        reply: reply[i],
+        groupID: communityList[i].ID,
+        avatar: 'http://192.168.3.132:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+      });
+    }
+  }
+  console.log(list);
+
+  const onCCollection = async(values) => {
+    console.log(values);
+    if(values.type === 'star-o') {
+      if(values.value === '1') {
+        return (
+          <IconText key="collection" type="star-o" value="0" text={values.text--} />
+        );
+      }
+      else {
+        return (
+          <IconText key="collection" type="star-o" value="1" text={item.collection} />
+        )
+      }
+    }
+  }
 
   const IconText = ({ type, text }) => {
     switch (type) {
@@ -90,6 +133,13 @@ const Articles = () => {
     },
   };
 
+  const onCollection = async(values) => {
+    console.log(values);
+    let count = values;
+    count++;
+    return count;
+  }
+
   const loadMoreDom = list.length > 0 && (
     <div
       style={{
@@ -115,6 +165,14 @@ const Articles = () => {
     </div>
   );
 
+  const clickPost = (values) => {
+    history.push({
+      pathname: '/group/post',
+      search: values.toString(),
+    });
+    return;
+  }
+
   return (
     <>
       <Card bordered={false}>
@@ -128,24 +186,13 @@ const Articles = () => {
           }
           onValuesChange={reload}
         >
-          {/* <StandardFormRow block> */}
-            {/* <FormItem name="category"> */}
-              <TagSelect expandable>
-                <TagSelect.Option value="cat1">Sports</TagSelect.Option>
-                <TagSelect.Option value="cat2">Professors</TagSelect.Option>
-                <TagSelect.Option value="cat3">Courses</TagSelect.Option>
-                <TagSelect.Option value="cat4">Daily Life</TagSelect.Option>
-                <TagSelect.Option value="cat5">Movies</TagSelect.Option>
-                {/* <TagSelect.Option value="cat6">类目六</TagSelect.Option>
-                <TagSelect.Option value="cat7">类目七</TagSelect.Option>
-                <TagSelect.Option value="cat8">类目八</TagSelect.Option>
-                <TagSelect.Option value="cat9">类目九</TagSelect.Option>
-                <TagSelect.Option value="cat10">类目十</TagSelect.Option>
-                <TagSelect.Option value="cat11">类目十一</TagSelect.Option>
-                <TagSelect.Option value="cat12">类目十二</TagSelect.Option> */}
-              </TagSelect>
-            {/* </FormItem> */}
-          {/* </StandardFormRow> */}
+        <TagSelect expandable>
+          <TagSelect.Option value="cat1">Sports</TagSelect.Option>
+          <TagSelect.Option value="cat2">Professors</TagSelect.Option>
+          <TagSelect.Option value="cat3">Courses</TagSelect.Option>
+          <TagSelect.Option value="cat4">Daily Life</TagSelect.Option>
+          <TagSelect.Option value="cat5">Movies</TagSelect.Option>
+        </TagSelect>
         </Form>
       </Card>
       <Card
@@ -168,14 +215,14 @@ const Articles = () => {
             <List.Item
               key={item.id}
               actions={[
-                <IconText key="collection" type="star-o" text={item.collection} />,
+                <IconText key="collection" type="star-o" text={item.collection}  />,
                 <IconText key="like" type="like-o" text={item.like} />,
                 <IconText key="reply" type="message" text={item.reply} />,
               ]}
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={"/group/post?"+item.id}>
+                  <a className={styles.listItemMetaTitle}  onClick={(e) => clickPost(item.id, e)}>
                     {item.title}
                   </a>
                 }

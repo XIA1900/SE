@@ -18,8 +18,14 @@ return: a list, including [params] posts and each post should have:
 7. the number of collections, number of likes, number of replies
 */
 
-export async function queryList(params) {
-  return request('/api/queryList', {
-    params,
+export async function queryList(body) {
+  console.log(body);
+  return request('/api/article/getarticlelist?PageNO='+body.PageNO+'&PageSize='+body.PageSize, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    //data: JSON.stringify(body),
+    credentials: 'include',
   });
 }

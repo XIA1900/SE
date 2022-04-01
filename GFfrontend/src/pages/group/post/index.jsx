@@ -14,34 +14,83 @@ A post have:
 url: /group/post?postid
 */
 
-import { PlusOutlined, TeamOutlined, CrownOutlined, CalendarOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
+import { PlusOutlined, TeamOutlined, CrownOutlined, CalendarOutlined, LikeOutlined, LikeTwoTone, MessageOutlined, StarOutlined, StarTwoTone, MessageTwoTone } from '@ant-design/icons';
+import { Avatar, Card, Col, Divider, Input, Row, Tag, Form, Modal } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
-import { Link, useRequest, history } from 'umi';
+import { Link, useRequest, history, useModel } from 'umi';
 import Like from './components/like';
 import Reply from './components/reply';
 import Collection from './components/collection';
 import styles from './Center.less';
 import { getPost } from '@/services/getPost';
+//import { currentUser } from '@/services/ant-design-pro/api';
+import { removeLike, getRelation } from '@/services/user';
 
 const postid = history.location.search.substring(1);
 console.log(postid);
 
-const operationTabList = [
-  {
-    key: 'reply',
-    tab: <span> Replies </span>,
-  },
-  {
-    key: 'like',
-    tab: <span> Likes </span>,
-  },
-  {
-    key: 'collection',
-    tab: <span> Collections</span>
-  },
-];
+const operationTabList = ({NumComment, NumLike, NumFavorite}) => {
+  if(typeof(NumComment) === 'undefined') return;
+  const tabList = [
+    {
+      key: 'reply',
+      tab: <span> Replies{' '+NumComment} </span>,
+    },
+    {
+      key: 'like',
+      tab: <span> Likes{' '+NumLike}</span>,
+    },
+    {
+      key: 'collection',
+      tab: <span> Collections{' '+NumFavorite}</span>
+    },
+  ];
+  return tabList;
+}
+
+const replyForm = ({ visible, onCreate, onCancel }) => {
+  const [form] = Form.useForm();
+  return (
+    <Modal
+    visible={true}
+    title="What's in your mind?"
+    okText="Send"
+    cancelText="Cancel"
+    onCancel={onCancel}
+    onOk={() => {
+      form
+        .validateFields()
+        .then((values) => {
+          form.resetFields();
+          onCreate(values);
+        })
+        .catch((info) => {
+          console.log('Validate Failed:', info);
+        });
+    }}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        name="form_in_modal"
+      >
+        <Form.Item 
+          name="description" 
+          label="Description"
+          rules={[
+            {
+              required: true,
+              message: 'Please say something.',
+            }
+          ]}
+        >
+          <Input type="textarea" />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+}
 
 const TagList = ({ tags }) => {
   const ref = useRef(null);
@@ -85,30 +134,154 @@ const TagList = ({ tags }) => {
 
 const Center = () => {
   const [tabKey, setTabKey] = useState('reply');
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const [visible, setVisible] = useState(false);
 
-  const { data: postContents, loading } = useRequest(() => {
-    return getPost({
-      postid: postid,
-    });
-  });
+  const { data: postContents, reload, loading, loadMore, loadingMore } = useRequest(
+    async() => {
+      const result = await getPost({
+        //username: currentUser.username,
+        ID: postid,
+      });
+      //console.log(result);
+      return result;
+    },
+    {
+      formatResult: result => result,
+      loadMore: true,
+    }
+  );
+  //console.log(postContents);
+  const list = postContents || [];
+  //console.log(list);
 
-  const list = postContents?.list || [];
-  console.log(list);
+  // if(typeof(postContents[0])!='undefined') {
+  //   list = postContents;
+  // }
 
-  const renderPostInfo = ({ avatar, title, content, owner, updatedAt }) => {
+  // console.log(list);
+
+
+  const onReply = (values) => {
+    console.log(values);
+    setVisible(false);
+  }
+
+  const onLike = async(values) => {
+    console.log("liked");
+    console.log(values);
+    if(values === '1') {
+      const result = removeLike({
+        username: currentUser.name,
+        postid: postid,
+      });
+      if(result.message === 'Ok') {
+        return {renderButtonInfo};
+      }
+    }
+  }
+
+  const onCollection = async(values) => {
+
+  }
+
+  const renderPostInfo = ({ avatar, Title, Content, Owner, UpdatedAt}) => {
     return (
       <div className={styles.listContent}>
-        <div className={styles.title}>{title}</div>
+        <div className={styles.title}>{Title}</div>
           <img
             alt=""
             src={avatar}
             style={{ width: '25px', height: '25px', borderRadius: '25px' }}
           />
-          <a href=''> {owner}</a> updated at {updatedAt}
-        <div className={styles.description}> {content} </div>
+          <a href=''> {Owner}</a> updated at {UpdatedAt}
+        <div className={styles.description}> {Content} 
+        </div>
       </div>
     );
   };
+  
+  const renderButtonInfo = ({Liked, Favorited}) => {
+    if(Liked === true && Favorited === true) {
+      return (
+        <div className={styles.listContent}>
+          <div className={styles.description}>
+            <p style={{float:'right'}}>
+                <MessageOutlined 
+                  style={{marginRight: '20px'}}  
+                  onClick={() => {
+                    console.log('clicked');
+                    //setVisible(true);
+                    console.log(visible);
+                    setVisible(visible => !visible);
+                    console.log(visible);
+                  }}
+                />
+                <replyForm
+                  visible = {visible}
+                  onCreate = {onReply}
+                  onCancel = {() => {
+                    setVisible(false);
+                  }}
+                />
+                
+                <LikeTwoTone style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
+                
+                <StarTwoTone onClick={(e) => onCollection(Favorited, e)}/>
+              </p>
+          </div>
+        </div>
+      );
+    }
+    else if(Liked === true && Favorited === false) {
+      return (
+        <div className={styles.listContent}>
+          <div className={styles.description} >
+            <p style={{float:'right'}}>
+              <MessageOutlined style={{marginRight: '20px'}}  onClick={onReply}/>
+              
+              <LikeTwoTone style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
+              
+              <StarOutlined onClick={(e) => onCollection(Favorited, e)}/>
+            </p>
+            
+          </div>
+        </div>
+      );
+    }
+    else if(Liked === false && Favorited === true) {
+      return (
+        <div className={styles.listContent}>
+          <div className={styles.description} >
+            <p style={{float:'right'}}>
+              <MessageOutlined style={{marginRight: '20px'}} onClick={onReply}/>
+              
+              <LikeOutlined style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)} />
+              
+              <StarTwoTone onClick={(e) => onCollection(Favorited, e)}/>
+            </p>
+          </div>
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className={styles.listContent}>
+          <div className={styles.description} style={{float:'right'}}>
+            <p style={{float:'right'}}>
+              <MessageOutlined style={{marginRight: '20px'}} onClick={onReply}/>
+              
+              <LikeOutlined style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
+              
+              <StarOutlined onClick={(e) => onCollection(Favorited, e)}/>
+            </p>
+            
+          </div>
+        </div>
+      );
+    }
+  }
 
   // 渲染tab切换
 
@@ -142,6 +315,7 @@ const Center = () => {
             {!loading && list && (
               <div>
                 {renderPostInfo(list)}
+                {renderButtonInfo(list)}
               </div>
             )}
           </Card>
@@ -149,7 +323,7 @@ const Center = () => {
           <Card
             className={styles.tabsCard}
             bordered={false}
-            tabList={operationTabList}
+            tabList={operationTabList(list)}
             activeTabKey={tabKey}
             onTabChange={(_tabKey) => {
               setTabKey(_tabKey);

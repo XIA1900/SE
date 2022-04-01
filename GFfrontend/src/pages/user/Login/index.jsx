@@ -8,11 +8,12 @@ import {
 } from '@ant-design/icons';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
+import cookie from "react-cookies";
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
 import { useIntl, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
-import { login } from '@/services/ant-design-pro/api';
-//import { login } from '@/services/login';
+//import { login } from '@/services/ant-design-pro/api';
+import { login } from '@/services/login';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import styles from './index.less';
 
@@ -35,26 +36,35 @@ const Login = () => {
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
-
+    console.log('userInfo:');
+    console.log(userInfo);
     if (userInfo) {
       await setInitialState((s) => ({ ...s, currentUser: userInfo }));
     }
   };
 
   const handleSubmit = async (values) => {
+    console.log(values);
     try {
       // 登录
       const msg = await login({ ...values, type }); //后端
-
-      if (msg.status === 'ok') {
+      console.log(msg);
+      if (msg.code == 200) {
+        //nickname = msg.Nickname;
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo(); //successful, wait for user info; this was not implemented
+        cookie.save('token', msg.message);
+        const userInfo = {
+          name: values.username,
+        };
+        console.log(userInfo);
+        //await fetchUserInfo(); //successful, wait for user info; this was not implemented
+        await setInitialState((s) => ({ ...s, currentUser: userInfo}));
+        
         /** 此方法会跳转到 redirect 参数所在的位置 */
-
         if (!history) return;
         const { query } = history.location;
         const { redirect } = query;
@@ -63,7 +73,6 @@ const Login = () => {
       }
 
       console.log(msg); // 如果失败去设置用户错误信息
-
       setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
@@ -71,6 +80,7 @@ const Login = () => {
         defaultMessage: '登录失败，请重试！',
       });
       message.error(defaultLoginFailureMessage);
+      location.reload();
     }
   };
 

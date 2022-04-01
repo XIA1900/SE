@@ -25,6 +25,7 @@ const avatars = [
   '/heroes/Sona_0.jpeg',
   '/heroes/Soraka_0.jpeg',
 ];
+
 const users = [
   'Ashe',
   'Janna',
@@ -77,7 +78,6 @@ function getReply(req, res) {
 }
 
 
-
 function postContents(postid) {
   const list = {
     postid: postid,
@@ -86,6 +86,11 @@ function postContents(postid) {
     owner: users[8],
     avatar: avatars[8],
     updatedAt: updateAt,
+    liked: '1',
+    collected: '1',
+    likes: 100,
+    replies: 100,
+    collections: 100,
   };
   console.log(list);
   return list;

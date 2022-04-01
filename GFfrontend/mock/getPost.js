@@ -78,7 +78,6 @@ function getReply(req, res) {
 }
 
 
-
 function postContents(postid) {
   const list = {
     postid: postid,

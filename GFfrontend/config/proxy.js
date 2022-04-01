@@ -27,7 +27,7 @@ export default {
   },
   pre: {
     '/api': {
-      target: 'http://172.20.10.2:10010/gf/api', //配置节点
+      target: 'http://192.168.3.132:10010/gf/api', //配置节点
       changeOrigin: true,
       pathRewrite: {
         '^/api': '', //  '/api': ''

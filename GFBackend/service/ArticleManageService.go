@@ -231,13 +231,17 @@ func (articleManageService *ArticleManageService) GetOneArticleByID(id int) (ent
 
 	return entity.ArticleDetail{
 		ID:            article.ID,
+		Owner:         article.Username,
 		Title:         article.Title,
 		TypeName:      articleType.TypeName,
 		CommunityName: community.Name,
 		Content:       article.Content,
+		Liked:         false,
+		Favorited:     false,
 		NumLike:       countLikeOfArticle,
 		NumFavorite:   countFavoriteOfArticle,
 		NumComment:    countCommentsOfArticle,
+		UpdatedAt:     article.CreateDay,
 	}, nil
 }
 

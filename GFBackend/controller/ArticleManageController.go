@@ -231,3 +231,46 @@ func (articleManageController *ArticleManageController) GetArticleList(context *
 		"CountComment":  countComment,
 	})
 }
+
+// GetArticleListByCommunityID godoc
+// @Summary Get Article List By Community ID
+// @Description need token in cookie, need page and page size
+// @Tags Article Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param page query integer true "Page"
+// @Param pageSize query integer true "Page Size"
+// @Param communityID query integer true "Community ID"
+// @Success 200 {object} entity.Article "<b>Success</b>. Get Successfully"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters / Not Found"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /article/getarticlelistbycommunityid [get]
+func (articleManageController *ArticleManageController) GetArticleListByCommunityID(context *gin.Context) {
+	communityID, err1 := strconv.Atoi(context.Query("CommunityID"))
+	pageNO, err2 := strconv.Atoi(context.Query("PageNO"))
+	pageSize, err3 := strconv.Atoi(context.Query("PageSize"))
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	if err2 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	if err3 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	articleList, countLike, countFavorite, countComment, err4 := articleManageController.articleManageService.GetArticleListByCommunityID(communityID, pageNO, pageSize)
+	if err4 != nil {
+		context.JSON(500, "Internal Server Error")
+		return
+	}
+	context.JSON(200, gin.H{
+		"ArticleList":   articleList,
+		"CountLike":     countLike,
+		"CountFavorite": countFavorite,
+		"CountComment":  countComment,
+	})
+}

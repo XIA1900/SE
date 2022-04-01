@@ -167,6 +167,69 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/article/getarticlelistbycommunityid": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need page and page size",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Manage"
+                ],
+                "summary": "Get Article List By Community ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page Size",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Community ID",
+                        "name": "communityID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Article"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters / Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/article/getone": {
             "get": {
                 "security": [
@@ -2500,8 +2563,14 @@ const docTemplate_swagger = `{
                     "type": "string",
                     "example": "I love UF"
                 },
+                "Favorited": {
+                    "type": "boolean"
+                },
                 "ID": {
                     "type": "integer"
+                },
+                "Liked": {
+                    "type": "boolean"
                 },
                 "NumComment": {
                     "type": "integer"
@@ -2512,6 +2581,10 @@ const docTemplate_swagger = `{
                 "NumLike": {
                     "type": "integer"
                 },
+                "Owner": {
+                    "type": "string",
+                    "example": "Owner1"
+                },
                 "Title": {
                     "type": "string",
                     "example": "Gator Forum"
@@ -2519,6 +2592,10 @@ const docTemplate_swagger = `{
                 "TypeName": {
                     "type": "string",
                     "example": "music"
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "example": "2018-01-01"
                 }
             }
         },

@@ -14,6 +14,7 @@ func InitArticleManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 		articleTypeManageReqsGroup.GET("/getone", articleManageController.GetOneArticleByID)
 		articleTypeManageReqsGroup.GET("/search", articleManageController.GetArticlesBySearchWords)
 		articleTypeManageReqsGroup.GET("/getarticlelist", articleManageController.GetArticleList)
+		articleTypeManageReqsGroup.GET("/getarticlelistbycommunityid", articleManageController.GetArticleListByCommunityID)
 	}
 
 	return articleTypeManageReqsGroup

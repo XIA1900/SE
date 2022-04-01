@@ -53,19 +53,29 @@ definitions:
       Content:
         example: I love UF
         type: string
+      Favorited:
+        type: boolean
       ID:
         type: integer
+      Liked:
+        type: boolean
       NumComment:
         type: integer
       NumFavorite:
         type: integer
       NumLike:
         type: integer
+      Owner:
+        example: Owner1
+        type: string
       Title:
         example: Gator Forum
         type: string
       TypeName:
         example: music
+        type: string
+      UpdatedAt:
+        example: "2018-01-01"
         type: string
     type: object
   entity.ArticleFavorite:
@@ -429,6 +439,47 @@ paths:
       security:
       - ApiAuthToken: []
       summary: Get Article List
+      tags:
+      - Article Manage
+  /article/getarticlelistbycommunityid:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie, need page and page size
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Page Size
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      - description: Community ID
+        in: query
+        name: communityID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Successfully
+          schema:
+            $ref: '#/definitions/entity.Article'
+        "400":
+          description: <b>Failure</b>. Bad Parameters / Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Article List By Community ID
       tags:
       - Article Manage
   /article/getone:

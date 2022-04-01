@@ -22,6 +22,7 @@ type IArticleManageService interface {
 	GetOneArticleByID(id int) (entity.ArticleDetail, error)
 	GetArticlesBySearchWords(articleSearchInfo entity.ArticleSearchInfo) (entity.ArticlesForSearching, error)
 	GetArticleList(pageNO, pageSize int) ([]entity.Article, []entity.Community, []int64, []int64, []int64, error)
+	GetArticleListByCommunityID(communityID int, pageNO, pageSize int) ([]entity.Article, []int64, []int64, []int64, error)
 }
 
 type ArticleManageService struct {
@@ -307,4 +308,40 @@ func (articleManageService *ArticleManageService) GetArticleList(pageNO, pageSiz
 		comments = append(comments, comment)
 	}
 	return articles, communities, likes, favorites, comments, nil
+}
+
+func (articleManageService *ArticleManageService) GetArticleListByCommunityID(communityID int, pageNO, pageSize int) ([]entity.Article, []int64, []int64, []int64, error) {
+	articles, err1 := articleManageService.articleDAO.GetArticleListByCommunityID(communityID, (pageNO-1)*pageSize, pageSize)
+	if err1 != nil {
+		logger.AppLogger.Error(err1.Error())
+		return nil, nil, nil, nil, err1
+	}
+	var likes []int64
+	for i := 0; i < len(articles); i++ {
+		like, err3 := articleManageService.articleLikeDAO.CountLikeOfArticle(articles[i].ID)
+		if err3 != nil {
+			logger.AppLogger.Error(err3.Error())
+			return nil, nil, nil, nil, err3
+		}
+		likes = append(likes, like)
+	}
+	var favorites []int64
+	for i := 0; i < len(articles); i++ {
+		favorite, err4 := articleManageService.articleFavoriteDAO.CountFavoriteOfArticle(articles[i].ID)
+		if err4 != nil {
+			logger.AppLogger.Error(err4.Error())
+			return nil, nil, nil, nil, err4
+		}
+		favorites = append(favorites, favorite)
+	}
+	var comments []int64
+	for i := 0; i < len(articles); i++ {
+		comment, err5 := articleManageService.articleCommentDAO.CountCommentsOfArticle(articles[i].ID)
+		if err5 != nil {
+			logger.AppLogger.Error(err5.Error())
+			return nil, nil, nil, nil, err5
+		}
+		comments = append(comments, comment)
+	}
+	return articles, likes, favorites, comments, nil
 }

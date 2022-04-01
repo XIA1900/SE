@@ -237,6 +237,7 @@ const Center = () => {
       birthday: data.Birthday,
       gender: data.Gender,
       major: data.Department,
+      avatar: 'http://192.168.3.132:10010/resources/userfiles/'+ data.Username+'/avatar.png',
     };
   }
 

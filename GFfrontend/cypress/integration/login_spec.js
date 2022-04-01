@@ -4,8 +4,8 @@ describe('login', function(){
         })
 
     it('correctLogin', function(){
-    cy.get('.ant-pro-form-login-main').get('#username').type('admin')
-    cy.get('.ant-pro-form-login-main').get('#password').type('ant.design')
+    cy.get('.ant-pro-form-login-main').get('#username').type('kirby')
+    cy.get('.ant-pro-form-login-main').get('#password').type('007')
     cy.get('button:contains("Login")').click()
     cy.url().should('include', '/homepage')
     })

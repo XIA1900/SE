@@ -1585,6 +1585,31 @@ paths:
       summary: Request User Files
       tags:
       - Static Resource
+  /user/GetUserInfoByUsername:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Search Successfully
+          schema:
+            $ref: '#/definitions/entity.UserInfo'
+        "400":
+          description: <b>Failure</b>. Bad Parameters.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Get User's Info
+      tags:
+      - User Manage
   /user/admin/delete:
     post:
       consumes:

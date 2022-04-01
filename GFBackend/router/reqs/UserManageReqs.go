@@ -19,6 +19,7 @@ func InitUserManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 		userManageReqsGroup.POST("/unfollow", userManageController.UserUnfollow)
 		userManageReqsGroup.POST("/followers", userManageController.GetFollowers)
 		userManageReqsGroup.POST("/followees", userManageController.GetFollowees)
+		userManageReqsGroup.GET("/getuserinfo", userManageController.GetUserInfoByUsername)
 
 		adminReqsGroup := userManageReqsGroup.Group("/admin")
 		{

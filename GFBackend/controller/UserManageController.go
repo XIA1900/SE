@@ -495,3 +495,32 @@ func (userManageController *UserManageController) GetFollowees(context *gin.Cont
 	context.JSON(200, userFollows)
 
 }
+
+// GetUserInfoByUsername godoc
+// @Summary Get User's Info
+// @Description need token in cookie
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Success 200 {object} entity.UserInfo "<b>Success</b>. Search Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters."
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/GetUserInfoByUsername [get]
+func (userManageController *UserManageController) GetUserInfoByUsername(context *gin.Context) {
+	username := context.Query("username")
+	userInfo, err := userManageController.userManageService.GetUserInfoByUsername(username)
+	if err != nil {
+		errMsg := entity.ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+		if strings.Contains(err.Error(), "500") {
+			errMsg.Code = http.StatusInternalServerError
+			errMsg.Message = "Internal Server Error"
+		}
+		context.JSON(errMsg.Code, errMsg)
+		return
+	}
+	context.JSON(http.StatusOK, userInfo)
+}

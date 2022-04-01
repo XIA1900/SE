@@ -28,6 +28,7 @@ type IUserManageService interface {
 	Unfollow(followee, follower string) error
 	GetFollowers(username string) ([]string, error)
 	GetFollowees(username string) ([]string, error)
+	GetUserInfoByUsername(username string) (entity.User, error)
 }
 
 type UserManageService struct {
@@ -277,4 +278,13 @@ func (userManageService UserManageService) GetFollowees(username string) ([]stri
 		followees = append(followees, follow.Followee)
 	}
 	return followees, nil
+}
+
+func (userManageService *UserManageService) GetUserInfoByUsername(username string) (entity.User, error) {
+	userInfo, err := userManageService.userDAO.GetUserInfoByUsername(username)
+	if err != nil {
+		logger.AppLogger.Error(err.Error())
+		return entity.User{}, errors.New("500")
+	}
+	return userInfo, nil
 }

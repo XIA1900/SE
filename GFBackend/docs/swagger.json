@@ -1953,6 +1953,46 @@
                 "responses": {}
             }
         },
+        "/user/GetUserInfoByUsername": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "Get User's Info",
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.UserInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/user/admin/delete": {
             "post": {
                 "security": [

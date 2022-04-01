@@ -64,3 +64,51 @@ This tab shows list of users who have favourited this post.
 This tab shows list of users who have liked this post. 
 ### 1.7.4 Reply
 This tab shows all replies of this post. Each reply has a "createdAt", "content", "owner", "number of likes". 
+
+# 2 Backend
+
+## 2.1 User Management
+
+- User login
+- User logout
+- User update password
+- User can view and update personal information
+- User follow other users
+- User unfollow other users
+- User can view the subscribed list
+- User can view all the groups which are involved
+
+## 2.2 Article Management
+
+- User can view all articles in the home page
+- User in one group homepage can view all articles belongs to this group
+- User can search article by words
+- User can view one article's detail
+- User can post an article
+- User can update article's title or content after posting the article
+- User can like  and unlike an article
+- User can favorite and unfavorite an article
+- User can post comment for an article
+- User can comment for a comment
+
+## 2.3 Group Management
+
+- User can create a group
+- User can update group information
+- User can search a group by group name
+- User can join a group
+- User can leave a group
+- Creator can view the members in this group
+
+## 2.4 File Management
+
+- User can upload private files.
+- User can request and browse private files.
+- User can delete their private files.
+- User download their private files.
+- User can see their space capacity.
+- Admin can expand users space capacity
+
+## 3 Unit Test
+
+GFBackend/test

@@ -4,7 +4,7 @@ import moment from 'moment';
 import { history } from 'umi';
 import styles from './index.less';
 
-const ArticleListContent = ({data: { content, logo, createdAt, name, group, groupID },}) => {
+const ArticleListContent = ({data: { content, avatar, createdAt, name, group, groupID },}) => {
 
   const clickGroup = () => {
     history.push({
@@ -24,7 +24,7 @@ const ArticleListContent = ({data: { content, logo, createdAt, name, group, grou
   <div className={styles.listContent}>
     <div className={styles.description}>{content}</div>
     <div className={styles.extra}>
-      <img src={logo} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+      <img src={avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
       <a onClick={(e) => clickUser(name, e)}> {name}</a> posted on
       <a onClick={clickGroup}> {group}</a>
       <em>{moment(createdAt).format('YYYY-MM-DD HH:mm')}</em>

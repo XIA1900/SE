@@ -125,7 +125,7 @@ const AvatarDropdown = ({ menu }) => {
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
         {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" /> */}
-        <img src='http://192.168.3.132:10010/resources/userfiles/exia/exia.png'/>
+        <img style={{ width: '25px', height: '25px', borderRadius: '25px' }} src='http://192.168.3.132:10010/resources/userfiles/exia/avatar.png'/>
         <span className={`${styles.name} anticon`}>{currentUser.name}</span>
       </span>
     </HeaderDropdown>

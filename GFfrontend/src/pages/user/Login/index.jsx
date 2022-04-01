@@ -80,6 +80,7 @@ const Login = () => {
         defaultMessage: '登录失败，请重试！',
       });
       message.error(defaultLoginFailureMessage);
+      location.reload();
     }
   };
 

@@ -9,10 +9,10 @@ describe('login', function(){
     cy.get('button:contains("Login")').click()
     cy.url().should('include', '/homepage')
     })
-    /*it('incorrectLogin', function(){
+    it('incorrectLogin', function(){
     cy.get('.ant-pro-form-login-main').get('#username').type('admin')
     cy.get('.ant-pro-form-login-main').get('#password').type('ant')
     cy.get('button:contains("Login")').click()
     cy.url().should('include', '/user/login') 
-    })*/
+    })
 })

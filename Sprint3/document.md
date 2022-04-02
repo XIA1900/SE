@@ -64,8 +64,7 @@ This tab shows list of users who have favourited this post.
 This tab shows list of users who have liked this post. 
 ### 1.7.4 Reply (+)
 This tab shows all replies of this post. Each reply has a "createdAt", "content", "owner", "number of likes". 
-## 1.8 Cypress Test
-GFfrontend/cypress
+
 
 # 2 Backend
 
@@ -114,3 +113,7 @@ GFfrontend/cypress
 ## 3 Unit Test
 
 GFBackend/test
+
+## 4 Cypress Test
+
+GFfrontend/cypress

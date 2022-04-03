@@ -47,6 +47,29 @@ const Following = () => {
 
       }
     };
+
+    const renderFollowingInformation = ({mutual}) => {
+      if(mutual === true) {
+        return (
+          <div>
+            <Button onClick={onRemove} style={{float:'right'}}>
+              Mutual
+            </Button>
+            <Button onClick={onBlock}>
+              Block
+            </Button>
+          </div>
+
+        )
+      }
+      else {
+        return (
+          <Button onClick={onRemove} style={{float:'right'}}>
+            Following
+          </Button>
+        )
+      }
+    }
   
     const formItemLayout = {
       wrapperCol: {

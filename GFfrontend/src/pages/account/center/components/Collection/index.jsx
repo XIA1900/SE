@@ -16,22 +16,28 @@ import styles from './style.less';
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
+const pageNO = 1;
 const username = history.location.search.substring(1);
 
 const Collection = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return getPersonalCollection({
-        username: username,
+    async() => {
+      const result = await getPersonalCollection({
+        pageSize: pageSize,
+        pageNO: pageNO,
       });
+      return result;
     },
     {
       loadMore: true,
+      formatResult: result => result,
     },
   );
 
-  const list = data?.list || [];
+  console.log(data);
+
+  const list = [];
   console.log(list);
 
   const IconText = ({ type, text, value }) => {

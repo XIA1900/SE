@@ -1,3 +1,6 @@
+# proxy.js
+avatar ip(homepage, avatarDropdown, /account/center)
+
 # config.js
 line 264-265;
 
@@ -12,4 +15,4 @@ line 5, 31
 # /services/user.js
 line 34
 
-
+npm run start:no-mock

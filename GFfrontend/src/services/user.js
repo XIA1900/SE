@@ -31,8 +31,8 @@ export async function joinGroup(values) {
 }
 
 export async function queryCurrent(params) {
-  //return request('/api/user/getuserinfo?username='+params.username, {
-  return request('/api/currentUserDetail', {  
+  return request('/api/user/getuserinfo?username='+params.username, {
+  //return request('/api/currentUserDetail', {  
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -41,8 +41,15 @@ export async function queryCurrent(params) {
   });
 }
 
-export async function getPersonalCollection(values) {
-  return request('/api/getPersonalCollection');
+export async function getPersonalCollection(params) {
+  //return request('/api/getPersonalCollection');
+  return request('/api/articlefavorite/get?pageno='+params.pageNO+'&pagesize='+params.pageSize, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
 }
 
 export async function removeCollection(values) {
@@ -53,8 +60,15 @@ export async function removeCollection(values) {
 }
 
 
-export async function getPersnalFollower(values) {
-  return request('/api/getPersnalFollower');
+export async function getPersonalFollower(values) {
+  //return request('/api/getPersnalFollower');
+  return request('/api/user/followers', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
 }
 
 export async function removeFollower(values) {
@@ -65,7 +79,14 @@ export async function removeFollower(values) {
 }
 
 export async function getPersonalFollowing(values) {
-  return request('/api/getPersonalFollowing');
+  //return request('/api/getPersonalFollowing');
+  return request('/api/user/followees', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
 }
   
 export async function removeFollowing(values) {

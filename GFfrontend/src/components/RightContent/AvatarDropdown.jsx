@@ -121,12 +121,13 @@ const AvatarDropdown = ({ menu }) => {
       </Menu.Item>
     </Menu>
   );
+  const avatarsrc = 'http://10.20.0.177:10010/resources/userfiles/'+currentUser.name+'/avatar.png';
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
         {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" /> */}
-        <img style={{ width: '25px', height: '25px', borderRadius: '25px' }} src='http://192.168.3.132:10010/resources/userfiles/exia/avatar.png'/>
-        <span className={`${styles.name} anticon`}>{currentUser.name}</span>
+        <img style={{ width: '25px', height: '25px', borderRadius: '25px' }} src={avatarsrc}/>
+        <span className={`${styles.name} anticon`}>{' '+currentUser.name}</span>
       </span>
     </HeaderDropdown>
   );

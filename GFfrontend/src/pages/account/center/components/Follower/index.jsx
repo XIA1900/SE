@@ -11,7 +11,7 @@ import { useRequest, history } from 'umi';
 import ArticleListContent from '@/pages/group/content/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import styles from './style.less';
-import { getPersnalFollower, removeFollower } from '@/services/user';
+import { getPersonalFollower, removeFollower } from '@/services/user';
   
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -20,17 +20,19 @@ const username = history.location.search.substring(1);
 const Follower = () => {
     const [form] = Form.useForm();
     const { data, reload, loading, loadMore, loadingMore } = useRequest(
-      () => {
-        return getPersnalFollower({
+      async() => {
+        const result = await getPersonalFollower({
           username: username,
         });
+        return result;
       },
       {
+        formatResult: result => result,
         loadMore: true,
       },
     );
   
-    const list = data?.list || [];
+    const list = [];
     console.log(list);
 
     const onRemove = async (values) => {
@@ -48,6 +50,23 @@ const Follower = () => {
       }
     };
   
+    const renderFollowingInformation = ({mutual}) => {
+      if(mutual === true) {
+        return (
+          <Button onClick={onRemove} style={{float:'right'}}>
+            Mutual
+          </Button>
+        )
+      }
+      else {
+        return (
+          <Button onClick={onRemove} style={{float:'right'}}>
+            Remove
+          </Button>
+        )
+      }
+    }
+
     const formItemLayout = {
       wrapperCol: {
         xs: {
@@ -110,9 +129,7 @@ const Follower = () => {
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
                 {item.user}
-                  <Button onClick = {(e) => onRemove(item.user, e)} style={{float: 'right'}}> 
-                    Remove
-                  </Button>
+                  {renderFollowerInformation(item)}
                 </p>
               </div>
             )}

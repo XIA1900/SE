@@ -212,7 +212,9 @@ const Center = () => {
       gender: data.Gender,
       major: data.Department,
       avatar: 'http://192.168.3.132:10010/resources/userfiles/'+ data.Username+'/avatar.png',
-      iffollower: true,
+      follower: true,  //current user is a follower of visited user
+      mutual: true,
+      blacklist: false, //visited user is in blacklist of current user
     };
   }
 
@@ -224,29 +226,65 @@ const Center = () => {
 
   }
 
-  const renderButton = ({iffollower}) => {
-    if(iffollower === true) {
+  const renderButton = ({follower, mutual}) => {
+    if(mutual === true) {
       return (
-        <Button onClick={unfollow}>
-          Following
-        </Button>
+        <div>
+          <Button onClick={unfollow}>
+          Mutual
+          </Button>
+          <Button onClick={onBlock}>
+            Block
+          </Button> 
+        </div>
+      );
+    }
+    if(follower === true) {
+      return (
+        <div>
+          <Button onClick={unfollow}>
+            Following
+          </Button>
+          <Button onClick={onBlock}>
+            Block
+          </Button> 
+        </div>
+        
       )
     }
     else {
       return (
-        <Button onClick={follow}>
-          Follow
-        </Button>
+        <div>
+          <Button onClick={follow}>
+            Follow
+          </Button>
+          <Button onClick={onBlock}>
+            Block
+          </Button> 
+        </div>
+
       )
     }
   }
 
   const renderGender = ({gender}) => {
-    
+    if(gender === 'Female') {
+      return (
+        <WomanOutlined/>
+      );
+    }
+    else if(gender === 'Male') {
+      return (
+        <ManOutlined/>
+      );
+    }
+    else {
+      return;
+    }
   }
 
   const renderUserInfo = ({ birthday, gender, email, major, grade, country, province, city, phone }) => {
-    if(gender === 'Female') {
+    
       return (
         <div className={styles.detail}>
           <p>
@@ -256,7 +294,7 @@ const Center = () => {
               }}
             />
             {birthday+'    '}
-            <WomanOutlined/>
+            {renderGender(gender)}
           </p>
           
           <p>
@@ -293,103 +331,153 @@ const Center = () => {
           </p>
         </div>
       );
-    }
-    else if (gender === 'Male') {
-      return (
-        <div className={styles.detail}>
-          <p>
-            <CalendarOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {birthday+'    '} 
-            <ManOutlined/>
-          </p>
-          
-          <p>
-            <MailOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {email}
-          </p>
-          <p>
-            <PhoneOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {phone} 
-          </p>
-          <p>
-            <ClusterOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {major+' '}{grade} 
-          </p>
-          <p>
-            <HomeOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {country+' '}{province+' '}{city}
-          </p>
-        </div>
-      );
-    }
-    else {
-      return (
-        <div className={styles.detail}>
-          <p>
-            <CalendarOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {birthday+'    '} 
-          </p>
-          
-          <p>
-            <MailOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {email}
-          </p>
-          <p>
-            <PhoneOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {phone} 
-          </p>
-          <p>
-            <ClusterOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {major+' '}{grade} 
-          </p>
-          <p>
-            <HomeOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {country+' '}{province+' '}{city}
-          </p>
-        </div>
-      );
-    }
   }; // 渲染tab切换
+
+  // const renderUserInfo = ({ birthday, gender, email, major, grade, country, province, city, phone }) => {
+  //   if(gender === 'Female') {
+  //     return (
+  //       <div className={styles.detail}>
+  //         <p>
+  //           <CalendarOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {birthday+'    '}
+  //           <WomanOutlined/>
+  //         </p>
+          
+  //         <p>
+  //           <MailOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {email}
+  //         </p>
+  //         <p>
+  //           <PhoneOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {phone} 
+  //         </p>
+  //         <p>
+  //           <ClusterOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {major+' '}{grade} 
+  //         </p>
+  //         <p>
+  //           <HomeOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {country+' '}{province+' '}{city}
+  //         </p>
+  //       </div>
+  //     );
+  //   }
+  //   else if (gender === 'Male') {
+  //     return (
+  //       <div className={styles.detail}>
+  //         <p>
+  //           <CalendarOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {birthday+'    '} 
+  //           <ManOutlined/>
+  //         </p>
+          
+  //         <p>
+  //           <MailOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {email}
+  //         </p>
+  //         <p>
+  //           <PhoneOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {phone} 
+  //         </p>
+  //         <p>
+  //           <ClusterOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {major+' '}{grade} 
+  //         </p>
+  //         <p>
+  //           <HomeOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {country+' '}{province+' '}{city}
+  //         </p>
+  //       </div>
+  //     );
+  //   }
+  //   else {
+  //     return (
+  //       <div className={styles.detail}>
+  //         <p>
+  //           <CalendarOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {birthday+'    '} 
+  //         </p>
+          
+  //         <p>
+  //           <MailOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {email}
+  //         </p>
+  //         <p>
+  //           <PhoneOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {phone} 
+  //         </p>
+  //         <p>
+  //           <ClusterOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {major+' '}{grade} 
+  //         </p>
+  //         <p>
+  //           <HomeOutlined
+  //             style={{
+  //               marginRight: 8,
+  //             }}
+  //           />
+  //           {country+' '}{province+' '}{city}
+  //         </p>
+  //       </div>
+  //     );
+  //   }
+  // }; // 渲染tab切换
 
   const renderChildrenByTabKey = (tabValue) => {
     if (tabValue === 'follower') {

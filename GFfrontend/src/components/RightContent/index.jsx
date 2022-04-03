@@ -35,14 +35,14 @@ const GlobalHeaderRight = () => {
             search: value});
         }}
       />
-      <span
+      {/* <span
         className={styles.action}
         onClick={() => {
           history.push('/form/basic-form');
         }}
       >
          <EditOutlined />
-      </span>
+      </span> */}
      
       {/* <NoticeIconView /> */}
       <Avatar menu />

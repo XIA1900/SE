@@ -15,7 +15,7 @@ const ArticleListContent = ({data: { content, avatar, createdAt, name, group, gr
 
   const clickUser = async(values) => {
     history.push({
-      pathname: '/user/account',
+      pathname: '/account/view',
       search: values,
     });
   }

@@ -242,6 +242,7 @@ export default {
     if (password === 'ant.design' && username === 'admin') {
       res.send({
         status: 'ok',
+        code: 200,
         type,
         currentAuthority: 'admin',
         Nickname: 'Tommy',
@@ -253,6 +254,7 @@ export default {
     if (password === 'ant.design' && username === 'user') {
       res.send({
         status: 'ok',
+        code: 200,
         type,
         currentAuthority: 'user',
       });

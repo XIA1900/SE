@@ -71,6 +71,20 @@ const BasicForm = () => {
         >
           <ProFormText
             width="md"
+            label="Group Name"
+            name="group"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            placeholder=""
+            initialValue={groupName}
+            disabled={true}
+          />
+
+          <ProFormText
+            width="md"
             label="Title"
             name="title"
             rules={[

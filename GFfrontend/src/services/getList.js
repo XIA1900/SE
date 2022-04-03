@@ -19,8 +19,8 @@ return: a list, including [params] posts and each post should have:
 */
 
 export async function queryList(body) {
-  console.log(body);
-  return request('/api/article/getarticlelist?PageNO='+body.PageNO+'&PageSize='+body.PageSize, {
+  //return request('/api/article/getarticlelist?PageNO='+body.PageNO+'&PageSize='+body.PageSize, {
+  return request('/api/queryList', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

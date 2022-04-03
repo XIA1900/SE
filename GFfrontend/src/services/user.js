@@ -31,7 +31,8 @@ export async function joinGroup(values) {
 }
 
 export async function queryCurrent(params) {
-  return request('/api/user/getuserinfo?username='+params.username, {
+  //return request('/api/user/getuserinfo?username='+params.username, {
+  return request('/api/currentUserDetail', {  
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

@@ -37,8 +37,17 @@ const Collection = () => {
 
   console.log(data);
 
-  const list = [];
-  console.log(list);
+  let list = [];
+  if(typeof(data.ArticleFavorites)!='undefined') {
+    const favorites = data.ArticleFavorites;
+    const size = Object.keys(favorites).length;
+    for(let i=0; i<size; i++) {
+      list.push({
+        id: favorites.ArticleID,
+        
+      })
+    }
+  }
 
   const IconText = ({ type, text, value }) => {
     const icon = {

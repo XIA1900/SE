@@ -12,6 +12,7 @@ import { useRequest, history } from 'umi';
 import ArticleListContent from '@/pages/group/content/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import styles from './style.less';
+import { result } from 'lodash';
   
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -20,17 +21,30 @@ const username = history.location.search.substring(1);
 const Following = () => {
     const [form] = Form.useForm();
     const { data, reload, loading, loadMore, loadingMore } = useRequest(
-      () => {
-        return getPersonalFollowing({
+      async() => {
+        const result = await getPersonalFollowing({
           username: username,
         });
+        return result;
       },
       {
+        formatResult: result => result,
         loadMore: true,
       },
     );
   
-    const list = data?.list || [];
+    console.log(data);
+    let list = [];
+    if(typeof(data.Users) != 'undefined') {
+      const users = data.Users;
+      const size = Object.keys(users).length;
+      for(let i=0; i<size; i++) {
+        list.push({
+          name: users[i],
+          avatar: 'http://10.20.0.177:10010/resources/userfiles/'+ users[i]+'/avatar.png',
+        });
+      }
+    }
     console.log(list);
 
     const onUnfollow = async (values) => {
@@ -132,7 +146,7 @@ const Following = () => {
               <div>
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-                {item.user}
+                {item.name}
                   <Button onClick = {(e) => onUnfollow(item.user, e)} style={{float: 'right'}}> 
                     Unfollow
                   </Button>

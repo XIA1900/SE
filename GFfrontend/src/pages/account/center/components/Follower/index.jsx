@@ -32,7 +32,19 @@ const Follower = () => {
       },
     );
   
-    const list = [];
+    console.log(data);
+    let list = [];
+    if(typeof(data.Users) != 'undefined') {
+      const users = data.Users;
+      const size = Object.keys(users).length;
+      for(let i=0; i<size; i++) {
+        list.push({
+          name: users[i],
+          avatar: 'http://10.20.0.177:10010/resources/userfiles/'+ users[i]+'/avatar.png',
+        });
+      }
+    }
+
     console.log(list);
 
     const onRemove = async (values) => {
@@ -128,8 +140,8 @@ const Follower = () => {
               <div>
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-                {item.user}
-                  {renderFollowerInformation(item)}
+                {item.name}
+                {renderFollowingInformation(item)}
                 </p>
               </div>
             )}

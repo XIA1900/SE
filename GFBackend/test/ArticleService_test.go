@@ -199,3 +199,32 @@ func TestGetArticleList(t *testing.T) {
 	}
 	fmt.Println(*str)
 }
+
+func TestGetLikeList(t *testing.T) {
+	type GetLikeListTest struct {
+		Page int
+	}
+	ArticleInfo := GetLikeListTest{
+		Page: 1,
+	}
+	requestData, _ := json.Marshal(ArticleInfo)
+	response, err1 := http.NewRequest("POST", "http://localhost:10010/gf/api/article/getlikelist",
+		strings.NewReader(string(requestData)))
+	if err1 != nil {
+		t.Error("Failed to Request. " + err1.Error())
+	}
+	defer response.Body.Close()
+
+	content, err2 := ioutil.ReadAll(response.Body)
+	if err2 != nil {
+		t.Error("Failed to Read Response Body. " + err2.Error())
+		return
+	}
+
+	str := (*string)(unsafe.Pointer(&content))
+	if strings.Contains(*str, "400") {
+		t.Error("Failed to Join Community By ID. " + *str)
+		return
+	}
+	fmt.Println(*str)
+}

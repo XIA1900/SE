@@ -207,5 +207,12 @@
       ```
       
     
-    
 
+
+
+## Backend Server Deployment
+
+- Installation of Go in remote server.
+- Copy the whole **GFBackend** folder to the remote server.
+- `cd` into GFBackend, run `go build main.go`
+- After building, run `./main`, then the GFBackend Server has been started up.

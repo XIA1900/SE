@@ -13,6 +13,6 @@ line 7, 18, 29, 40
 line 5, 31
 
 # /services/user.js
-line 34
+line 34, 45, 64， 82
 
 npm run start:no-mock

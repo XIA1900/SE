@@ -2,8 +2,8 @@ import { request } from 'umi';
 
 export async function getGroupPosts(params) {
   //only for created groups, return entire information
-  return request('/api/article/getarticlelistbycommunityid?CommunityID='+params.id+'&PageNO='+params.pageNO+'&PageSize='+params.pageSize, {
-  //return request('/api/getGroupPosts', {  
+  //return request('/api/article/getarticlelistbycommunityid?CommunityID='+params.id+'&PageNO='+params.pageNO+'&PageSize='+params.pageSize, {
+  return request('/api/getGroupPosts', {  
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -28,8 +28,8 @@ export async function getJoinedGroup(params) {
 
 export async function getGroupBasic(params) {
   //only for created groups, return entire information
-  return request('/api/community/getone?id='+params.groupID+'&username='+params.username+'&pageNO='+params.pageNO+'&pageSize='+params.pageSize, {
-  //return request('/api/getGroupBasic', {  
+  //return request('/api/community/getone?id='+params.groupID+'&username='+params.username+'&pageNO='+params.pageNO+'&pageSize='+params.pageSize, {
+  return request('/api/getGroupBasic', {  
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

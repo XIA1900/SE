@@ -29,6 +29,20 @@ const operationTabList = [
     ),
   },
   {
+    key: 'post',
+    tab: (
+      <span>
+        Post{' '}
+        <span
+          style={{
+            fontSize: 14,
+          }}
+        >
+        </span>
+      </span>
+    ),
+  },
+  {
     key: 'follower',
     tab: (
       <span>
@@ -390,6 +404,10 @@ const Center = () => {
   const renderChildrenByTabKey = (tabValue) => {
     if (tabValue === 'collection') {
       return <Collection />;
+    }
+
+    if (tabValue === 'post') {
+      return <Post />;
     }
 
     if (tabValue === 'follower') {

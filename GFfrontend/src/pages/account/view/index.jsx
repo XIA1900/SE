@@ -1,11 +1,11 @@
 import { CalendarOutlined, PlusOutlined, HomeOutlined, ContactsOutlined, ClusterOutlined, PhoneOutlined, MailOutlined, WomanOutlined, ManOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
+import { Avatar, Card, Col, Divider, Input, Row, Tag, message } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
-import { Link, useRequest, history } from 'umi';
+import { Link, useRequest, history, useModel, useIntl } from 'umi';
 import Follower from './components/Follower';
 import Following from './components/Following';
-import { queryCurrent } from '@/services/user';
+import { addFollowing, queryCurrent, removeFollower, removeFollowing, addBlacklist, removeBlacklist } from '@/services/user';
 import styles from './Center.less';
 import { domainToASCII } from 'url';
 
@@ -190,6 +190,7 @@ const Center = () => {
   const [tabKey, setTabKey] = useState('follower'); //  获取用户信息
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState;
+  const intl = useIntl();
 
   const { data, loading } = useRequest(
     async() => {
@@ -219,11 +220,59 @@ const Center = () => {
   }
 
   const unfollow = () => {
-
+    const result = removeFollowing({
+      username: username,
+      visiteduser: visitedUser.name,
+    });
+    if(result.code === 200) {
+      const defaultunfollowMessage = intl.formatMessage({
+        id: 'unfollow',
+        defaultMessage: 'Unfollow Successful!',
+      });
+      message.success(defaultunfollowMessage);
+    }
   }
 
   const follow = () => {
+    const result = addFollowing({
+      username: username,
+      visiteduser: visitedUser.name,
+    });
+    if(result.code === 200) {
+      const defaultfollowMessage = intl.formatMessage({
+        id: 'follow',
+        defaultMessage: 'Follow Successful!',
+      });
+      message.success(defaultfollowMessage);
+    }
+  }
 
+  const onBlock = () => {
+    const result = addBlacklist({
+      username: username,
+      visiteduser: visitedUser.name,
+    });
+    if(result.code === 200) {
+      const defaultaddBlacklistMessage = intl.formatMessage({
+        id: 'addBlacklist',
+        defaultMessage: 'Blocked Successful!',
+      });
+      message.success(defaultaddBlacklistMessage);
+    }
+  }
+
+  const removeBlock = () => {
+    const result = removeBlacklist({
+      username: username,
+      visiteduser: visitedUser.name,
+    });
+    if(result.code === 200) {
+      const defaultremoveBlacklistMessage = intl.formatMessage({
+        id: 'removeBlacklist',
+        defaultMessage: 'Unblocked Successful!',
+      });
+      message.success(defaultremoveBlacklistMessage);
+    }
   }
 
   const renderButton = ({follower, mutual}) => {
@@ -231,7 +280,7 @@ const Center = () => {
       return (
         <div>
           <Button onClick={unfollow}>
-          Mutual
+            Mutual
           </Button>
           <Button onClick={onBlock}>
             Block
@@ -250,6 +299,13 @@ const Center = () => {
           </Button> 
         </div>
         
+      )
+    }
+    if(blacklist == true) {
+      return (
+        <Button onClick={removeBlock}>
+          Blocked
+        </Button> 
       )
     }
     else {

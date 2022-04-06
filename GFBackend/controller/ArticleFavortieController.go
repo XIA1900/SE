@@ -126,7 +126,7 @@ func (articleFavoriteController ArticleFavoriteController) GetUserFavorites(cont
 	token, _ := context.Cookie("token")
 	username, _ := auth.GetTokenUsername(token)
 
-	articleFavoritesInfo, err3 := articleFavoriteController.articleFavoriteService.GetUserFavorites(username, pageNO, pageSize)
+	articleFavoritesInfo, articleDetails, err3 := articleFavoriteController.articleFavoriteService.GetUserFavorites(username, pageNO, pageSize)
 	if err3 != nil {
 		if strings.Contains(err3.Error(), "400") {
 			context.JSON(400, "Bad Parameters")
@@ -136,7 +136,10 @@ func (articleFavoriteController ArticleFavoriteController) GetUserFavorites(cont
 		return
 	}
 
-	context.JSON(200, articleFavoritesInfo)
+	context.JSON(200, gin.H{
+		"articleFavoritesInfo": articleFavoritesInfo,
+		"articleDetails":       articleDetails,
+	})
 }
 
 // GetFavoriteOfArticle godoc

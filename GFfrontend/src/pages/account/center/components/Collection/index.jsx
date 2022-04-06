@@ -1,6 +1,7 @@
 import {
   ContactsOutlined,
   LikeOutlined,
+  LikeTwoTone,
   LoadingOutlined,
   MessageOutlined,
   StarOutlined,
@@ -38,15 +39,8 @@ const Collection = () => {
   console.log(data);
 
   let list = [];
-  if(typeof(data.ArticleFavorites)!='undefined') {
-    const favorites = data.ArticleFavorites;
-    const size = Object.keys(favorites).length;
-    for(let i=0; i<size; i++) {
-      list.push({
-        id: favorites.ArticleID,
-        
-      })
-    }
+  if(typeof(data.articleDetails)!='undefined') {
+    list = data.articleDetails;
   }
 
   const IconText = ({ type, text, value }) => {
@@ -69,16 +63,31 @@ const Collection = () => {
           </span>
         );
       case 'like-o':
-        return (
-          <span>
-            <LikeOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
+        if(value === false) {
+          return (
+            <span>
+              <LikeOutlined
+                style={{
+                  marginRight: 8,
+                }}
+              />
+              {text}
+            </span>
+          );
+        }
+        else {
+          return (
+            <span>
+              <LikeTwoTone
+                style={{
+                  marginRight: 8,
+                }}
+              />
+              {text}
+            </span>
+          );
+        }
+        
 
       case 'message':
         return (
@@ -171,18 +180,18 @@ const Collection = () => {
           dataSource={list} 
           renderItem={(item) => (
             <List.Item
-              key={item.id}
+              key={item.ID}
               actions={[
-                <IconText key="collection" type="star-o" value={item.id} text={item.collection} />,
-                <IconText key="like" type="like-o" text={item.like} />,
-                <IconText key="reply" type="message" text={item.reply} />,
+                <IconText key="collection" type="star-o" value={item.Favorited} text={item.NumFavorite} />,
+                <IconText key="like" type="like-o" value={item.Liked} text={item.NumLike} />,
+                <IconText key="reply" type="message" value={item.ID} text={item.NumComment} />,
               ]}
               //extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={'/group/post?'+item.id}>
-                    {item.title}
+                  <a className={styles.listItemMetaTitle} href={'/group/post?'+item.ID}>
+                    {item.Title}
                   </a>
                 }
               />

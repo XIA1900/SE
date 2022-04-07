@@ -129,26 +129,26 @@ func (communityManageService *CommunityManageService) GetOneCommunityByID(id int
 	community, err1 := communityManageService.communityDAO.GetOneCommunityByID(id)
 	if err1 != nil {
 		logger.AppLogger.Error(err1.Error())
-		return entity.Community{}, 0, false, err1
+		return entity.Community{}, 0, true, err1
 	}
 	count, err2 := communityManageService.communityMemberDAO.CountMemberByCommunityID(id)
 	if err2 != nil {
 		logger.AppLogger.Error(err2.Error())
-		return entity.Community{}, 0, false, err2
+		return entity.Community{}, 0, true, err2
 	}
 	memberList, err3 := communityManageService.communityMemberDAO.GetMembersByCommunityIDs(id, (pageNO-1)*pageSize, pageSize)
 	if err3 != nil {
 		logger.AppLogger.Error(err3.Error())
-		return entity.Community{}, 0, false, err3
+		return entity.Community{}, 0, true, err3
 	}
 	for i := 0; i < len(memberList); i++ {
 		if memberList[i].Member == username {
 			return community, count, true, nil
 		} else {
-			return community, count, false, nil
+			return community, count, true, nil
 		}
 	}
-	return community, count, false, nil
+	return community, count, true, nil
 }
 
 func (communityManageService *CommunityManageService) GetCommunitiesByNameFuzzyMatch(name string, pageNO, pageSize int) ([]entity.Community, int64, error) {

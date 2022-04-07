@@ -60,7 +60,7 @@ func (articleManageController *ArticleManageController) CreateArticle(context *g
 	token, _ := context.Cookie("token")
 	username, _ := auth.GetTokenUsername(token)
 
-	err2 := articleManageController.articleManageService.CreateArticle(username, articleInfo)
+	articleID, err2 := articleManageController.articleManageService.CreateArticle(username, articleInfo)
 	if err2 != nil {
 		if strings.Contains(err2.Error(), "400") {
 			context.JSON(400, "Info Error")
@@ -70,7 +70,10 @@ func (articleManageController *ArticleManageController) CreateArticle(context *g
 		return
 	}
 
-	context.JSON(200, "Create Successfully")
+	context.JSON(200, gin.H{
+		"message":   "200",
+		"articleID": articleID,
+	})
 }
 
 // DeleteArticle godoc

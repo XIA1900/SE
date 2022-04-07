@@ -16,7 +16,7 @@ var articleManageServiceLock sync.Mutex
 var articleManageService *ArticleManageService
 
 type IArticleManageService interface {
-	CreateArticle(username string, articleInfo entity.ArticleInfo) error
+	CreateArticle(username string, articleInfo entity.ArticleInfo) (int, error)
 	DeleteArticleByID(id int, operator string) error
 	UpdateArticleTitleOrContentByID(articleInfo entity.ArticleInfo, operator string) error
 	GetOneArticleByID(id int) (entity.ArticleDetail, error)
@@ -70,7 +70,7 @@ var ArticleManageServiceSet = wire.NewSet(
 	NewArticleManageService,
 )
 
-func (articleManageService *ArticleManageService) CreateArticle(username string, articleInfo entity.ArticleInfo) error {
+func (articleManageService *ArticleManageService) CreateArticle(username string, articleInfo entity.ArticleInfo) (int, error) {
 	article := entity.Article{
 		Username:    username,
 		Title:       articleInfo.Title,
@@ -83,25 +83,25 @@ func (articleManageService *ArticleManageService) CreateArticle(username string,
 	_, typeErr := articleManageService.articleTypeDAO.GetArticleTypeByID(article.TypeID)
 	if typeErr != nil {
 		if strings.Contains(typeErr.Error(), "not found") {
-			return errors.New("400")
+			return -1, errors.New("type not found")
 		}
 		logger.AppLogger.Error(typeErr.Error())
-		return errors.New("500")
+		return -1, errors.New("500")
 	}
 
 	_, communityErr := articleManageService.communityDAO.GetOneCommunityByID(article.CommunityID)
 	if communityErr != nil {
 		if strings.Contains(communityErr.Error(), "not found") {
-			return errors.New("400")
+			return -1, errors.New("400")
 		}
 		logger.AppLogger.Error(communityErr.Error())
-		return errors.New("500")
+		return -1, errors.New("500")
 	}
 
 	articleID, err1 := articleManageService.articleDAO.CreateArticle(article)
 	if err1 != nil {
 		logger.AppLogger.Error(err1.Error())
-		return err1
+		return -1, err1
 	}
 
 	res := elasticsearch.CreateDocument(entity.ArticleOfES{
@@ -111,10 +111,10 @@ func (articleManageService *ArticleManageService) CreateArticle(username string,
 		Content:  articleInfo.Content,
 	})
 	if !res {
-		return errors.New("article cannot be searched")
+		return -1, errors.New("article cannot be searched")
 	}
 
-	return nil
+	return articleID, nil
 }
 
 func (articleManageService *ArticleManageService) DeleteArticleByID(id int, operator string) error {

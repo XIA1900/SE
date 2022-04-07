@@ -15,7 +15,7 @@ var communityManageServiceLock sync.Mutex
 var communityManageService *CommunityManageService
 
 type ICommunityManageService interface {
-	CreateCommunity(creator string, name string, description string) error
+	CreateCommunity(creator string, name string, description string) (int, error)
 	DeleteCommunityByID(id int, operator string) error
 	UpdateDescriptionByID(id int, newDescription, operator string) error
 	GetNumberOfMembersByID(id int) (int64, error)
@@ -55,23 +55,23 @@ var CommunityManageServiceSet = wire.NewSet(
 	NewCommunityManageService,
 )
 
-func (communityManageService *CommunityManageService) CreateCommunity(creator, name, description string) error {
+func (communityManageService *CommunityManageService) CreateCommunity(creator, name, description string) (int, error) {
 	newCommunityID, err1 := communityManageService.communityDAO.CreateCommunity(name, creator, description, utils.GetCurrentDate())
 	if err1 != nil {
 		if strings.Contains(err1.Error(), "Duplicate") {
-			return errors.New("400")
+			return -1, errors.New("400")
 		}
 		logger.AppLogger.Error(err1.Error())
-		return errors.New("500")
+		return -1, errors.New("500")
 	}
 
 	err2 := communityManageService.communityMemberDAO.Create(newCommunityID, creator, utils.GetCurrentDate())
 	if err2 != nil {
 		logger.AppLogger.Error(err2.Error())
-		return errors.New("500")
+		return -1, errors.New("500")
 	}
 
-	return nil
+	return newCommunityID, nil
 }
 
 func (communityManageService *CommunityManageService) DeleteCommunityByID(id int, operator string) error {

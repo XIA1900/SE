@@ -64,7 +64,7 @@ func (communityManageController *CommunityManageController) CreateCommunity(cont
 	token, _ := context.Cookie("token")
 	username, _ := auth.GetTokenUsername(token)
 
-	err2 := communityManageController.communityManageService.CreateCommunity(username, communityInfo.Name, communityInfo.Description)
+	newCommunityID, err2 := communityManageController.communityManageService.CreateCommunity(username, communityInfo.Name, communityInfo.Description)
 	if err2 != nil {
 		if strings.Contains(err2.Error(), "400") {
 			context.JSON(respMsg.Code, respMsg)
@@ -78,6 +78,7 @@ func (communityManageController *CommunityManageController) CreateCommunity(cont
 
 	respMsg.Code = 200
 	respMsg.Message = "Create Community Success"
+	respMsg.NewCommunityID = newCommunityID
 	context.JSON(respMsg.Code, respMsg)
 	return
 }

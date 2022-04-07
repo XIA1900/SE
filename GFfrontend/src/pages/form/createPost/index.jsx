@@ -13,7 +13,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import { createPost } from '@/services/create';
 import styles from './style.less';
 
-const groupName = history.location.search.substring(1);
+const groupID = history.location.search.substring(1);
 
 const BasicForm = () => {
 
@@ -22,33 +22,51 @@ const BasicForm = () => {
   const intl = useIntl();
 
   const onFinish = async (values) => {
-    const date = new Date();
-    
-    const result = await createPost({
-      groupName: groupName,
-      userName: currentUser.name,
-      title: values.title,
-      content: values.content,
-      time: date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate(),
-    });
-
-    console.log(result);
-
-
-    if(result.message === 'Ok') {
-      const defaultLoginSuccessMessage = intl.formatMessage({
-        id: 'createPost',
-        defaultMessage: 'Post submitted successfully!',
+    try {
+      console.log(values);   
+      const result = await createPost({
+        Title: values.title,
+        TypeID: 5,
+        CommunityID: parseInt(groupID),
+        Content: values.content,
       });
-      message.success(defaultLoginSuccessMessage);
 
-      const postid = result.postid;
+      console.log(result);
 
-      history.push({
-        pathname: '/group/post',
-        search: postid,
+
+      if(result.message === '200') {
+        const defaultcreatePostSuccessMessage = intl.formatMessage({
+          id: 'createPost',
+          defaultMessage: 'Post submitted successfully!',
+        });
+        message.success(defaultcreatePostSuccessMessage);
+
+        const postid = result.articleID;
+        console.log(postid);
+
+        history.push({
+          pathname: '/group/post',
+          search: postid.toString(),
+        });
+        console.log("pushed");
+        return;
+      }
+      else {
+        const defaultcreatePostFailedMessage = intl.formatMessage({
+          id: 'createPostFailed',
+          defaultMessage: 'Post submitted failed!',
+        });
+        message.error(defaultcreatePostFailedMessage);
+        return;
+      }
+    }catch (error) {
+      const defaultcreatePostFailedMessage = intl.formatMessage({
+        id: 'createPostFailed',
+        defaultMessage: 'Failed!',
       });
+      message.error(defaultcreatePostFailedMessage);
     }
+    
     
   };
 
@@ -71,7 +89,7 @@ const BasicForm = () => {
         >
           <ProFormText
             width="md"
-            label="Group Name"
+            label="Group ID"
             name="group"
             rules={[
               {
@@ -79,7 +97,7 @@ const BasicForm = () => {
               },
             ]}
             placeholder=""
-            initialValue={groupName}
+            initialValue={groupID}
             disabled={true}
           />
 

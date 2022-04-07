@@ -44,7 +44,7 @@ const groupForm = () => {
       if(msg.message === 'Ok') { //redirect to group page
         history.push({
           pathname: '/group',
-          search: 'params.groupName',
+          search: params.groupName,
         });
       }
       else if(msg.message === 'Name') {

@@ -138,7 +138,7 @@ const Center = () => {
   const onPost = async() => {
     history.push({
       pathname: '/form/createPost',
-      search: groupName,
+      search: groupID,
     })
   };
 

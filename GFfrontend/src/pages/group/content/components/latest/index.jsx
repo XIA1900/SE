@@ -49,7 +49,7 @@ const Latest = () => {
         collection: countFavorite[i],
         like: countLike[i],
         reply: countComment[i],
-        avatar: 'http://192.168.3.132:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+        avatar: 'http://10.20.0.170:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
       });
     }
   }

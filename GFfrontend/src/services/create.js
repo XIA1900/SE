@@ -10,9 +10,14 @@ export async function createGroup(params) {
   });
 }
 
-export async function createPost(params) {
-  return request('/api/createPost', {
-    data: params,
+export async function createPost(body) {
+  console.log(body);
+  return request('/api/article/create', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    credentials: 'include',
   });
 }

@@ -186,13 +186,13 @@ const Center = () => {
 
   }
 
-  const renderPostInfo = ({ avatar, Title, Content, Owner, UpdatedAt}) => {
+  const renderPostInfo = ({ Title, Content, Owner, UpdatedAt}) => {
     return (
       <div className={styles.listContent}>
         <div className={styles.title}>{Title}</div>
           <img
             alt=""
-            src={avatar}
+            src={'http://10.20.0.170:10010/resources/userfiles/'+Owner+'/avatar.png'}
             style={{ width: '25px', height: '25px', borderRadius: '25px' }}
           />
           <a href=''> {Owner}</a> updated at {UpdatedAt}

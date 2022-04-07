@@ -8,9 +8,11 @@ import ProForm, {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { useRequest } from 'umi';
-import { queryCurrent } from '@/services/user';
+import { useRequest, history, useIntl} from 'umi';
+import { queryCurrent, userUpdate } from '@/services/user';
 import styles from './BaseView.less';
+
+const username = history.location.search.substring(1);
 
 const validatorPhone = (rule, value, callback) => {
   if (!value[0]) {
@@ -42,9 +44,31 @@ const AvatarView = ({ avatar }) => (
 );
 
 const BaseView = () => {
-  const { data: currentUser, loading } = useRequest(() => {
-    return queryCurrent();
-  });
+  const intl = useIntl();
+
+  const { data, loading } = useRequest(
+    async() => {
+      const result = await queryCurrent({
+        username: username,
+      });
+      return result;
+    },
+    {
+      formatResult: result => result,
+    }
+  );
+
+  console.log(data);
+  let currentUser = [];
+  if(typeof(data) != 'undefined') {
+    currentUser = {
+      name: data.Username,
+      birthday: data.Birthday,
+      gender: data.Gender,
+      major: data.Department,
+      avatar: 'http://10.20.0.170:10010/resources/userfiles/'+ data.Username+'/avatar.png',
+    };
+  }
 
   const getAvatarURL = () => {
     if (currentUser) {
@@ -59,8 +83,21 @@ const BaseView = () => {
     return '';
   };
 
-  const handleFinish = async () => {
-    message.success('Change basic information successfully');
+  const handleFinish = async (values) => {
+    const data = {
+      Username: values.username,
+      Birthday: values.birthday,
+      Gender: values.gender,
+      Department: values.major,
+    }
+    const result = await userUpdate(data);
+    if(result.code === 200)  {
+      const defaultupdateInfoMessage = intl.formatMessage({
+        id: 'updateInfo',
+        defaultMessage: 'Update Successfully',
+      });
+      message.success(defaultupdateInfoMessage);
+    }
   };
 
   return (
@@ -81,8 +118,9 @@ const BaseView = () => {
                   children: '更新基本信息',
                 },
               }}
-              initialValues={{ ...currentUser, phone: currentUser?.phone.split('-') }}
+              initialValues={{}}
               hideRequiredMark
+              
             >
               <ProForm.Group>
                 <ProFormText
@@ -97,6 +135,7 @@ const BaseView = () => {
                   ]}
                   initialValue={currentUser.name}
                   layout="inline"
+                  disabled
                 />
                 <ProFormText
                   width="md"

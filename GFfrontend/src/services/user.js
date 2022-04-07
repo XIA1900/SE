@@ -41,6 +41,18 @@ export async function queryCurrent(params) {
   });
 }
 
+export async function userUpdate(body) {
+  return request('/api/user/update', {
+  //return request('/api/currentUserDetail', {  
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    data: body,
+  });
+}
+
 export async function getPersonalCollection(params) {
   //return request('/api/getPersonalCollection');
   return request('/api/articlefavorite/get?pageno='+params.pageNO+'&pagesize='+params.pageSize, {

@@ -19,42 +19,24 @@ const groupForm = () => {
   const { currentUser } = initialState;
   const intl = useIntl();
   const onFinish = async (values) => {
-    
-    let newdate = new Date();
-    var date, month;
-    if(newdate.getDate() < 10) 
-      date = '0'+newdate.getDate().toString();
-    else 
-      date = newdate.getDate().toString();
-    if(newdate.getMonth()+1<10) 
-      month = '0'+(newdate.getMonth()+1).toString();
-    else 
-      month = (newdate.getMonth()+1).toString();
-    let year = newdate.getFullYear();
-
     const params = {
-      groupName: values.title,
-      groupDescription: values.content,
-      time: year+'-'+month+'-'+date,
-      userId: currentUser.userId,
+      Name: values.title,
+      Description: values.content,
     };
 
     try {
       const msg = await createGroup({...params});
-      if(msg.message === 'Ok') { //redirect to group page
+      console.log(msg);
+
+      if(msg.code === 200) { //redirect to group page
+        const id = msg.new_community_id;
+        console.log(id);
         history.push({
-          pathname: '/group',
-          search: params.groupName,
+          pathname: '/group/content',
+          search: msg.new_community_id.toString(),
         });
       }
-      else if(msg.message === 'Name') {
-        const nameDuplicate = intl.formatMessage({
-          id: 'createGroup.failure.nameDuplicate',
-          defaultMessage: 'Group name duplicate, please change a name and try again!',
-        });
-        message.error(nameDuplicate);
-      }
-      else if(msg.message === 'Count') {
+      else {
         const countMaximum = intl.formatMessage({
           id: 'createGroup.failure.countMaximum',
           defaultMessage: 'You already own 5 groups.',

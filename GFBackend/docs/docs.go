@@ -1281,6 +1281,60 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/community/getcommunitiesbycreator": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, need page info: username, PageNO, pageSize",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Community Manage"
+                ],
+                "summary": "Get Communities By Creator",
+                "parameters": [
+                    {
+                        "description": "Get Communities By Creator",
+                        "name": "name",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Community"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Get Community Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.NewCommunityInfo"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/community/getcommunityidbymember": {
             "get": {
                 "security": [
@@ -2867,6 +2921,35 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "entity.NewCommunityInfo": {
+            "type": "object",
+            "properties": {
+                "Communities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Community"
+                    }
+                },
+                "NumberOfMember": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "NumberOfPost": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "PageNO": {
+                    "type": "integer"
+                },
+                "PageSize": {
+                    "type": "integer"
+                }
+            }
+        },
         "entity.NewUserInfo": {
             "type": "object",
             "properties": {
@@ -2906,6 +2989,9 @@ const docTemplate_swagger = `{
                 "message": {
                     "type": "string",
                     "example": "process successfully"
+                },
+                "new_community_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -2960,6 +3046,9 @@ const docTemplate_swagger = `{
                 "message": {
                     "type": "string",
                     "example": "process successfully"
+                },
+                "new_community_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -2988,6 +3077,9 @@ const docTemplate_swagger = `{
                 "message": {
                     "type": "string",
                     "example": "process successfully"
+                },
+                "new_community_id": {
+                    "type": "integer"
                 }
             }
         },

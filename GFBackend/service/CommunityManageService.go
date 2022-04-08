@@ -26,14 +26,16 @@ type ICommunityManageService interface {
 	LeaveCommunityByID(id int, username string) error
 	GetMembersByCommunityIDs(id int, pageNO, pageSize int) ([]entity.CommunityMember, error)
 	GetCommunityIDsByMember(username string, pageNO, pageSize int) ([]entity.CommunityMember, error)
+	GetCommunitiesByCreator(creator string, pageNO, pageSize int) ([]entity.Community, []int64, []int64, error)
 }
 
 type CommunityManageService struct {
 	communityDAO       dao.ICommunityDAO
 	communityMemberDAO dao.ICommunityMemberDAO
+	articleDAO         dao.IArticleDAO
 }
 
-func NewCommunityManageService(communityDAO dao.ICommunityDAO, communityMemberDAO dao.ICommunityMemberDAO) *CommunityManageService {
+func NewCommunityManageService(communityDAO dao.ICommunityDAO, communityMemberDAO dao.ICommunityMemberDAO, articleDAO dao.IArticleDAO) *CommunityManageService {
 	if communityManageService == nil {
 		communityManageServiceLock.Lock()
 		if communityManageService == nil {
@@ -41,6 +43,9 @@ func NewCommunityManageService(communityDAO dao.ICommunityDAO, communityMemberDA
 				communityDAO:       communityDAO,
 				communityMemberDAO: communityMemberDAO,
 			}
+		}
+		if articleDAO != nil {
+			communityManageService.articleDAO = articleDAO
 		}
 		communityManageServiceLock.Unlock()
 	}
@@ -52,6 +57,8 @@ var CommunityManageServiceSet = wire.NewSet(
 	wire.Bind(new(dao.ICommunityMemberDAO), new(*dao.CommunityMemberDAO)),
 	dao.NewCommunityDAO,
 	wire.Bind(new(dao.ICommunityDAO), new(*dao.CommunityDAO)),
+	wire.Bind(new(dao.IArticleDAO), new(*dao.ArticleDAO)),
+	dao.NewArticleDAO,
 	NewCommunityManageService,
 )
 
@@ -189,6 +196,34 @@ func (communityManageService *CommunityManageService) GetCommunities(pageNO, pag
 	}
 
 	return communities, totalPageNO, nil
+}
+
+func (communityManageService *CommunityManageService) GetCommunitiesByCreator(creator string, pageNO, pageSize int) ([]entity.Community, []int64, []int64, error) {
+	communities, err1 := communityManageService.communityDAO.GetCommunitiesByCreator(creator, (pageNO-1)*pageSize, pageSize)
+	if err1 != nil {
+		logger.AppLogger.Error(err1.Error())
+		return nil, nil, nil, err1
+	}
+	var num_member []int64
+	for i := 0; i < len(communities); i++ {
+		count, err2 := communityManageService.communityMemberDAO.CountMemberByCommunityID(communities[i].ID)
+		if err2 != nil {
+			logger.AppLogger.Error(err2.Error())
+			return nil, nil, nil, err2
+		}
+		num_member = append(num_member, count)
+	}
+	var num_post []int64
+	for i := 0; i < len(communities); i++ {
+		count, err2 := communityManageService.articleDAO.CountArticleByCommunityID(communities[i].ID)
+		if err2 != nil {
+			logger.AppLogger.Error(err2.Error())
+			return nil, nil, nil, err2
+		}
+		num_post = append(num_post, count)
+	}
+
+	return communities, num_member, num_post, nil
 }
 
 func (communityManageService *CommunityManageService) JoinCommunityByID(id int, username string) error {

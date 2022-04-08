@@ -42,6 +42,14 @@ type CommunitiesInfo struct {
 	Communities []Community `form:"Communities" json:"Communities"`
 }
 
+type NewCommunityInfo struct {
+	PageNO         int         `form:"PageNO" json:"PageNO" example:1`
+	PageSize       int         `form:"PageSize" json:"PageSize" example:5`
+	Communities    []Community `form:"Communities" json:"Communities"`
+	NumberOfMember []int64     `form:"NumberOfMember" json:"NumberOfMember" example:5`
+	NumberOfPost   []int64     `form:"NumberOfPost" json:"NumberOfPost" example:5`
+}
+
 type CommunityMembersInfo struct {
 	CommunityID int               `form:"CommunityID" json:"CommunityID" example:1`
 	PageNO      int               `form:"PageNO" json:"PageNO" example:1`

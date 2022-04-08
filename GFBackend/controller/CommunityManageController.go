@@ -298,6 +298,47 @@ func (communityManageController *CommunityManageController) GetCommunities(conte
 	context.JSON(200, communitiesInfo)
 }
 
+// GetCommunitiesByCreator godoc
+// @Summary Get Communities By Creator
+// @Description need token in cookie, need page info: username, PageNO, pageSize
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param name body entity.Community true "Get Communities By Creator"
+// @Success 200 {object} []entity.NewCommunityInfo "<b>Success</b>. Get Community Success"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters or Not Found"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /community/getcommunitiesbycreator [get]
+func (communityManageController *CommunityManageController) GetCommunitiesByCreator(context *gin.Context) {
+	username := context.Query("username")
+	pageNO, err1 := strconv.Atoi(context.Query("pageNO"))
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	pageSize, err2 := strconv.Atoi(context.Query("pageSize"))
+	if err2 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+
+	communities, count_member, count_post, err3 := communityManageController.communityManageService.
+		GetCommunitiesByCreator(username, pageNO, pageSize)
+	if err3 != nil {
+		return
+	}
+
+	communitiesInfo := entity.NewCommunityInfo{
+		PageNO:         pageNO,
+		PageSize:       pageSize,
+		Communities:    communities,
+		NumberOfMember: count_member,
+		NumberOfPost:   count_post,
+	}
+	context.JSON(200, communitiesInfo)
+}
+
 // JoinCommunityByID godoc
 // @Summary Join One Community By ID
 // @Description need token in cookie, need community ID

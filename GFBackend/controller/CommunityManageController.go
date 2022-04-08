@@ -352,7 +352,7 @@ func (communityManageController *CommunityManageController) GetCommunitiesByCrea
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
 // @Router /community/join/:id [get]
 func (communityManageController *CommunityManageController) JoinCommunityByID(context *gin.Context) {
-	id, err1 := strconv.Atoi(context.Param("id"))
+	id, err1 := strconv.Atoi(context.Query("id"))
 	if err1 != nil {
 		context.JSON(400, "Bad Parameters or Not Found or Existed")
 		return

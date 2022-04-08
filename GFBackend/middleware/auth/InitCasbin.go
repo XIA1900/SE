@@ -50,7 +50,7 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getone", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getbyname", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/get", "GET")
-	CasbinEnforcer.AddPolicy("regular", basePath+"/community/join/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/join", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/leave/:id", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getmember", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getcommunityidbymember", "GET")

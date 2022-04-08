@@ -27,7 +27,8 @@ func InitializeUserManageController() (*controller.UserManageController, error) 
 func InitializeCommunityManageController() (*controller.CommunityManageController, error) {
 	communityDAO := dao.NewCommunityDAO()
 	communityMemberDAO := dao.NewCommunityMemberDAO()
-	communityManageService := service.NewCommunityManageService(communityDAO, communityMemberDAO)
+	articleDAO := dao.NewArticleDAO()
+	communityManageService := service.NewCommunityManageService(communityDAO, communityMemberDAO, articleDAO)
 	communityManageController := controller.NewCommunityManageController(communityManageService)
 	return communityManageController, nil
 }

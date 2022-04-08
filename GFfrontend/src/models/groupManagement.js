@@ -82,6 +82,12 @@ const Model = {
           data: action.payload,
         };
       },
+    save5(state, action) {
+        return {
+          ...state,
+          data: action.payload,
+        };
+      },
     save6(state, action) {
         return {
           ...state,

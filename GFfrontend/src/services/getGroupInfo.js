@@ -14,8 +14,12 @@ export async function getGroupPosts(params) {
 
 export async function getCreatedGroup(params) {
   //only return group basic information, number of member,number of lists
-  return request('/api/getCreatedGroup', {
-    params,
+  return request('/api/community/getcommunitiesbycreator?username='+params.userName+'&pageNO=1&pageSize=20', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
   });
 }
 

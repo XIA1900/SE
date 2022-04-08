@@ -41,7 +41,7 @@ const Following = () => {
       for(let i=0; i<size; i++) {
         list.push({
           name: users[i],
-          avatar: 'http://10.20.0.170:10010/resources/userfiles/'+ users[i]+'/avatar.png',
+          avatar: 'http://10.20.0.169:10010/resources/userfiles/'+ users[i]+'/avatar.png',
         });
       }
     }

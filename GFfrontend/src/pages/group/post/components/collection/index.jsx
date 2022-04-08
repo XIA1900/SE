@@ -103,7 +103,7 @@ const Collection = () => {
           renderItem={(item) => (
             <div>
               <p>
-              <img src={'http://10.20.0.170:10010/resources/userfiles/'+item.Username+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+              <img src={'http://10.20.0.169:10010/resources/userfiles/'+item.Username+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
               {item.Username} 
               </p>
               

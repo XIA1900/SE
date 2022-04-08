@@ -12,12 +12,13 @@ import ProForm, {
   ProFormTextArea,
 } from '@ant-design/pro-form';
 import { ProFormInstance } from '@ant-design/pro-form';
-import { useIntl, useRequest, history } from 'umi';
+import { useIntl, useRequest, history, useModel } from 'umi';
 import { getBasicInfo, updateGroupInfo, deleteGroup } from '@/services/groupManagement';  
 import styles from './BaseView.less';
+import { result } from 'lodash';
 
 
-const groupName = history.location.search.substring(1);
+const groupID = history.location.search.substring(1);
 // 头像组件 方便以后独立，增加裁剪之类的功能
 const AvatarView = ({ avatar }) => (
   <>
@@ -37,14 +38,37 @@ const AvatarView = ({ avatar }) => (
 );
 
 const BasicInfo = () => {
-  const { data: basicInfo, loading } = useRequest(() => {
-    return getBasicInfo({
-        groupName,
-    });
-  });
-  const list = basicInfo?.list || [];
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [form] = Form.useForm();
   const intl = useIntl();
+
+  const { data, loading } = useRequest(
+    async() => {
+      const result = await getBasicInfo({
+          id: groupID,
+          username: currentUser.name,
+      });
+      console.log(result);
+      return result;
+      },
+      {
+        formatResult: result => result,
+      }
+    );
+  
+  let list =  [];
+  console.log(data);
+  if(typeof(data) != 'undefined') {
+    const community = data.community;
+    list = {
+      groupId: community.ID,
+      owner: community.Creator,
+      name: community.Name,
+      description: community.Description,
+      createdAt: community.CreatedDay,
+    };
+  }
 
   const getAvatarURL = () => {
     if (list) {
@@ -58,33 +82,50 @@ const BasicInfo = () => {
   const onFinish = async (values) => {
     console.log(values);
     const result = await updateGroupInfo({
-      values,
-      
+      ID: parseInt(groupID, 10),
+      Description: values.description,
     });
-    //console.log(result);
-    const msg = result.message;   
-    if(msg === 'Ok') {
-      const defaultLoginSuccessMessage = intl.formatMessage({
+    console.log(result);  
+    if(result.code === 200) {
+      const defaultgroupUpdateMessage = intl.formatMessage({
         id: 'groupUpdate',
-        defaultMessage: 'Group Info Updated',
+        defaultMessage: 'Group Info Updated!',
       });
-      message.success(defaultLoginSuccessMessage);
+      message.success(defaultgroupUpdateMessage);
+    }
+    else {
+      const defaultgroupUpdateMessage = intl.formatMessage({
+        id: 'groupUpdateFailed',
+        defaultMessage: 'Group Info Update Failed! Please try again!',
+      });
+      message.error(defaultgroupUpdateMessage);
     }
       
   }
 
   const onDelete = async () => {
-    const msg = deleteGroup({groupName,}).msg;
-      if(msg === 'Ok') {
-        console.log('deleted');
-        
-      }
-      else if(msg === '') {
-
-      }
-      else {
-
-      }
+    const result = await deleteGroup({ 
+      id: groupID,
+    });
+    console.log(result);
+    if(result === 'Delete Successfully') {
+      const defaultgroupDeleteMessage = intl.formatMessage({
+        id: 'groupDelete',
+        defaultMessage: 'Group Deleted!',
+      });
+      message.success(defaultgroupDeleteMessage);
+      history.push({
+        pathname:'/account/selectGroups/created',
+        search: currentUser.name,
+      });
+    }
+    else {
+      const defaultgroupDeleteMessage = intl.formatMessage({
+        id: 'groupDeleteFailed',
+        defaultMessage: 'Group Info Delete Failed! Please try again!',
+      });
+      message.error(defaultgroupDeleteMessage);
+    }
   };
 
   return (

@@ -54,7 +54,7 @@ const Articles = () => {
         like: like[i],
         reply: reply[i],
         groupID: communityList[i].ID,
-        avatar: 'http://10.20.0.170:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+        avatar: 'http://10.20.0.169:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
       });
     }
   }

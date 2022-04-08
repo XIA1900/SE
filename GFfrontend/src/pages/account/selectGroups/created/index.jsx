@@ -12,13 +12,36 @@ const userName = history.location.search.substring(1);
 
 
 const CardList = () => {
-  const { data, loading } = useRequest(() => {
-    return getCreatedGroup({
-      userName: userName,
-    });
-  });
-
-  const list = data?.list || [];
+  const { data, loading } = useRequest(
+    async() => {
+      const result = await getCreatedGroup({
+        userName: userName,
+      });
+      return result;
+    },
+    {
+      formatResult: result => result,
+    }
+  );
+    
+  console.log(data);
+  const list = [];
+  if(typeof(data) != 'undefined') {
+    const communities = data.Communities;
+    const members = data.NumberOfMember;
+    const posts = data.NumberOfPost;
+    const size = Object.keys(communities).length;
+    for(let i=0; i<size; i++) {
+      list.push({
+        id: communities[i].ID,
+        groupName: communities[i].Name,
+        description: communities[i].Description,
+        createdAt: communities[i].CreateDay,
+        numberOfMember: members[i],
+        numberOfPost: posts[i],
+      });
+    }
+  }
 
   console.log(list);
 
@@ -36,6 +59,13 @@ const CardList = () => {
       history.push('/form/createGroup');
     },
   );
+
+  const onManagement = async(values) => {
+    history.push({
+      pathname: '/group/management',
+      search: values.toString(),
+    });
+  }
 
   const nullData = {};
   return (
@@ -65,7 +95,7 @@ const CardList = () => {
                   >
                     <Card.Meta
                       avatar={<img alt="" className={styles.cardAvatar} src={item.groupAvatar} />}
-                      title={<a href={"/group/management?"+item.groupName}>{item.groupName}</a>}
+                      title={<a onClick={(e) => onManagement(item.id, e)}>{item.id +": " +item.groupName}</a>}
                       description={
                         <Paragraph
                           className={styles.item}
@@ -73,7 +103,7 @@ const CardList = () => {
                             rows: 3,
                           }}
                         >
-                          {item.groupDescription}
+                          {item.description}
                         </Paragraph>
                       }
                     />

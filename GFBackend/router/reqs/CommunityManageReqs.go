@@ -9,7 +9,7 @@ func InitCommunityManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 	communityManageReqsGroup := baseGroup.Group("/community")
 	{
 		communityManageReqsGroup.POST("/create", communityManageController.CreateCommunity)
-		communityManageReqsGroup.GET("/delete/:id", communityManageController.DeleteCommunityByID)
+		communityManageReqsGroup.GET("/delete", communityManageController.DeleteCommunityByID)
 		communityManageReqsGroup.POST("/update", communityManageController.UpdateDescriptionByID)
 		communityManageReqsGroup.GET("/numberofmember", communityManageController.GetNumberOfMemberByID)
 		communityManageReqsGroup.GET("/getone", communityManageController.GetOneCommunityByID)

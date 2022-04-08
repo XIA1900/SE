@@ -99,7 +99,7 @@ func (communityManageController *CommunityManageController) DeleteCommunityByID(
 		Message: "Delete Successfully",
 	}
 	context.JSON(respMsg.Code, respMsg.Message)
-	id, err1 := strconv.Atoi(context.Param("id"))
+	id, err1 := strconv.Atoi(context.Query("id"))
 	if err1 != nil {
 		return
 	}

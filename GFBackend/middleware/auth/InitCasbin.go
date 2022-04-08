@@ -44,7 +44,7 @@ func addInitialPolicy() {
 
 	// /community/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/create", "POST")
-	CasbinEnforcer.AddPolicy("regular", basePath+"/community/delete/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/delete", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/update", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/numberofmember", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getone", "GET")

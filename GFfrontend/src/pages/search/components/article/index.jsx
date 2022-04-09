@@ -1,58 +1,42 @@
-import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
+import {
+  ContactsOutlined,
+  LikeOutlined,
+  LoadingOutlined,
+  MessageOutlined,
+  StarOutlined,
+} from '@ant-design/icons';
+import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
-import ArticleListContent from './components/ArticleListContent';
-import TagSelect from './components/TagSelect';
-import { getGroupPosts } from '@/services/getGroupInfo';
+import ArticleListContent from '@/pages/group/content/components/articleContent';
+import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
+import { searchArticle } from '@/services/search';
 import styles from './style.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
-const pageNO = 1;
-const groupID = history.location.search.substring(1);
+const pageNo = 1;
+const search = history.location.search.substring(1);
 
-const Post = () => {
+const Article = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
     async() => {
-      const result = await getGroupPosts({
-        id: groupID,
-        type: 'lattest',
-        pageNO: pageNO,
-        pageSize: pageSize,
+      const result = await searchArticle({
+        PageNo: pageNo,
+        PageSize: pageSize,
+        SearchWords: search,
       });
-      return result;
     },
     {
-      formatResult: result => result,
       loadMore: true,
+      formatResult: result => result,
     },
   );
 
   console.log(data);
   const list = [];
-  if(typeof(data.ArticleList)!='undefined') {
-    const articleList = data.ArticleList;
-    const countComment = data.CountComment;
-    const countFavorite = data.CountFavorite;
-    const countLike = data.CountLike;
-    const size = Object.keys(articleList).length;
-    for(let i=0; i<size; i++) {
-      list.push({
-        id: articleList[i].ID,
-        name: articleList[i].Username,
-        title: articleList[i].Title,
-        createdAt: articleList[i].CreateDay,
-        content: articleList[i].Content,
-        collection: countFavorite[i],
-        like: countLike[i],
-        reply: countComment[i],
-        avatar: 'http://10.20.0.168:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
-      });
-    }
-  }
 
   const IconText = ({ type, text }) => {
     switch (type) {
@@ -137,10 +121,11 @@ const Post = () => {
   );
 
   return (
+    <>
       <Card
-        style={{
-          marginTop: 10,
-        }}
+        // style={{
+        //   marginTop: 24,
+        // }}
         bordered={false}
         // bodyStyle={{
         //   padding: '8px 32px 32px 32px',
@@ -161,13 +146,22 @@ const Post = () => {
                 <IconText key="like" type="like-o" text={item.like} />,
                 <IconText key="reply" type="message" text={item.reply} />,
               ]}
+              //extra={<div className={styles.listItemExtra} />}
             >
+              <List.Item.Meta
+                title={
+                  <a className={styles.listItemMetaTitle} href={item.href}>
+                    {item.title}
+                  </a>
+                }
+              />
               <ArticleListContent data={item} />
             </List.Item>
           )}
         />
       </Card>
+    </>
   );
 };
 
-export default Post;
+export default Article;

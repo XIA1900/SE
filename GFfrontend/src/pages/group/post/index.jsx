@@ -192,7 +192,7 @@ const Center = () => {
         <div className={styles.title}>{Title}</div>
           <img
             alt=""
-            src={'http://10.20.0.169:10010/resources/userfiles/'+Owner+'/avatar.png'}
+            src={'http://10.20.0.168:10010/resources/userfiles/'+Owner+'/avatar.png'}
             style={{ width: '25px', height: '25px', borderRadius: '25px' }}
           />
           <a href=''> {Owner}</a> updated at {UpdatedAt}

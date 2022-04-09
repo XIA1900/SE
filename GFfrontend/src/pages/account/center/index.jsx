@@ -251,7 +251,7 @@ const Center = () => {
       birthday: data.Birthday,
       gender: data.Gender,
       major: data.Department,
-      avatar: 'http://10.20.0.169:10010/resources/userfiles/'+ data.Username+'/avatar.png',
+      avatar: 'http://10.20.0.168:10010/resources/userfiles/'+ data.Username+'/avatar.png',
     };
   }
 

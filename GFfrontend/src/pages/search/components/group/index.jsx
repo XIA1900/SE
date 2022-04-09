@@ -1,18 +1,29 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, List, Typography } from 'antd';
-import { PageContainer } from '@ant-design/pro-layout';
+import {
+  ContactsOutlined,
+  LikeOutlined,
+  LoadingOutlined,
+  MessageOutlined,
+  StarOutlined,
+} from '@ant-design/icons';
+import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
+import React from 'react';
 import { useRequest, history } from 'umi';
-import { getJoinedGroup } from '@/services/getGroupInfo';
+import ArticleListContent from '@/pages/group/content/components/articleContent';
+import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
+import { searchGroup } from '@/services/search';
 import styles from './style.less';
 
-const { Paragraph } = Typography;
-const user = history.location.search.substring(1);
+const { Option } = Select;
+const FormItem = Form.Item;
+const pageSize = 10;
+const pageNo = 1;
+const search = history.location.search.substring(1);
 
 
-const Joined = () => {
+const Group = () => {
   const { data, loading } = useRequest( async () => {
     const result = await getJoinedGroup({
-      name: user,
+
     });
     return result;
   },
@@ -59,8 +70,6 @@ const Joined = () => {
                   <Card
                     hoverable
                     className={styles.card}
-                    //actions={[<p># Group Members: {item.numberOfMember}</p>, <p># Posts: {item.numberOfPost}</p>,  <p>Created At: {item.CreateDay}</p>]}
-                    //actions={[<p>Created At: {item.CreateDay}</p>]}
                   >
                     <Card.Meta
                       avatar={<img alt="" className={styles.cardAvatar} src={item.groupAvatar} />}
@@ -98,4 +107,4 @@ const Joined = () => {
   );
 };
 
-export default Joined;
+export default Group;

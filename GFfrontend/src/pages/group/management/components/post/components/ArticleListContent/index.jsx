@@ -4,11 +4,12 @@ import moment from 'moment';
 import styles from './index.less';
 import { group } from 'console';
 import { deletePost } from '@/services/groupManagement';
+import {history} from 'umi';
 
+const groupID = history.location.search.substring(1);
 
-
-const ArticleListContent = ({ data: { content, logo, updatedAt, owner, group, id, title }, }) => {
-  const group_href = '/group?' + group;
+const ArticleListContent = ({ data: { content, avatar, createdAt, name,  id, title }, }) => {
+  const group_href = '/group/content?' + groupID;
   
   const onDelete = async(values) => {
     const postid = values;
@@ -27,12 +28,12 @@ const ArticleListContent = ({ data: { content, logo, updatedAt, owner, group, id
       <div style = {{display:'inline-block'}}>
         <div >
           <div className={styles.extra}>
-            <img src={logo} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-            <a href=''> {owner}&nbsp;&nbsp;&nbsp;&nbsp; </a>  
+            <img src={avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+            <a href=''> {name}&nbsp;&nbsp;&nbsp;&nbsp; </a>  
             <a className={styles.listItemMetaTitle} href={"/group/post?" + id}>
               {title}&nbsp;&nbsp;&nbsp;&nbsp;
             </a>
-            <em>{moment(updatedAt).format('YYYY-MM-DD HH:mm')}</em> 
+            <em>{moment(createdAt).format('YYYY-MM-DD HH:mm')}</em> 
           </div>     
         </div>
         <div className={styles.description}>{content}</div>

@@ -1,47 +1,55 @@
-import {
-  ContactsOutlined,
-  LikeOutlined,
-  LoadingOutlined,
-  MessageOutlined,
-  StarOutlined,
-} from '@ant-design/icons';
+import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
+import ArticleListContent from '@/pages/group/content/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
-import { getLike } from '@/services/getPost';
+import { searchUser } from '@/services/search';
 import styles from './style.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
-const postid = history.location.search.substring(1);
+const pageNO = 1;
+const search = history.location.search.substring(1);
 
-const Like = () => {
+const User = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
     async() => {
-      const result = await getLike({
-        ID: postid,
+      const result = await getMember({
+        
+        PageNO: pageNO,
+        PageSize: pageSize,
       });
+      console.log(result);
       return result;
     },
     {
-      loadMore: true,
       formatResult: result => result,
-    },
-  );
-  
-  console.log(data);
-  const list = [];
-  if(typeof(data[0])!='undefined') {
-    var size = Object.keys(data).length;
-    for(let i=0; i<size-1; i++) {
-      list.push(data[i]);
+      loadMore: true,
     }
+  );
+
+  let list =[];
+  if(typeof(data.Members) != 'undefined') {
+    list = data.Members;
   }
-  // const list = data?.list || [];
- console.log(list);
+
+  const deleteUser = async (values) => {
+    console.log(values);
+    const user = values;
+    const result = deleteMember({
+      user: user,
+      group: groupName,
+    });
+    if(result.message === 'Ok') {
+      location.reload();   //refresh page
+    }
+    else {
+
+    }
+  };
 
   const formItemLayout = {
     wrapperCol: {
@@ -103,8 +111,11 @@ const Like = () => {
           renderItem={(item) => (
             <div>
               <p>
-              <img src={'http://10.20.0.168:10010/resources/userfiles/'+item.Username+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-              {item.Username}
+              <img src={'http://10.20.0.168:10010/resources/userfiles/'+item.Member+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+              {item.Member+" " + item.JoinDay}
+                <Button onClick = {(e) => deleteUser(item.Member, e)} style={{float: 'right'}}> 
+                  Delete
+                </Button>
               </p>
             </div>
           )}
@@ -113,5 +124,4 @@ const Like = () => {
     </>
   );
 };
-
-export default Like;
+export default User;

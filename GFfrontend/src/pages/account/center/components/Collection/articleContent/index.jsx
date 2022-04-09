@@ -7,7 +7,7 @@ const ArticleListContent = ({ data: { Content, UpdatedAt, Owner } }) => (
   <div className={styles.listContent}>
     <div className={styles.description}>{Content}</div>
     <div className={styles.extra}>
-      <img src={'http://10.20.0.169:10010/resources/userfiles/'+Owner+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+      <img src={'http://10.20.0.168:10010/resources/userfiles/'+Owner+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
       <a href={'/account/center?'+Owner}> {Owner} </a>
       <em>last updated at {moment(UpdatedAt).format('YYYY-MM-DD HH:mm')}</em>
     </div>

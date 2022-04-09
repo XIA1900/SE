@@ -25,8 +25,12 @@ export async function getCreatedGroup(params) {
 
 export async function getJoinedGroup(params) {
   //only return group basic information, group link
-  return request('/api/getJoinedGroup', {
-    params,
+  return request('/api/community/getcommunityidbymember?name='+params.name+'&pageNO=1&pageSize=20', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
   });
 }
 

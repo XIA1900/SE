@@ -14,19 +14,40 @@ const query = history.location.search;
 const values = query.substring(1);
 console.log(values);
 
+const operationTabList = [
+  {
+    key: 'article',
+    tab: <span>Article </span>,
+  },
+  {
+    key: 'user',
+    tab: <span>User </span>,
+  },
+  {
+    key: 'group',
+    tab: <span>Group </span>,
+  },
+];
+
 const searchResults = () => {
-    const [form] = Form.useForm();
-    const { data, reload, loading, loadMore, loadingMore } = useRequest(
-      () => {
-        return search({
-          values: values,
-        });
-      },
-      {
-        loadMore: true,
-      },
-    );
-    const list = data?.list || [];
+  const [form] = Form.useForm();
+  const [tabKey, setTabKey] = useState('article');
+
+  const renderChildrenByTabKey = (tabValue) => {
+    if (tabValue === 'article') {
+      return <Article />;
+    }
+
+    if (tabValue === 'user') {
+      return <User />;
+    }
+
+    if (tabValue === 'group') {
+      return <Group />;
+    }
+
+    return null;
+  };
   
     const IconText = ({ type, text }) => {
       switch (type) {
@@ -84,73 +105,26 @@ const searchResults = () => {
         },
       },
     };
-  
-    const loadMoreDom = list.length > 0 && (
-      <div
-        style={{
-          textAlign: 'center',
-          marginTop: 16,
-        }}
-      >
-        <Button
-          onClick={loadMore}
-          style={{
-            paddingLeft: 48,
-            paddingRight: 48,
-          }}
-        >
-          {loadingMore ? (
-            <span>
-              <LoadingOutlined /> Loading...
-            </span>
-          ) : (
-            'Load More'
-          )}
-        </Button>
-      </div>
-    );
+
   
     return (
-      <>
-        <Card
-          style={{
-            marginTop: 24,
-          }}
-          bordered={false}
-          bodyStyle={{
-            padding: '8px 32px 32px 32px',
-          }}
-        >
-          <List
-            size="large"
-            loading={loading}
-            rowKey="id"
-            itemLayout="vertical"
-            loadMore={loadMoreDom}
-            dataSource={list}
-            renderItem={(item) => (
-              <List.Item
-                key={item.id}
-                actions={[
-                  <IconText key="collection" type="star-o" text={item.star} />,
-                  <IconText key="like" type="like-o" text={item.like} />,
-                  <IconText key="reply" type="message" text={item.message} />,
-                ]}
-                extra={<div className={styles.listItemExtra} />}
-              >
-                <List.Item.Meta
-                  title={
-                    <a className={styles.listItemMetaTitle} href={item.href}>
-                      {item.title}
-                    </a>
-                  }
-                />
-                <ArticleListContent data={item} />
-              </List.Item>
-            )}
-          />
-        </Card>
-      </>
+      <GridContent>
+        <Row gutter={24}>
+          <Col lg={17} md={24}>
+            <Card
+              className={styles.tabsCard}
+              bordered={false}
+              tabList={operationTabList}
+              activeTabKey={tabKey}
+              onTabChange={(_tabKey) => {
+                setTabKey(_tabKey);
+              }}
+            >
+              {renderChildrenByTabKey(tabKey)}
+            </Card>
+          </Col>
+        </Row>
+      </GridContent>
     );
   };
   

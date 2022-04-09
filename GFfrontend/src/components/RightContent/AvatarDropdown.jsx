@@ -121,7 +121,7 @@ const AvatarDropdown = ({ menu }) => {
       </Menu.Item>
     </Menu>
   );
-  const avatarsrc = 'http://10.20.0.169:10010/resources/userfiles/'+currentUser.name+'/avatar.png';
+  const avatarsrc = 'http://10.20.0.168:10010/resources/userfiles/'+currentUser.name+'/avatar.png';
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>

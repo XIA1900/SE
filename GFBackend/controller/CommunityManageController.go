@@ -412,21 +412,37 @@ func (communityManageController *CommunityManageController) LeaveCommunityByID(c
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
 // @Router /community/getmember [get]
 func (communityManageController *CommunityManageController) GetMembersByCommunityIDs(context *gin.Context) {
-	var CommunityMembersInfo entity.CommunityMembersInfo
-	err1 := context.ShouldBindJSON(&CommunityMembersInfo)
+	//var CommunityMembersInfo entity.CommunityMembersInfo
+	//err1 := context.ShouldBindJSON(&CommunityMembersInfo)
+	//if err1 != nil {
+	//	context.JSON(400, "Bad Parameters")
+	//	return
+	//}
+	CommunityID, err1 := strconv.Atoi(context.Query("id"))
 	if err1 != nil {
 		context.JSON(400, "Bad Parameters")
 		return
 	}
-	communityMembers, err2 := communityManageController.communityManageService.
-		GetMembersByCommunityIDs(CommunityMembersInfo.CommunityID, CommunityMembersInfo.PageNO, CommunityMembersInfo.PageSize)
+	PageNO, err2 := strconv.Atoi(context.Query("pageNO"))
 	if err2 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	PageSize, err3 := strconv.Atoi(context.Query("pageSize"))
+	if err3 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+
+	communityMembers, err4 := communityManageController.communityManageService.
+		GetMembersByCommunityIDs(CommunityID, PageNO, PageSize)
+	if err4 != nil {
 		return
 	}
 	newCommunityMembersInfo := entity.CommunityMembersInfo{
-		PageNO:      CommunityMembersInfo.PageNO,
-		PageSize:    CommunityMembersInfo.PageSize,
-		CommunityID: CommunityMembersInfo.CommunityID,
+		PageNO:      PageNO,
+		PageSize:    PageSize,
+		CommunityID: CommunityID,
 		Members:     communityMembers,
 	}
 	context.JSON(200, newCommunityMembersInfo)

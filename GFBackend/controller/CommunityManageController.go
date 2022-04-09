@@ -461,20 +461,21 @@ func (communityManageController *CommunityManageController) GetMembersByCommunit
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
 // @Router /community/getcommunityidbymember [get]
 func (communityManageController *CommunityManageController) GetCommunityIDsByMember(context *gin.Context) {
-	var CommunityIDsInfo entity.CommunityIDsInfo
-	err1 := context.ShouldBindJSON(&CommunityIDsInfo)
-	if err1 != nil {
+	member := context.Query("name")
+	pageNO, err2 := strconv.Atoi(context.Query("pageNO"))
+	if err2 != nil {
 		context.JSON(400, "Bad Parameters")
 		return
 	}
-	communityIDs, err2 := communityManageController.communityManageService.
-		GetCommunityIDsByMember(CommunityIDsInfo.Member, CommunityIDsInfo.PageNO, CommunityIDsInfo.PageSize)
-	if err2 != nil {
+	pageSize, err3 := strconv.Atoi(context.Query("pageSize"))
+	if err3 != nil {
+		context.JSON(400, "Bad Parameters")
 		return
 	}
-	var newCommunityIDsInfo []int
-	for i := 0; i < len(communityIDs); i++ {
-		newCommunityIDsInfo = append(newCommunityIDsInfo, communityIDs[i].CommunityID)
+
+	communityIDs, err4 := communityManageController.communityManageService.GetCommunityIDsByMember(member, pageNO, pageSize)
+	if err4 != nil {
+		return
 	}
-	context.JSON(200, newCommunityIDsInfo)
+	context.JSON(200, communityIDs)
 }

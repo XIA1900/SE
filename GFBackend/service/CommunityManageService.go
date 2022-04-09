@@ -25,7 +25,7 @@ type ICommunityManageService interface {
 	JoinCommunityByID(id int, username string) error
 	LeaveCommunityByID(id int, username string) error
 	GetMembersByCommunityIDs(id int, pageNO, pageSize int) ([]entity.CommunityMember, error)
-	GetCommunityIDsByMember(username string, pageNO, pageSize int) ([]entity.CommunityMember, error)
+	GetCommunityIDsByMember(username string, pageNO, pageSize int) ([]entity.Community, error)
 	GetCommunitiesByCreator(creator string, pageNO, pageSize int) ([]entity.Community, []int64, []int64, error)
 }
 
@@ -264,11 +264,20 @@ func (communityManageService *CommunityManageService) GetMembersByCommunityIDs(i
 	return members, nil
 }
 
-func (communityManageService *CommunityManageService) GetCommunityIDsByMember(username string, pageNO, pageSize int) ([]entity.CommunityMember, error) {
+func (communityManageService *CommunityManageService) GetCommunityIDsByMember(username string, pageNO, pageSize int) ([]entity.Community, error) {
 	members, err := communityManageService.communityMemberDAO.GetCommunityIDsByMember(username, (pageNO-1)*pageSize, pageSize)
 	if err != nil {
 		logger.AppLogger.Error(err.Error())
 		return nil, err
 	}
-	return members, nil
+	var communities []entity.Community
+	for i := 0; i < len(members); i++ {
+		community, err1 := communityManageService.communityDAO.GetOneCommunityByID(members[i].CommunityID)
+		if err1 != nil {
+			logger.AppLogger.Error(err1.Error())
+			return nil, err1
+		}
+		communities = append(communities, community)
+	}
+	return communities, nil
 }

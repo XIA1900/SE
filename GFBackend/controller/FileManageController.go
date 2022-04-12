@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"net/http"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -74,6 +75,56 @@ func (fileManageController *FileManageController) UploadFile(context *gin.Contex
 		if strings.Contains(err2.Error(), "400") {
 			errMsg.Code = 400
 			errMsg.Message = "Not enough space"
+		} else if strings.Contains(err2.Error(), "500") {
+			errMsg.Code = 500
+			errMsg.Message = "Internal Server Error"
+		}
+		context.JSON(errMsg.Code, errMsg)
+		return
+	}
+
+	context.JSON(200, entity.ResponseMsg{
+		Code:    200,
+		Message: "Upload Success",
+	})
+
+}
+
+// UploadCommunityAvatar godoc
+// @Summary User Uploads avatar about community that he or she creates
+// @Description need token in cookie, html file type input element include name attribute with value "uploadFilename"
+// @Tags Static Resource
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Success 201 {object} entity.ResponseMsg "<b>Success</b>. Upload Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters or No Enough Space"
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /file/upload/groupavatar/:groupid [post]
+func (fileManageController *FileManageController) UploadCommunityAvatar(context *gin.Context) {
+	token, _ := context.Cookie("token")
+	username, _ := auth.GetTokenUsername(token)
+	file, err1 := context.FormFile("uploadFilename")
+	errMsg := entity.ResponseMsg{
+		Code:    http.StatusBadRequest,
+		Message: "Bad Parameters",
+	}
+	if err1 != nil {
+		context.JSON(400, errMsg)
+		return
+	}
+
+	groupId, paramErr := strconv.Atoi(context.Param("groupid"))
+	if paramErr != nil {
+		context.JSON(400, "No Group Id")
+		return
+	}
+
+	err2 := fileManageController.fileManageService.UploadCommunityAvatar(context, username, groupId, file)
+	if err2 != nil {
+		if strings.Contains(err2.Error(), "400") {
+			errMsg.Code = 400
+			errMsg.Message = "Not This Community Creator"
 		} else if strings.Contains(err2.Error(), "500") {
 			errMsg.Code = 500
 			errMsg.Message = "Internal Server Error"

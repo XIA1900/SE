@@ -29,6 +29,7 @@ type IUserManageService interface {
 	GetFollowers(username string) ([]string, error)
 	GetFollowees(username string) ([]string, error)
 	GetUserInfoByUsername(username string) (entity.User, error)
+	GetUsersInfoByUsernameFuzzySearch(username string, pageNo, pageSize int) ([]entity.User, error)
 }
 
 type UserManageService struct {
@@ -287,4 +288,13 @@ func (userManageService *UserManageService) GetUserInfoByUsername(username strin
 		return entity.User{}, errors.New("500")
 	}
 	return userInfo, nil
+}
+
+func (userManageService UserManageService) GetUsersInfoByUsernameFuzzySearch(username string, pageNo, pageSize int) ([]entity.User, error) {
+	users, getUserErr := userManageService.userDAO.GetUsersByUsernameFuzzySearch(username, (pageNo-1)*pageSize, pageSize)
+	if getUserErr != nil {
+		logger.AppLogger.Error(getUserErr.Error())
+		return nil, errors.New("500")
+	}
+	return users, nil
 }

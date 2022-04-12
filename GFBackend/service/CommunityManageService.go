@@ -57,8 +57,8 @@ var CommunityManageServiceSet = wire.NewSet(
 	wire.Bind(new(dao.ICommunityMemberDAO), new(*dao.CommunityMemberDAO)),
 	dao.NewCommunityDAO,
 	wire.Bind(new(dao.ICommunityDAO), new(*dao.CommunityDAO)),
-	wire.Bind(new(dao.IArticleDAO), new(*dao.ArticleDAO)),
 	dao.NewArticleDAO,
+	wire.Bind(new(dao.IArticleDAO), new(*dao.ArticleDAO)),
 	NewCommunityManageService,
 )
 

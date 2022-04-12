@@ -4,4 +4,5 @@
 /logger/logs
 /.DS_Store
 /resources/userfiles/*
+/resources/groupfiles/*
 /test/.DS_Store

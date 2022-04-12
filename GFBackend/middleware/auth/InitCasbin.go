@@ -41,6 +41,7 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/followers", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/followees", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/getuserinfo", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/user/getusersinfo", "GET")
 
 	// /community/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/create", "POST")
@@ -58,6 +59,7 @@ func addInitialPolicy() {
 
 	// /file/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/upload", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/file/upload/communityavatar/:groupid", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/download", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/delete", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/scan", "POST")

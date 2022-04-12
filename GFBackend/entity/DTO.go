@@ -14,6 +14,17 @@ type UserInfo struct {
 	ForAdmin    bool   `form:"ForAdmin" json:"ForAdmin" example:true`
 }
 
+type SimpleUserInfo struct {
+	ID       int    `form:"ID" json:"ID" example:"21" `
+	Username string `form:"Username" json:"Username" example:"jamesbond21" `
+}
+
+type UsersInfo struct {
+	Users    []SimpleUserInfo `form:"Users" json:"Users"`
+	PageNO   int              `form:"PageNO" json:"PageNO" example:1`
+	PageSize int              `form:"PageSize" json:"PageSize" example:5`
+}
+
 type NewUserInfo struct {
 	Username   string `form:"Username" json:"Username" example:"jamesbond21"`
 	Nickname   string `form:"Nickname" json:"Nickname" example:"Peter Park"`

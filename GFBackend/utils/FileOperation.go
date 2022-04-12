@@ -10,6 +10,7 @@ import (
 )
 
 var DirBasePath = "./resources/userfiles/"
+var CommunityAvatarBasePath = "./resources/groupfiles/"
 
 func IsDirExists(username string) bool {
 	info, err := os.Stat(DirBasePath + username)

@@ -4,7 +4,7 @@ package docs
 
 import "github.com/swaggo/swag"
 
-const docTemplate_swagger = `{
+const docTemplate = `{
     "schemes": {{ marshal .Schemes }},
     "swagger": "2.0",
     "info": {
@@ -1998,6 +1998,46 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/file/upload/groupavatar/:groupid": {
+            "post": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie, html file type input element include name attribute with value \"uploadFilename\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Static Resource"
+                ],
+                "summary": "User Uploads avatar about community that he or she creates",
+                "responses": {
+                    "201": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Upload Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters or No Enough Space",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/resources/userfiles/{username}/{filename}": {
             "get": {
                 "description": "Static files request, need to claim the username and filename in the url",
@@ -2281,6 +2321,46 @@ const docTemplate_swagger = `{
                         "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
                         "schema": {
                             "$ref": "#/definitions/entity.UserFollows"
+                        }
+                    },
+                    "400": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Bad Parameters.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    },
+                    "500": {
+                        "description": "\u003cb\u003eFailure\u003c/b\u003e. Server Internal Error.",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ResponseMsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/getusersinfo": {
+            "get": {
+                "security": [
+                    {
+                        "ApiAuthToken": []
+                    }
+                ],
+                "description": "need token in cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Manage"
+                ],
+                "summary": "Get Users' Info By username, pageNo, pageSize, \"/getusersinfo?username=\u0026pageNo=\u0026pageSize=\"",
+                "responses": {
+                    "200": {
+                        "description": "\u003cb\u003eSuccess\u003c/b\u003e. Search Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/entity.UsersInfo"
                         }
                     },
                     "400": {
@@ -2995,6 +3075,19 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "entity.SimpleUserInfo": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "type": "integer",
+                    "example": 21
+                },
+                "Username": {
+                    "type": "string",
+                    "example": "jamesbond21"
+                }
+            }
+        },
         "entity.Space": {
             "type": "object",
             "properties": {
@@ -3114,6 +3207,23 @@ const docTemplate_swagger = `{
                     "example": "boss"
                 }
             }
+        },
+        "entity.UsersInfo": {
+            "type": "object",
+            "properties": {
+                "PageNO": {
+                    "type": "integer"
+                },
+                "PageSize": {
+                    "type": "integer"
+                },
+                "Users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.SimpleUserInfo"
+                    }
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -3125,8 +3235,8 @@ const docTemplate_swagger = `{
     }
 }`
 
-// SwaggerInfo_swagger holds exported Swagger Info so clients can modify it
-var SwaggerInfo_swagger = &swag.Spec{
+// SwaggerInfo holds exported Swagger Info so clients can modify it
+var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "http://167.71.166.120:10010",
 	BasePath:         "/gf/api",
@@ -3134,9 +3244,9 @@ var SwaggerInfo_swagger = &swag.Spec{
 	Title:            "Gator Forum Backend API",
 	Description:      "This is the Gator Forum Backend Server",
 	InfoInstanceName: "swagger",
-	SwaggerTemplate:  docTemplate_swagger,
+	SwaggerTemplate:  docTemplate,
 }
 
 func init() {
-	swag.Register(SwaggerInfo_swagger.InstanceName(), SwaggerInfo_swagger)
+	swag.Register(SwaggerInfo.InstanceName(), SwaggerInfo)
 }

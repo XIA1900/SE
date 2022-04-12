@@ -1,5 +1,5 @@
 import React from 'react';
-import { UploadOutlined } from '@ant-design/icons';
+import { PropertySafetyOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Input, Upload, message } from 'antd';
 import ProForm, {
   ProFormDependency,
@@ -13,6 +13,46 @@ import { queryCurrent, userUpdate } from '@/services/user';
 import styles from './BaseView.less';
 
 const username = history.location.search.substring(1);
+
+const props = {
+  name: "avatar",
+  listType: "picture-card",
+  className: "avatar-uploader",
+  showUploadList: false,
+  // 设置只上传一张图片，根据实际情况修改
+  customRequest: info => {
+    // 手动上传
+    const formData = new FormData();
+    formData.append('file', info.file);
+    uploadLogoImg(formData);
+  },
+  onRemove: file => {
+    // 删除图片调用
+    this.setState(state => {
+      const index = state.fileList.indexOf(file);
+      const newFileList = state.fileList.slice();
+      newFileList.splice(index, 1);
+      return {
+        fileList: newFileList,
+      };
+    });
+  },
+
+  beforeUpload: file => {
+    // 控制上传图片格式
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+
+    if (!isJpgOrPng) {
+      message.error('Only JPEG/PNG files are allowed!');
+      return;
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('File size must be smaller than 2MB!');
+      return;
+    }
+  },
+}
 
 const validatorPhone = (rule, value, callback) => {
   if (!value[0]) {
@@ -32,7 +72,7 @@ const AvatarView = ({ avatar }) => (
     <div className={styles.avatar}>
       <img src={avatar} alt="avatar" />
     </div>
-    <Upload showUploadList={false}>
+    <Upload {...props}>
       <div className={styles.button_view}>
         <Button>
           <UploadOutlined />

@@ -100,6 +100,7 @@ const Center = () => {
       createdAt: community.CreateDay, 
       groupMember: data.count,
       ifexit: data.ifexit,
+      avatar: 'http://10.20.0.166:10010/resources/groupfiles/'+community.Name+'/avatar.png',
     };
   }
 
@@ -249,7 +250,7 @@ const Center = () => {
               <div className={styles.avatarHolder}>
                 <img
                   alt=""
-                  src={list.groupAvatar}
+                  src={list.avatar}
                   style={{ width: '100px', height: '100px', borderRadius: '100px' }}
                 />
                 {renderGroupInfo(list)}

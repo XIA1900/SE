@@ -17,10 +17,10 @@ const User = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
     async() => {
-      const result = await getMember({
-        
-        PageNO: pageNO,
+      const result = await searchUser({
+        PageNo: pageNO,
         PageSize: pageSize,
+        SearchWords: search,
       });
       console.log(result);
       return result;
@@ -30,26 +30,13 @@ const User = () => {
       loadMore: true,
     }
   );
-
+  
+  console.log(data);
   let list =[];
-  if(typeof(data.Members) != 'undefined') {
-    list = data.Members;
+  if(typeof(data.Users) != 'undefined') {
+    if(data.Users!= null) list = data.Users;
   }
 
-  const deleteUser = async (values) => {
-    console.log(values);
-    const user = values;
-    const result = deleteMember({
-      user: user,
-      group: groupName,
-    });
-    if(result.message === 'Ok') {
-      location.reload();   //refresh page
-    }
-    else {
-
-    }
-  };
 
   const formItemLayout = {
     wrapperCol: {
@@ -90,6 +77,14 @@ const User = () => {
     </div>
   );
 
+  const clickUser = async(values) => {
+    console.log(values);
+    history.push({
+      pathname: '/account/view',
+      search: values.toString(),
+    });
+  }
+
   return (
     <>
       <Card
@@ -111,11 +106,8 @@ const User = () => {
           renderItem={(item) => (
             <div>
               <p>
-              <img src={'http://10.20.0.168:10010/resources/userfiles/'+item.Member+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-              {item.Member+" " + item.JoinDay}
-                <Button onClick = {(e) => deleteUser(item.Member, e)} style={{float: 'right'}}> 
-                  Delete
-                </Button>
+              <img src={'http://10.20.0.166:10010/resources/userfiles/'+item.Username+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+              <a onClick={e => clickUser(item.id,e)}>{item.Username} </a>
               </p>
             </div>
           )}

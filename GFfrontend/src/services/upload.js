@@ -1,7 +1,10 @@
-export async function uploadLogoImg(body, options) {
-    console.log(body);
-    return request('/api/user/login', {
+import { request } from 'umi';
+
+export async function uploadLogoImg(params) {
+    console.log(JSON.stringify(params));
+    return request('/api/file/upload', {
       method: 'POST',
-      data: body,
+      body: params,
+      credentials: 'include',
     });
   }

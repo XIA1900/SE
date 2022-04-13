@@ -49,7 +49,7 @@ const Latest = () => {
         collection: countFavorite[i],
         like: countLike[i],
         reply: countComment[i],
-        avatar: 'http://10.20.0.168:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+        avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
       });
     }
   }
@@ -138,6 +138,13 @@ const Latest = () => {
     </div>
   );
 
+  const clickPost = async(values) => {
+    history.push({
+      pathname: '/group/post',
+      search: values.toString(),
+    });
+  }
+
   return (
     <>
       <Card bordered={false}>
@@ -160,7 +167,7 @@ const Latest = () => {
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={item.href}>
+                  <a className={styles.listItemMetaTitle} onClick={e => clickPost(item.id, e)}>
                     {item.title}
                   </a>
                 }

@@ -64,12 +64,7 @@ export async function getPersonalCollection(params) {
   });
 }
 
-export async function removeCollection(values) {
-  return request('/api/removeCollection', {
-    params: values,
-    method: 'POST',
-  });
-}
+
 
 
 export async function getPersonalFollower(values) {
@@ -147,7 +142,31 @@ export async function removeLike(values) {
   });
 }
 
+export async function createLike(params) {
+  return request('/api/articlelike/create/'+params.id, {
+    method: 'POST',
+    credentials: 'include',
+  });
+}
+
+export async function removeCollection(values) {
+  return request('/api/removeCollection', {
+    params: values,
+    method: 'POST',
+  });
+}
+
+export async function createCollection(values) {
+  return request('/api/removeCollection', {
+    params: values,
+    method: 'POST',
+  });
+}
+
+
+
 export async function getRelation(values) {
   return request('/api/getRelation', {
   });
 }
+

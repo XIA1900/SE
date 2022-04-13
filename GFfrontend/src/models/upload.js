@@ -8,7 +8,7 @@ const Model = {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(login, payload);
+      const response = yield call(uploadLogoImg, payload);
       yield put({
         type: 'save',
         payload: response,

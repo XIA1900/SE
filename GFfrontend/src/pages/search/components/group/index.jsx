@@ -5,7 +5,8 @@ import {
   MessageOutlined,
   StarOutlined,
 } from '@ant-design/icons';
-import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
+import { Typography, Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
+import { PageContainer } from '@ant-design/pro-layout';
 import React from 'react';
 import { useRequest, history } from 'umi';
 import ArticleListContent from '@/pages/group/content/components/articleContent';
@@ -18,12 +19,15 @@ const FormItem = Form.Item;
 const pageSize = 10;
 const pageNo = 1;
 const search = history.location.search.substring(1);
+const { Paragraph } = Typography;
 
 
 const Group = () => {
   const { data, loading } = useRequest( async () => {
-    const result = await getJoinedGroup({
-
+    const result = await searchGroup({
+      Name: search,
+      PageNO: pageNo,
+      PageSize: pageSize,
     });
     return result;
   },
@@ -35,20 +39,12 @@ const Group = () => {
   console.log(data);
   let list =  [];
   if(typeof(data) != 'undefined') {
-    list = data;
+    if(data.Communities != null) list = data.Communities;
   }
-
-  const content = (
-    <div className={styles.pageHeaderContent}>
-      <p>
-        Please select a group.
-      </p>
-    </div>
-  );
 
   const nullData = {};
   return (
-    <PageContainer content={content} >
+    <PageContainer >
       <div className={styles.cardList}>
         <List
           rowKey="id"
@@ -87,7 +83,8 @@ const Group = () => {
                           }}
                         >
                           {item.Description}
-                          //<p>Created At: {item.CreateDay}</p>
+                          <p></p>
+                          <p>{item.Creator+" "} Created At: {item.CreateDay}</p>
                         </Paragraph>
                       }
                     />

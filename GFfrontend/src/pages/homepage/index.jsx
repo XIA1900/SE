@@ -6,6 +6,7 @@ import ArticleListContent from './components/ArticleListContent';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
 import { queryList } from '@/services/getList';
+import { createLike } from '@/services/user';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -54,7 +55,7 @@ const Articles = () => {
         like: like[i],
         reply: reply[i],
         groupID: communityList[i].ID,
-        avatar: 'http://10.20.0.168:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+        avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
       });
     }
   }
@@ -76,7 +77,18 @@ const Articles = () => {
     }
   }
 
-  const IconText = ({ type, text }) => {
+  const onLike = async(values) => {
+    console.log("liked");
+    console.log(values);
+    const result = await createLike({
+      id: values,
+    });
+    if(result === '200') {
+      location.reload();
+    }
+  }
+
+  const IconText = ({ value, type, text }) => {
     switch (type) {
       case 'star-o':
         return (
@@ -215,9 +227,9 @@ const Articles = () => {
             <List.Item
               key={item.id}
               actions={[
-                <IconText key="collection" type="star-o" text={item.collection}  />,
-                <IconText key="like" type="like-o" text={item.like} />,
-                <IconText key="reply" type="message" text={item.reply} />,
+                <IconText key="collection" type="star-o" value = {item.id} text={item.collection}  />,
+                <IconText key="like" type="like-o" value = {item.id} text={item.like} />,
+                <IconText key="reply" type="message" value = {item.id} text={item.reply} />,
               ]}
             >
               <List.Item.Meta

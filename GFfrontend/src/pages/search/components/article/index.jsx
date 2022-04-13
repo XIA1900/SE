@@ -8,7 +8,7 @@ import {
 import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
-import ArticleListContent from '@/pages/group/content/components/articleContent';
+import ArticleListContent from './ArticleListContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import { searchArticle } from '@/services/search';
 import styles from './style.less';
@@ -18,6 +18,7 @@ const FormItem = Form.Item;
 const pageSize = 10;
 const pageNo = 1;
 const search = history.location.search.substring(1);
+console.log(search);
 
 const Article = () => {
   const [form] = Form.useForm();
@@ -28,6 +29,7 @@ const Article = () => {
         PageSize: pageSize,
         SearchWords: search,
       });
+      return result;
     },
     {
       loadMore: true,
@@ -36,50 +38,10 @@ const Article = () => {
   );
 
   console.log(data);
-  const list = [];
-
-  const IconText = ({ type, text }) => {
-    switch (type) {
-      case 'star-o':
-        return (
-          <span>
-            <StarOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
-
-      case 'like-o':
-        return (
-          <span>
-            <LikeOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
-
-      case 'message':
-        return (
-          <span>
-            <MessageOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
-
-      default:
-        return null;
-    }
-  };
+  let list = [];
+  if(typeof(data.Articles)!='undefined') {
+    if(data.Articles != null) list = data.Articles;
+  }
 
   const formItemLayout = {
     wrapperCol: {
@@ -120,6 +82,14 @@ const Article = () => {
     </div>
   );
 
+  const onPost = async(values) => {
+    console.log(values);
+    history.push({
+      pathname: '/group/post',
+      search: values.toString(),
+    });
+  }
+
   return (
     <>
       <Card
@@ -140,18 +110,15 @@ const Article = () => {
           dataSource={list}
           renderItem={(item) => (
             <List.Item
-              key={item.id}
+              key={item.ID}
               actions={[
-                <IconText key="collection" type="star-o" text={item.collection} />,
-                <IconText key="like" type="like-o" text={item.like} />,
-                <IconText key="reply" type="message" text={item.reply} />,
               ]}
               //extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={item.href}>
-                    {item.title}
+                  <a className={styles.listItemMetaTitle} onClick={e => onPost(item.ID,e)}>
+                    {item.Title}
                   </a>
                 }
               />

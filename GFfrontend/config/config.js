@@ -6,7 +6,7 @@ import proxy from './proxy';
 import { stubFalse } from 'lodash';
 const { REACT_APP_ENV } = process.env;
 export default defineConfig({
-  hash: true,
+  hash: false,
   antd: {},
   dva: {
     hmr: true,

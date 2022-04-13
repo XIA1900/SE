@@ -20,7 +20,7 @@ export async function searchArticle(body) {
 }
 
 export async function searchGroup(body) {
-  return request('/api/article/search', {
+  return request('/api/community/getbyname', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -30,13 +30,12 @@ export async function searchGroup(body) {
   });
 }
 
-export async function searchUser(body) {
-  return request('/api/article/search', {
-    method: 'POST',
+export async function searchUser(params) {
+  return request('/api/user/getusersinfo?username='+params.SearchWords+'&pageNo='+params.PageNo+'&pageSize='+params.PageSize, {
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-    data: body,
   });
 }

@@ -25,7 +25,7 @@ import Collection from './components/collection';
 import styles from './Center.less';
 import { getPost } from '@/services/getPost';
 //import { currentUser } from '@/services/ant-design-pro/api';
-import { removeLike, getRelation } from '@/services/user';
+import { removeLike, getRelation, createLike, createCollection, removeCollection } from '@/services/user';
 
 const postid = history.location.search.substring(1);
 console.log(postid);
@@ -141,7 +141,7 @@ const Center = () => {
   const { data: postContents, reload, loading, loadMore, loadingMore } = useRequest(
     async() => {
       const result = await getPost({
-        //username: currentUser.username,
+        user: currentUser.name,
         ID: postid,
       });
       //console.log(result);
@@ -171,19 +171,39 @@ const Center = () => {
   const onLike = async(values) => {
     console.log("liked");
     console.log(values);
-    if(values === '1') {
-      const result = removeLike({
-        username: currentUser.name,
+    if(values === true) {
+      const result = await removeLike({
+        //username: currentUser.name,
         postid: postid,
       });
       if(result.message === 'Ok') {
         return {renderButtonInfo};
       }
     }
+    else {
+      const result = await createLike({
+        id: postid,
+      });
+
+    }
   }
 
   const onCollection = async(values) => {
+    if(values === true) {
+      const result = await removeCollection({
+        //username: currentUser.name,
+        postid: postid,
+      });
+      if(result.message === 'Ok') {
+        return {renderButtonInfo};
+      }
+    }
+    else {
+      const result = await createCollection({
+        id: postid,
+      });
 
+    }
   }
 
   const renderPostInfo = ({ Title, Content, Owner, UpdatedAt}) => {
@@ -192,7 +212,7 @@ const Center = () => {
         <div className={styles.title}>{Title}</div>
           <img
             alt=""
-            src={'http://10.20.0.168:10010/resources/userfiles/'+Owner+'/avatar.png'}
+            src={'http://10.20.0.166:10010/resources/userfiles/'+Owner+'/avatar.png'}
             style={{ width: '25px', height: '25px', borderRadius: '25px' }}
           />
           <a href=''> {Owner}</a> updated at {UpdatedAt}

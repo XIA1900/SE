@@ -10,22 +10,46 @@ import ProForm, {
 } from '@ant-design/pro-form';
 import { useRequest, history, useIntl} from 'umi';
 import { queryCurrent, userUpdate } from '@/services/user';
+import { uploadLogoImg } from '@/services/upload';
 import styles from './BaseView.less';
 
 const username = history.location.search.substring(1);
 
 const props = {
-  name: "avatar",
-  listType: "picture-card",
-  className: "avatar-uploader",
-  showUploadList: false,
-  // 设置只上传一张图片，根据实际情况修改
-  customRequest: info => {
-    // 手动上传
-    const formData = new FormData();
-    formData.append('file', info.file);
-    uploadLogoImg(formData);
+  name: "uploadFilename",
+  action: '/api/file/upload',
+  headers: {
+    authorization: 'authorization-text',
   },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+      history.push({
+        pathname: '/account/settings',
+        search:username,
+      });
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+  //设置只上传一张图片，根据实际情况修改
+  // customRequest: async info => {
+  //   // 手动上传
+  //   const formData = new FormData();
+  //   formData.append('uploadFilename', info.file);
+  //   const result = await uploadLogoImg(formData);
+  //   console.log(result);
+  //   if(result.code === 200) {
+  //     console.log("upload successful");
+  //     history.push({
+  //       pathname: '/account/settings',
+  //       search:username,
+  //     });
+  //   }
+  // },
   onRemove: file => {
     // 删除图片调用
     this.setState(state => {
@@ -40,7 +64,7 @@ const props = {
 
   beforeUpload: file => {
     // 控制上传图片格式
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isJpgOrPng = file.type === 'image/png';
 
     if (!isJpgOrPng) {
       message.error('Only JPEG/PNG files are allowed!');
@@ -64,7 +88,7 @@ const validatorPhone = (rule, value, callback) => {
   }
 
   callback();
-}; // 头像组件 方便以后独立，增加裁剪之类的功能
+}; 
 
 const AvatarView = ({ avatar }) => (
   <>
@@ -106,7 +130,7 @@ const BaseView = () => {
       birthday: data.Birthday,
       gender: data.Gender,
       major: data.Department,
-      avatar: 'http://10.20.0.168:10010/resources/userfiles/'+ data.Username+'/avatar.png',
+      avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ data.Username+'/avatar.png',
     };
   }
 
@@ -376,7 +400,7 @@ const BaseView = () => {
             </ProForm>
           </div>
           <div className={styles.right}>
-            <AvatarView avatar={getAvatarURL()} />
+            <AvatarView avatar={currentUser.avatar} />
           </div>
         </>
       )}

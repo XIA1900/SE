@@ -1,31 +1,35 @@
 import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
-import React from 'react';
+import React, {useState} from 'react';
 import { useRequest, history } from 'umi';
+import { GridContent } from '@ant-design/pro-layout';
 import ArticleListContent from '@/pages/homepage/components/ArticleListContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import TagSelect from '@/pages/homepage/components/TagSelect';
 import { search } from '@/services/search';
+import Article from './components/article';
+import Group from './components/group';
+import User from './components/user';
 import styles from './style.less';
 import { wrapConstructor } from 'lodash-decorators/utils';
 
 
 const query = history.location.search;
 const values = query.substring(1);
-console.log(values);
+//console.log(values);
 
 const operationTabList = [
   {
     key: 'article',
-    tab: <span>Article </span>,
+    tab: (<span>Article </span>),
   },
   {
     key: 'user',
-    tab: <span>User </span>,
+    tab: (<span>User </span>),
   },
   {
     key: 'group',
-    tab: <span>Group </span>,
+    tab: (<span>Group </span>),
   },
 ];
 
@@ -106,7 +110,6 @@ const searchResults = () => {
       },
     };
 
-  
     return (
       <GridContent>
         <Row gutter={24}>

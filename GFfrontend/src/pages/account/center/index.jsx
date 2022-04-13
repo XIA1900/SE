@@ -28,20 +28,20 @@ const operationTabList = [
       </span>
     ),
   },
-  {
-    key: 'post',
-    tab: (
-      <span>
-        Post{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-        </span>
-      </span>
-    ),
-  },
+  // {
+  //   key: 'post',
+  //   tab: (
+  //     <span>
+  //       Post{' '}
+  //       <span
+  //         style={{
+  //           fontSize: 14,
+  //         }}
+  //       >
+  //       </span>
+  //     </span>
+  //   ),
+  // },
   {
     key: 'follower',
     tab: (
@@ -70,20 +70,20 @@ const operationTabList = [
       </span>
     ),
   },
-  {
-    key: 'blacklist',
-    tab: (
-      <span>
-        Blacklist{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-        </span>
-      </span>
-    ),
-  },
+  // {
+  //   key: 'blacklist',
+  //   tab: (
+  //     <span>
+  //       Blacklist{' '}
+  //       <span
+  //         style={{
+  //           fontSize: 14,
+  //         }}
+  //       >
+  //       </span>
+  //     </span>
+  //   ),
+  // },
 ];
 
 const CourseList = ({ tags }) => {
@@ -251,7 +251,7 @@ const Center = () => {
       birthday: data.Birthday,
       gender: data.Gender,
       major: data.Department,
-      avatar: 'http://10.20.0.168:10010/resources/userfiles/'+ data.Username+'/avatar.png',
+      avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ data.Username+'/avatar.png',
     };
   }
 
@@ -406,9 +406,9 @@ const Center = () => {
       return <Collection />;
     }
 
-    if (tabValue === 'post') {
-      return <Post />;
-    }
+    // if (tabValue === 'post') {
+    //   return <Post />;
+    // }
 
     if (tabValue === 'follower') {
       return <Follower />;
@@ -418,9 +418,9 @@ const Center = () => {
       return <Following />;
     }
 
-    if (tabValue == 'blacklist') {
-      return <Blacklist />
-    }
+    // if (tabValue == 'blacklist') {
+    //   return <Blacklist />
+    // }
 
     return null;
   };

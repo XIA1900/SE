@@ -3,7 +3,7 @@ import { request } from 'umi';
 export async function getPost(params) {
   //ID: article id
   //username
-  return request('/api/article/getone?id='+params.ID, {
+  return request('/api/article/getone?id='+params.ID+'&currentUser='+params.user, {
   //return request('/api/getPost', {
     //params,
     method: 'GET',

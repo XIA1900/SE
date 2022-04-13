@@ -13,7 +13,7 @@ func InitCommunityManageReqs(baseGroup *gin.RouterGroup) *gin.RouterGroup {
 		communityManageReqsGroup.POST("/update", communityManageController.UpdateDescriptionByID)
 		communityManageReqsGroup.GET("/numberofmember", communityManageController.GetNumberOfMemberByID)
 		communityManageReqsGroup.GET("/getone", communityManageController.GetOneCommunityByID)
-		communityManageReqsGroup.GET("/getbyname", communityManageController.GetCommunitiesByNameFuzzyMatch)
+		communityManageReqsGroup.POST("/getbyname", communityManageController.GetCommunitiesByNameFuzzyMatch)
 		communityManageReqsGroup.GET("/get", communityManageController.GetCommunities)
 		communityManageReqsGroup.GET("/join", communityManageController.JoinCommunityByID)
 		communityManageReqsGroup.GET("/leave/:id", communityManageController.LeaveCommunityByID)

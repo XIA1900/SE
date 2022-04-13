@@ -232,7 +232,7 @@ func (articleManageService *ArticleManageService) GetOneArticleByID(id int, curr
 	liked, err7 := articleManageService.articleLikeDAO.GetLike(currentUser, article.ID)
 	if err7 != nil {
 		logger.AppLogger.Error(err7.Error())
-		return entity.ArticleDetail{}, err7
+		//return entity.ArticleDetail{}, err7
 	}
 	var liked_new bool
 	if liked.ArticleID != 0 {
@@ -243,7 +243,7 @@ func (articleManageService *ArticleManageService) GetOneArticleByID(id int, curr
 	favorited, err8 := articleManageService.articleFavoriteDAO.GetOne(currentUser, article.ID)
 	if err8 != nil {
 		logger.AppLogger.Error(err8.Error())
-		return entity.ArticleDetail{}, err8
+		//return entity.ArticleDetail{}, err8
 	}
 	var favorited_new bool
 	if favorited.ArticleID != 0 {

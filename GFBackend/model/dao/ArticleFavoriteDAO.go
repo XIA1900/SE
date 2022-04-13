@@ -61,7 +61,11 @@ func (articleFavoriteDAO *ArticleFavoriteDAO) GetOne(username string, articleID 
 	var articleFavorite entity.ArticleFavorite
 	result := articleFavoriteDAO.db.Where("Username = ? AND ArticleID = ?", username, articleID).First(&articleFavorite)
 	if result.Error != nil {
-		return entity.ArticleFavorite{}, result.Error
+		return entity.ArticleFavorite{
+			Username:    "",
+			ArticleID:   0,
+			FavoriteDay: "",
+		}, result.Error
 	}
 	return articleFavorite, nil
 }

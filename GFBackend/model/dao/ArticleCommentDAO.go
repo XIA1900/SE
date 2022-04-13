@@ -128,7 +128,7 @@ func (articleCommentDAO *ArticleCommentDAO) CountSubCommentsByArticleIDAndCommen
 
 func (articleCommentDAO *ArticleCommentDAO) CountCommentsOfArticle(articleID int) (int64, error) {
 	var count int64
-	result := articleCommentDAO.db.Model(&entity.ArticleLike{}).Where("ArticleID = ?", articleID).Count(&count)
+	result := articleCommentDAO.db.Model(&entity.ArticleComment{}).Where("ArticleID = ?", articleID).Count(&count)
 	if result.Error != nil {
 		return -1, result.Error
 	}

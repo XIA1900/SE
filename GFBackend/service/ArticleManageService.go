@@ -19,7 +19,7 @@ type IArticleManageService interface {
 	CreateArticle(username string, articleInfo entity.ArticleInfo) (int, error)
 	DeleteArticleByID(id int, operator string) error
 	UpdateArticleTitleOrContentByID(articleInfo entity.ArticleInfo, operator string) error
-	GetOneArticleByID(id int) (entity.ArticleDetail, error)
+	GetOneArticleByID(id int, currentUser string) (entity.ArticleDetail, error)
 	GetArticlesBySearchWords(articleSearchInfo entity.ArticleSearchInfo) (entity.ArticlesForSearching, error)
 	GetArticleList(pageNO, pageSize int) ([]entity.Article, []entity.Community, []int64, []int64, []int64, error)
 	GetArticleListByCommunityID(communityID int, pageNO, pageSize int) ([]entity.Article, []int64, []int64, []int64, error)
@@ -184,7 +184,7 @@ func (articleManageService *ArticleManageService) UpdateArticleTitleOrContentByI
 	return nil
 }
 
-func (articleManageService *ArticleManageService) GetOneArticleByID(id int) (entity.ArticleDetail, error) {
+func (articleManageService *ArticleManageService) GetOneArticleByID(id int, currentUser string) (entity.ArticleDetail, error) {
 	article, err1 := articleManageService.articleDAO.GetArticleByID(id)
 	if err1 != nil {
 		if strings.Contains(err1.Error(), "not found") {
@@ -229,6 +229,28 @@ func (articleManageService *ArticleManageService) GetOneArticleByID(id int) (ent
 		logger.AppLogger.Error(err6.Error())
 		return entity.ArticleDetail{}, err6
 	}
+	liked, err7 := articleManageService.articleLikeDAO.GetLike(currentUser, article.ID)
+	if err7 != nil {
+		logger.AppLogger.Error(err7.Error())
+		return entity.ArticleDetail{}, err7
+	}
+	var liked_new bool
+	if liked.ArticleID != 0 {
+		liked_new = true
+	} else {
+		liked_new = false
+	}
+	favorited, err8 := articleManageService.articleFavoriteDAO.GetOne(currentUser, article.ID)
+	if err8 != nil {
+		logger.AppLogger.Error(err8.Error())
+		return entity.ArticleDetail{}, err8
+	}
+	var favorited_new bool
+	if favorited.ArticleID != 0 {
+		favorited_new = true
+	} else {
+		favorited_new = false
+	}
 
 	return entity.ArticleDetail{
 		ID:            article.ID,
@@ -237,8 +259,8 @@ func (articleManageService *ArticleManageService) GetOneArticleByID(id int) (ent
 		TypeName:      articleType.TypeName,
 		CommunityName: community.Name,
 		Content:       article.Content,
-		Liked:         false,
-		Favorited:     false,
+		Liked:         liked_new,
+		Favorited:     favorited_new,
 		NumLike:       countLikeOfArticle,
 		NumFavorite:   countFavoriteOfArticle,
 		NumComment:    countCommentsOfArticle,

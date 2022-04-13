@@ -67,8 +67,7 @@ func (articleLikeController ArticleLikeController) CreateLike(context *gin.Conte
 		}
 		return
 	}
-
-	context.JSON(200, "Create Successfully")
+	context.JSON(200, "200")
 }
 
 // DeleteLike godoc

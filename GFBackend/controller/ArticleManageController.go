@@ -156,8 +156,9 @@ func (articleManageController *ArticleManageController) GetOneArticleByID(contex
 		context.JSON(400, "Bad Parameters")
 		return
 	}
+	currentUser := context.Query("currentUser")
 
-	articleDetail, err2 := articleManageController.articleManageService.GetOneArticleByID(id)
+	articleDetail, err2 := articleManageController.articleManageService.GetOneArticleByID(id, currentUser)
 	if err2 != nil {
 		if strings.Contains(err2.Error(), "400") {
 			context.JSON(400, "Bad Parameters / Not Found")

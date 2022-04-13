@@ -68,7 +68,7 @@ func (articleFavoriteController ArticleFavoriteController) CreateFavorite(contex
 		return
 	}
 
-	context.JSON(200, "Create Successfully")
+	context.JSON(200, "200")
 }
 
 // DeleteFavorite godoc
@@ -94,7 +94,7 @@ func (articleFavoriteController ArticleFavoriteController) DeleteFavorite(contex
 
 	_ = articleFavoriteController.articleFavoriteService.DeleteFavorite(username, id)
 
-	context.JSON(200, "Delete Favorite Successfully")
+	context.JSON(200, "200")
 }
 
 // GetUserFavorites godoc

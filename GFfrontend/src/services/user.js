@@ -136,8 +136,7 @@ export async function changePassword(values) {
 }
 
 export async function removeLike(values) {
-  return request('/api/removeLike', {
-    params: values,
+  return request('/api/articlelike/delete/'+values.id, {
     method: 'POST',
   });
 }
@@ -150,19 +149,32 @@ export async function createLike(params) {
 }
 
 export async function removeCollection(values) {
-  return request('/api/removeCollection', {
-    params: values,
+  return request('/api/articlefavorite/delete/'+values.id, {
     method: 'POST',
+    credentials: 'include',
   });
 }
 
 export async function createCollection(values) {
+  return request('/api/articlefavorite/create/'+values.id, {
+    method: 'POST',
+    credentials: 'include',
+  });
+}
+
+export async function removeReply(values) {
   return request('/api/removeCollection', {
     params: values,
     method: 'POST',
   });
 }
 
+export async function createReply(body) {
+  return request('/api/articlecomment/create', {
+    data: body,
+    method: 'POST',
+  });
+}
 
 
 export async function getRelation(values) {

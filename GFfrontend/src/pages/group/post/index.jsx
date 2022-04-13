@@ -15,7 +15,7 @@ url: /group/post?postid
 */
 
 import { PlusOutlined, TeamOutlined, CrownOutlined, CalendarOutlined, LikeOutlined, LikeTwoTone, MessageOutlined, StarOutlined, StarTwoTone, MessageTwoTone } from '@ant-design/icons';
-import { Avatar, Card, Col, Divider, Input, Row, Tag, Form, Modal } from 'antd';
+import { Avatar, Card, Col, Divider, Input, Row, Tag, Form, Modal, message } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Link, useRequest, history, useModel } from 'umi';
@@ -25,7 +25,7 @@ import Collection from './components/collection';
 import styles from './Center.less';
 import { getPost } from '@/services/getPost';
 //import { currentUser } from '@/services/ant-design-pro/api';
-import { removeLike, getRelation, createLike, createCollection, removeCollection } from '@/services/user';
+import { createReply, removeLike, getRelation, createLike, createCollection, removeCollection } from '@/services/user';
 
 const postid = history.location.search.substring(1);
 console.log(postid);
@@ -154,7 +154,7 @@ const Center = () => {
   );
   //console.log(postContents);
   const list = postContents || [];
-  //console.log(list);
+  console.log(list);
 
   // if(typeof(postContents[0])!='undefined') {
   //   list = postContents;
@@ -163,20 +163,30 @@ const Center = () => {
   // console.log(list);
 
 
-  const onReply = (values) => {
+  const onReply = async (values) => {
     console.log(values);
-    setVisible(false);
+    const result = await createReply ({
+      id: postid,
+      content: values,
+    });
+    if(result === '200') {
+      message.success("Comment submitted!");
+      setVisible(false);
+    }
+    
   }
 
   const onLike = async(values) => {
-    console.log("liked");
-    console.log(values);
+    //console.log("liked");
+    //console.log(values);
     if(values === true) {
       const result = await removeLike({
         //username: currentUser.name,
-        postid: postid,
+        id: postid,
       });
-      if(result.message === 'Ok') {
+      //console.log(result);
+      if(result === '200') {
+        message.success("Cancel Liked");
         return {renderButtonInfo};
       }
     }
@@ -184,7 +194,11 @@ const Center = () => {
       const result = await createLike({
         id: postid,
       });
-
+      //console.log(result);
+      if(result === '200') {
+        message.success("Liked");
+        return {renderButtonInfo};
+      }
     }
   }
 
@@ -192,9 +206,10 @@ const Center = () => {
     if(values === true) {
       const result = await removeCollection({
         //username: currentUser.name,
-        postid: postid,
+        id: postid,
       });
-      if(result.message === 'Ok') {
+      if(result === '200') {
+        message.success("Cancelled!");
         return {renderButtonInfo};
       }
     }
@@ -202,6 +217,10 @@ const Center = () => {
       const result = await createCollection({
         id: postid,
       });
+      if(result === '200') {
+        message.success("Collected");
+        return {renderButtonInfo};
+      }
 
     }
   }

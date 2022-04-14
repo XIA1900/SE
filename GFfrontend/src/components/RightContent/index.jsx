@@ -10,6 +10,7 @@ import { search } from '@/services/search';
 
 const GlobalHeaderRight = () => {
   const { initialState } = useModel('@@initialState');
+  console.log("i am here");
 
   if (!initialState || !initialState.settings) {
     return null;

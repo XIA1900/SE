@@ -27,29 +27,11 @@ const props = {
     }
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
-      history.push({
-        pathname: '/account/settings',
-        search:username,
-      });
+      location.reload(true);
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`);
     }
   },
-  //设置只上传一张图片，根据实际情况修改
-  // customRequest: async info => {
-  //   // 手动上传
-  //   const formData = new FormData();
-  //   formData.append('uploadFilename', info.file);
-  //   const result = await uploadLogoImg(formData);
-  //   console.log(result);
-  //   if(result.code === 200) {
-  //     console.log("upload successful");
-  //     history.push({
-  //       pathname: '/account/settings',
-  //       search:username,
-  //     });
-  //   }
-  // },
   onRemove: file => {
     // 删除图片调用
     this.setState(state => {
@@ -114,6 +96,7 @@ const BaseView = () => {
     async() => {
       const result = await queryCurrent({
         username: username,
+        target: username,
       });
       return result;
     },
@@ -125,12 +108,18 @@ const BaseView = () => {
   console.log(data);
   let currentUser = [];
   if(typeof(data) != 'undefined') {
+    const info = data.userInfo;
     currentUser = {
-      name: data.Username,
-      birthday: data.Birthday,
-      gender: data.Gender,
-      major: data.Department,
-      avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ data.Username+'/avatar.png',
+      name: info.Username,
+      birthday: info.Birthday.substring(0,10),
+      email: info.Username+'@ufl.edu',
+      gender: info.Gender,
+      major: info.Department,
+      grade: 1,
+      avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ info.Username+'/avatar.png',
+      country: 'U.S',
+      province: 'Florida',
+      city: 'Gainesville',
     };
   }
 
@@ -212,7 +201,6 @@ const BaseView = () => {
                     },
                   ]}
                   initialValue={currentUser.email}
-                  layout="inline"
                 />
                 
               </ProForm.Group>
@@ -241,8 +229,8 @@ const BaseView = () => {
                     value: 'Prefer not to say',
                   }
                 ]}
-                initialValue = {currentUser.sex}
-                layout="inline"
+                initialValue = {currentUser.gender}
+                placeholder = {currentUser.gender}
               />
 
               <ProFormText
@@ -251,13 +239,13 @@ const BaseView = () => {
                 label="Birthday"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: 'Please input your birthday!',
                   },
                 ]}
                 initialValue={currentUser.birthday}
               />
-              <ProFormText
+              {/* <ProFormText
                 width="md"
                 name="major"
                 label="Major"
@@ -268,8 +256,7 @@ const BaseView = () => {
                   },
                 ]}
                 initialValue={currentUser.major}
-                display="inline-block"
-              />
+              /> */}
               <ProFormText
                 width="md"
                 name="grade"
@@ -283,7 +270,7 @@ const BaseView = () => {
                 initialValue={currentUser.grade}
                 display="inline-block"
               />
-              <ProFormTextArea
+              {/* <ProFormTextArea
                 name="signature"
                 label="Signature"
                 rules={[
@@ -294,7 +281,7 @@ const BaseView = () => {
                 ]}
                 placeholder="Tomorrow is another day."
                 initialValue={currentUser.signature}
-              />
+              /> */}
               <ProFormSelect
                 width="sm"
                 name="country"
@@ -368,7 +355,7 @@ const BaseView = () => {
                 initialValue={currentUser.city}
               />    
               
-              <ProFormText
+              {/* <ProFormText
                 width="md"
                 name="phone"
                 label="phone"
@@ -379,7 +366,7 @@ const BaseView = () => {
                   },
                 ]}
                 initialValue={currentUser.phone}
-              />
+              /> */}
 
               {/* <ProFormFieldSet
                 name="phone"

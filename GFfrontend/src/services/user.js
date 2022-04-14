@@ -8,6 +8,15 @@ input: values is a string
 return: most related 10 articles, same properties as /api/queryList
 */
 
+export async function currentUser() {
+  return request('/api/user/current', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
+}
 
 export async function logout(values) {
   return request('/api/user/logout', {

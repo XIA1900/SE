@@ -34,7 +34,7 @@ const Follower = () => {
   
     console.log(data);
     let list = [];
-    if(typeof(data.Users) != 'undefined') {
+    if(typeof(data.Users) != 'undefined' && data.Users != null) {
       const users = data.Users;
       const size = Object.keys(users).length;
       for(let i=0; i<size; i++) {
@@ -62,22 +62,6 @@ const Follower = () => {
       }
     };
   
-    const renderFollowingInformation = ({mutual}) => {
-      if(mutual === true) {
-        return (
-          <Button onClick={onRemove} style={{float:'right'}}>
-            Mutual
-          </Button>
-        )
-      }
-      else {
-        return (
-          <Button onClick={onRemove} style={{float:'right'}}>
-            Remove
-          </Button>
-        )
-      }
-    }
 
     const formItemLayout = {
       wrapperCol: {
@@ -117,6 +101,14 @@ const Follower = () => {
         </Button>
       </div>
     );
+
+    const clickUser = async(values) => {
+      history.push({
+        pathname: '/account/view',
+        search: values,
+      });
+      return;
+    }
   
     return (
       <>
@@ -140,8 +132,10 @@ const Follower = () => {
               <div>
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-                {item.name}
-                {renderFollowingInformation(item)}
+                <a onClick={e => clickUser(item.name, e)} style={{marginLeft:'15px'}}>{item.name}</a>
+                <Button onClick={e => onRemove(item.name, e)} style={{float:'right'}}>
+                  Remove
+                </Button>
                 </p>
               </div>
             )}

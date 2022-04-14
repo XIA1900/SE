@@ -35,7 +35,7 @@ const Following = () => {
   
     console.log(data);
     let list = [];
-    if(typeof(data.Users) != 'undefined') {
+    if(typeof(data.Users) != 'undefined' && data.Users != null) {
       const users = data.Users;
       const size = Object.keys(users).length;
       for(let i=0; i<size; i++) {
@@ -128,6 +128,14 @@ const Following = () => {
       </div>
     );
   
+    const clickUser = async(values) => {
+      history.push({
+        pathname: '/account/view',
+        search: values,
+      });
+      return;
+    }
+
     return (
       <>
         <Card
@@ -150,7 +158,7 @@ const Following = () => {
               <div>
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-                {item.name}
+                <a onClick={e => clickUser(item.name, e)} style={{marginLeft:'15px'}}>{item.name}</a>
                 {renderFollowingInformation(item)}
                   {/* <Button onClick = {(e) => onUnfollow(item.user, e)} style={{float: 'right'}}> 
                     Unfollow

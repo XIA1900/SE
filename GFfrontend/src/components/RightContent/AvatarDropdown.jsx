@@ -6,6 +6,7 @@ import { stringify } from 'querystring';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import { logout } from '@/services/user';
+import cookie from 'react-cookies';
 
 /**
  * logout and save the url
@@ -28,26 +29,18 @@ const loginOut = async () => {
 const AvatarDropdown = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState;
+  console.log(currentUser.name);
 
   const onMenuClick = useCallback(
     async(event) => {
       const { key } = event;
 
       if (key === 'logout') {
-        const result = await logout({
-          username: currentUser.name,
-        })
-        console.log(result);
-        if(result === '200') {
-          message.success("Logout Successfully!");
-          setInitialState((s) => ({ ...s, currentUser: undefined }));
-          history.push('/user/login');
-          return;
-        }
-        else {
-          message.error("Logout failed! Please try again.");
-        }
-        
+        cookie.remove('token');
+        message.success("Logout Successfully!");
+        setInitialState((s) => ({ ...s, currentUser: undefined }));
+        history.push('/user/login');
+        return;
       }
 
       if(key === 'created_groups') {

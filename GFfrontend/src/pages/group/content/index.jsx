@@ -111,7 +111,8 @@ const Center = () => {
     });
     console.log(result);
     if(result === 'Join Successfully') {
-      location.reload();
+      history.push('/form/basic-form')
+      history.goBack();
     }
   };
 
@@ -122,7 +123,8 @@ const Center = () => {
     });
     console.log(result);
     if(result === 'Leave Successfully') {
-      location.reload(true);
+      history.push('/form/basic-form')
+      history.goBack();
     }
   };
 

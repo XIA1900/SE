@@ -36,7 +36,7 @@ const Password = () => {
       console.log(result);
   
   
-      if(result.message === 'Ok') {
+      if(result.code === 200) {
         const defaultChangePasswordMessage = intl.formatMessage({
           id: 'changePassword',
           defaultMessage: 'Password changed successfully!',

@@ -8,7 +8,7 @@ import { stubFalse } from 'lodash';
 const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
-  hash: false,
+  hash: true,
   antd: {},
   dva: {
     hmr: true,
@@ -33,7 +33,6 @@ export default defineConfig({
   targets: {
     ie: 11,
   },
-  history: {type: 'hash'},
   // umi routes: https://umijs.org/docs/routing
   routes: [
     {

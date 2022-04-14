@@ -1,9 +1,11 @@
 import { PageLoading } from '@ant-design/pro-layout';
-import { history, Link } from 'umi';
+import { history, Link, useModel } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+//mport { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import { currentUser as queryCurrentUser } from './services/user';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
+
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
@@ -18,17 +20,25 @@ export const initialStateConfig = {
 export async function getInitialState() {
   const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser();
-      return msg.data;
+      //const msg = await queryCurrentUser();
+      //return msg;
+      const result = {
+        name: 'link',
+      }
+      return result;
     } catch (error) {
       history.push(loginPath);
     }
 
     return undefined;
-  }; // 如果是登录页面，不执行
-
+  }; 
+  
+  // 如果是登录页面，不执行
   if (history.location.pathname !== loginPath) {
-    const currentUser = await fetchUserInfo();
+    //const currentUser = await fetchUserInfo();
+    const currentUser = {
+      name: 'link',
+    }
     return {
       fetchUserInfo,
       currentUser,
@@ -43,6 +53,7 @@ export async function getInitialState() {
 } // ProLayout 支持的api https://procomponents.ant.design/components/layout
 
 export const layout = ({ initialState }) => {
+  console.log(initialState);
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
@@ -51,8 +62,9 @@ export const layout = ({ initialState }) => {
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
-      const { location } = history; // 如果没有登录，重定向到 login
-
+      const { location } = history; 
+      
+      // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
       }

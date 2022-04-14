@@ -247,14 +247,15 @@ const Center = () => {
   console.log(data);
   let currentUser = [];
   if(typeof(data) != 'undefined') {
+    const info = data.userInfo;
     currentUser = {
-      name: data.Username,
-      birthday: data.Birthday.substring(0,10),
-      email: data.Username+'@ufl.edu',
-      gender: data.Gender,
-      major: data.Department,
+      name: info.Username,
+      birthday: info.Birthday.substring(0,10),
+      email: info.Username+'@ufl.edu',
+      gender: info.Gender,
+      major: info.Department,
       grade: 1,
-      avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ data.Username+'/avatar.png',
+      avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ info.Username+'/avatar.png',
       country: 'U.S',
       province: 'Florida',
       city: 'Gainesville',
@@ -331,14 +332,14 @@ const Center = () => {
             />
             {email}
           </p>
-          <p>
+          {/* <p>
             <PhoneOutlined
               style={{
                 marginRight: 8,
               }}
             />
             {phone} 
-          </p>
+          </p> */}
           <p>
             <ClusterOutlined
               style={{

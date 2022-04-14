@@ -40,7 +40,7 @@ const Collection = () => {
 
   let list = [];
   if(typeof(data.articleDetails)!='undefined') {
-    list = data.articleDetails;
+    if(data.articleDetails !== null) list = data.articleDetails;
   }
 
   const clickPost = (values) => {

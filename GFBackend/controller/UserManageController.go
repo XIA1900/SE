@@ -509,8 +509,9 @@ func (userManageController *UserManageController) GetFollowees(context *gin.Cont
 // @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/GetUserInfoByUsername [get]
 func (userManageController *UserManageController) GetUserInfoByUsername(context *gin.Context) {
-	username := context.Query("username")
-	userInfo, err := userManageController.userManageService.GetUserInfoByUsername(username)
+	current_username := context.Query("current_username")
+	target_username := context.Query("target_username")
+	userInfo, isFollowed, isFollowother, err := userManageController.userManageService.GetUserInfoByUsername(current_username, target_username)
 	if err != nil {
 		errMsg := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
@@ -523,7 +524,11 @@ func (userManageController *UserManageController) GetUserInfoByUsername(context 
 		context.JSON(errMsg.Code, errMsg)
 		return
 	}
-	context.JSON(http.StatusOK, userInfo)
+	context.JSON(http.StatusOK, gin.H{
+		"userInfo":      userInfo,
+		"isFollowed":    isFollowed,
+		"isFollowother": isFollowother,
+	})
 }
 
 // GetUsersInfoByUsernameFuzzySearch godoc

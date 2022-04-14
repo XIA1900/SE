@@ -28,7 +28,7 @@ type IUserManageService interface {
 	Unfollow(followee, follower string) error
 	GetFollowers(username string) ([]string, error)
 	GetFollowees(username string) ([]string, error)
-	GetUserInfoByUsername(username string) (entity.User, error)
+	GetUserInfoByUsername(current_username string, target_username string) (entity.User, bool, bool, error)
 	GetUsersInfoByUsernameFuzzySearch(username string, pageNo, pageSize int) ([]entity.User, error)
 }
 
@@ -281,13 +281,35 @@ func (userManageService *UserManageService) GetFollowees(username string) ([]str
 	return followees, nil
 }
 
-func (userManageService *UserManageService) GetUserInfoByUsername(username string) (entity.User, error) {
-	userInfo, err := userManageService.userDAO.GetUserInfoByUsername(username)
-	if err != nil {
-		logger.AppLogger.Error(err.Error())
-		return entity.User{}, errors.New("500")
+func (userManageService *UserManageService) GetUserInfoByUsername(current_username string, target_username string) (entity.User, bool, bool, error) {
+	userInfo, err1 := userManageService.userDAO.GetUserInfoByUsername(target_username)
+	if err1 != nil {
+		logger.AppLogger.Error(err1.Error())
+		return entity.User{}, false, false, errors.New("500")
 	}
-	return userInfo, nil
+	follower, err2 := userManageService.followDAO.GetFollowers(current_username)
+	if err2 != nil {
+		logger.AppLogger.Error(err2.Error())
+		return entity.User{}, false, false, errors.New("500")
+	}
+	followee, err3 := userManageService.followDAO.GetFollowers(target_username)
+	if err3 != nil {
+		logger.AppLogger.Error(err3.Error())
+		return entity.User{}, false, false, errors.New("500")
+	}
+	var isFollowed bool
+	var isFollowother bool
+	for i := 0; i < len(follower); i++ {
+		if follower[i].Follower == target_username {
+			isFollowed = true
+		}
+	}
+	for i := 0; i < len(followee); i++ {
+		if followee[i].Follower == current_username {
+			isFollowother = true
+		}
+	}
+	return userInfo, isFollowed, isFollowother, nil
 }
 
 func (userManageService *UserManageService) GetUsersInfoByUsernameFuzzySearch(username string, pageNo, pageSize int) ([]entity.User, error) {

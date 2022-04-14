@@ -214,7 +214,7 @@ func (userManageService *UserManageService) Update(userInfo entity.User) error {
 	return nil
 }
 
-func (userManageService UserManageService) Follow(followee, follower string) error {
+func (userManageService *UserManageService) Follow(followee, follower string) error {
 	follow, err1 := userManageService.followDAO.GetOneFollow(followee, follower)
 	if err1 != nil {
 		if !strings.Contains(err1.Error(), "record not found") {
@@ -241,7 +241,7 @@ func (userManageService UserManageService) Follow(followee, follower string) err
 	return nil
 }
 
-func (userManageService UserManageService) Unfollow(followee, follower string) error {
+func (userManageService *UserManageService) Unfollow(followee, follower string) error {
 	followeeUserInfo := userManageService.userDAO.GetUserByUsername(followee)
 	if followeeUserInfo.Username == "" {
 		return errors.New("400")
@@ -255,7 +255,7 @@ func (userManageService UserManageService) Unfollow(followee, follower string) e
 	return nil
 }
 
-func (userManageService UserManageService) GetFollowers(username string) ([]string, error) {
+func (userManageService *UserManageService) GetFollowers(username string) ([]string, error) {
 	follows, err1 := userManageService.followDAO.GetFollowers(username)
 	if err1 != nil {
 		logger.AppLogger.Error(err1.Error())
@@ -268,7 +268,7 @@ func (userManageService UserManageService) GetFollowers(username string) ([]stri
 	return followers, nil
 }
 
-func (userManageService UserManageService) GetFollowees(username string) ([]string, error) {
+func (userManageService *UserManageService) GetFollowees(username string) ([]string, error) {
 	follows, err1 := userManageService.followDAO.GetFollowees(username)
 	if err1 != nil {
 		logger.AppLogger.Error(err1.Error())
@@ -290,7 +290,7 @@ func (userManageService *UserManageService) GetUserInfoByUsername(username strin
 	return userInfo, nil
 }
 
-func (userManageService UserManageService) GetUsersInfoByUsernameFuzzySearch(username string, pageNo, pageSize int) ([]entity.User, error) {
+func (userManageService *UserManageService) GetUsersInfoByUsernameFuzzySearch(username string, pageNo, pageSize int) ([]entity.User, error) {
 	users, getUserErr := userManageService.userDAO.GetUsersByUsernameFuzzySearch(username, (pageNo-1)*pageSize, pageSize)
 	if getUserErr != nil {
 		logger.AppLogger.Error(getUserErr.Error())

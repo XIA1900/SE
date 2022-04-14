@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { LogoutOutlined, SettingOutlined, UserOutlined, CrownOutlined, HeartOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Spin } from 'antd';
+import { Avatar, Menu, message, Spin } from 'antd';
 import { history, useModel } from 'umi';
 import { stringify } from 'querystring';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import { outLogin } from '@/services/ant-design-pro/api';
+import { logout } from '@/services/user';
 
 /**
  * logout and save the url
@@ -30,14 +30,24 @@ const AvatarDropdown = ({ menu }) => {
   const { currentUser } = initialState;
 
   const onMenuClick = useCallback(
-    (event) => {
+    async(event) => {
       const { key } = event;
 
       if (key === 'logout') {
-        setInitialState((s) => ({ ...s, currentUser: undefined }));
-        //loginOut();
-        history.push('/user/login');
-        return;
+        const result = await logout({
+          username: currentUser.name,
+        })
+        console.log(result);
+        if(result === '200') {
+          message.success("Logout Successfully!");
+          setInitialState((s) => ({ ...s, currentUser: undefined }));
+          history.push('/user/login');
+          return;
+        }
+        else {
+          message.error("Logout failed! Please try again.");
+        }
+        
       }
 
       if(key === 'created_groups') {

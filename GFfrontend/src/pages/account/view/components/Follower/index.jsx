@@ -38,13 +38,15 @@ const Follower = () => {
       const user = values;
       const result = await removeFollower({
         username: username,
-        followerName: user,
       });
-      if(result.message === 'Ok') {
+      if(result.code === 200) {
+        
+        message.success("Unfollowed Successfully!");
         location.reload();   //refresh page
+
       }
       else {
-
+        message.error("Failed! Please try again.");
       }
     };
   

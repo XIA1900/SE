@@ -43,12 +43,15 @@ const Collection = () => {
     list = data.articleDetails;
   }
 
-  const IconText = ({ type, text, value }) => {
-    const icon = {
-      type: type,
-      text: text,
-      value: value,
-    };
+  const clickPost = (values) => {
+    history.push({
+      pathname: '/group/post',
+      search: values.toString(),
+    });
+    return;
+  }
+
+  const IconText = ({ id, type, text, value }) => {
     switch (type) {
       case 'star-o':
         return (
@@ -57,7 +60,7 @@ const Collection = () => {
               style={{
                 marginRight: 8,
               }}
-              onClick={(e) => onCollection(icon, e)}
+              onClick = {e => clickPost(id, e)}
             />
             {text}
           </span>
@@ -70,6 +73,7 @@ const Collection = () => {
                 style={{
                   marginRight: 8,
                 }}
+                onClick = {e => clickPost(id, e)}
               />
               {text}
             </span>
@@ -82,6 +86,7 @@ const Collection = () => {
                 style={{
                   marginRight: 8,
                 }}
+                onClick = {e => clickPost(id, e)}
               />
               {text}
             </span>
@@ -96,6 +101,7 @@ const Collection = () => {
               style={{
                 marginRight: 8,
               }}
+              onClick = {e => clickPost(id, e)}
             />
             {text}
           </span>
@@ -106,20 +112,6 @@ const Collection = () => {
     }
   };
 
-  const onCollection = async(values) => {
-    console.log(values);
-    const id = values.value;
-    const result = await removeCollection({
-      username: username,
-      postid: id,
-    });
-    if(result.message === 'Ok') {
-      location. reload();
-    }
-    else {
-      
-    }
-  }
 
   const formItemLayout = {
     wrapperCol: {
@@ -182,11 +174,10 @@ const Collection = () => {
             <List.Item
               key={item.ID}
               actions={[
-                <IconText key="collection" type="star-o" value={item.Favorited} text={item.NumFavorite} />,
-                <IconText key="like" type="like-o" value={item.Liked} text={item.NumLike} />,
-                <IconText key="reply" type="message" value={item.ID} text={item.NumComment} />,
+                <IconText key="collection" type="star-o" id={item.ID} value={item.ID} text={item.NumFavorite} />,
+                <IconText key="like" type="like-o" id={item.ID} value={item.Liked} text={item.NumLike} />,
+                <IconText key="reply" type="message" id={item.ID} value={item.ID} text={item.NumComment} />,
               ]}
-              //extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
                 title={

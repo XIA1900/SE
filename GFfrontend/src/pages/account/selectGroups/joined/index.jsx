@@ -63,11 +63,11 @@ const Joined = () => {
                     //actions={[<p>Created At: {item.CreateDay}</p>]}
                   >
                     <Card.Meta
-                      avatar={<img alt="" className={styles.cardAvatar} src={item.groupAvatar} />}
+                      avatar={<img alt="" className={styles.cardAvatar} src={'http://10.20.0.166:10010/resources/groupfiles/'+item.Name+'/avatar.png'} />}
                       title={<p key='group' onClick={() => {
                         history.push({
                           pathname: '/group/content',
-                          search: item.ID,
+                          search: item.ID.toString(),
                         });
                       }}>{item.Name}</p>}
                       description={
@@ -78,7 +78,7 @@ const Joined = () => {
                           }}
                         >
                           {item.Description}
-                          //<p>Created At: {item.CreateDay}</p>
+                          <p>Created At: {item.CreateDay.substring(0, 10)}</p>
                         </Paragraph>
                       }
                     />

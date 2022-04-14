@@ -235,6 +235,7 @@ const Center = () => {
     async() => {
       const result = await queryCurrent({
         username: username,
+        target: username,
       });
       return result;
     },
@@ -248,10 +249,15 @@ const Center = () => {
   if(typeof(data) != 'undefined') {
     currentUser = {
       name: data.Username,
-      birthday: data.Birthday,
+      birthday: data.Birthday.substring(0,10),
+      email: data.Username+'@ufl.edu',
       gender: data.Gender,
       major: data.Department,
+      grade: 1,
       avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ data.Username+'/avatar.png',
+      country: 'U.S',
+      province: 'Florida',
+      city: 'Gainesville',
     };
   }
 
@@ -277,14 +283,14 @@ const Center = () => {
             />
             {email}
           </p>
-          <p>
+          {/* <p>
             <PhoneOutlined
               style={{
                 marginRight: 8,
               }}
             />
             {phone} 
-          </p>
+          </p> */}
           <p>
             <ClusterOutlined
               style={{

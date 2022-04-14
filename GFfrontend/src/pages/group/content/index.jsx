@@ -12,6 +12,7 @@ import { countReset } from 'console';
 
 
 const groupID = history.location.search.substring(1);
+console.log(groupID);
 const pageNo = 1;
 const pageSize = 10;
 
@@ -104,35 +105,24 @@ const Center = () => {
     };
   }
 
-  //console.log(list);
-  
-  //const list = groupBasics?.list || [];
-
-  const isMember = async() => {
-    return await checkMember({
-      groupName: groupName,
-      user: currentUser.name,
-    });
-  };
-
-  const onJoin = async() => {
+  const onJoin = async(values) => {
     const result = await joinGroup({
-      groupName: groupName,
-      user: currentUser.name
+      id: values,
     });
     console.log(result);
-    if(result.message === 'Ok') {
+    if(result === 'Join Successfully') {
       location.reload();
     }
   };
 
-  const onQuit = async() => {
+  const onQuit = async(values) => {
+    console.log(values);
     const result = await quitGroup({
-      groupName: groupName,
-      user: currentUser.name,
+      id: values,
     });
-    if(result.message === 'Ok') {
-      location.reload();
+    console.log(result);
+    if(result === 'Leave Successfully') {
+      location.reload(true);
     }
   };
 
@@ -143,7 +133,7 @@ const Center = () => {
     })
   };
 
-  const renderGroupInfo = ({ groupOwner, groupName, groupDescription, createdAt, groupMember, ifexit }) => {
+  const renderGroupInfo = ({id, groupOwner, groupName, groupDescription, createdAt, groupMember, ifexit }) => {
     if(ifexit === true) {
       return (
         <div className={styles.detail}>
@@ -171,7 +161,7 @@ const Center = () => {
             />
             Created at {createdAt}
           </p>
-          <Button onClick={onQuit} style={{display: 'inline-block'}}>
+          <Button onClick={e => onQuit(id, e)} style={{display: 'inline-block'}}>
             <FrownOutlined/>
               Quit
           </Button> 
@@ -210,7 +200,7 @@ const Center = () => {
             />
             Created at {createdAt}
           </p>
-          <Button onClick={onJoin}>
+          <Button onClick={e => onJoin(id, e)}>
             <SmileOutlined/>
               Join
           </Button>

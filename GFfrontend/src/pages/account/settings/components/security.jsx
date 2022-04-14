@@ -23,22 +23,22 @@ const SecurityView = () => {
       title: 'password',
       description: (
         <>
-          current password strength：
+          current password strength:
           {passwordStrength.strong}
         </>
       ),
-      actions: [<a key="Modify" onClick={onEdit}>edit</a>],
+      actions: [<a key="Modify" onClick={onEdit}>Edit</a>],
     },
-    {
-      title: 'phone',
-      description: `35*******7`,
-      actions: [<a key="Modify">edit</a>],
-    },
-    {
-      title: 'email',
-      description: `*******@ufl.edu`,
-      actions: [<a key="Modify">edit</a>],
-    },
+    // {
+    //   title: 'phone',
+    //   description: `35*******7`,
+    //   actions: [<a key="Modify">edit</a>],
+    // },
+    // {
+    //   title: 'email',
+    //   description: `*******@ufl.edu`,
+    //   actions: [<a key="Modify">edit</a>],
+    // },
   ];
 
   const data = getData();

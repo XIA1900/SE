@@ -4,7 +4,9 @@ import { join } from 'path';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import { stubFalse } from 'lodash';
+
 const { REACT_APP_ENV } = process.env;
+
 export default defineConfig({
   hash: false,
   antd: {},
@@ -31,6 +33,7 @@ export default defineConfig({
   targets: {
     ie: 11,
   },
+  history: {type: 'hash'},
   // umi routes: https://umijs.org/docs/routing
   routes: [
     {
@@ -183,6 +186,10 @@ export default defineConfig({
           icon: 'smile',
           path: '/account/center',
           component: './account/center',
+        },
+        {
+          path: '/account/view',
+          component: './account/view',
         },
         {
           name: 'Settings',

@@ -1,5 +1,5 @@
 import { CalendarOutlined, PlusOutlined, HomeOutlined, ContactsOutlined, ClusterOutlined, PhoneOutlined, MailOutlined, WomanOutlined, ManOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Divider, Input, Row, Tag, message } from 'antd';
+import { Avatar, Card, Col, Divider, Input, Row, Tag, message, Button } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Link, useRequest, history, useModel, useIntl } from 'umi';
@@ -44,148 +44,6 @@ const operationTabList = [
   },
 ];
 
-const CourseList = ({ tags }) => {
-  const ref = useRef(null);
-  const [newTags, setNewTags] = useState([]);
-  const [inputVisible, setInputVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-
-  const showInput = () => {
-    setInputVisible(true);
-
-    if (ref.current) {
-      // eslint-disable-next-line no-unused-expressions
-      ref.current?.focus();
-    }
-  };
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleInputConfirm = () => {
-    let tempsTags = [...newTags];
-
-    if (inputValue && tempsTags.filter((tag) => tag.label === inputValue).length === 0) {
-      tempsTags = [
-        ...tempsTags,
-        {
-          key: `new-${tempsTags.length}`,
-          label: inputValue,
-        },
-      ];
-    }
-
-    setNewTags(tempsTags);
-    setInputVisible(false);
-    setInputValue('');
-  };
-
-  return (
-    <div className={styles.tags}>
-      <div className={styles.tagsTitle}> Courses </div>
-      {(tags || []).concat(newTags).map((item) => (
-        <Tag key={item.key}>{item.label}</Tag>
-      ))}
-      {inputVisible && (
-        <Input
-          ref={ref}
-          type="text"
-          size="small"
-          style={{
-            width: 78,
-          }}
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      )}
-      {!inputVisible && (
-        <Tag
-          onClick={showInput}
-          style={{
-            borderStyle: 'dashed',
-          }}
-        >
-          <PlusOutlined />
-        </Tag>
-      )}
-    </div>
-  );
-};
-
-const InterestList = ({ tags }) => {
-  const ref = useRef(null);
-  const [newTags, setNewTags] = useState([]);
-  const [inputVisible, setInputVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-
-  const showInput = () => {
-    setInputVisible(true);
-
-    if (ref.current) {
-      // eslint-disable-next-line no-unused-expressions
-      ref.current?.focus();
-    }
-  };
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleInputConfirm = () => {
-    let tempsTags = [...newTags];
-
-    if (inputValue && tempsTags.filter((tag) => tag.label === inputValue).length === 0) {
-      tempsTags = [
-        ...tempsTags,
-        {
-          key: `new-${tempsTags.length}`,
-          label: inputValue,
-        },
-      ];
-    }
-
-    setNewTags(tempsTags);
-    setInputVisible(false);
-    setInputValue('');
-  };
-
-  return (
-    <div className={styles.tags}>
-      <div className={styles.tagsTitle}> Interests </div>
-      {(tags || []).concat(newTags).map((item) => (
-        <Tag key={item.key}>{item.label}</Tag>
-      ))}
-      {inputVisible && (
-        <Input
-          ref={ref}
-          type="text"
-          size="small"
-          style={{
-            width: 78,
-          }}
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      )}
-      {!inputVisible && (
-        <Tag
-          onClick={showInput}
-          style={{
-            borderStyle: 'dashed',
-          }}
-        >
-          <PlusOutlined />
-        </Tag>
-      )}
-    </div>
-  );
-};
-
 const Center = () => {
   const [tabKey, setTabKey] = useState('follower'); //  获取用户信息
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -195,7 +53,8 @@ const Center = () => {
   const { data, loading } = useRequest(
     async() => {
       const result = await queryCurrent({
-        username: username,
+        username: currentUser.name,
+        target: username,
       });
       return result;
     },
@@ -207,48 +66,50 @@ const Center = () => {
   console.log(data);
   let visitedUser = [];
   if(typeof(data) != 'undefined') {
+    const info = data.userInfo;
     visitedUser = {
-      name: data.Username,
-      birthday: data.Birthday,
-      gender: data.Gender,
-      major: data.Department,
-      avatar: 'http://192.168.3.132:10010/resources/userfiles/'+ data.Username+'/avatar.png',
-      follower: true,  //current user is a follower of visited user
-      mutual: true,
-      blacklist: false, //visited user is in blacklist of current user
+      name: info.Username,
+      birthday: info.Birthday.substring(0,10),
+      email: info.Username+"@ufl.edu",
+      gender: info.Gender,
+      major: info.Department,
+      avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ info.Username+'/avatar.png',
+      country: 'U.S',
+      province: 'Florida',
+      city: 'Gainesville',
+      isFollowed: data.isFollowed,
+      isFollowother: data.isFollowother,
     };
   }
 
-  const unfollow = () => {
-    const result = removeFollowing({
-      username: username,
-      visiteduser: visitedUser.name,
+  const unfollow = async() => {
+    const result = await removeFollowing({
+      username: visitedUser.name,
     });
     if(result.code === 200) {
       const defaultunfollowMessage = intl.formatMessage({
         id: 'unfollow',
-        defaultMessage: 'Unfollow Successful!',
+        defaultMessage: 'Unfollowed!',
       });
       message.success(defaultunfollowMessage);
     }
   }
 
-  const follow = () => {
-    const result = addFollowing({
-      username: username,
-      visiteduser: visitedUser.name,
+  const follow = async() => {
+    const result = await addFollowing({
+      username: visitedUser.name,
     });
     if(result.code === 200) {
       const defaultfollowMessage = intl.formatMessage({
         id: 'follow',
-        defaultMessage: 'Follow Successful!',
+        defaultMessage: 'Followed!',
       });
       message.success(defaultfollowMessage);
     }
   }
 
-  const onBlock = () => {
-    const result = addBlacklist({
+  const onBlock = async () => {
+    const result = await addBlacklist({
       username: username,
       visiteduser: visitedUser.name,
     });
@@ -275,48 +136,49 @@ const Center = () => {
     }
   }
 
-  const renderButton = ({follower, mutual}) => {
-    if(mutual === true) {
+  const renderButton = ({isFollowed, isFollowother}) => {
+    if(isFollowed === true && isFollowother === true) {
       return (
         <div>
           <Button onClick={unfollow}>
             Mutual
           </Button>
-          <Button onClick={onBlock}>
+          &nbsp;
+          {/* <Button onClick={onBlock}>
             Block
-          </Button> 
+          </Button>  */}
         </div>
       );
     }
-    if(follower === true) {
+    if(isFollowother === true) {
       return (
         <div>
           <Button onClick={unfollow}>
             Following
           </Button>
-          <Button onClick={onBlock}>
+          {/* <Button onClick={onBlock}>
             Block
-          </Button> 
+          </Button>  */}
         </div>
         
       )
     }
-    if(blacklist == true) {
-      return (
-        <Button onClick={removeBlock}>
-          Blocked
-        </Button> 
-      )
-    }
+    // if(blacklist == true) {
+      // return (
+      //   <Button onClick={removeBlock}>
+      //     Blocked
+      //   </Button> 
+      // )
+    // }
     else {
       return (
         <div>
           <Button onClick={follow}>
             Follow
           </Button>
-          <Button onClick={onBlock}>
+          {/* <Button onClick={onBlock}>
             Block
-          </Button> 
+          </Button>  */}
         </div>
 
       )
@@ -339,8 +201,10 @@ const Center = () => {
     }
   }
 
+
+
   const renderUserInfo = ({ birthday, gender, email, major, grade, country, province, city, phone }) => {
-    
+    if(gender === 'Female') {
       return (
         <div className={styles.detail}>
           <p>
@@ -350,7 +214,7 @@ const Center = () => {
               }}
             />
             {birthday+'    '}
-            {renderGender(gender)}
+            <WomanOutlined/>
           </p>
           
           <p>
@@ -361,14 +225,14 @@ const Center = () => {
             />
             {email}
           </p>
-          <p>
+          {/* <p>
             <PhoneOutlined
               style={{
                 marginRight: 8,
               }}
             />
             {phone} 
-          </p>
+          </p> */}
           <p>
             <ClusterOutlined
               style={{
@@ -387,153 +251,103 @@ const Center = () => {
           </p>
         </div>
       );
+    }
+    else if (gender === 'Male') {
+      return (
+        <div className={styles.detail}>
+          <p>
+            <CalendarOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {birthday+'    '} 
+            <ManOutlined/>
+          </p>
+          
+          <p>
+            <MailOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {email}
+          </p>
+          {/* <p>
+            <PhoneOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {phone} 
+          </p> */}
+          <p>
+            <ClusterOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {major+' '}{grade} 
+          </p>
+          <p>
+            <HomeOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {country+' '}{province+' '}{city}
+          </p>
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className={styles.detail}>
+          <p>
+            <CalendarOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {birthday+'    '} 
+          </p>
+          
+          <p>
+            <MailOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {email}
+          </p>
+          {/* <p>
+            <PhoneOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {phone} 
+          </p> */}
+          <p>
+            <ClusterOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {major+' '}{grade} 
+          </p>
+          {/* <p>
+            <HomeOutlined
+              style={{
+                marginRight: 8,
+              }}
+            />
+            {country+' '}{province+' '}{city}
+          </p> */}
+        </div>
+      );
+    }
   }; // 渲染tab切换
-
-  // const renderUserInfo = ({ birthday, gender, email, major, grade, country, province, city, phone }) => {
-  //   if(gender === 'Female') {
-  //     return (
-  //       <div className={styles.detail}>
-  //         <p>
-  //           <CalendarOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {birthday+'    '}
-  //           <WomanOutlined/>
-  //         </p>
-          
-  //         <p>
-  //           <MailOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {email}
-  //         </p>
-  //         <p>
-  //           <PhoneOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {phone} 
-  //         </p>
-  //         <p>
-  //           <ClusterOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {major+' '}{grade} 
-  //         </p>
-  //         <p>
-  //           <HomeOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {country+' '}{province+' '}{city}
-  //         </p>
-  //       </div>
-  //     );
-  //   }
-  //   else if (gender === 'Male') {
-  //     return (
-  //       <div className={styles.detail}>
-  //         <p>
-  //           <CalendarOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {birthday+'    '} 
-  //           <ManOutlined/>
-  //         </p>
-          
-  //         <p>
-  //           <MailOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {email}
-  //         </p>
-  //         <p>
-  //           <PhoneOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {phone} 
-  //         </p>
-  //         <p>
-  //           <ClusterOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {major+' '}{grade} 
-  //         </p>
-  //         <p>
-  //           <HomeOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {country+' '}{province+' '}{city}
-  //         </p>
-  //       </div>
-  //     );
-  //   }
-  //   else {
-  //     return (
-  //       <div className={styles.detail}>
-  //         <p>
-  //           <CalendarOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {birthday+'    '} 
-  //         </p>
-          
-  //         <p>
-  //           <MailOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {email}
-  //         </p>
-  //         <p>
-  //           <PhoneOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {phone} 
-  //         </p>
-  //         <p>
-  //           <ClusterOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {major+' '}{grade} 
-  //         </p>
-  //         <p>
-  //           <HomeOutlined
-  //             style={{
-  //               marginRight: 8,
-  //             }}
-  //           />
-  //           {country+' '}{province+' '}{city}
-  //         </p>
-  //       </div>
-  //     );
-  //   }
-  // }; // 渲染tab切换
 
   const renderChildrenByTabKey = (tabValue) => {
     if (tabValue === 'follower') {
@@ -564,18 +378,9 @@ const Center = () => {
                   <img alt="" src={visitedUser.avatar} />
                   <div className={styles.name}>{visitedUser.name}</div>
                   <div>{visitedUser?.signature}</div>
+                  {renderButton(visitedUser)}
                 </div>
-                {renderButton(visitedUser)}
                 {renderUserInfo(visitedUser)}
-                <Divider dashed />
-                <CourseList tags={visitedUser.courses || []} />
-                <Divider
-                  style={{
-                    marginTop: 16,
-                  }}
-                  dashed
-                />
-                <InterestList tags={visitedUser.interests || []} />
               </div>
             )}
           </Card>

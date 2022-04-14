@@ -8,6 +8,19 @@ input: values is a string
 return: most related 10 articles, same properties as /api/queryList
 */
 
+
+export async function logout(values) {
+  return request('/api/user/logout', {
+    data: values,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
+}
+
+
 export async function checkMember(values) {
   return request('/api/checkMember', {
     params: values,
@@ -17,21 +30,27 @@ export async function checkMember(values) {
 
 
 export async function quitGroup(values) {
-  return request('/api/quitGroup', {
-    params: values,
-    method: 'POST',
+  return request('/api/community/leave/'+values.id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
   });
 }
 
 export async function joinGroup(values) {
-  return request('/api/joinGroup', {
-    params: values,
-    method: 'POST',
+  return request('/api/community/join?id='+values.id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
   });
 }
 
 export async function queryCurrent(params) {
-  return request('/api/user/getuserinfo?username='+params.username, {
+  return request('/api/user/getuserinfo?current_username='+params.username+'&target_username='+params.target, {
   //return request('/api/currentUserDetail', {  
     method: 'GET',
     headers: {
@@ -78,7 +97,7 @@ export async function getPersonalFollower(values) {
   });
 }
 
-export async function removeFollower(values) {
+export async function removeFollower(values) {  //let someone not follow me
   return request('/api/removeFollower', {
     params: values,
     method: 'POST',
@@ -96,17 +115,25 @@ export async function getPersonalFollowing(values) {
   });
 }
   
-export async function removeFollowing(values) {
-  return request('/api/removeFollowing', {
-    params: values,
+export async function removeFollowing(body) {   //not follow someone 
+  return request('/api/user/unfollow', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    data: body
   });
 }
 
 export async function addFollowing(values) {
-  return request('/api/addFollowing', {
-    params: values,
+  return request('/api/user/follow', {
+    data: values,
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
   });
 }
 
@@ -128,10 +155,14 @@ export async function addBlacklist(values) {
   });
 }
 
-export async function changePassword(values) {
-  return request('/api/changePassword', {
-    params: values,
+export async function changePassword(body) {
+  return request('/api/user/password', {
+    data: body,
     method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 }
 
@@ -173,6 +204,10 @@ export async function createReply(body) {
   return request('/api/articlecomment/create', {
     data: body,
     method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 }
 

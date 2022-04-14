@@ -13,7 +13,7 @@ A post have:
 /*
 url: /group/post?postid
 */
-
+import ProForm, {ProFormText, ProFormTextArea,} from '@ant-design/pro-form';
 import { PlusOutlined, TeamOutlined, CrownOutlined, CalendarOutlined, LikeOutlined, LikeTwoTone, MessageOutlined, StarOutlined, StarTwoTone, MessageTwoTone } from '@ant-design/icons';
 import { Avatar, Card, Col, Divider, Input, Row, Tag, Form, Modal, message } from 'antd';
 import React, { useState, useRef } from 'react';
@@ -136,7 +136,7 @@ const Center = () => {
   const [tabKey, setTabKey] = useState('reply');
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [visible, setVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { data: postContents, reload, loading, loadMore, loadingMore } = useRequest(
     async() => {
@@ -162,19 +162,43 @@ const Center = () => {
 
   // console.log(list);
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
-  const onReply = async (values) => {
+  const handleOk = async(values) => {
     console.log(values);
     const result = await createReply ({
-      id: postid,
-      content: values,
+      ArticleID: parseInt(postid, 10),
+      Content: values.goal,
     });
-    if(result === '200') {
+    console.log(result);
+    if(result === 'Create Successfully') {
       message.success("Comment submitted!");
-      setVisible(false);
+      setIsModalVisible(false);
     }
+    else {
+      message.error("Failed! Please try again!");
+    }
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  // const onReply = async (values) => {
+  //   console.log(values);
+  //   const result = await createReply ({
+  //     id: postid,
+  //     content: values,
+  //   });
+  //   if(result === '200') {
+  //     message.success("Comment submitted!");
+  //     setVisible(false);
+  //   }
     
-  }
+  // }
+
 
   const onLike = async(values) => {
     //console.log("liked");
@@ -246,27 +270,41 @@ const Center = () => {
       return (
         <div className={styles.listContent}>
           <div className={styles.description}>
-            <p style={{float:'right'}}>
+            <p style={{float:'right'}}>   
                 <MessageOutlined 
-                  style={{marginRight: '20px'}}  
-                  onClick={() => {
-                    console.log('clicked');
-                    //setVisible(true);
-                    console.log(visible);
-                    setVisible(visible => !visible);
-                    console.log(visible);
-                  }}
-                />
-                <replyForm
-                  visible = {visible}
-                  onCreate = {onReply}
-                  onCancel = {() => {
-                    setVisible(false);
-                  }}
-                />
-                
+                    style={{marginRight: '20px'}}  
+                    onClick={showModal}
+                  />
+                  <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                    <ProForm
+                      hideRequiredMark
+                      style={{
+                        margin: 'auto',
+                        marginTop: 8,
+                        maxWidth: 600,
+                      }}
+                      name="basic"
+                      layout="vertical"
+                      initialValues={{
+                        public: '1',
+                      }}
+                      onFinish={onFinish}
+                    >
+                      <ProFormTextArea
+                        label="Comment"
+                        width="xl"
+                        name="goal"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please input your comment.',
+                          },
+                        ]}
+                        placeholder=""
+                      />
+                    </ProForm>
+                  </Modal>            
                 <LikeTwoTone style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
-                
                 <StarTwoTone onClick={(e) => onCollection(Favorited, e)}/>
               </p>
           </div>
@@ -278,8 +316,15 @@ const Center = () => {
         <div className={styles.listContent}>
           <div className={styles.description} >
             <p style={{float:'right'}}>
-              <MessageOutlined style={{marginRight: '20px'}}  onClick={onReply}/>
-              
+              <MessageOutlined 
+                  style={{marginRight: '20px'}}  
+                  onClick={showModal}
+                />
+                <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                  <p>Some contents...</p>
+                  <p>Some contents...</p>
+                  <p>Some contents...</p>
+                </Modal>
               <LikeTwoTone style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
               
               <StarOutlined onClick={(e) => onCollection(Favorited, e)}/>
@@ -294,8 +339,15 @@ const Center = () => {
         <div className={styles.listContent}>
           <div className={styles.description} >
             <p style={{float:'right'}}>
-              <MessageOutlined style={{marginRight: '20px'}} onClick={onReply}/>
-              
+              <MessageOutlined 
+                  style={{marginRight: '20px'}}  
+                  onClick={showModal}
+                />
+                <Modal title="Basic Modal" visible={isModalVisible}>
+                  <p>Some contents...</p>
+                  <p>Some contents...</p>
+                  <p>Some contents...</p>
+                </Modal>
               <LikeOutlined style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)} />
               
               <StarTwoTone onClick={(e) => onCollection(Favorited, e)}/>
@@ -309,8 +361,40 @@ const Center = () => {
         <div className={styles.listContent}>
           <div className={styles.description} style={{float:'right'}}>
             <p style={{float:'right'}}>
-              <MessageOutlined style={{marginRight: '20px'}} onClick={onReply}/>
-              
+              <MessageOutlined 
+                  style={{marginRight: '20px'}}  
+                  onClick={showModal}
+                />
+                <Modal title="Basic Modal" visible={isModalVisible} destroyOnClose = {true} footer={null}>
+                    <ProForm
+                      hideRequiredMark
+                      style={{
+                        margin: 'auto',
+                        marginTop: 8,
+                        maxWidth: 600,
+                      }}
+                      name="basic"
+                      layout="vertical"
+                      initialValues={{
+                        public: '1',
+                      }}
+                      onFinish={handleOk}
+                      onReset={handleCancel}
+                    >
+                      <ProFormTextArea
+                        label="Comment"
+                        width="xl"
+                        name="goal"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please input your comment.',
+                          },
+                        ]}
+                        placeholder=""
+                      />
+                    </ProForm>
+                </Modal>
               <LikeOutlined style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
               
               <StarOutlined onClick={(e) => onCollection(Favorited, e)}/>
@@ -354,6 +438,7 @@ const Center = () => {
             {!loading && list && (
               <div>
                 {renderPostInfo(list)}
+                
                 {renderButtonInfo(list)}
               </div>
             )}

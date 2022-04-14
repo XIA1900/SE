@@ -6,7 +6,7 @@ import {
     MessageOutlined,
     StarOutlined,
   } from '@ant-design/icons';
-import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
+import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs, message } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
 import ArticleListContent from '@/pages/group/content/components/articleContent';
@@ -42,6 +42,7 @@ const Following = () => {
         list.push({
           name: users[i],
           avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ users[i]+'/avatar.png',
+          mutual: false,
         });
       }
     }
@@ -51,34 +52,37 @@ const Following = () => {
       console.log(values);
       const user = values;
       const result = await removeFollowing({
-        username: username,
-        unfollowinguser: user,
+        username: user,
       });
-      if(result.message === 'Ok') {
+      console.log(result);
+      if(result.code === 200) {
+        
+        message.success("Unfollowed Successfully!");
         location.reload();   //refresh page
+
       }
       else {
-
+        message.error("Failed! Please try again.");
       }
     };
 
-    const renderFollowingInformation = ({mutual}) => {
+    const renderFollowingInformation = ({name, mutual}) => {
       if(mutual === true) {
         return (
           <div>
-            <Button onClick={onRemove} style={{float:'right'}}>
+            <Button onClick={e => onUnfollow(name, e)} style={{float:'right'}}>
               Mutual
             </Button>
-            <Button onClick={onBlock}>
+            {/* <Button onClick={onBlock}>
               Block
-            </Button>
+            </Button> */}
           </div>
 
         )
       }
       else {
         return (
-          <Button onClick={onRemove} style={{float:'right'}}>
+          <Button onClick={e => onUnfollow(name, e)} style={{float:'right'}}>
             Following
           </Button>
         )
@@ -147,9 +151,10 @@ const Following = () => {
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
                 {item.name}
-                  <Button onClick = {(e) => onUnfollow(item.user, e)} style={{float: 'right'}}> 
+                {renderFollowingInformation(item)}
+                  {/* <Button onClick = {(e) => onUnfollow(item.user, e)} style={{float: 'right'}}> 
                     Unfollow
-                  </Button>
+                  </Button> */}
                 </p>
               </div>
             )}

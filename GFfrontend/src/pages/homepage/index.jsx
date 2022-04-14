@@ -44,49 +44,23 @@ const Articles = () => {
     const reply = data.CountComment;
     const size = Object.keys(articleList).length;
     for(let i=0; i<size; i++) {
+      let j = size - 1 - i;
       list.push({
-        id: articleList[i].ID,
-        name: articleList[i].Username,
-        title: articleList[i].Title,
-        group: communityList[i].Name,
-        createdAt: articleList[i].CreateDay,
-        content: articleList[i].Content,
-        collection: collection[i],
-        like: like[i],
-        reply: reply[i],
-        groupID: communityList[i].ID,
-        avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+        id: articleList[j].ID,
+        name: articleList[j].Username,
+        title: articleList[j].Title,
+        group: communityList[j].Name,
+        createdAt: articleList[j].CreateDay,
+        content: articleList[j].Content,
+        collection: collection[j],
+        like: like[j],
+        reply: reply[j],
+        groupID: communityList[j].ID,
+        avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ articleList[j].Username+'/avatar.png',
       });
     }
   }
   console.log(list);
-
-  const onCCollection = async(values) => {
-    console.log(values);
-    if(values.type === 'star-o') {
-      if(values.value === '1') {
-        return (
-          <IconText key="collection" type="star-o" value="0" text={values.text--} />
-        );
-      }
-      else {
-        return (
-          <IconText key="collection" type="star-o" value="1" text={item.collection} />
-        )
-      }
-    }
-  }
-
-  const onLike = async(values) => {
-    console.log("liked");
-    console.log(values);
-    const result = await createLike({
-      id: values,
-    });
-    if(result === '200') {
-      location.reload();
-    }
-  }
 
   const IconText = ({ value, type, text }) => {
     switch (type) {
@@ -97,6 +71,7 @@ const Articles = () => {
               style={{
                 marginRight: 8,
               }}
+              onClick = {e => clickPost(value, e)}
             />
             {text}
           </span>
@@ -109,6 +84,7 @@ const Articles = () => {
               style={{
                 marginRight: 8,
               }}
+              onClick = {e => clickPost(value, e)}
             />
             {text}
           </span>
@@ -121,6 +97,7 @@ const Articles = () => {
               style={{
                 marginRight: 8,
               }}
+              onClick = {e => clickPost(value, e)}
             />
             {text}
           </span>
@@ -144,13 +121,6 @@ const Articles = () => {
       },
     },
   };
-
-  const onCollection = async(values) => {
-    console.log(values);
-    let count = values;
-    count++;
-    return count;
-  }
 
   const loadMoreDom = list.length > 0 && (
     <div
@@ -206,6 +176,25 @@ const Articles = () => {
           <TagSelect.Option value="cat5">Movies</TagSelect.Option>
         </TagSelect>
         </Form>
+        {/* <List
+          size="large"
+          loading={loading}
+          rowKey="id"
+          itemLayout="vertical"
+          loadMore={loadMoreDom}
+          dataSource={list}
+          renderItem={(item) => (
+            <List.Item key={item.id}>
+              <List.Item.Meta
+                title={
+                  <a className={styles.listItemMetaTitle}  onClick={(e) => clickGroup(item.id, e)}>
+                    {item.group}
+                  </a>
+                }
+              />
+            </List.Item>
+          )}
+        /> */}
       </Card>
       <Card
         style={{
@@ -228,8 +217,8 @@ const Articles = () => {
               key={item.id}
               actions={[
                 <IconText key="collection" type="star-o" value = {item.id} text={item.collection}  />,
-                <IconText key="like" type="like-o" value = {item.id} text={item.like} />,
-                <IconText key="reply" type="message" value = {item.id} text={item.reply} />,
+                <IconText key="like" type="like-o" value = {item.id} text={item.like} onClick = {e => clickPost(item.id, e)}/>,
+                <IconText key="reply" type="message" value = {item.id} text={item.reply} onClick = {e => clickPost(item.id, e)}/>,
               ]}
             >
               <List.Item.Meta

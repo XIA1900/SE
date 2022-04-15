@@ -39,7 +39,7 @@ const CardList = () => {
         createdAt: communities[i].CreateDay,
         numberOfMember: members[i],
         numberOfPost: posts[i],
-        groupAvatar: 'http://10.20.0.166:10010/resources/groupfiles/'+communities[i].Name+'/avatar.png',
+        groupAvatar: 'http://10.20.0.164:10010/resources/groupfiles/'+communities[i].Name+'/avatar.png',
       });
     }
   }

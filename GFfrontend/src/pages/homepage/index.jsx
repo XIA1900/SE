@@ -56,7 +56,7 @@ const Articles = () => {
         like: like[j],
         reply: reply[j],
         groupID: communityList[j].ID,
-        avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ articleList[j].Username+'/avatar.png',
+        avatar: 'http://10.20.0.164:10010/resources/userfiles/'+ articleList[j].Username+'/avatar.png',
       });
     }
   }
@@ -176,25 +176,6 @@ const Articles = () => {
           <TagSelect.Option value="cat5">Movies</TagSelect.Option>
         </TagSelect>
         </Form>
-        {/* <List
-          size="large"
-          loading={loading}
-          rowKey="id"
-          itemLayout="vertical"
-          loadMore={loadMoreDom}
-          dataSource={list}
-          renderItem={(item) => (
-            <List.Item key={item.id}>
-              <List.Item.Meta
-                title={
-                  <a className={styles.listItemMetaTitle}  onClick={(e) => clickGroup(item.id, e)}>
-                    {item.group}
-                  </a>
-                }
-              />
-            </List.Item>
-          )}
-        /> */}
       </Card>
       <Card
         style={{
@@ -216,10 +197,11 @@ const Articles = () => {
             <List.Item
               key={item.id}
               actions={[
-                <IconText key="collection" type="star-o" value = {item.id} text={item.collection}  />,
+                <IconText key="collection" type="star-o" value = {item.id} text={item.collection}  onClick = {e => clickPost(item.id, e)}/>,
                 <IconText key="like" type="like-o" value = {item.id} text={item.like} onClick = {e => clickPost(item.id, e)}/>,
                 <IconText key="reply" type="message" value = {item.id} text={item.reply} onClick = {e => clickPost(item.id, e)}/>,
               ]}
+              style={{marginLeft:'30px', marginRight:'30px'}}
             >
               <List.Item.Meta
                 title={

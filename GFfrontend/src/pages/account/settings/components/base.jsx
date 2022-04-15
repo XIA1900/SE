@@ -116,7 +116,7 @@ const BaseView = () => {
       gender: info.Gender,
       major: info.Department,
       grade: 1,
-      avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ info.Username+'/avatar.png',
+      avatar: 'http://10.20.0.164:10010/resources/userfiles/'+ info.Username+'/avatar.png',
       country: 'U.S',
       province: 'Florida',
       city: 'Gainesville',

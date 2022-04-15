@@ -45,6 +45,9 @@ const Login = () => {
 
   const handleSubmit = async (values) => {
     console.log(values);
+    const userInfo = {
+      name: values.username,
+    };
     try {
       // 登录
       const msg = await login({ ...values, type }); //后端
@@ -57,18 +60,16 @@ const Login = () => {
         });
         message.success(defaultLoginSuccessMessage);
         cookie.save('token', msg.message);
-        const userInfo = {
-          name: values.username,
-        };
         console.log(userInfo);
         //await fetchUserInfo(); //successful, wait for user info; this was not implemented
         await setInitialState((s) => ({ ...s, currentUser: userInfo}));
         
         /** 此方法会跳转到 redirect 参数所在的位置 */
-        if (!history) return;
-        const { query } = history.location;
-        const { redirect } = query;
-        history.push(redirect || '/');
+        // if (!history) return;
+        // const { query } = history.location;
+        // const { redirect } = query;
+        // history.push(redirect || '/');
+        history.push("/homepage");
         return;
       }
 

@@ -26,9 +26,10 @@ import styles from './Center.less';
 import { getPost } from '@/services/getPost';
 //import { currentUser } from '@/services/ant-design-pro/api';
 import { createReply, removeLike, getRelation, createLike, createCollection, removeCollection } from '@/services/user';
+import cookie from "react-cookies";
+
 
 const postid = history.location.search.substring(1);
-console.log(postid);
 
 const operationTabList = ({NumComment, NumLike, NumFavorite}) => {
   if(typeof(NumComment) === 'undefined') return;
@@ -49,48 +50,6 @@ const operationTabList = ({NumComment, NumLike, NumFavorite}) => {
   return tabList;
 }
 
-const replyForm = ({ visible, onCreate, onCancel }) => {
-  const [form] = Form.useForm();
-  return (
-    <Modal
-    visible={true}
-    title="What's in your mind?"
-    okText="Send"
-    cancelText="Cancel"
-    onCancel={onCancel}
-    onOk={() => {
-      form
-        .validateFields()
-        .then((values) => {
-          form.resetFields();
-          onCreate(values);
-        })
-        .catch((info) => {
-          console.log('Validate Failed:', info);
-        });
-    }}
-    >
-      <Form
-        form={form}
-        layout="vertical"
-        name="form_in_modal"
-      >
-        <Form.Item 
-          name="description" 
-          label="Description"
-          rules={[
-            {
-              required: true,
-              message: 'Please say something.',
-            }
-          ]}
-        >
-          <Input type="textarea" />
-        </Form.Item>
-      </Form>
-    </Modal>
-  );
-}
 
 const TagList = ({ tags }) => {
   const ref = useRef(null);
@@ -137,6 +96,7 @@ const Center = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const groupID = cookie.load('groupID');
 
   const { data: postContents, reload, loading, loadMore, loadingMore } = useRequest(
     async() => {
@@ -258,7 +218,7 @@ const Center = () => {
         <p style={{fontSize: '15px', marginTop:'25px'}}>
           <img
             alt=""
-            src={'http://10.20.0.166:10010/resources/userfiles/'+Owner+'/avatar.png'}
+            src={'http://10.20.0.164:10010/resources/userfiles/'+Owner+'/avatar.png'}
           />
           <a onClick={e => clickUser(Owner, e)}> {Owner}</a> updated at {UpdatedAt.substring(0,10)}
         </p>
@@ -480,6 +440,13 @@ const Center = () => {
     return null;
   };
 
+  const clickGroup = (values) => {
+    history.push({
+      pathname: '/group/content',
+      search: groupID,
+    });
+  }
+
   return (
     <GridContent>
       <Row gutter={24}>
@@ -493,6 +460,7 @@ const Center = () => {
           >
             {!loading && list && (
               <div>
+                <a onClick={e => clickGroup(groupID, e)}> Return </a>
                 {renderPostInfo(list)}
                 
                 {renderButtonInfo(list)}

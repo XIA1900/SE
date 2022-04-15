@@ -34,7 +34,7 @@ const ArticleListContent = ({data: { ID, Content, Username},}) => {
   <div className={styles.listContent}>
     <div className={styles.description} onClick={e => clickPost(ID, e)}>{Content}</div>
     <div className={styles.extra}>
-      <img src={ 'http://10.20.0.166:10010/resources/userfiles/'+ Username+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+      <img src={ 'http://10.20.0.164:10010/resources/userfiles/'+ Username+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
       <a onClick={(e) => clickUser(Username, e)}> {Username}</a> posted
     </div>
   </div>

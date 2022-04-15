@@ -42,10 +42,11 @@ const ArticleListContent = ({data: { id, content, avatar, createdAt, name, group
   <div className={styles.listContent}>
     <div className={styles.description} onClick = {e => clickPost(id, e)}>{content}</div>
     <div className={styles.extra}>
-      <img src={avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+      <img src={avatar} style={{ width: '30px', height: '30px', borderRadius: '30px' }} />
       <a onClick={(e) => clickUser(name, e)}> {name}</a> posted on
       <a onClick={clickGroup}> {group}</a>
-      <em> at {moment(createdAt).format('YYYY-MM-DD')}</em>
+      <em> {moment(createdAt).format('YYYY-MM-DD')}</em>
+      
     </div>
   </div>
 )};

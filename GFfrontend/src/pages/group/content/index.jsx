@@ -101,7 +101,7 @@ const Center = () => {
       createdAt: community.CreateDay, 
       groupMember: data.count,
       ifexit: data.ifexit,
-      avatar: 'http://10.20.0.166:10010/resources/groupfiles/'+community.Name+'/avatar.png',
+      avatar: 'http://10.20.0.164:10010/resources/groupfiles/'+community.Name+'/avatar.png',
     };
   }
 
@@ -110,7 +110,11 @@ const Center = () => {
       id: values,
     });
     if(result === 'Join Successfully') {
+      message.success(result);
       location.reload();
+    }
+    else {
+      message.success('Quit Failed! Please try again.');
     }
   };
 
@@ -125,7 +129,11 @@ const Center = () => {
     });
     console.log(result);
     if(result === 'Leave Successfully') {
+      message.success('Quit Successfully!');
       location.reload();
+    }
+    else {
+      message.success('Quit Failed! Please try again.');
     }
   };
 

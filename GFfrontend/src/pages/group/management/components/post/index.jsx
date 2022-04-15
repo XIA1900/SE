@@ -49,7 +49,7 @@ const Post = () => {
         collection: countFavorite[i],
         like: countLike[i],
         reply: countComment[i],
-        avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+        avatar: 'http://10.20.0.164:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
       });
     }
   }

@@ -12,6 +12,7 @@ import { history, useRequest, useModel, useIntl } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { createPost } from '@/services/create';
 import styles from './style.less';
+import cookie from "react-cookies";
 
 const groupID = history.location.search.substring(1);
 
@@ -32,9 +33,10 @@ const BasicForm = () => {
       });
 
       console.log(result);
-
+      
 
       if(result.message === '200') {
+        cookie.save('groupID', groupID);
         const defaultcreatePostSuccessMessage = intl.formatMessage({
           id: 'createPost',
           defaultMessage: 'Post submitted successfully!',
@@ -48,13 +50,12 @@ const BasicForm = () => {
           pathname: '/group/post',
           search: postid.toString(),
         });
-        console.log("pushed");
         return;
       }
       else {
         const defaultcreatePostFailedMessage = intl.formatMessage({
           id: 'createPostFailed',
-          defaultMessage: 'Post submitted failed!',
+          defaultMessage: 'Post submitted failed! Please try again.',
         });
         message.error(defaultcreatePostFailedMessage);
         return;

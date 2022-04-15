@@ -37,8 +37,8 @@ const AvatarDropdown = ({ menu }) => {
 
       if (key === 'logout') {
         cookie.remove('token');
+        await setInitialState((s) => ({ ...s, currentUser: undefined }));
         message.success("Logout Successfully!");
-        setInitialState((s) => ({ ...s, currentUser: undefined }));
         history.push('/user/login');
         return;
       }

@@ -3,12 +3,16 @@ import React from 'react';
 import moment from 'moment';
 import styles from './index.less';
 import { useModel, history } from 'umi';
+import cookie from "react-cookies";
+
+const groupID = history.location.search.substring(1);
 
 const ArticleListContent = ({ data: { id, content, avatar, createdAt, name } }) => {
     const { initialState } = useModel('@@initialState');
     const { currentUser } = initialState || {};
 
     const clickPost = async(values) => {
+      cookie.save('groupID',values)
       history.push({
         pathname: '/group/post',
         search: values.toString(),
@@ -35,7 +39,7 @@ const ArticleListContent = ({ data: { id, content, avatar, createdAt, name } }) 
       <div className={styles.description} onClick={e => clickPost(id, e)}>{content}</div>
       <div className={styles.extra}>
         <img src={avatar} style={{ width: '30px', height: '30px', borderRadius: '30px' }} />
-        <a > {name} </a>
+        <a onClick={e => clickUser(name, e)}> {name} </a>
         <em>last updated at {moment(createdAt).format('YYYY-MM-DD HH:mm')}</em>
       </div>
     </div>

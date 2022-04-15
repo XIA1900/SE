@@ -64,12 +64,7 @@ const Joined = () => {
                   >
                     <Card.Meta
                       avatar={<img alt="" className={styles.cardAvatar} src={'http://10.20.0.164:10010/resources/groupfiles/'+item.Name+'/avatar.png'} />}
-                      title={<p key='group' onClick={() => {
-                        history.push({
-                          pathname: '/group/content',
-                          search: item.ID.toString(),
-                        });
-                      }}>{item.Name}</p>}
+                      title={<p key='group'>{item.Name}</p>}
                       description={
                         <Paragraph
                           className={styles.item}
@@ -81,6 +76,12 @@ const Joined = () => {
                           <p>Created At: {item.CreateDay.substring(0, 10)}</p>
                         </Paragraph>
                       }
+                      onClick={() => {
+                        history.push({
+                          pathname: '/group/content',
+                          search: item.ID.toString(),
+                        });
+                      }}
                     />
                   </Card>
                 </List.Item>

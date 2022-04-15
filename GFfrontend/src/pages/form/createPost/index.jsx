@@ -21,6 +21,7 @@ const BasicForm = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState;
   const intl = useIntl();
+  const groupName = cookie.load("groupName");
 
   const onFinish = async (values) => {
     try {
@@ -36,6 +37,7 @@ const BasicForm = () => {
       
 
       if(result.message === '200') {
+        cookie.remove('groupName');
         cookie.save('groupID', groupID);
         const defaultcreatePostSuccessMessage = intl.formatMessage({
           id: 'createPost',
@@ -84,14 +86,13 @@ const BasicForm = () => {
           name="basic"
           layout="vertical"
           initialValues={{
-            public: '1',
           }}
           onFinish={onFinish}
         >
           <ProFormText
-            width="md"
+            width="xl"
             label="Group ID"
-            name="group"
+            name="groupID"
             rules={[
               {
                 required: true,
@@ -103,7 +104,21 @@ const BasicForm = () => {
           />
 
           <ProFormText
-            width="md"
+            width="xl"
+            label="Group Name"
+            name="groupName"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            placeholder=""
+            initialValue={groupName}
+            disabled={true}
+          />
+
+          <ProFormText
+            width="xl"
             label="Title"
             name="title"
             rules={[

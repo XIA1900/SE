@@ -9,6 +9,7 @@ import styles from './Center.less';
 import { getGroupBasic } from '@/services/getGroupInfo';
 import { checkMember, quitGroup, joinGroup } from '@/services/user';
 import { countReset } from 'console';
+import cookie from 'react-cookies';
 
 
 const groupID = history.location.search.substring(1);
@@ -73,6 +74,8 @@ const Center = () => {
   const [tabKey, setTabKey] = useState('latest');
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState;
+  cookie.remove('groupID');
+  cookie.save('groupID', groupID);
 
   const { data, loading } = useRequest( async() => {
     const result = await getGroupBasic({
@@ -138,6 +141,8 @@ const Center = () => {
   };
 
   const onPost = async() => {
+    cookie.remove('groupName');
+    cookie.save('groupName', list.groupName);
     history.push({
       pathname: '/form/createPost',
       search: groupID,

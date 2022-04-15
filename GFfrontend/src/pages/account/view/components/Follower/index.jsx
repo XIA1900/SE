@@ -11,7 +11,7 @@ import { useRequest, history } from 'umi';
 import ArticleListContent from '@/pages/group/content/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import styles from './style.less';
-import { getPersnalFollower, removeFollower } from '@/services/user';
+import { getPersonalFollower, removeFollower } from '@/services/user';
   
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -21,7 +21,7 @@ const Follower = () => {
     const [form] = Form.useForm();
     const { data, reload, loading, loadMore, loadingMore } = useRequest(
       () => {
-        return getPersnalFollower({
+        return getPersonalFollower({
           username: username,
         });
       },

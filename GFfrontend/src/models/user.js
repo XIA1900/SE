@@ -1,5 +1,5 @@
 import { router } from 'umi';
-import { currentUser, createReply, getRelation, removeLike, createLike, removeCollection, createCollection, changePassword, checkMember, queryCurrent, quitGroup, joinGroup, getPersnalFollower, getPersonalBlacklist, getPersonalCollection, getPersonalFollowing, removeFollower, removeFollowing, removeBlacklist } from '@/services/user';
+import { currentUser, createReply, getRelation, removeLike, createLike, removeCollection, createCollection, changePassword, checkMember, queryCurrent, quitGroup, joinGroup, getPersonalFollower, getPersonalBlacklist, getPersonalCollection, getPersonalFollowing, removeFollower, removeFollowing, removeBlacklist } from '@/services/user';
 
 const Model = {
   namespace: 'user',
@@ -32,7 +32,7 @@ const Model = {
         payload: response4,
       });
 
-      const response5 = yield call(getPersnalFollower, payload);
+      const response5 = yield call(getPersonalFollower, payload);
       yield put({
         type: 'save5',
         payload: response5,

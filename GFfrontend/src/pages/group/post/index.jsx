@@ -97,6 +97,7 @@ const Center = () => {
   const { currentUser } = initialState || {};
   const [isModalVisible, setIsModalVisible] = useState(false);
   const groupID = cookie.load('groupID');
+  console.log(groupID);
 
   const { data: postContents, reload, loading, loadMore, loadingMore } = useRequest(
     async() => {
@@ -148,8 +149,6 @@ const Center = () => {
   };
 
   const onLike = async(values) => {
-    //console.log("liked");
-    //console.log(values);
     if(values === true) {
       const result = await removeLike({
         //username: currentUser.name,
@@ -215,7 +214,7 @@ const Center = () => {
     return (
       <div className={styles.listContent}>
         <div className={styles.title}>{Title}</div>
-        <p style={{fontSize: '15px', marginTop:'25px'}}>
+        <p style={{fontSize: '15px', marginTop:'25px', color: '#4F4F4F',}}>
           <img
             alt=""
             src={'http://10.20.0.164:10010/resources/userfiles/'+Owner+'/avatar.png'}
@@ -440,11 +439,21 @@ const Center = () => {
     return null;
   };
 
-  const clickGroup = (values) => {
-    history.push({
-      pathname: '/group/content',
-      search: groupID,
-    });
+  const clickGroup = () => {
+    if(typeof(groupID) === 'undefined') {
+      history.push({
+        pathname:'/account/center',
+        search: currentUser.name,
+      });
+      return;
+    }
+    else {
+      history.push({
+        pathname: '/group/content',
+        search: groupID,
+      });
+    }
+    
   }
 
   return (
@@ -460,7 +469,7 @@ const Center = () => {
           >
             {!loading && list && (
               <div>
-                <a onClick={e => clickGroup(groupID, e)}> Return </a>
+                <a onClick={clickGroup}> Return</a>
                 {renderPostInfo(list)}
                 
                 {renderButtonInfo(list)}

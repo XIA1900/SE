@@ -9,6 +9,7 @@ import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
+import ArticleListContent from '../articleContent';
 import { getLike } from '@/services/getPost';
 import styles from './style.less';
 
@@ -101,12 +102,19 @@ const Like = () => {
           loadMore={loadMoreDom}
           dataSource={list}
           renderItem={(item) => (
-            <div>
-              <p>
-              <img src={'http://10.20.0.166:10010/resources/userfiles/'+item.Username+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-              {item.Username}
-              </p>
-            </div>
+            <List.Item
+              actions={[
+                // <IconText key="like" type="like-o" text={item.likes} />,
+              ]}
+            >
+              <ArticleListContent data={item} />
+            </List.Item>
+            // <div>
+            //   <p>
+            //   <img src={'http://10.20.0.166:10010/resources/userfiles/'+item.Username+'/avatar.png'} style={{ width: '30px', height: '30px', borderRadius: '30px' }} />
+            //   {item.Username}
+            //   </p>
+            // </div>
           )}
         />
       </Card>

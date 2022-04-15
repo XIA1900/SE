@@ -49,7 +49,7 @@ const SecurityView = () => {
         dataSource={data}
         renderItem={(item) => (
           <List.Item actions={item.actions}>
-            <List.Item.Meta title={item.title} description={item.description} />
+            <List.Item.Meta title={item.title} />
           </List.Item>
         )}
       />

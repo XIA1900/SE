@@ -1,9 +1,9 @@
 import { PlusOutlined, TeamOutlined, CrownOutlined, CalendarOutlined, FormOutlined, FrownOutlined, SmileOutlined  } from '@ant-design/icons';
-import { Button, Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
+import { Button, Avatar, Card, Col, Divider, Input, Row, Tag, message } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Link, useRequest, history, useModel } from 'umi';
-import Hottest from './components/hottest';
+import Earliest from './components/earliest';
 import Latest from './components/latest';
 import styles from './Center.less';
 import { getGroupBasic } from '@/services/getGroupInfo';
@@ -18,8 +18,8 @@ const pageSize = 10;
 
 const operationTabList = [
   {
-    key: 'hottest',
-    tab: <span>Hottest </span>,
+    key: 'earliest',
+    tab: <span>Earliest </span>,
   },
   {
     key: 'latest',
@@ -109,22 +109,23 @@ const Center = () => {
     const result = await joinGroup({
       id: values,
     });
-    console.log(result);
     if(result === 'Join Successfully') {
-      history.push('/form/basic-form')
-      history.goBack();
+      location.reload();
     }
   };
 
   const onQuit = async(values) => {
-    console.log(values);
+    //console.log(values);
+    if(list.groupMember === 1) {
+      message.error("You cannot quit the group. If you want to, you could delete this group.");
+      return;
+    }
     const result = await quitGroup({
       id: values,
     });
     console.log(result);
     if(result === 'Leave Successfully') {
-      history.push('/form/basic-form')
-      history.goBack();
+      location.reload();
     }
   };
 
@@ -140,8 +141,8 @@ const Center = () => {
       return (
         <div className={styles.detail}>
           <h1>{groupName}</h1>
-          <p>{groupDescription}</p>
-          <p>
+          <p style={{fontSize:'15px'}}>{groupDescription}</p>
+          <p style={{fontSize:'15px'}}>
             <CrownOutlined
               style={{
                 marginRight: 8,
@@ -161,7 +162,7 @@ const Center = () => {
                 marginLeft: 20,
               }}
             />
-            Created at {createdAt}
+            Created at {createdAt.substring(0,10)}
           </p>
           <Button onClick={e => onQuit(id, e)} style={{display: 'inline-block'}}>
             <FrownOutlined/>
@@ -179,8 +180,8 @@ const Center = () => {
       return (
         <div className={styles.detail}>
           <h1>{groupName}</h1>
-          <p>{groupDescription}</p>
-          <p>
+          <p style={{fontSize:'15px'}}>{groupDescription}</p>
+          <p style={{fontSize:'15px'}}>
             <CrownOutlined
               style={{
                 marginRight: 8,
@@ -215,8 +216,8 @@ const Center = () => {
   // 渲染tab切换
 
   const renderChildrenByTabKey = (tabValue) => {
-    if (tabValue === 'hottest') {
-      return <Hottest />;
+    if (tabValue === 'earliest') {
+      return <Earliest />;
     }
 
     if (tabValue === 'latest') {
@@ -229,7 +230,7 @@ const Center = () => {
   return (
     <GridContent>
       <Row gutter={24}>
-        <Col lg={17} md={24}>
+        <Col lg={24} md={24}>
           <Card
             bordered={false}
             style={{

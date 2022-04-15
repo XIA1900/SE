@@ -40,16 +40,17 @@ const Latest = () => {
     const countLike = data.CountLike;
     const size = Object.keys(articleList).length;
     for(let i=0; i<size; i++) {
+      let j = size-1-i;
       list.push({
-        id: articleList[i].ID,
-        name: articleList[i].Username,
-        title: articleList[i].Title,
-        createdAt: articleList[i].CreateDay,
-        content: articleList[i].Content,
-        collection: countFavorite[i],
-        like: countLike[i],
-        reply: countComment[i],
-        avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+        id: articleList[j].ID,
+        name: articleList[j].Username,
+        title: articleList[j].Title,
+        createdAt: articleList[j].CreateDay,
+        content: articleList[j].Content,
+        collection: countFavorite[j],
+        like: countLike[j],
+        reply: countComment[j],
+        avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ articleList[j].Username+'/avatar.png',
       });
     }
   }
@@ -159,10 +160,11 @@ const Latest = () => {
             <List.Item
               key={item.id}
               actions={[
-                <IconText key="collection" type="star-o" text={item.collection} />,
-                <IconText key="like" type="like-o" text={item.like} />,
-                <IconText key="reply" type="message" text={item.reply} />,
+                <IconText key="collection" type="star-o" text={item.collection} onClick={e => clickPost(item.id, e)}/>,
+                <IconText key="like" type="like-o" text={item.like} onClick={e => clickPost(item.id, e)}/>,
+                <IconText key="reply" type="message" text={item.reply} onClick={e => clickPost(item.id, e)}/>,
               ]}
+              
               //extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta

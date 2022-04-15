@@ -1,10 +1,4 @@
-import {
-  ContactsOutlined,
-  LikeOutlined,
-  LoadingOutlined,
-  MessageOutlined,
-  StarOutlined,
-} from '@ant-design/icons';
+import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import React from 'react';
 import { useRequest, history } from 'umi';
@@ -16,26 +10,51 @@ import styles from './style.less';
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
-const groupName = history.location.search.substring(1);
-console.log('groupName:' + groupName);
+const pageNO = 1;
+const groupID = history.location.search.substring(1);
 
-const Hottest = () => {
+const Earliest = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return getGroupPosts({
-        count: pageSize,
-        type: 'hottest',
-        groupName: groupName,
+    async() => {
+      const result = await getGroupPosts({
+        id: groupID,
+        type: 'lattest',
+        pageNO: pageNO,
+        pageSize: pageSize,
       });
+      return result;
     },
     {
+      formatResult: result => result,
       loadMore: true,
     },
   );
 
-  const list = data?.list || [];
-  console.log(list);
+  console.log(data);
+  const list = [];
+  if(typeof(data.ArticleList)!='undefined') {
+    const articleList = data.ArticleList;
+    const countComment = data.CountComment;
+    const countFavorite = data.CountFavorite;
+    const countLike = data.CountLike;
+    const size = Object.keys(articleList).length;
+    for(let i=0; i<size; i++) {
+      list.push({
+        id: articleList[i].ID,
+        name: articleList[i].Username,
+        title: articleList[i].Title,
+        createdAt: articleList[i].CreateDay,
+        content: articleList[i].Content,
+        collection: countFavorite[i],
+        like: countLike[i],
+        reply: countComment[i],
+        avatar: 'http://10.20.0.166:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+      });
+    }
+  }
+
+  //const list = data?.list || [];
 
   const IconText = ({ type, text }) => {
     switch (type) {
@@ -119,17 +138,16 @@ const Hottest = () => {
     </div>
   );
 
+  const clickPost = async(values) => {
+    history.push({
+      pathname: '/group/post',
+      search: values.toString(),
+    });
+  }
+
   return (
     <>
-      <Card
-        // style={{
-        //   marginTop: 24,
-        // }}
-        bordered={false}
-        // bodyStyle={{
-        //   padding: '8px 32px 32px 32px',
-        // }}
-      >
+      <Card bordered={false}>
         <List
           size="large"
           loading={loading}
@@ -145,11 +163,12 @@ const Hottest = () => {
                 <IconText key="like" type="like-o" text={item.like} />,
                 <IconText key="reply" type="message" text={item.reply} />,
               ]}
+              onClick={e => clickPost(item.id, e)}
               //extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={item.href}>
+                  <a className={styles.listItemMetaTitle} onClick={e => clickPost(item.id, e)}>
                     {item.title}
                   </a>
                 }
@@ -163,4 +182,4 @@ const Hottest = () => {
   );
 };
 
-export default Hottest;
+export default Earliest;

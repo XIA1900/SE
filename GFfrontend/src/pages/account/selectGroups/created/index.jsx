@@ -88,20 +88,20 @@ const CardList = () => {
           renderItem={(item) => {
             if (item && item.id) {
               return (
-                <List.Item key={item.id}>
+                <List.Item key={item.id} onClick={(e) => onManagement(item.id, e)}>
                   <Card
                     hoverable
                     className={styles.card}
-                    actions={[<p key="option1"># Group Members: {item.numberOfMember}</p>, <p key="option2"># Posts: {item.numberOfPost}</p>,  <p key="option3">Created At: {item.createdAt}</p>]}
+                    actions={[<p>Members: {item.numberOfMember}</p>, <p>Posts: {item.numberOfPost}</p>,  <p>{item.createdAt.substring(0,10)}</p>]}
                   >
                     <Card.Meta
                       avatar={<img alt="" className={styles.cardAvatar} src={item.groupAvatar} />}
-                      title={<a onClick={(e) => onManagement(item.id, e)}>{item.id +": " +item.groupName}</a>}
+                      title={<a onClick={(e) => onManagement(item.id, e)}>{item.groupName}</a>}
                       description={
                         <Paragraph
                           className={styles.item}
                           ellipsis={{
-                            rows: 3,
+                            rows: 2,
                           }}
                         >
                           {item.description}

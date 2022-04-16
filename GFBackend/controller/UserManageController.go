@@ -437,8 +437,9 @@ func (userManageController *UserManageController) UserUnfollow(context *gin.Cont
 // @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/followers [post]
 func (userManageController *UserManageController) GetFollowers(context *gin.Context) {
-	token, _ := context.Cookie("token")
-	username, _ := auth.GetTokenUsername(token)
+	//token, _ := context.Cookie("token")
+	//username, _ := auth.GetTokenUsername(token)
+	username := context.Query("username")
 	followers, err1 := userManageController.userManageService.GetFollowers(username)
 	errMsg := entity.ResponseMsg{
 		Code:    http.StatusBadRequest,
@@ -473,8 +474,9 @@ func (userManageController *UserManageController) GetFollowers(context *gin.Cont
 // @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/followees [post]
 func (userManageController *UserManageController) GetFollowees(context *gin.Context) {
-	token, _ := context.Cookie("token")
-	username, _ := auth.GetTokenUsername(token)
+	//token, _ := context.Cookie("token")
+	//username, _ := auth.GetTokenUsername(token)
+	username := context.Query("username")
 	followers, err1 := userManageController.userManageService.GetFollowees(username)
 	errMsg := entity.ResponseMsg{
 		Code:    http.StatusBadRequest,

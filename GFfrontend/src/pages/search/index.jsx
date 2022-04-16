@@ -13,11 +13,6 @@ import User from './components/user';
 import styles from './style.less';
 import { wrapConstructor } from 'lodash-decorators/utils';
 
-
-const query = history.location.search;
-const values = query.substring(1);
-//console.log(values);
-
 const operationTabList = [
   {
     key: 'article',
@@ -111,9 +106,9 @@ const searchResults = () => {
     };
 
     return (
-      <GridContent>
+      <GridContent key={location.pathname}>
         <Row gutter={24}>
-          <Col lg={17} md={24}>
+          <Col lg={24} md={24}>
             <Card
               className={styles.tabsCard}
               bordered={false}

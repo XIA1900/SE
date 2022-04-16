@@ -115,13 +115,13 @@ const Member = () => {
             loadMore={loadMoreDom}
             dataSource={list}
             renderItem={(item) => (
-              <div>
+              <div style={{fontSize: '15px', color: '#4F4F4F'}}>
                 <p>
                 <img src={'http://10.20.0.164:10010/resources/userfiles/'+item.Member+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-                {item.Member+" " + item.JoinDay}
-                  <Button onClick = {(e) => deleteUser(item.Member, e)} style={{float: 'right'}}> 
-                    Delete
-                  </Button>
+                <a onClick={e => clickUser(item.name, e)} style={{marginLeft:'15px'}}>{item.Member}</a> joined at {item.JoinDay.substring(0,10)}
+                {/* <Button onClick={e => deleteUser(item.Member, e)} style={{float:'right'}}>
+                  Delete
+                </Button> */}
                 </p>
               </div>
             )}

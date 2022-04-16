@@ -8,7 +8,7 @@ import { stubFalse } from 'lodash';
 const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
-  hash: true,
+  hash: false,
   antd: {},
   dva: {
     hmr: true,
@@ -209,11 +209,12 @@ export default defineConfig({
       ],
     },
     {
-      name: 'search',
+      name: ' ',
       path: '/search',
       routes: [
         {
           path: '/search',
+          name:' ',
           component: './search',
         },
       ],
@@ -252,7 +253,7 @@ export default defineConfig({
     },
     {
       path: '/',
-      redirect: '/user/login',
+      redirect: '/homepage',
     },
     {
       component: '404',

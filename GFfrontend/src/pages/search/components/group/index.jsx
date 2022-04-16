@@ -8,7 +8,7 @@ import {
 import { Typography, Button, Card, Col, Form, List, Row, Select, Tag, Tabs } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 import React from 'react';
-import { useRequest, history } from 'umi';
+import { useRequest, history, useModel } from 'umi';
 import ArticleListContent from '@/pages/group/content/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import { searchGroup } from '@/services/search';
@@ -23,6 +23,9 @@ const { Paragraph } = Typography;
 
 
 const Group = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+
   const { data, loading } = useRequest( async () => {
     const result = await searchGroup({
       Name: search,
@@ -43,6 +46,23 @@ const Group = () => {
   }
 
   const nullData = {};
+
+  const clickUser = (values) => {
+    if(values === currentUser.name) {
+      history.push({
+        pathname: '/account/center',
+        search: values,
+      });
+    }
+    else {
+      history.push({
+        pathname: '/account/view',
+        search: values,
+      })
+    }
+  }
+
+
   return (
     <PageContainer >
       <div className={styles.cardList}>
@@ -68,13 +88,8 @@ const Group = () => {
                     className={styles.card}
                   >
                     <Card.Meta
-                      avatar={<img alt="" className={styles.cardAvatar} src={item.groupAvatar} />}
-                      title={<p key='group' onClick={() => {
-                        history.push({
-                          pathname: '/group/content',
-                          search: item.ID,
-                        });
-                      }}>{item.Name}</p>}
+                      avatar={<img alt="" className={styles.cardAvatar} src={'http://10.20.0.164:10010/resources/groupfiles/'+item.Name+'/avatar.png'} />}
+                      title={<p key='group' >{item.Name}</p>}
                       description={
                         <Paragraph
                           className={styles.item}
@@ -83,10 +98,16 @@ const Group = () => {
                           }}
                         >
                           {item.Description}
-                          <p></p>
-                          <p>{item.Creator+" "} Created At: {item.CreateDay}</p>
+                    
+                          <p> Created At: {item.CreateDay.substring(0,10)}</p>
                         </Paragraph>
                       }
+                      onClick={() => {
+                        history.push({
+                          pathname: '/group/content',
+                          search: item.ID.toString(),
+                        });
+                      }}
                     />
                   </Card>
                 </List.Item>

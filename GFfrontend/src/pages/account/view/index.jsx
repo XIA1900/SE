@@ -92,6 +92,10 @@ const Center = () => {
         defaultMessage: 'Unfollowed!',
       });
       message.success(defaultunfollowMessage);
+      location.reload();
+    }
+    else {
+      message.error("Failed! Please try again.");
     }
   }
 
@@ -105,6 +109,10 @@ const Center = () => {
         defaultMessage: 'Followed!',
       });
       message.success(defaultfollowMessage);
+      location.reload();
+    }
+    else {
+      message.error('Failed! Please try again.');
     }
   }
 

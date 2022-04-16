@@ -5,6 +5,8 @@ import Footer from '@/components/Footer';
 //mport { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { currentUser as queryCurrentUser } from './services/user';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
+import cookie from "react-cookies";
+import { login } from './services/login';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -22,10 +24,20 @@ export async function getInitialState() {
     try {
       //const msg = await queryCurrentUser();
       //return msg;
-      const result = {
-        name: 'link',
+      // const result = {
+      //   name: 'link',
+      // }
+      const name = cookie.load('username');
+      if(typeof(name) === 'undefined') {
+        history.push(loginPath);
       }
-      return result;
+      else {
+        const result = {
+          name: name,
+        }
+        return result;
+      }
+      
     } catch (error) {
       history.push(loginPath);
     }
@@ -35,10 +47,10 @@ export async function getInitialState() {
   
   // 如果是登录页面，不执行
   if (history.location.pathname !== loginPath) {
-    //const currentUser = await fetchUserInfo();
-    const currentUser = {
-      name: 'link',
-    }
+    const currentUser = await fetchUserInfo();
+    // const currentUser = {
+    //   name: 'link',
+    // }
     return {
       fetchUserInfo,
       currentUser,

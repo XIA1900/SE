@@ -29,18 +29,24 @@ const loginOut = async () => {
 const AvatarDropdown = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState;
-  console.log(currentUser.name);
 
   const onMenuClick = useCallback(
     async(event) => {
       const { key } = event;
 
       if (key === 'logout') {
+        const result = await logout({
+          username: currentUser.name,
+        });
+        console.log(result);
         cookie.remove('token');
-        await setInitialState((s) => ({ ...s, currentUser: undefined }));
+        cookie.remove('groupID');
+        cookie.remove('groupName');
         message.success("Logout Successfully!");
+        await setInitialState((s) => ({ ...s, currentUser: undefined }));
         history.push('/user/login');
         return;
+        
       }
 
       if(key === 'created_groups') {

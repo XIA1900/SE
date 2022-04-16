@@ -97,7 +97,7 @@ export async function getPersonalCollection(params) {
 
 export async function getPersonalFollower(values) {
   //return request('/api/getPersnalFollower');
-  return request('/api/user/followers', {
+  return request('/api/user/followers?username='+values.username, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ export async function removeFollower(values) {  //let someone not follow me
 
 export async function getPersonalFollowing(values) {
   //return request('/api/getPersonalFollowing');
-  return request('/api/user/followees', {
+  return request('/api/user/followees?username='+values.username, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -135,9 +135,9 @@ export async function removeFollowing(body) {   //not follow someone
   });
 }
 
-export async function addFollowing(values) {
+export async function addFollowing(body) {
   return request('/api/user/follow', {
-    data: values,
+    data: body,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

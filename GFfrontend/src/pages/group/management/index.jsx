@@ -17,10 +17,10 @@ console.log(groupID);
 const Settings = () => {
   const menuMap = {
     base: 'Basic Information',
-    analysis: 'Analysis',
+    //analysis: 'Analysis',
     member: 'Member List',
     post: 'Post List',
-    notification: 'Notification',
+    //notification: 'Notification',
   };
   const [initConfig, setInitConfig] = useState({
     mode: 'inline',

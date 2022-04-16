@@ -212,7 +212,7 @@ const BaseView = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your country!',
+                    message: 'Please input your gender!',
                   },
                 ]}
                 options={[

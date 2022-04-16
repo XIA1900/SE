@@ -112,10 +112,7 @@ const Following = () => {
               <div>
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-                {item.user}
-                  <Button onClick = {(e) => onUnfollow(item.user, e)} style={{float: 'right'}}> 
-                    Unfollow
-                  </Button>
+                <a onClick={e => clickUser(item.name, e)} style={{marginLeft:'15px'}}>{item.name}</a>
                 </p>
               </div>
             )}

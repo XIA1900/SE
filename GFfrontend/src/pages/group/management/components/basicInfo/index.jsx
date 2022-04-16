@@ -66,7 +66,7 @@ const BasicInfo = () => {
       owner: community.Creator,
       name: community.Name,
       description: community.Description,
-      createdAt: community.CreatedDay,
+      createdAt: community.CreateDay.substring(0,10),
     };
   }
 
@@ -134,7 +134,7 @@ const BasicInfo = () => {
         <>
           <div className={styles.left}>
             {/*begin change*/}
-            <Form layout='horizontal' form={form} onFinish={onFinish}>
+            <Form layout='vertical' form={form} onFinish={onFinish}>
 
               <Form.Item 
                 label="Group ID" 

@@ -1,5 +1,5 @@
 import { router } from 'umi';
-import { currentUser, createReply, getRelation, removeLike, createLike, removeCollection, createCollection, changePassword, checkMember, queryCurrent, quitGroup, joinGroup, getPersonalFollower, getPersonalBlacklist, getPersonalCollection, getPersonalFollowing, removeFollower, removeFollowing, removeBlacklist } from '@/services/user';
+import { addFollowing, currentUser, createReply, getRelation, removeLike, createLike, removeCollection, createCollection, changePassword, checkMember, queryCurrent, quitGroup, joinGroup, getPersonalFollower, getPersonalBlacklist, getPersonalCollection, getPersonalFollowing, removeFollower, removeFollowing, removeBlacklist } from '@/services/user';
 
 const Model = {
   namespace: 'user',
@@ -121,6 +121,12 @@ const Model = {
         type: 'save19',
         payload: response19,
       });
+
+      const response20 = yield call(addFollowing, payload);
+      yield put({
+        type: 'save20',
+        payload: response20,
+      });
     },
   },
   reducers: {
@@ -227,6 +233,12 @@ const Model = {
       };
     },
     save19(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save20(state, action) {
       return {
         ...state,
         data: action.payload,

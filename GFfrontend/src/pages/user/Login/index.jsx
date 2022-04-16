@@ -45,15 +45,18 @@ const Login = () => {
 
   const handleSubmit = async (values) => {
     console.log(values);
-    const userInfo = {
-      name: values.username,
-    };
+    
     try {
       // 登录
       const msg = await login({ ...values, type }); //后端
-      console.log(msg);
+      const token = msg.message;
+      console.log(token);
       if (msg.code == 200) {
-        cookie.save('token', msg.message);
+        const userInfo = {
+          name: values.username,
+        };
+        cookie.save('token', token);
+        cookie.save('username', values.username);
         //nickname = msg.Nickname;
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',

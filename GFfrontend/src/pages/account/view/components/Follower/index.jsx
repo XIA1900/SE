@@ -16,22 +16,35 @@ import { getPersonalFollower, removeFollower } from '@/services/user';
 const { Option } = Select;
 const FormItem = Form.Item;
 const username = history.location.search.substring(1);
+console.log(username);
   
 const Follower = () => {
     const [form] = Form.useForm();
     const { data, reload, loading, loadMore, loadingMore } = useRequest(
-      () => {
-        return getPersonalFollower({
+      async() => {
+        const result = await getPersonalFollower({
           username: username,
         });
+        return result;
       },
       {
+        formatResult: result => result,
         loadMore: true,
       },
     );
   
-    const list = data?.list || [];
-    console.log(list);
+    console.log(data);
+    let list = [];
+    if(typeof(data.Users) != 'undefined' && data.Users != null) {
+      const users = data.Users;
+      const size = Object.keys(users).length;
+      for(let i=0; i<size; i++) {
+        list.push({
+          name: users[i],
+          avatar: 'http://10.20.0.164:10010/resources/userfiles/'+ users[i]+'/avatar.png',
+        });
+      }
+    }
 
     const onRemove = async (values) => {
       console.log(values);
@@ -111,10 +124,7 @@ const Follower = () => {
               <div>
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-                {item.user}
-                  <Button onClick = {(e) => onRemove(item.user, e)} style={{float: 'right'}}> 
-                    Remove
-                  </Button>
+                <a onClick={e => clickUser(item.name, e)} style={{marginLeft:'15px'}}>{item.name}</a>
                 </p>
               </div>
             )}

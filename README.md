@@ -9,9 +9,6 @@ This is SE Projects By Center of the Road Group
 - Backend: Golang, GIN,  GORM.
 - Database: Mysql, Redis, ElasticSearch..
 
-## App URL
-
-- http://167.71.166.120:8001
 
 ## API Documentation
 

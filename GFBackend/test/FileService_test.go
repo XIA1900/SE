@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetSpaceInfo(t *testing.T) {
-	loginInfo, err := userLogin("kirby", "007")
+	loginInfo, err := userLogin("foo", "007")
 	if err != nil || loginInfo.Message == "" {
 		t.Error("Fail to Login. Error Message: " + err.Error())
 		return
@@ -69,8 +69,8 @@ func TestExpandSpace(t *testing.T) {
 	}
 
 	info := Info{
-		Username: "kirby",
-		Capacity: 36.8,
+		Username: "foo",
+		Capacity: 39.9,
 	}
 
 	requestData, _ := json.Marshal(info)
@@ -161,7 +161,7 @@ func TestDeleteFile(t *testing.T) {
 		Value: loginInfo.Message,
 	}
 	info := entity.UserFilename{
-		Filename: "soh.jpg",
+		Filename: "avatar.jpg",
 	}
 
 	requestData, _ := json.Marshal(info)

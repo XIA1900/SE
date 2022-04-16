@@ -64,7 +64,7 @@ func (communityManageController *CommunityManageController) CreateCommunity(cont
 	token, _ := context.Cookie("token")
 	username, _ := auth.GetTokenUsername(token)
 
-	err2 := communityManageController.communityManageService.CreateCommunity(username, communityInfo.Name, communityInfo.Description)
+	newCommunityID, err2 := communityManageController.communityManageService.CreateCommunity(username, communityInfo.Name, communityInfo.Description)
 	if err2 != nil {
 		if strings.Contains(err2.Error(), "400") {
 			context.JSON(respMsg.Code, respMsg)
@@ -78,6 +78,7 @@ func (communityManageController *CommunityManageController) CreateCommunity(cont
 
 	respMsg.Code = 200
 	respMsg.Message = "Create Community Success"
+	respMsg.NewCommunityID = newCommunityID
 	context.JSON(respMsg.Code, respMsg)
 	return
 }
@@ -98,7 +99,7 @@ func (communityManageController *CommunityManageController) DeleteCommunityByID(
 		Message: "Delete Successfully",
 	}
 	context.JSON(respMsg.Code, respMsg.Message)
-	id, err1 := strconv.Atoi(context.Param("id"))
+	id, err1 := strconv.Atoi(context.Query("id"))
 	if err1 != nil {
 		return
 	}
@@ -297,6 +298,47 @@ func (communityManageController *CommunityManageController) GetCommunities(conte
 	context.JSON(200, communitiesInfo)
 }
 
+// GetCommunitiesByCreator godoc
+// @Summary Get Communities By Creator
+// @Description need token in cookie, need page info: username, PageNO, pageSize
+// @Tags Community Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Param name body entity.Community true "Get Communities By Creator"
+// @Success 200 {object} []entity.NewCommunityInfo "<b>Success</b>. Get Community Success"
+// @Failure 400 {string} string "<b>Failure</b>. Bad Parameters or Not Found"
+// @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
+// @Router /community/getcommunitiesbycreator [get]
+func (communityManageController *CommunityManageController) GetCommunitiesByCreator(context *gin.Context) {
+	username := context.Query("username")
+	pageNO, err1 := strconv.Atoi(context.Query("pageNO"))
+	if err1 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	pageSize, err2 := strconv.Atoi(context.Query("pageSize"))
+	if err2 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+
+	communities, count_member, count_post, err3 := communityManageController.communityManageService.
+		GetCommunitiesByCreator(username, pageNO, pageSize)
+	if err3 != nil {
+		return
+	}
+
+	communitiesInfo := entity.NewCommunityInfo{
+		PageNO:         pageNO,
+		PageSize:       pageSize,
+		Communities:    communities,
+		NumberOfMember: count_member,
+		NumberOfPost:   count_post,
+	}
+	context.JSON(200, communitiesInfo)
+}
+
 // JoinCommunityByID godoc
 // @Summary Join One Community By ID
 // @Description need token in cookie, need community ID
@@ -310,7 +352,7 @@ func (communityManageController *CommunityManageController) GetCommunities(conte
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
 // @Router /community/join/:id [get]
 func (communityManageController *CommunityManageController) JoinCommunityByID(context *gin.Context) {
-	id, err1 := strconv.Atoi(context.Param("id"))
+	id, err1 := strconv.Atoi(context.Query("id"))
 	if err1 != nil {
 		context.JSON(400, "Bad Parameters or Not Found or Existed")
 		return
@@ -370,21 +412,37 @@ func (communityManageController *CommunityManageController) LeaveCommunityByID(c
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
 // @Router /community/getmember [get]
 func (communityManageController *CommunityManageController) GetMembersByCommunityIDs(context *gin.Context) {
-	var CommunityMembersInfo entity.CommunityMembersInfo
-	err1 := context.ShouldBindJSON(&CommunityMembersInfo)
+	//var CommunityMembersInfo entity.CommunityMembersInfo
+	//err1 := context.ShouldBindJSON(&CommunityMembersInfo)
+	//if err1 != nil {
+	//	context.JSON(400, "Bad Parameters")
+	//	return
+	//}
+	CommunityID, err1 := strconv.Atoi(context.Query("id"))
 	if err1 != nil {
 		context.JSON(400, "Bad Parameters")
 		return
 	}
-	communityMembers, err2 := communityManageController.communityManageService.
-		GetMembersByCommunityIDs(CommunityMembersInfo.CommunityID, CommunityMembersInfo.PageNO, CommunityMembersInfo.PageSize)
+	PageNO, err2 := strconv.Atoi(context.Query("pageNO"))
 	if err2 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+	PageSize, err3 := strconv.Atoi(context.Query("pageSize"))
+	if err3 != nil {
+		context.JSON(400, "Bad Parameters")
+		return
+	}
+
+	communityMembers, err4 := communityManageController.communityManageService.
+		GetMembersByCommunityIDs(CommunityID, PageNO, PageSize)
+	if err4 != nil {
 		return
 	}
 	newCommunityMembersInfo := entity.CommunityMembersInfo{
-		PageNO:      CommunityMembersInfo.PageNO,
-		PageSize:    CommunityMembersInfo.PageSize,
-		CommunityID: CommunityMembersInfo.CommunityID,
+		PageNO:      PageNO,
+		PageSize:    PageSize,
+		CommunityID: CommunityID,
 		Members:     communityMembers,
 	}
 	context.JSON(200, newCommunityMembersInfo)
@@ -403,20 +461,21 @@ func (communityManageController *CommunityManageController) GetMembersByCommunit
 // @Failure 500 {string} string "<b>Failure</b>. Server Internal Error."
 // @Router /community/getcommunityidbymember [get]
 func (communityManageController *CommunityManageController) GetCommunityIDsByMember(context *gin.Context) {
-	var CommunityIDsInfo entity.CommunityIDsInfo
-	err1 := context.ShouldBindJSON(&CommunityIDsInfo)
-	if err1 != nil {
+	member := context.Query("name")
+	pageNO, err2 := strconv.Atoi(context.Query("pageNO"))
+	if err2 != nil {
 		context.JSON(400, "Bad Parameters")
 		return
 	}
-	communityIDs, err2 := communityManageController.communityManageService.
-		GetCommunityIDsByMember(CommunityIDsInfo.Member, CommunityIDsInfo.PageNO, CommunityIDsInfo.PageSize)
-	if err2 != nil {
+	pageSize, err3 := strconv.Atoi(context.Query("pageSize"))
+	if err3 != nil {
+		context.JSON(400, "Bad Parameters")
 		return
 	}
-	var newCommunityIDsInfo []int
-	for i := 0; i < len(communityIDs); i++ {
-		newCommunityIDsInfo = append(newCommunityIDsInfo, communityIDs[i].CommunityID)
+
+	communityIDs, err4 := communityManageController.communityManageService.GetCommunityIDsByMember(member, pageNO, pageSize)
+	if err4 != nil {
+		return
 	}
-	context.JSON(200, newCommunityIDsInfo)
+	context.JSON(200, communityIDs)
 }

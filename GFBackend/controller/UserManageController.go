@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"net/http"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -436,8 +437,9 @@ func (userManageController *UserManageController) UserUnfollow(context *gin.Cont
 // @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/followers [post]
 func (userManageController *UserManageController) GetFollowers(context *gin.Context) {
-	token, _ := context.Cookie("token")
-	username, _ := auth.GetTokenUsername(token)
+	//token, _ := context.Cookie("token")
+	//username, _ := auth.GetTokenUsername(token)
+	username := context.Query("username")
 	followers, err1 := userManageController.userManageService.GetFollowers(username)
 	errMsg := entity.ResponseMsg{
 		Code:    http.StatusBadRequest,
@@ -472,8 +474,9 @@ func (userManageController *UserManageController) GetFollowers(context *gin.Cont
 // @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/followees [post]
 func (userManageController *UserManageController) GetFollowees(context *gin.Context) {
-	token, _ := context.Cookie("token")
-	username, _ := auth.GetTokenUsername(token)
+	//token, _ := context.Cookie("token")
+	//username, _ := auth.GetTokenUsername(token)
+	username := context.Query("username")
 	followers, err1 := userManageController.userManageService.GetFollowees(username)
 	errMsg := entity.ResponseMsg{
 		Code:    http.StatusBadRequest,
@@ -508,8 +511,9 @@ func (userManageController *UserManageController) GetFollowees(context *gin.Cont
 // @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
 // @Router /user/GetUserInfoByUsername [get]
 func (userManageController *UserManageController) GetUserInfoByUsername(context *gin.Context) {
-	username := context.Query("username")
-	userInfo, err := userManageController.userManageService.GetUserInfoByUsername(username)
+	current_username := context.Query("current_username")
+	target_username := context.Query("target_username")
+	userInfo, isFollowed, isFollowother, err := userManageController.userManageService.GetUserInfoByUsername(current_username, target_username)
 	if err != nil {
 		errMsg := entity.ResponseMsg{
 			Code:    http.StatusBadRequest,
@@ -522,5 +526,52 @@ func (userManageController *UserManageController) GetUserInfoByUsername(context 
 		context.JSON(errMsg.Code, errMsg)
 		return
 	}
-	context.JSON(http.StatusOK, userInfo)
+	context.JSON(http.StatusOK, gin.H{
+		"userInfo":      userInfo,
+		"isFollowed":    isFollowed,
+		"isFollowother": isFollowother,
+	})
+}
+
+// GetUsersInfoByUsernameFuzzySearch godoc
+// @Summary Get Users' Info By username, pageNo, pageSize, "/getusersinfo?username=&pageNo=&pageSize="
+// @Description need token in cookie
+// @Tags User Manage
+// @Accept json
+// @Produce json
+// @Security ApiAuthToken
+// @Success 200 {object} entity.UsersInfo "<b>Success</b>. Search Successfully"
+// @Failure 400 {object} entity.ResponseMsg "<b>Failure</b>. Bad Parameters."
+// @Failure 500 {object} entity.ResponseMsg "<b>Failure</b>. Server Internal Error."
+// @Router /user/getusersinfo [get]
+func (userManageController *UserManageController) GetUsersInfoByUsernameFuzzySearch(context *gin.Context) {
+	username := context.Query("username")
+	pageNo, _ := strconv.Atoi(context.Query("pageNo"))
+	pageSize, _ := strconv.Atoi(context.Query("pageSize"))
+	userInfo, err := userManageController.userManageService.GetUsersInfoByUsernameFuzzySearch(username, pageNo, pageSize)
+	if err != nil {
+		errMsg := entity.ResponseMsg{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Parameters.",
+		}
+		if strings.Contains(err.Error(), "500") {
+			errMsg.Code = http.StatusInternalServerError
+			errMsg.Message = "Internal Server Error"
+		}
+		context.JSON(errMsg.Code, errMsg)
+		return
+	}
+	var simpleUsers []entity.SimpleUserInfo
+	for _, user := range userInfo {
+		simpleUsers = append(simpleUsers, entity.SimpleUserInfo{
+			ID:       user.ID,
+			Username: user.Username,
+		})
+	}
+	usersInfo := entity.UsersInfo{
+		Users:    simpleUsers,
+		PageNO:   pageNo,
+		PageSize: pageSize,
+	}
+	context.JSON(http.StatusOK, usersInfo)
 }

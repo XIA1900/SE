@@ -17,6 +17,7 @@ type IArticleDAO interface {
 	GetArticleByID(id int) (entity.Article, error)
 	GetArticleList(offset, limit int) ([]entity.Article, error)
 	GetArticleListByCommunityID(communityID int, offset, limit int) ([]entity.Article, error)
+	CountArticleByCommunityID(communityID int) (int64, error)
 }
 
 type ArticleDAO struct {
@@ -86,4 +87,13 @@ func (articleDAO *ArticleDAO) GetArticleListByCommunityID(communityID int, offse
 		return nil, result.Error
 	}
 	return articles, nil
+}
+
+func (articleDAO *ArticleDAO) CountArticleByCommunityID(communityID int) (int64, error) {
+	var count int64
+	result := articleDAO.db.Model(&entity.Article{}).Where("CommunityID = ?", communityID).Count(&count)
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	return count, nil
 }

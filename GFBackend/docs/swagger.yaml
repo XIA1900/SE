@@ -229,6 +229,25 @@ definitions:
         example: It is true
         type: string
     type: object
+  entity.NewCommunityInfo:
+    properties:
+      Communities:
+        items:
+          $ref: '#/definitions/entity.Community'
+        type: array
+      NumberOfMember:
+        items:
+          type: integer
+        type: array
+      NumberOfPost:
+        items:
+          type: integer
+        type: array
+      PageNO:
+        type: integer
+      PageSize:
+        type: integer
+    type: object
   entity.NewUserInfo:
     properties:
       Birthday:
@@ -257,6 +276,17 @@ definitions:
         type: integer
       message:
         example: process successfully
+        type: string
+      new_community_id:
+        type: integer
+    type: object
+  entity.SimpleUserInfo:
+    properties:
+      ID:
+        example: 21
+        type: integer
+      Username:
+        example: jamesbond21
         type: string
     type: object
   entity.Space:
@@ -295,6 +325,8 @@ definitions:
       message:
         example: process successfully
         type: string
+      new_community_id:
+        type: integer
     type: object
   entity.UserFollows:
     properties:
@@ -315,6 +347,8 @@ definitions:
       message:
         example: process successfully
         type: string
+      new_community_id:
+        type: integer
     type: object
   entity.UserInfo:
     properties:
@@ -337,6 +371,17 @@ definitions:
       Username:
         example: boss
         type: string
+    type: object
+  entity.UsersInfo:
+    properties:
+      PageNO:
+        type: integer
+      PageSize:
+        type: integer
+      Users:
+        items:
+          $ref: '#/definitions/entity.SimpleUserInfo'
+        type: array
     type: object
 host: http://167.71.166.120:10010
 info:
@@ -1153,6 +1198,40 @@ paths:
       summary: Get Communities By Name Fuzzy Match
       tags:
       - Community Manage
+  /community/getcommunitiesbycreator:
+    get:
+      consumes:
+      - application/json
+      description: 'need token in cookie, need page info: username, PageNO, pageSize'
+      parameters:
+      - description: Get Communities By Creator
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Community'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Get Community Success
+          schema:
+            items:
+              $ref: '#/definitions/entity.NewCommunityInfo'
+            type: array
+        "400":
+          description: <b>Failure</b>. Bad Parameters or Not Found
+          schema:
+            type: string
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            type: string
+      security:
+      - ApiAuthToken: []
+      summary: Get Communities By Creator
+      tags:
+      - Community Manage
   /community/getcommunityidbymember:
     get:
       consumes:
@@ -1573,6 +1652,32 @@ paths:
       summary: User Uploads files including images, video etc.
       tags:
       - Static Resource
+  /file/upload/groupavatar/:groupid:
+    post:
+      consumes:
+      - application/json
+      description: need token in cookie, html file type input element include name
+        attribute with value "uploadFilename"
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: <b>Success</b>. Upload Successfully
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "400":
+          description: <b>Failure</b>. Bad Parameters or No Enough Space
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: User Uploads avatar about community that he or she creates
+      tags:
+      - Static Resource
   /resources/userfiles/{username}/{filename}:
     get:
       consumes:
@@ -1764,6 +1869,31 @@ paths:
       security:
       - ApiAuthToken: []
       summary: Get User's followers
+      tags:
+      - User Manage
+  /user/getusersinfo:
+    get:
+      consumes:
+      - application/json
+      description: need token in cookie
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: <b>Success</b>. Search Successfully
+          schema:
+            $ref: '#/definitions/entity.UsersInfo'
+        "400":
+          description: <b>Failure</b>. Bad Parameters.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+        "500":
+          description: <b>Failure</b>. Server Internal Error.
+          schema:
+            $ref: '#/definitions/entity.ResponseMsg'
+      security:
+      - ApiAuthToken: []
+      summary: Get Users' Info By username, pageNo, pageSize, "/getusersinfo?username=&pageNo=&pageSize="
       tags:
       - User Manage
   /user/login:

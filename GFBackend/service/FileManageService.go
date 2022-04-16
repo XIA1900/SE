@@ -22,20 +22,23 @@ type IFileManageService interface {
 	UpdateUsed(username string) error
 	UpdateCapacity(username string, newSize float64) error
 	Upload(context *gin.Context, username string, file *multipart.FileHeader) error
+	UploadCommunityAvatar(context *gin.Context, username string, groupId int, file *multipart.FileHeader) error
 	Download(context *gin.Context, username string, filename string) error
 	DeleteUserFile(username, filename string) error
 }
 
 type FileManageService struct {
-	spaceDAO dao.ISpaceDAO
+	spaceDAO     dao.ISpaceDAO
+	communityDAO dao.ICommunityDAO
 }
 
-func NewFileManageService(spaceDAO dao.ISpaceDAO) *FileManageService {
+func NewFileManageService(spaceDAO dao.ISpaceDAO, communityDAO dao.ICommunityDAO) *FileManageService {
 	if fileManageService == nil {
 		fileManageServiceLock.Lock()
 		if fileManageService == nil {
 			fileManageService = &FileManageService{
-				spaceDAO: spaceDAO,
+				spaceDAO:     spaceDAO,
+				communityDAO: communityDAO,
 			}
 		}
 		fileManageServiceLock.Unlock()
@@ -46,6 +49,8 @@ func NewFileManageService(spaceDAO dao.ISpaceDAO) *FileManageService {
 var FileManageServiceSet = wire.NewSet(
 	dao.NewSpaceDAO,
 	wire.Bind(new(dao.ISpaceDAO), new(*dao.SpaceDAO)),
+	dao.NewCommunityDAO,
+	wire.Bind(new(dao.ICommunityDAO), new(*dao.CommunityDAO)),
 	NewFileManageService,
 )
 
@@ -99,6 +104,24 @@ func (fileManageService FileManageService) Upload(context *gin.Context, username
 		return errors.New("400")
 	}
 	filename := utils.DirBasePath + username + "/" + file.Filename
+	if err1 := context.SaveUploadedFile(file, filename); err1 != nil {
+		logger.AppLogger.Error(err1.Error())
+		return errors.New("500")
+	}
+	_ = fileManageService.UpdateUsed(username)
+	return nil
+}
+
+func (fileManageService FileManageService) UploadCommunityAvatar(context *gin.Context, username string, groupId int, file *multipart.FileHeader) error {
+	community, getCommunityErr := fileManageService.communityDAO.GetOneCommunityByID(groupId)
+	if getCommunityErr != nil {
+		logger.AppLogger.Error(getCommunityErr.Error())
+		return errors.New("500")
+	}
+	if community.Creator != username {
+		return errors.New("400")
+	}
+	filename := utils.CommunityAvatarBasePath + file.Filename
 	if err1 := context.SaveUploadedFile(file, filename); err1 != nil {
 		logger.AppLogger.Error(err1.Error())
 		return errors.New("500")

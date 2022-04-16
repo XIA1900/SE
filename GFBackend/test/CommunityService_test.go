@@ -1,10 +1,13 @@
 package test
 
 import (
+	"GFBackend/entity"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/cookiejar"
 	"strings"
 	"testing"
 	"unsafe"
@@ -108,36 +111,85 @@ func TestDeleteCommunity(t *testing.T) {
 }
 
 func TestCreateCommunity(t *testing.T) {
-	type CommunityInfo struct {
-		Name        string `json:"Name"`
-		Description string `json:"Description"`
+	loginInfo, err := userLogin("boss", "007")
+	if err != nil || loginInfo.Message == "" {
+		t.Error("Fail to Login. Error Message: " + err.Error())
+		return
+	}
+	cookie := &http.Cookie{
+		Name:  "token",
+		Value: loginInfo.Message,
 	}
 
-	communityInfo := CommunityInfo{
-		Name:        "group11",
-		Description: "test11",
+	communityInfo := entity.CommunityInfo{
+		Name:        "NintendoGames",
+		Description: "The Legend of Zelda: Breath of the Wild",
 	}
+
+	//type Info struct {
+	//	Username string  `json:"username"`
+	//	Capacity float32 `json:"capacity"`
+	//}
+	//
+	//type CommunityInfo struct {
+	//	Name        string `json:"Name"`
+	//	Description string `json:"Description"`
+	//}
+	//
+	//communityInfo := CommunityInfo{
+	//	Name:        "group11",
+	//	Description: "test11",
+	//}
 
 	requestData, _ := json.Marshal(communityInfo)
-	response, err1 := http.NewRequest("POST", "http://localhost:10010/gf/api/community/create",
-		strings.NewReader(string(requestData)))
+	request, err1 := http.NewRequest(
+		"POST",
+		"http://localhost:10010/gf/api/community/create",
+		bytes.NewReader(requestData))
+	//if err1 != nil {
+	//	t.Error("Failed to Request. " + err1.Error())
+	//}
+	//defer response.Body.Close()
+	//
+	//content, err2 := ioutil.ReadAll(response.Body)
+	//if err2 != nil {
+	//	t.Error("Failed to Read Response Body. " + err2.Error())
+	//	return
+	//}
+	//
+	//str := (*string)(unsafe.Pointer(&content))
+	//if strings.Contains(*str, "400") {
+	//	t.Error("Failed to Create Community. " + *str)
+	//	return
+	//}
+	//fmt.Println(*str)
 	if err1 != nil {
-		t.Error("Failed to Request. " + err1.Error())
+		t.Error("Failed to Generate Request: " + err1.Error())
+		return
+	}
+	request.AddCookie(cookie)
+	jar, err2 := cookiejar.New(nil)
+	if err2 != nil {
+		t.Error("Failed to Set Cookie: " + err2.Error())
+		return
+	}
+	var client http.Client
+	client = http.Client{
+		Jar: jar,
+	}
+	response, err3 := client.Do(request)
+	if err3 != nil {
+		t.Error("Failed to Request: " + err3.Error())
+		return
 	}
 	defer response.Body.Close()
 
-	content, err2 := ioutil.ReadAll(response.Body)
-	if err2 != nil {
-		t.Error("Failed to Read Response Body. " + err2.Error())
+	err4 := printResponseContent(response)
+	if err4 != nil {
+		t.Error("Failed to Interpret Response Message: " + err4.Error())
 		return
 	}
 
-	str := (*string)(unsafe.Pointer(&content))
-	if strings.Contains(*str, "400") {
-		t.Error("Failed to Create Community. " + *str)
-		return
-	}
-	fmt.Println(*str)
 }
 
 func TestDeleteCommunityByID(t *testing.T) {
@@ -257,6 +309,7 @@ func TestGetOneCommunityByID(t *testing.T) {
 		t.Error("Failed to Read Response Body. " + err2.Error())
 		return
 	}
+	defer response.Body.Close()
 
 	str := (*string)(unsafe.Pointer(&content))
 	if strings.Contains(*str, "400") {

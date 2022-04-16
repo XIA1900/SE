@@ -17,6 +17,7 @@ type IUserDAO interface {
 	UpdateUserPassword(username string, newPassword string) error
 	UpdateUserByUsername(userInfo entity.User) error
 	GetUserInfoByUsername(username string) (entity.User, error)
+	GetUsersByUsernameFuzzySearch(username string, offset, limit int) ([]entity.User, error)
 }
 
 type UserDAO struct {
@@ -90,4 +91,13 @@ func (userDAO *UserDAO) GetUserInfoByUsername(username string) (entity.User, err
 		return entity.User{}, result.Error
 	}
 	return userInfo, nil
+}
+
+func (userDAO *UserDAO) GetUsersByUsernameFuzzySearch(username string, offset, limit int) ([]entity.User, error) {
+	var users []entity.User
+	result := userDAO.db.Where("username like ?", "%"+username+"%").Offset(offset).Limit(limit).Find(&users)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return users, nil
 }

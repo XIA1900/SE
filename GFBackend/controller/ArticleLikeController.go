@@ -67,8 +67,7 @@ func (articleLikeController ArticleLikeController) CreateLike(context *gin.Conte
 		}
 		return
 	}
-
-	context.JSON(200, "Create Successfully")
+	context.JSON(200, "200")
 }
 
 // DeleteLike godoc
@@ -94,7 +93,7 @@ func (articleLikeController ArticleLikeController) DeleteLike(context *gin.Conte
 
 	_ = articleLikeController.articleLikeService.DeleteLike(username, id)
 
-	context.JSON(200, "Delete Like Successfully")
+	context.JSON(200, "200")
 }
 
 // GetLikeList godoc

@@ -68,7 +68,11 @@ func (articleLikeDAO *ArticleLikeDAO) GetLike(username string, articleID int) (e
 	var articleLike entity.ArticleLike
 	result := articleLikeDAO.db.Where("Username = ? AND ArticleID = ?", username, articleID).First(&articleLike)
 	if result.Error != nil {
-		return entity.ArticleLike{}, result.Error
+		return entity.ArticleLike{
+			Username:  "",
+			ArticleID: 0,
+			LikeDay:   "",
+		}, result.Error
 	}
 	return articleLike, nil
 }

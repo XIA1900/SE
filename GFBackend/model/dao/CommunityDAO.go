@@ -19,6 +19,7 @@ type ICommunityDAO interface {
 	CountByNameFuzzyMatch(name string) (int64, error)
 	GetCommunities(offset, limit int) ([]entity.Community, error)
 	CountCommunities() (int64, error)
+	GetCommunitiesByCreator(creator string, offset, limit int) ([]entity.Community, error)
 }
 
 type CommunityDAO struct {
@@ -99,6 +100,15 @@ func (communityDAO *CommunityDAO) CountByNameFuzzyMatch(name string) (int64, err
 func (communityDAO *CommunityDAO) GetCommunities(offset, limit int) ([]entity.Community, error) {
 	var communities []entity.Community
 	result := communityDAO.db.Limit(limit).Offset(offset).Find(&communities)
+	if result.Error != nil {
+		return communities, result.Error
+	}
+	return communities, nil
+}
+
+func (communityDAO *CommunityDAO) GetCommunitiesByCreator(creator string, offset, limit int) ([]entity.Community, error) {
+	var communities []entity.Community
+	result := communityDAO.db.Limit(limit).Offset(offset).Where("Creator = ?", creator).Find(&communities)
 	if result.Error != nil {
 		return communities, result.Error
 	}

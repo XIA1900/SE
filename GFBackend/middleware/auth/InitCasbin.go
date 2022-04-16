@@ -41,22 +41,25 @@ func addInitialPolicy() {
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/followers", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/followees", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/user/getuserinfo", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/user/getusersinfo", "GET")
 
 	// /community/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/create", "POST")
-	CasbinEnforcer.AddPolicy("regular", basePath+"/community/delete/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/delete", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/update", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/numberofmember", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getone", "GET")
-	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getbyname", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getbyname", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/get", "GET")
-	CasbinEnforcer.AddPolicy("regular", basePath+"/community/join/:id", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/join", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/leave/:id", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getmember", "GET")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getcommunityidbymember", "GET")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/community/getcommunitiesbycreator", "GET")
 
 	// /file/...
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/upload", "POST")
+	CasbinEnforcer.AddPolicy("regular", basePath+"/file/upload/communityavatar/:groupid", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/download", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/delete", "POST")
 	CasbinEnforcer.AddPolicy("regular", basePath+"/file/scan", "POST")

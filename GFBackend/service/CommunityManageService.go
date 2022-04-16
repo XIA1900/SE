@@ -15,7 +15,7 @@ var communityManageServiceLock sync.Mutex
 var communityManageService *CommunityManageService
 
 type ICommunityManageService interface {
-	CreateCommunity(creator string, name string, description string) error
+	CreateCommunity(creator string, name string, description string) (int, error)
 	DeleteCommunityByID(id int, operator string) error
 	UpdateDescriptionByID(id int, newDescription, operator string) error
 	GetNumberOfMembersByID(id int) (int64, error)
@@ -25,15 +25,17 @@ type ICommunityManageService interface {
 	JoinCommunityByID(id int, username string) error
 	LeaveCommunityByID(id int, username string) error
 	GetMembersByCommunityIDs(id int, pageNO, pageSize int) ([]entity.CommunityMember, error)
-	GetCommunityIDsByMember(username string, pageNO, pageSize int) ([]entity.CommunityMember, error)
+	GetCommunityIDsByMember(username string, pageNO, pageSize int) ([]entity.Community, error)
+	GetCommunitiesByCreator(creator string, pageNO, pageSize int) ([]entity.Community, []int64, []int64, error)
 }
 
 type CommunityManageService struct {
 	communityDAO       dao.ICommunityDAO
 	communityMemberDAO dao.ICommunityMemberDAO
+	articleDAO         dao.IArticleDAO
 }
 
-func NewCommunityManageService(communityDAO dao.ICommunityDAO, communityMemberDAO dao.ICommunityMemberDAO) *CommunityManageService {
+func NewCommunityManageService(communityDAO dao.ICommunityDAO, communityMemberDAO dao.ICommunityMemberDAO, articleDAO dao.IArticleDAO) *CommunityManageService {
 	if communityManageService == nil {
 		communityManageServiceLock.Lock()
 		if communityManageService == nil {
@@ -41,6 +43,9 @@ func NewCommunityManageService(communityDAO dao.ICommunityDAO, communityMemberDA
 				communityDAO:       communityDAO,
 				communityMemberDAO: communityMemberDAO,
 			}
+		}
+		if articleDAO != nil {
+			communityManageService.articleDAO = articleDAO
 		}
 		communityManageServiceLock.Unlock()
 	}
@@ -52,26 +57,28 @@ var CommunityManageServiceSet = wire.NewSet(
 	wire.Bind(new(dao.ICommunityMemberDAO), new(*dao.CommunityMemberDAO)),
 	dao.NewCommunityDAO,
 	wire.Bind(new(dao.ICommunityDAO), new(*dao.CommunityDAO)),
+	dao.NewArticleDAO,
+	wire.Bind(new(dao.IArticleDAO), new(*dao.ArticleDAO)),
 	NewCommunityManageService,
 )
 
-func (communityManageService *CommunityManageService) CreateCommunity(creator, name, description string) error {
+func (communityManageService *CommunityManageService) CreateCommunity(creator, name, description string) (int, error) {
 	newCommunityID, err1 := communityManageService.communityDAO.CreateCommunity(name, creator, description, utils.GetCurrentDate())
 	if err1 != nil {
 		if strings.Contains(err1.Error(), "Duplicate") {
-			return errors.New("400")
+			return -1, errors.New("400")
 		}
 		logger.AppLogger.Error(err1.Error())
-		return errors.New("500")
+		return -1, errors.New("500")
 	}
 
 	err2 := communityManageService.communityMemberDAO.Create(newCommunityID, creator, utils.GetCurrentDate())
 	if err2 != nil {
 		logger.AppLogger.Error(err2.Error())
-		return errors.New("500")
+		return -1, errors.New("500")
 	}
 
-	return nil
+	return newCommunityID, nil
 }
 
 func (communityManageService *CommunityManageService) DeleteCommunityByID(id int, operator string) error {
@@ -139,7 +146,7 @@ func (communityManageService *CommunityManageService) GetOneCommunityByID(id int
 	memberList, err3 := communityManageService.communityMemberDAO.GetMembersByCommunityIDs(id, (pageNO-1)*pageSize, pageSize)
 	if err3 != nil {
 		logger.AppLogger.Error(err3.Error())
-		return entity.Community{}, 0, false, err3
+		return entity.Community{}, 0, true, err3
 	}
 	for i := 0; i < len(memberList); i++ {
 		if memberList[i].Member == username {
@@ -148,7 +155,7 @@ func (communityManageService *CommunityManageService) GetOneCommunityByID(id int
 			return community, count, false, nil
 		}
 	}
-	return community, count, false, nil
+	return community, count, true, nil
 }
 
 func (communityManageService *CommunityManageService) GetCommunitiesByNameFuzzyMatch(name string, pageNO, pageSize int) ([]entity.Community, int64, error) {
@@ -191,6 +198,34 @@ func (communityManageService *CommunityManageService) GetCommunities(pageNO, pag
 	return communities, totalPageNO, nil
 }
 
+func (communityManageService *CommunityManageService) GetCommunitiesByCreator(creator string, pageNO, pageSize int) ([]entity.Community, []int64, []int64, error) {
+	communities, err1 := communityManageService.communityDAO.GetCommunitiesByCreator(creator, (pageNO-1)*pageSize, pageSize)
+	if err1 != nil {
+		logger.AppLogger.Error(err1.Error())
+		return nil, nil, nil, err1
+	}
+	var num_member []int64
+	for i := 0; i < len(communities); i++ {
+		count, err2 := communityManageService.communityMemberDAO.CountMemberByCommunityID(communities[i].ID)
+		if err2 != nil {
+			logger.AppLogger.Error(err2.Error())
+			return nil, nil, nil, err2
+		}
+		num_member = append(num_member, count)
+	}
+	var num_post []int64
+	for i := 0; i < len(communities); i++ {
+		count, err2 := communityManageService.articleDAO.CountArticleByCommunityID(communities[i].ID)
+		if err2 != nil {
+			logger.AppLogger.Error(err2.Error())
+			return nil, nil, nil, err2
+		}
+		num_post = append(num_post, count)
+	}
+
+	return communities, num_member, num_post, nil
+}
+
 func (communityManageService *CommunityManageService) JoinCommunityByID(id int, username string) error {
 	_, err1 := communityManageService.communityDAO.GetOneCommunityByID(id)
 	if err1 != nil {
@@ -229,11 +264,20 @@ func (communityManageService *CommunityManageService) GetMembersByCommunityIDs(i
 	return members, nil
 }
 
-func (communityManageService *CommunityManageService) GetCommunityIDsByMember(username string, pageNO, pageSize int) ([]entity.CommunityMember, error) {
+func (communityManageService *CommunityManageService) GetCommunityIDsByMember(username string, pageNO, pageSize int) ([]entity.Community, error) {
 	members, err := communityManageService.communityMemberDAO.GetCommunityIDsByMember(username, (pageNO-1)*pageSize, pageSize)
 	if err != nil {
 		logger.AppLogger.Error(err.Error())
 		return nil, err
 	}
-	return members, nil
+	var communities []entity.Community
+	for i := 0; i < len(members); i++ {
+		community, err1 := communityManageService.communityDAO.GetOneCommunityByID(members[i].CommunityID)
+		if err1 != nil {
+			logger.AppLogger.Error(err1.Error())
+			return nil, err1
+		}
+		communities = append(communities, community)
+	}
+	return communities, nil
 }

@@ -30,7 +30,7 @@ func TestUserLogin(t *testing.T) {
 
 func TestUserRegister(t *testing.T) {
 	userInfo := entity.UserInfo{
-		Username: "kirby",
+		Username: "foo",
 		Password: "007",
 	}
 
@@ -64,7 +64,7 @@ func TestUserRegister(t *testing.T) {
 }
 
 func TestUserUpdatePassword(t *testing.T) {
-	loginInfo, err := userLogin("kirby", "008")
+	loginInfo, err := userLogin("foo", "008")
 	if err != nil || loginInfo.Message == "" {
 		t.Error("Fail to Login. Error Message: " + err.Error())
 		return
@@ -74,7 +74,7 @@ func TestUserUpdatePassword(t *testing.T) {
 		Value: loginInfo.Message,
 	}
 	userInfo := entity.UserInfo{
-		Username:    "kirby",
+		Username:    "foo",
 		Password:    "008",
 		NewPassword: "007",
 	}
@@ -115,7 +115,7 @@ func TestUserUpdatePassword(t *testing.T) {
 }
 
 func TestUserUpdateInfo(t *testing.T) {
-	loginInfo, err := userLogin("kirby", "007")
+	loginInfo, err := userLogin("foo", "007")
 	if err != nil || loginInfo.Message == "" {
 		t.Error("Fail to Login. Error Message: " + err.Error())
 		return
@@ -125,8 +125,8 @@ func TestUserUpdateInfo(t *testing.T) {
 		Value: loginInfo.Message,
 	}
 	userInfo := entity.NewUserInfo{
-		Username:   "kirby",
-		Nickname:   "star",
+		Username:   "foo",
+		Nickname:   "food",
 		Birthday:   "2020-02-02",
 		Gender:     "unknown",
 		Department: "CISE",

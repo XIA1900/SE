@@ -111,7 +111,7 @@ const Like = () => {
             </List.Item>
             // <div>
             //   <p>
-            //   <img src={'http://10.20.0.164:10010/resources/userfiles/'+item.Username+'/avatar.png'} style={{ width: '30px', height: '30px', borderRadius: '30px' }} />
+            //   <img src={'http://167.71.166.120:8001/resources/userfiles/'+item.Username+'/avatar.png'} style={{ width: '30px', height: '30px', borderRadius: '30px' }} />
             //   {item.Username}
             //   </p>
             // </div>

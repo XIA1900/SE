@@ -73,7 +73,7 @@ const Center = () => {
       email: info.Username+"@ufl.edu",
       gender: info.Gender,
       major: info.Department,
-      avatar: 'http://10.20.0.164:10010/resources/userfiles/'+ info.Username+'/avatar.png',
+      avatar: 'http://167.71.166.120:8001/resources/userfiles/'+ info.Username+'/avatar.png',
       country: 'U.S',
       province: 'Florida',
       city: 'Gainesville',

@@ -26,7 +26,7 @@ const ArticleListContent = ({ data: { Content, CreateDay, Username} }) => {
   return (
   <div className={styles.listContent}>
     <div className={styles.extra}>
-      <img src={'http://10.20.0.164:10010/resources/userfiles/'+Username+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+      <img src={'http://167.71.166.120:8001/resources/userfiles/'+Username+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
       <a onClick={(e) => clickUser(Username, e)}> {Username} </a>
       <em> {CreateDay}</em>
     </div>

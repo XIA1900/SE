@@ -217,7 +217,7 @@ const Center = () => {
         <p style={{fontSize: '15px', marginTop:'25px', color: '#4F4F4F',}}>
           <img
             alt=""
-            src={'http://10.20.0.164:10010/resources/userfiles/'+Owner+'/avatar.png'}
+            src={'http://167.71.166.120:8001/resources/userfiles/'+Owner+'/avatar.png'}
           />
           <a onClick={e => clickUser(Owner, e)}> {Owner}</a> updated at {UpdatedAt.substring(0,10)}
         </p>

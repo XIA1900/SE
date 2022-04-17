@@ -88,7 +88,7 @@ const Group = () => {
                     className={styles.card}
                   >
                     <Card.Meta
-                      avatar={<img alt="" className={styles.cardAvatar} src={'http://10.20.0.164:10010/resources/groupfiles/'+item.Name+'/avatar.png'} />}
+                      avatar={<img alt="" className={styles.cardAvatar} src={'http://167.71.166.120:8001/resources/groupfiles/'+item.Name+'/avatar.png'} />}
                       title={<p key='group' >{item.Name}</p>}
                       description={
                         <Paragraph

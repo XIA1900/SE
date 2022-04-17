@@ -104,7 +104,7 @@ const Center = () => {
       createdAt: community.CreateDay, 
       groupMember: data.count,
       ifexit: data.ifexit,
-      avatar: 'http://10.20.0.164:10010/resources/groupfiles/'+community.Name+'/avatar.png',
+      avatar: 'http://167.71.166.120:8001/resources/groupfiles/'+community.Name+'/avatar.png',
     };
   }
 

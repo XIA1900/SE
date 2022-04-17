@@ -4,6 +4,7 @@ import (
 	"GFBackend/config"
 	"GFBackend/docs"
 	"GFBackend/logger"
+	"GFBackend/middleware"
 	"GFBackend/middleware/interceptor"
 	"GFBackend/router/reqs"
 	"fmt"
@@ -21,6 +22,7 @@ func RunServer() {
 	interceptor.InitNonAuthReq()
 	AppRouter = gin.Default()
 	AppRouter.Static("/resources", "./resources")
+	AppRouter.Use(middleware.CorsHandler())
 	AppRouter.Use(interceptor.AuthInterceptor())
 
 	docs.SwaggerInfo.BasePath = appConfig.Server.BasePath

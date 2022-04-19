@@ -14,6 +14,11 @@ This is SE Projects By Center of the Road Group
 
 - http://167.71.166.120:10010/swagger/index.html
 
+## Demo video functionality
+
+https://user-images.githubusercontent.com/90939944/164087559-24c308af-6fe5-425a-a714-28f19fa8d725.mp4
+
+
 
 
 # Gator Forum

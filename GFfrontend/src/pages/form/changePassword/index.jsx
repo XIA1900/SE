@@ -22,19 +22,21 @@ const Password = () => {
   const intl = useIntl();
 
   const onFinish = async (values) => {
+    const oldpassword = values.oldpassword;
     const password = values.newpassword;
     const passwordRepeat = values.passwordRepeat;
     
     if(password === passwordRepeat) {
       const result = await changePassword({
-        username: username,
-        password: password,
+        Username: username,
+        Password: oldpassword,
+        NewPassword: password,
       });
   
       console.log(result);
   
   
-      if(result.message === 'Ok') {
+      if(result.code === 200) {
         const defaultChangePasswordMessage = intl.formatMessage({
           id: 'changePassword',
           defaultMessage: 'Password changed successfully!',
@@ -46,20 +48,26 @@ const Password = () => {
           search: username,
         });
       }
+      else {
+        const defaultChangePasswordMessage = intl.formatMessage({
+          id: 'changePasswordFailed',
+          defaultMessage: 'Failed! Please check your old password.',
+        });
+        message.success(defaultChangePasswordMessage);
+      }
     }
     else {
       const defaultChangePasswordFailedMessage = intl.formatMessage({
         id: 'changePasswordFailed',
-        defaultMessage: 'Password doens\' match, please try again',
+        defaultMessage: 'New Password doens\'t match, please try again',
       });
       message.success(defaultChangePasswordFailedMessage);
     }
     
-    
   };
 
   return (
-    <PageContainer content="Change a password.">
+    <PageContainer content="Change password.">
       <Card bordered={false}>
         <ProForm
           hideRequiredMark
@@ -75,6 +83,18 @@ const Password = () => {
           }}
           onFinish={onFinish}
         >
+          <ProFormText.Password
+            width="md"
+            label="oldPassword"
+            name="oldpassword"
+            rules={[
+              {
+                required: true,
+                message: 'Please input old password.',
+              },
+            ]}
+            placeholder=""
+          />
           <ProFormText.Password
             width="md"
             label="Password"

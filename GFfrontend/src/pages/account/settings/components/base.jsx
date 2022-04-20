@@ -1,5 +1,5 @@
 import React from 'react';
-import { UploadOutlined } from '@ant-design/icons';
+import { PropertySafetyOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Input, Upload, message } from 'antd';
 import ProForm, {
   ProFormDependency,
@@ -8,9 +8,57 @@ import ProForm, {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { useRequest } from 'umi';
-import { queryCurrent } from '@/services/user';
+import { useRequest, history, useIntl} from 'umi';
+import { queryCurrent, userUpdate } from '@/services/user';
+import { uploadLogoImg } from '@/services/upload';
 import styles from './BaseView.less';
+
+const username = history.location.search.substring(1);
+
+const props = {
+  name: "uploadFilename",
+  action: '/api/file/upload',
+  headers: {
+    authorization: 'authorization-text',
+  },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+      location.reload(true);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+  onRemove: file => {
+    // 删除图片调用
+    this.setState(state => {
+      const index = state.fileList.indexOf(file);
+      const newFileList = state.fileList.slice();
+      newFileList.splice(index, 1);
+      return {
+        fileList: newFileList,
+      };
+    });
+  },
+
+  beforeUpload: file => {
+    // 控制上传图片格式
+    const isJpgOrPng = file.type === 'image/png';
+
+    if (!isJpgOrPng) {
+      message.error('Only JPEG/PNG files are allowed!');
+      return;
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('File size must be smaller than 2MB!');
+      return;
+    }
+  },
+}
 
 const validatorPhone = (rule, value, callback) => {
   if (!value[0]) {
@@ -22,7 +70,7 @@ const validatorPhone = (rule, value, callback) => {
   }
 
   callback();
-}; // 头像组件 方便以后独立，增加裁剪之类的功能
+}; 
 
 const AvatarView = ({ avatar }) => (
   <>
@@ -30,7 +78,7 @@ const AvatarView = ({ avatar }) => (
     <div className={styles.avatar}>
       <img src={avatar} alt="avatar" />
     </div>
-    <Upload showUploadList={false}>
+    <Upload {...props}>
       <div className={styles.button_view}>
         <Button>
           <UploadOutlined />
@@ -42,9 +90,38 @@ const AvatarView = ({ avatar }) => (
 );
 
 const BaseView = () => {
-  const { data: currentUser, loading } = useRequest(() => {
-    return queryCurrent();
-  });
+  const intl = useIntl();
+
+  const { data, loading } = useRequest(
+    async() => {
+      const result = await queryCurrent({
+        username: username,
+        target: username,
+      });
+      return result;
+    },
+    {
+      formatResult: result => result,
+    }
+  );
+
+  console.log(data);
+  let currentUser = [];
+  if(typeof(data) != 'undefined') {
+    const info = data.userInfo;
+    currentUser = {
+      name: info.Username,
+      birthday: info.Birthday.substring(0,10),
+      email: info.Username+'@ufl.edu',
+      gender: info.Gender,
+      major: info.Department,
+      grade: 1,
+      avatar: 'http://167.71.166.120:8001/resources/userfiles/'+ info.Username+'/avatar.png',
+      country: 'U.S',
+      province: 'Florida',
+      city: 'Gainesville',
+    };
+  }
 
   const getAvatarURL = () => {
     if (currentUser) {
@@ -59,8 +136,21 @@ const BaseView = () => {
     return '';
   };
 
-  const handleFinish = async () => {
-    message.success('Change basic information successfully');
+  const handleFinish = async (values) => {
+    const data = {
+      Username: values.username,
+      Birthday: values.birthday,
+      Gender: values.gender,
+      Department: values.major,
+    }
+    const result = await userUpdate(data);
+    if(result.code === 200)  {
+      const defaultupdateInfoMessage = intl.formatMessage({
+        id: 'updateInfo',
+        defaultMessage: 'Update Successfully',
+      });
+      message.success(defaultupdateInfoMessage);
+    }
   };
 
   return (
@@ -81,8 +171,9 @@ const BaseView = () => {
                   children: '更新基本信息',
                 },
               }}
-              initialValues={{ ...currentUser, phone: currentUser?.phone.split('-') }}
+              initialValues={{}}
               hideRequiredMark
+              
             >
               <ProForm.Group>
                 <ProFormText
@@ -97,6 +188,7 @@ const BaseView = () => {
                   ]}
                   initialValue={currentUser.name}
                   layout="inline"
+                  disabled
                 />
                 <ProFormText
                   width="md"
@@ -109,7 +201,6 @@ const BaseView = () => {
                     },
                   ]}
                   initialValue={currentUser.email}
-                  layout="inline"
                 />
                 
               </ProForm.Group>
@@ -121,7 +212,7 @@ const BaseView = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your country!',
+                    message: 'Please input your gender!',
                   },
                 ]}
                 options={[
@@ -138,8 +229,8 @@ const BaseView = () => {
                     value: 'Prefer not to say',
                   }
                 ]}
-                initialValue = {currentUser.sex}
-                layout="inline"
+                initialValue = {currentUser.gender}
+                placeholder = {currentUser.gender}
               />
 
               <ProFormText
@@ -148,13 +239,13 @@ const BaseView = () => {
                 label="Birthday"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: 'Please input your birthday!',
                   },
                 ]}
                 initialValue={currentUser.birthday}
               />
-              <ProFormText
+              {/* <ProFormText
                 width="md"
                 name="major"
                 label="Major"
@@ -165,8 +256,7 @@ const BaseView = () => {
                   },
                 ]}
                 initialValue={currentUser.major}
-                display="inline-block"
-              />
+              /> */}
               <ProFormText
                 width="md"
                 name="grade"
@@ -180,7 +270,7 @@ const BaseView = () => {
                 initialValue={currentUser.grade}
                 display="inline-block"
               />
-              <ProFormTextArea
+              {/* <ProFormTextArea
                 name="signature"
                 label="Signature"
                 rules={[
@@ -191,7 +281,7 @@ const BaseView = () => {
                 ]}
                 placeholder="Tomorrow is another day."
                 initialValue={currentUser.signature}
-              />
+              /> */}
               <ProFormSelect
                 width="sm"
                 name="country"
@@ -265,7 +355,7 @@ const BaseView = () => {
                 initialValue={currentUser.city}
               />    
               
-              <ProFormText
+              {/* <ProFormText
                 width="md"
                 name="phone"
                 label="phone"
@@ -276,7 +366,7 @@ const BaseView = () => {
                   },
                 ]}
                 initialValue={currentUser.phone}
-              />
+              /> */}
 
               {/* <ProFormFieldSet
                 name="phone"
@@ -297,7 +387,7 @@ const BaseView = () => {
             </ProForm>
           </div>
           <div className={styles.right}>
-            <AvatarView avatar={getAvatarURL()} />
+            <AvatarView avatar={currentUser.avatar} />
           </div>
         </>
       )}

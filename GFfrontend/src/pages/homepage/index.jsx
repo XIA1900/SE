@@ -6,6 +6,7 @@ import ArticleListContent from './components/ArticleListContent';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
 import { queryList } from '@/services/getList';
+import { createLike } from '@/services/user';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -43,40 +44,25 @@ const Articles = () => {
     const reply = data.CountComment;
     const size = Object.keys(articleList).length;
     for(let i=0; i<size; i++) {
+      let j = size - 1 - i;
       list.push({
-        id: articleList[i].ID,
-        name: articleList[i].Username,
-        title: articleList[i].Title,
-        group: communityList[i].Name,
-        createdAt: articleList[i].CreateDay,
-        content: articleList[i].Content,
-        collection: collection[i],
-        like: like[i],
-        reply: reply[i],
-        groupID: communityList[i].ID,
-        avatar: 'http://192.168.3.132:10010/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+        id: articleList[j].ID,
+        name: articleList[j].Username,
+        title: articleList[j].Title,
+        group: communityList[j].Name,
+        createdAt: articleList[j].CreateDay,
+        content: articleList[j].Content,
+        collection: collection[j],
+        like: like[j],
+        reply: reply[j],
+        groupID: communityList[j].ID,
+        avatar: 'http://167.71.166.120:8001/resources/userfiles/'+ articleList[j].Username+'/avatar.png',
       });
     }
   }
   console.log(list);
 
-  const onCCollection = async(values) => {
-    console.log(values);
-    if(values.type === 'star-o') {
-      if(values.value === '1') {
-        return (
-          <IconText key="collection" type="star-o" value="0" text={values.text--} />
-        );
-      }
-      else {
-        return (
-          <IconText key="collection" type="star-o" value="1" text={item.collection} />
-        )
-      }
-    }
-  }
-
-  const IconText = ({ type, text }) => {
+  const IconText = ({ value, type, text }) => {
     switch (type) {
       case 'star-o':
         return (
@@ -85,6 +71,7 @@ const Articles = () => {
               style={{
                 marginRight: 8,
               }}
+              onClick = {e => clickPost(value, e)}
             />
             {text}
           </span>
@@ -97,6 +84,7 @@ const Articles = () => {
               style={{
                 marginRight: 8,
               }}
+              onClick = {e => clickPost(value, e)}
             />
             {text}
           </span>
@@ -109,6 +97,7 @@ const Articles = () => {
               style={{
                 marginRight: 8,
               }}
+              onClick = {e => clickPost(value, e)}
             />
             {text}
           </span>
@@ -132,13 +121,6 @@ const Articles = () => {
       },
     },
   };
-
-  const onCollection = async(values) => {
-    console.log(values);
-    let count = values;
-    count++;
-    return count;
-  }
 
   const loadMoreDom = list.length > 0 && (
     <div
@@ -215,10 +197,11 @@ const Articles = () => {
             <List.Item
               key={item.id}
               actions={[
-                <IconText key="collection" type="star-o" text={item.collection}  />,
-                <IconText key="like" type="like-o" text={item.like} />,
-                <IconText key="reply" type="message" text={item.reply} />,
+                <IconText key="collection" type="star-o" value = {item.id} text={item.collection}  onClick = {e => clickPost(item.id, e)}/>,
+                <IconText key="like" type="like-o" value = {item.id} text={item.like} onClick = {e => clickPost(item.id, e)}/>,
+                <IconText key="reply" type="message" value = {item.id} text={item.reply} onClick = {e => clickPost(item.id, e)}/>,
               ]}
+              style={{marginLeft:'30px', marginRight:'30px'}}
             >
               <List.Item.Meta
                 title={

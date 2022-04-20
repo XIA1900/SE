@@ -4,9 +4,11 @@ import { join } from 'path';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import { stubFalse } from 'lodash';
+
 const { REACT_APP_ENV } = process.env;
+
 export default defineConfig({
-  hash: true,
+  hash: false,
   antd: {},
   dva: {
     hmr: true,
@@ -185,6 +187,10 @@ export default defineConfig({
           component: './account/center',
         },
         {
+          path: '/account/view',
+          component: './account/view',
+        },
+        {
           name: 'Settings',
           icon: 'smile',
           path: '/account/settings',
@@ -203,11 +209,12 @@ export default defineConfig({
       ],
     },
     {
-      name: 'search',
+      name: ' ',
       path: '/search',
       routes: [
         {
           path: '/search',
+          name:' ',
           component: './search',
         },
       ],
@@ -262,7 +269,7 @@ export default defineConfig({
   title: false,
   ignoreMomentLocale: true,
   proxy: proxy[REACT_APP_ENV || 'pre'], //'dev'
-  // proxy: proxy[REACT_APP_ENV || 'dev'],
+  //proxy: proxy[REACT_APP_ENV || 'dev'],
   manifest: {
     basePath: '/',
   },

@@ -1,18 +1,23 @@
 import { request } from 'umi';
 
-export async function createGroup(params) {
-  return request('/api/createGroup', {
-    data: params,
+export async function createGroup(body) {
+  return request('/api/community/create', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    data: body,
+    credentials: 'include',
   });
 }
 
-export async function createPost(params) {
-  return request('/api/createPost', {
-    data: params,
+export async function createPost(body) {
+  return request('/api/article/create', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    credentials: 'include',
   });
 }

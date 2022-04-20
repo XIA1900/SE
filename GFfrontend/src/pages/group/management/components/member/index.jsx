@@ -1,4 +1,4 @@
-import { getMember, deleteMember } from '@/services/groupManagement'
+import { getMember, deleteMember } from '@/services/groupManagement';
 import {
     ContactsOutlined,
     LikeOutlined,
@@ -15,23 +15,32 @@ import styles from './style.less';
   
 const { Option } = Select;
 const FormItem = Form.Item;
-const groupName = history.location.search.substring(1);
+const groupID = history.location.search.substring(1);
+const pageNo = 1;
+const pageSize = 20;
   
 const Member = () => {
     const [form] = Form.useForm();
     const { data, reload, loading, loadMore, loadingMore } = useRequest(
-      () => {
-        return getMember({
-          groupName: groupName,
+      async() => {
+        const result = await getMember({
+          CommunityID: parseInt(groupID, 10),
+          PageNO: pageNo,
+          PageSize: pageSize,
         });
+        console.log(result);
+        return result;
       },
       {
+        formatResult: result => result,
         loadMore: true,
-      },
+      }
     );
   
-    const list = data?.list || [];
-    console.log(list);
+    let list =[];
+    if(typeof(data.Members) != 'undefined') {
+      list = data.Members;
+    }
 
     const deleteUser = async (values) => {
       console.log(values);
@@ -106,13 +115,13 @@ const Member = () => {
             loadMore={loadMoreDom}
             dataSource={list}
             renderItem={(item) => (
-              <div>
+              <div style={{fontSize: '15px', color: '#4F4F4F'}}>
                 <p>
-                <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-                {item.user}
-                  <Button onClick = {(e) => deleteUser(item.user, e)}> 
-                    Delete
-                  </Button>
+                <img src={'http://167.71.166.120:8001/resources/userfiles/'+item.Member+'/avatar.png'} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
+                <a onClick={e => clickUser(item.name, e)} style={{marginLeft:'15px'}}>{item.Member}</a> joined at {item.JoinDay.substring(0,10)}
+                {/* <Button onClick={e => deleteUser(item.Member, e)} style={{float:'right'}}>
+                  Delete
+                </Button> */}
                 </p>
               </div>
             )}

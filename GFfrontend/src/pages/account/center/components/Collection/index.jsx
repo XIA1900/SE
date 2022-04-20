@@ -1,6 +1,7 @@
 import {
   ContactsOutlined,
   LikeOutlined,
+  LikeTwoTone,
   LoadingOutlined,
   MessageOutlined,
   StarOutlined,
@@ -16,30 +17,41 @@ import styles from './style.less';
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
+const pageNO = 1;
 const username = history.location.search.substring(1);
 
 const Collection = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return getPersonalCollection({
-        username: username,
+    async() => {
+      const result = await getPersonalCollection({
+        pageSize: pageSize,
+        pageNO: pageNO,
       });
+      return result;
     },
     {
       loadMore: true,
+      formatResult: result => result,
     },
   );
 
-  const list = data?.list || [];
-  console.log(list);
+  console.log(data);
 
-  const IconText = ({ type, text, value }) => {
-    const icon = {
-      type: type,
-      text: text,
-      value: value,
-    };
+  let list = [];
+  if(typeof(data.articleDetails)!='undefined') {
+    if(data.articleDetails !== null) list = data.articleDetails;
+  }
+
+  const clickPost = (values) => {
+    history.push({
+      pathname: '/group/post',
+      search: values.toString(),
+    });
+    return;
+  }
+
+  const IconText = ({ id, type, text, value }) => {
     switch (type) {
       case 'star-o':
         return (
@@ -48,22 +60,39 @@ const Collection = () => {
               style={{
                 marginRight: 8,
               }}
-              onClick={(e) => onCollection(icon, e)}
+              onClick = {e => clickPost(id, e)}
             />
             {text}
           </span>
         );
       case 'like-o':
-        return (
-          <span>
-            <LikeOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
+        if(value === false) {
+          return (
+            <span>
+              <LikeOutlined
+                style={{
+                  marginRight: 8,
+                }}
+                onClick = {e => clickPost(id, e)}
+              />
+              {text}
+            </span>
+          );
+        }
+        else {
+          return (
+            <span>
+              <LikeTwoTone
+                style={{
+                  marginRight: 8,
+                }}
+                onClick = {e => clickPost(id, e)}
+              />
+              {text}
+            </span>
+          );
+        }
+        
 
       case 'message':
         return (
@@ -72,6 +101,7 @@ const Collection = () => {
               style={{
                 marginRight: 8,
               }}
+              onClick = {e => clickPost(id, e)}
             />
             {text}
           </span>
@@ -82,20 +112,6 @@ const Collection = () => {
     }
   };
 
-  const onCollection = async(values) => {
-    console.log(values);
-    const id = values.value;
-    const result = await removeCollection({
-      username: username,
-      postid: id,
-    });
-    if(result.message === 'Ok') {
-      location. reload();
-    }
-    else {
-      
-    }
-  }
 
   const formItemLayout = {
     wrapperCol: {
@@ -156,18 +172,17 @@ const Collection = () => {
           dataSource={list} 
           renderItem={(item) => (
             <List.Item
-              key={item.id}
+              key={item.ID}
               actions={[
-                <IconText key="collection" type="star-o" value={item.id} text={item.collection} />,
-                <IconText key="like" type="like-o" text={item.like} />,
-                <IconText key="reply" type="message" text={item.reply} />,
+                <IconText key="collection" type="star-o" id={item.ID} value={item.ID} text={item.NumFavorite} />,
+                <IconText key="like" type="like-o" id={item.ID} value={item.Liked} text={item.NumLike} />,
+                <IconText key="reply" type="message" id={item.ID} value={item.ID} text={item.NumComment} />,
               ]}
-              //extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
                 title={
-                  <a className={styles.listItemMetaTitle} href={'/group/post?'+item.id}>
-                    {item.title}
+                  <a className={styles.listItemMetaTitle} href={'/group/post?'+item.ID}>
+                    {item.Title}
                   </a>
                 }
               />

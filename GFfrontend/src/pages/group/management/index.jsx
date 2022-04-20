@@ -11,16 +11,16 @@ import styles from './style.less';
 import { UmiContext } from '@/.umi/plugin-model/helpers/constant';
 const { Item } = Menu;
 
-const groupName = history.location.search.substring(1);
-console.log('groupName:'+groupName);
+const groupID = history.location.search.substring(1);
+console.log(groupID);
 
 const Settings = () => {
   const menuMap = {
     base: 'Basic Information',
-    analysis: 'Analysis',
+    //analysis: 'Analysis',
     member: 'Member List',
     post: 'Post List',
-    notification: 'Notification',
+    //notification: 'Notification',
   };
   const [initConfig, setInitConfig] = useState({
     mode: 'inline',

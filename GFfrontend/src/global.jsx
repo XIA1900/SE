@@ -59,7 +59,7 @@ if (pwa) {
         );
       });
       clearCache();
-      window.location.reload();
+      window.location.reload(true);
       return true;
     };
 

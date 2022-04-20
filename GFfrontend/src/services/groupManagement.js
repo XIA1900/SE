@@ -1,8 +1,13 @@
 import { request } from 'umi';
 
 export async function getBasicInfo(params) {
-    return request('/api/getBasicInfo', {
-        params,
+    console.log(params);
+    return request('/api/community/getone?id='+params.id+'&username='+params.username+'&pageNO=1&pageSize=20', {
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        credentials: 'include',
     });
 }
 
@@ -13,8 +18,13 @@ export async function getAnalysis(params) {
 }
 
 export async function getMember(params) {
-    return request('/api/getMember', {
-        params,
+    console.log(params);
+    return request('/api/community/getmember?id='+params.CommunityID+'&pageNO=1&pageSize=20', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
     });
 }
 
@@ -25,23 +35,25 @@ export async function getNotification(params) {
     });
 }
 
-export async function updateGroupInfo(params) {
-    return request('/api/updateGroupInfo', {
-        data: params,
+export async function updateGroupInfo(body) {
+    return request('/api/community/update', {
+        data: body,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
     });
 }
 
 export async function deleteGroup(params) {
-    return request('/api/deleteGroup', {
-        data: params,
-        method: 'POST',
+    console.log("params");
+    return request('/api/community/delete?id='+params.id, {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
     });
 }
 

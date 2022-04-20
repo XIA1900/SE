@@ -4,29 +4,55 @@ import React from 'react';
 import { useRequest, history } from 'umi';
 import ArticleListContent from './components/ArticleListContent';
 import TagSelect from './components/TagSelect';
-import { queryList } from '@/services/getList';
+import { getGroupPosts } from '@/services/getGroupInfo';
 import styles from './style.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 10;
-const groupName = history.location.search.substring(1);
+const pageNO = 1;
+const groupID = history.location.search.substring(1);
 
 const Post = () => {
   const [form] = Form.useForm();
   const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return queryList({
-        count: pageSize,
-        type: 'hottest',
-        groupName: groupName,
+    async() => {
+      const result = await getGroupPosts({
+        id: groupID,
+        type: 'lattest',
+        pageNO: pageNO,
+        pageSize: pageSize,
       });
+      return result;
     },
     {
+      formatResult: result => result,
       loadMore: true,
     },
   );
-  const list = data?.list || [];
+
+  console.log(data);
+  const list = [];
+  if(typeof(data.ArticleList)!='undefined') {
+    const articleList = data.ArticleList;
+    const countComment = data.CountComment;
+    const countFavorite = data.CountFavorite;
+    const countLike = data.CountLike;
+    const size = Object.keys(articleList).length;
+    for(let i=0; i<size; i++) {
+      list.push({
+        id: articleList[i].ID,
+        name: articleList[i].Username,
+        title: articleList[i].Title,
+        createdAt: articleList[i].CreateDay,
+        content: articleList[i].Content,
+        collection: countFavorite[i],
+        like: countLike[i],
+        reply: countComment[i],
+        avatar: 'http://167.71.166.120:8001/resources/userfiles/'+ articleList[i].Username+'/avatar.png',
+      });
+    }
+  }
 
   const IconText = ({ type, text }) => {
     switch (type) {

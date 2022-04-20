@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
 import { LogoutOutlined, SettingOutlined, UserOutlined, CrownOutlined, HeartOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Spin } from 'antd';
+import { Avatar, Menu, message, Spin } from 'antd';
 import { history, useModel } from 'umi';
 import { stringify } from 'querystring';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import { outLogin } from '@/services/ant-design-pro/api';
+import { logout } from '@/services/user';
+import cookie from 'react-cookies';
 
 /**
  * logout and save the url
@@ -30,14 +31,22 @@ const AvatarDropdown = ({ menu }) => {
   const { currentUser } = initialState;
 
   const onMenuClick = useCallback(
-    (event) => {
+    async(event) => {
       const { key } = event;
 
       if (key === 'logout') {
-        setInitialState((s) => ({ ...s, currentUser: undefined }));
-        //loginOut();
+        const result = await logout({
+          username: currentUser.name,
+        });
+        console.log(result);
+        cookie.remove('token');
+        cookie.remove('groupID');
+        cookie.remove('groupName');
+        message.success("Logout Successfully!");
+        await setInitialState((s) => ({ ...s, currentUser: undefined }));
         history.push('/user/login');
         return;
+        
       }
 
       if(key === 'created_groups') {
@@ -121,12 +130,13 @@ const AvatarDropdown = ({ menu }) => {
       </Menu.Item>
     </Menu>
   );
+  const avatarsrc = 'http://167.71.166.120:8001/resources/userfiles/'+currentUser.name+'/avatar.png';
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
         {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" /> */}
-        <img style={{ width: '25px', height: '25px', borderRadius: '25px' }} src='http://192.168.3.132:10010/resources/userfiles/exia/avatar.png'/>
-        <span className={`${styles.name} anticon`}>{currentUser.name}</span>
+        <img style={{ width: '25px', height: '25px', borderRadius: '25px' }} src={avatarsrc}/>
+        <span className={`${styles.name} anticon`}>{' '+currentUser.name}</span>
       </span>
     </HeaderDropdown>
   );

@@ -45,30 +45,35 @@ const Login = () => {
 
   const handleSubmit = async (values) => {
     console.log(values);
+    
     try {
       // 登录
       const msg = await login({ ...values, type }); //后端
-      console.log(msg);
+      const token = msg.message;
+      console.log(token);
       if (msg.code == 200) {
+        const userInfo = {
+          name: values.username,
+        };
+        cookie.save('token', token);
+        cookie.save('username', values.username);
         //nickname = msg.Nickname;
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-        cookie.save('token', msg.message);
-        const userInfo = {
-          name: values.username,
-        };
+        
         console.log(userInfo);
         //await fetchUserInfo(); //successful, wait for user info; this was not implemented
         await setInitialState((s) => ({ ...s, currentUser: userInfo}));
         
         /** 此方法会跳转到 redirect 参数所在的位置 */
-        if (!history) return;
-        const { query } = history.location;
-        const { redirect } = query;
-        history.push(redirect || '/');
+        // if (!history) return;
+        // const { query } = history.location;
+        // const { redirect } = query;
+        // history.push(redirect || '/');
+        history.push("/homepage");
         return;
       }
 
@@ -80,11 +85,10 @@ const Login = () => {
         defaultMessage: '登录失败，请重试！',
       });
       message.error(defaultLoginFailureMessage);
-      location.reload();
     }
   };
 
-  const { status, type: loginType } = userLoginState;
+  const { code, type: loginType } = userLoginState;
   return (
     <div className={styles.container}>
       <div className={styles.lang} data-lang>
@@ -115,11 +119,12 @@ const Login = () => {
             />
           </Tabs>
 
-          {status === 'error' && loginType === 'account' && (
+          {code !== 200 && loginType === 'account' && (
             <LoginMessage
               content={intl.formatMessage({
-                id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误(admin/ant.design)',
+                //id: 'pages.login.accountLogin.errorMessage',
+                id: 'loginFailed',
+                defaultMessage: 'Input doesn\'t match our records. Try cat/007',
               })}
             />
           )}
@@ -132,16 +137,18 @@ const Login = () => {
                   prefix: <UserOutlined className={styles.prefixIcon} />,
                 }}
                 placeholder={intl.formatMessage({
-                  id: 'pages.login.username.placeholder',
-                  defaultMessage: '用户名: admin or user',
+                  //id: 'pages.login.username.placeholder',
+                  id:'username empty',
+                  defaultMessage: 'Username: cat',
                 })}
                 rules={[
                   {
                     required: true,
                     message: (
                       <FormattedMessage
-                        id="pages.login.username.required"
-                        defaultMessage="请输入用户名!"
+                        //id="pages.login.username.required"
+                        id="username required"
+                        defaultMessage="Please input username!"
                       />
                     ),
                   },
@@ -154,16 +161,16 @@ const Login = () => {
                   prefix: <LockOutlined className={styles.prefixIcon} />,
                 }}
                 placeholder={intl.formatMessage({
-                  id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
+                  id: 'password placeholder',
+                  defaultMessage: 'Password: 007',
                 })}
                 rules={[
                   {
                     required: true,
                     message: (
                       <FormattedMessage
-                        id="pages.login.password.required"
-                        defaultMessage="请输入密码！"
+                        id="password required"
+                        defaultMessage="Please input password!"
                       />
                     ),
                   },

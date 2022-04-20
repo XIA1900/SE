@@ -1,5 +1,5 @@
 import { router } from 'umi';
-import { getRelation, removeLike, removeCollection, changePassword, checkMember, queryCurrent, quitGroup, joinGroup, getPersnalFollower, getPersonalBlacklist, getPersonalCollection, getPersonalFollowing, removeFollower, removeFollowing, removeBlacklist } from '@/services/user';
+import { addFollowing, currentUser, createReply, getRelation, removeLike, createLike, removeCollection, createCollection, changePassword, checkMember, queryCurrent, quitGroup, joinGroup, getPersonalFollower, getPersonalBlacklist, getPersonalCollection, getPersonalFollowing, removeFollower, removeFollowing, removeBlacklist } from '@/services/user';
 
 const Model = {
   namespace: 'user',
@@ -32,7 +32,7 @@ const Model = {
         payload: response4,
       });
 
-      const response5 = yield call(getPersnalFollower, payload);
+      const response5 = yield call(getPersonalFollower, payload);
       yield put({
         type: 'save5',
         payload: response5,
@@ -96,6 +96,36 @@ const Model = {
       yield put({
         type: 'save15',
         payload: response15,
+      });
+
+      const response16 = yield call(createLike, payload);
+      yield put({
+        type: 'save16',
+        payload: response16,
+      });
+
+      const response17 = yield call(createCollection, payload);
+      yield put({
+        type: 'save17',
+        payload: response17,
+      });
+
+      const response18 = yield call(createReply, payload);
+      yield put({
+        type: 'save18',
+        payload: response18,
+      });
+
+      const response19 = yield call(createReply, payload);
+      yield put({
+        type: 'save19',
+        payload: response19,
+      });
+
+      const response20 = yield call(addFollowing, payload);
+      yield put({
+        type: 'save20',
+        payload: response20,
       });
     },
   },
@@ -179,6 +209,36 @@ const Model = {
       };
     },
     save15(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save16(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save17(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save18(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save19(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    save20(state, action) {
       return {
         ...state,
         data: action.payload,

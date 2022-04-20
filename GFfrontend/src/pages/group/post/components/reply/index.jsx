@@ -134,7 +134,7 @@ const Reply = () => {
           renderItem={(item) => (
             <List.Item
               actions={[
-                <IconText key="like" type="like-o" text={item.likes} />,
+                // <IconText key="like" type="like-o" text={item.likes} />,
               ]}
             >
               <ArticleListContent data={item} />

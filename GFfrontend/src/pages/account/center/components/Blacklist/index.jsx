@@ -20,17 +20,19 @@ const username = history.location.search.substring(1);
 const Blacklist = () => {
     const [form] = Form.useForm();
     const { data, reload, loading, loadMore, loadingMore } = useRequest(
-      () => {
-        return getPersonalBlacklist({
+      async() => {
+        const result = await getPersonalBlacklist({
           username: username, 
         });
+        return result;
       },
       {
         loadMore: true,
+        formatResult: result => result,
       },
     );
   
-    const list = data?.list || [];
+    const list = [];
     console.log(list);
 
     const onUnblock = async (values) => {

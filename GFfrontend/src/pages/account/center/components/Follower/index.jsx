@@ -11,7 +11,7 @@ import { useRequest, history } from 'umi';
 import ArticleListContent from '@/pages/group/content/components/articleContent';
 import StandardFormRow from '@/pages/homepage/components/StandardFormRow';
 import styles from './style.less';
-import { getPersnalFollower, removeFollower } from '@/services/user';
+import { getPersonalFollower, removeFollower } from '@/services/user';
   
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -20,17 +20,31 @@ const username = history.location.search.substring(1);
 const Follower = () => {
     const [form] = Form.useForm();
     const { data, reload, loading, loadMore, loadingMore } = useRequest(
-      () => {
-        return getPersnalFollower({
+      async() => {
+        const result = await getPersonalFollower({
           username: username,
         });
+        return result;
       },
       {
+        formatResult: result => result,
         loadMore: true,
       },
     );
   
-    const list = data?.list || [];
+    console.log(data);
+    let list = [];
+    if(typeof(data.Users) != 'undefined' && data.Users != null) {
+      const users = data.Users;
+      const size = Object.keys(users).length;
+      for(let i=0; i<size; i++) {
+        list.push({
+          name: users[i],
+          avatar: 'http://167.71.166.120:8001/resources/userfiles/'+ users[i]+'/avatar.png',
+        });
+      }
+    }
+
     console.log(list);
 
     const onRemove = async (values) => {
@@ -48,6 +62,7 @@ const Follower = () => {
       }
     };
   
+
     const formItemLayout = {
       wrapperCol: {
         xs: {
@@ -86,6 +101,14 @@ const Follower = () => {
         </Button>
       </div>
     );
+
+    const clickUser = async(values) => {
+      history.push({
+        pathname: '/account/view',
+        search: values,
+      });
+      return;
+    }
   
     return (
       <>
@@ -109,10 +132,10 @@ const Follower = () => {
               <div>
                 <p>
                 <img src={item.avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-                {item.user}
-                  <Button onClick = {(e) => onRemove(item.user, e)} style={{float: 'right'}}> 
-                    Remove
-                  </Button>
+                <a onClick={e => clickUser(item.name, e)} style={{marginLeft:'15px'}}>{item.name}</a>
+                <Button onClick={e => onRemove(item.name, e)} style={{float:'right'}}>
+                  Remove
+                </Button>
                 </p>
               </div>
             )}

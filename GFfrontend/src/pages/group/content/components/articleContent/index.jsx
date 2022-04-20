@@ -2,16 +2,49 @@ import { Avatar } from 'antd';
 import React from 'react';
 import moment from 'moment';
 import styles from './index.less';
+import { useModel, history } from 'umi';
+import cookie from "react-cookies";
 
-const ArticleListContent = ({ data: { content, avatar, createdAt, name } }) => (
-  <div className={styles.listContent}>
-    <div className={styles.description}>{content}</div>
-    <div className={styles.extra}>
-      <img src={avatar} style={{ width: '25px', height: '25px', borderRadius: '25px' }} />
-      <a > {name} </a>
-      <em>last updated at {moment(createdAt).format('YYYY-MM-DD HH:mm')}</em>
+const groupID = history.location.search.substring(1);
+
+const ArticleListContent = ({ data: { id, content, avatar, createdAt, name } }) => {
+    const { initialState } = useModel('@@initialState');
+    const { currentUser } = initialState || {};
+
+    const clickPost = async(values) => {
+      cookie.save('groupID',values)
+      history.push({
+        pathname: '/group/post',
+        search: values.toString(),
+      });
+    }
+
+    const clickUser = (values) => {
+      if(values === currentUser.name) {
+        history.push({
+          pathname: '/account/center',
+          search: values,
+        });
+      }
+      else {
+        history.push({
+          pathname: '/account/view',
+          search: values,
+        })
+      }
+    }
+
+    return (
+      <div className={styles.listContent}>
+      <div className={styles.description} onClick={e => clickPost(id, e)}>{content}</div>
+      <div className={styles.extra}>
+        <img src={avatar} style={{ width: '30px', height: '30px', borderRadius: '30px' }} />
+        <a onClick={e => clickUser(name, e)}> {name} </a>
+        <em>last updated at {moment(createdAt).format('YYYY-MM-DD HH:mm')}</em>
+      </div>
     </div>
-  </div>
-);
+    );
+}
+
 
 export default ArticleListContent;

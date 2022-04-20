@@ -6,18 +6,27 @@ import { getJoinedGroup } from '@/services/getGroupInfo';
 import styles from './style.less';
 
 const { Paragraph } = Typography;
-const user = history.location.search;
-const userName = user.substring(1);
+const user = history.location.search.substring(1);
 
 
-const CardList = () => {
-  const { data, loading } = useRequest(() => {
-    return getJoinedGroup({
-      userName: userName,
+const Joined = () => {
+  const { data, loading } = useRequest( async () => {
+    const result = await getJoinedGroup({
+      name: user,
     });
-  });
+    return result;
+  },
+  {
+    formatResult: result => result,
+  }
+  );
 
-  const list = data?.list || [];
+  console.log(data);
+  let list =  [];
+  if(typeof(data) != 'undefined') {
+    list = data;
+  }
+
   const content = (
     <div className={styles.pageHeaderContent}>
       <p>
@@ -44,22 +53,18 @@ const CardList = () => {
           }}
           dataSource={[ ...list]}
           renderItem={(item) => {
-            if (item && item.id) {
+            if (item && item.ID) {
               return (
-                <List.Item key={item.id}>
+                <List.Item key={item.ID}>
                   <Card
                     hoverable
                     className={styles.card}
-                    actions={[<p># Group Members: {item.numberOfMember}</p>, <p># Posts: {item.numberOfPost}</p>,  <p>Created At: {item.createdAt}</p>]}
+                    //actions={[<p># Group Members: {item.numberOfMember}</p>, <p># Posts: {item.numberOfPost}</p>,  <p>Created At: {item.CreateDay}</p>]}
+                    //actions={[<p>Created At: {item.CreateDay}</p>]}
                   >
                     <Card.Meta
-                      avatar={<img alt="" className={styles.cardAvatar} src={item.groupAvatar} />}
-                      title={<p key='group' onClick={() => {
-                        history.push({
-                          pathname: '/group/content',
-                          search: item.groupName,
-                        });
-                      }}>{item.groupName}</p>}
+                      avatar={<img alt="" className={styles.cardAvatar} src={'http://167.71.166.120:8001/resources/groupfiles/'+item.Name+'/avatar.png'} />}
+                      title={<p key='group'>{item.Name}</p>}
                       description={
                         <Paragraph
                           className={styles.item}
@@ -67,9 +72,16 @@ const CardList = () => {
                             rows: 3,
                           }}
                         >
-                          {item.groupDescription}
+                          {item.Description}
+                          <p>Created At: {item.CreateDay.substring(0, 10)}</p>
                         </Paragraph>
                       }
+                      onClick={() => {
+                        history.push({
+                          pathname: '/group/content',
+                          search: item.ID.toString(),
+                        });
+                      }}
                     />
                   </Card>
                 </List.Item>
@@ -87,4 +99,4 @@ const CardList = () => {
   );
 };
 
-export default CardList;
+export default Joined;

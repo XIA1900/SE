@@ -12,13 +12,37 @@ const userName = history.location.search.substring(1);
 
 
 const CardList = () => {
-  const { data, loading } = useRequest(() => {
-    return getCreatedGroup({
-      userName: userName,
-    });
-  });
-
-  const list = data?.list || [];
+  const { data, loading } = useRequest(
+    async() => {
+      const result = await getCreatedGroup({
+        userName: userName,
+      });
+      return result;
+    },
+    {
+      formatResult: result => result,
+    }
+  );
+    
+  console.log(data);
+  const list = [];
+  if(typeof(data) != 'undefined') {
+    const communities = data.Communities;
+    const members = data.NumberOfMember;
+    const posts = data.NumberOfPost;
+    const size = Object.keys(communities).length;
+    for(let i=0; i<size; i++) {
+      list.push({
+        id: communities[i].ID,
+        groupName: communities[i].Name,
+        description: communities[i].Description,
+        createdAt: communities[i].CreateDay,
+        numberOfMember: members[i],
+        numberOfPost: posts[i],
+        groupAvatar: 'http://167.71.166.120:8001/resources/groupfiles/'+communities[i].Name+'/avatar.png',
+      });
+    }
+  }
 
   console.log(list);
 
@@ -36,6 +60,13 @@ const CardList = () => {
       history.push('/form/createGroup');
     },
   );
+
+  const onManagement = async(values) => {
+    history.push({
+      pathname: '/group/management',
+      search: values.toString(),
+    });
+  }
 
   const nullData = {};
   return (
@@ -57,23 +88,23 @@ const CardList = () => {
           renderItem={(item) => {
             if (item && item.id) {
               return (
-                <List.Item key={item.id}>
+                <List.Item key={item.id} onClick={(e) => onManagement(item.id, e)}>
                   <Card
                     hoverable
                     className={styles.card}
-                    actions={[<p key="option1"># Group Members: {item.numberOfMember}</p>, <p key="option2"># Posts: {item.numberOfPost}</p>,  <p key="option3">Created At: {item.createdAt}</p>]}
+                    actions={[<p>Members: {item.numberOfMember}</p>, <p>Posts: {item.numberOfPost}</p>,  <p>{item.createdAt.substring(0,10)}</p>]}
                   >
                     <Card.Meta
                       avatar={<img alt="" className={styles.cardAvatar} src={item.groupAvatar} />}
-                      title={<a href={"/group/management?"+item.groupName}>{item.groupName}</a>}
+                      title={<a onClick={(e) => onManagement(item.id, e)}>{item.groupName}</a>}
                       description={
                         <Paragraph
                           className={styles.item}
                           ellipsis={{
-                            rows: 3,
+                            rows: 2,
                           }}
                         >
-                          {item.groupDescription}
+                          {item.description}
                         </Paragraph>
                       }
                     />

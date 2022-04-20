@@ -10,6 +10,7 @@ import { search } from '@/services/search';
 
 const GlobalHeaderRight = () => {
   const { initialState } = useModel('@@initialState');
+  console.log("i am here");
 
   if (!initialState || !initialState.settings) {
     return null;
@@ -35,14 +36,6 @@ const GlobalHeaderRight = () => {
             search: value});
         }}
       />
-      <span
-        className={styles.action}
-        onClick={() => {
-          history.push('/form/basic-form');
-        }}
-      >
-         <EditOutlined />
-      </span>
      
       {/* <NoticeIconView /> */}
       <Avatar menu />

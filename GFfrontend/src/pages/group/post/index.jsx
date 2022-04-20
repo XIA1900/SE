@@ -13,9 +13,9 @@ A post have:
 /*
 url: /group/post?postid
 */
-
+import ProForm, {ProFormText, ProFormTextArea,} from '@ant-design/pro-form';
 import { PlusOutlined, TeamOutlined, CrownOutlined, CalendarOutlined, LikeOutlined, LikeTwoTone, MessageOutlined, StarOutlined, StarTwoTone, MessageTwoTone } from '@ant-design/icons';
-import { Avatar, Card, Col, Divider, Input, Row, Tag, Form, Modal } from 'antd';
+import { Avatar, Card, Col, Divider, Input, Row, Tag, Form, Modal, message } from 'antd';
 import React, { useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Link, useRequest, history, useModel } from 'umi';
@@ -25,10 +25,11 @@ import Collection from './components/collection';
 import styles from './Center.less';
 import { getPost } from '@/services/getPost';
 //import { currentUser } from '@/services/ant-design-pro/api';
-import { removeLike, getRelation } from '@/services/user';
+import { createReply, removeLike, getRelation, createLike, createCollection, removeCollection } from '@/services/user';
+import cookie from "react-cookies";
+
 
 const postid = history.location.search.substring(1);
-console.log(postid);
 
 const operationTabList = ({NumComment, NumLike, NumFavorite}) => {
   if(typeof(NumComment) === 'undefined') return;
@@ -49,48 +50,6 @@ const operationTabList = ({NumComment, NumLike, NumFavorite}) => {
   return tabList;
 }
 
-const replyForm = ({ visible, onCreate, onCancel }) => {
-  const [form] = Form.useForm();
-  return (
-    <Modal
-    visible={true}
-    title="What's in your mind?"
-    okText="Send"
-    cancelText="Cancel"
-    onCancel={onCancel}
-    onOk={() => {
-      form
-        .validateFields()
-        .then((values) => {
-          form.resetFields();
-          onCreate(values);
-        })
-        .catch((info) => {
-          console.log('Validate Failed:', info);
-        });
-    }}
-    >
-      <Form
-        form={form}
-        layout="vertical"
-        name="form_in_modal"
-      >
-        <Form.Item 
-          name="description" 
-          label="Description"
-          rules={[
-            {
-              required: true,
-              message: 'Please say something.',
-            }
-          ]}
-        >
-          <Input type="textarea" />
-        </Form.Item>
-      </Form>
-    </Modal>
-  );
-}
 
 const TagList = ({ tags }) => {
   const ref = useRef(null);
@@ -136,12 +95,14 @@ const Center = () => {
   const [tabKey, setTabKey] = useState('reply');
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [visible, setVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const groupID = cookie.load('groupID');
+  console.log(groupID);
 
   const { data: postContents, reload, loading, loadMore, loadingMore } = useRequest(
     async() => {
       const result = await getPost({
-        //username: currentUser.username,
+        user: currentUser.name,
         ID: postid,
       });
       //console.log(result);
@@ -154,7 +115,7 @@ const Center = () => {
   );
   //console.log(postContents);
   const list = postContents || [];
-  //console.log(list);
+  console.log(list);
 
   // if(typeof(postContents[0])!='undefined') {
   //   list = postContents;
@@ -162,40 +123,106 @@ const Center = () => {
 
   // console.log(list);
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
-  const onReply = (values) => {
+  const handleOk = async(values) => {
     console.log(values);
-    setVisible(false);
-  }
+    const result = await createReply ({
+      ArticleID: parseInt(postid, 10),
+      Content: values.goal,
+    });
+    console.log(result);
+    if(result === 'Create Successfully') {
+      message.success("Comment submitted!");
+      setIsModalVisible(false);
+      location.reload(true);
+    }
+    else {
+      message.error("Failed! Please try again!");
+    }
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const onLike = async(values) => {
-    console.log("liked");
-    console.log(values);
-    if(values === '1') {
-      const result = removeLike({
-        username: currentUser.name,
-        postid: postid,
+    if(values === true) {
+      const result = await removeLike({
+        //username: currentUser.name,
+        id: postid,
       });
-      if(result.message === 'Ok') {
-        return {renderButtonInfo};
+      //console.log(result);
+      if(result === '200') {
+        message.success("Cancel Liked");
+        location.reload(true);
+      }
+    }
+    else {
+      const result = await createLike({
+        id: postid,
+      });
+      //console.log(result);
+      if(result === '200') {
+        message.success("Liked");
+        location.reload(true);
       }
     }
   }
 
   const onCollection = async(values) => {
+    if(values === true) {
+      const result = await removeCollection({
+        //username: currentUser.name,
+        id: postid,
+      });
+      if(result === '200') {
+        message.success("Cancelled!");
+        location.reload(true);
+      }
+    }
+    else {
+      const result = await createCollection({
+        id: postid,
+      });
+      if(result === '200') {
+        message.success("Collected");
+        location.reload(true);
+      }
 
+    }
   }
 
-  const renderPostInfo = ({ avatar, Title, Content, Owner, UpdatedAt}) => {
+  const clickUser = (values) => {
+    if(values === currentUser.name) {
+      history.push({
+        pathname: '/account/center',
+        search: values,
+      });
+    }
+    else {
+      history.push({
+        pathname: '/account/view',
+        search: values,
+      })
+    }
+  }
+
+  const renderPostInfo = ({ Title, Content, Owner, UpdatedAt}) => {
     return (
       <div className={styles.listContent}>
         <div className={styles.title}>{Title}</div>
+        <p style={{fontSize: '15px', marginTop:'25px', color: '#4F4F4F',}}>
           <img
             alt=""
-            src={avatar}
-            style={{ width: '25px', height: '25px', borderRadius: '25px' }}
+            src={'http://167.71.166.120:8001/resources/userfiles/'+Owner+'/avatar.png'}
           />
-          <a href=''> {Owner}</a> updated at {UpdatedAt}
+          <a onClick={e => clickUser(Owner, e)}> {Owner}</a> updated at {UpdatedAt.substring(0,10)}
+        </p>
+
+
         <div className={styles.description}> {Content} 
         </div>
       </div>
@@ -205,29 +232,44 @@ const Center = () => {
   const renderButtonInfo = ({Liked, Favorited}) => {
     if(Liked === true && Favorited === true) {
       return (
-        <div className={styles.listContent}>
-          <div className={styles.description}>
-            <p style={{float:'right'}}>
+        <div style={{marginRight: '50px'}}>
+          <div>
+            <p style={{float:'right'}}>   
                 <MessageOutlined 
-                  style={{marginRight: '20px'}}  
-                  onClick={() => {
-                    console.log('clicked');
-                    //setVisible(true);
-                    console.log(visible);
-                    setVisible(visible => !visible);
-                    console.log(visible);
-                  }}
-                />
-                <replyForm
-                  visible = {visible}
-                  onCreate = {onReply}
-                  onCancel = {() => {
-                    setVisible(false);
-                  }}
-                />
-                
+                    style={{marginRight: '20px'}}  
+                    onClick={showModal}
+                  />
+                  <Modal title="Basic Modal" visible={isModalVisible} destroyOnClose = {true} footer={null}>
+                    <ProForm
+                      hideRequiredMark
+                      style={{
+                        margin: 'auto',
+                        marginTop: 8,
+                        maxWidth: 600,
+                      }}
+                      name="basic"
+                      layout="vertical"
+                      initialValues={{
+                        public: '1',
+                      }}
+                      onFinish={handleOk}
+                      onReset={handleCancel}
+                    >
+                      <ProFormTextArea
+                        label="Comment"
+                        width="xl"
+                        name="goal"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please input your comment.',
+                          },
+                        ]}
+                        placeholder=""
+                      />
+                    </ProForm>
+                </Modal>         
                 <LikeTwoTone style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
-                
                 <StarTwoTone onClick={(e) => onCollection(Favorited, e)}/>
               </p>
           </div>
@@ -236,11 +278,43 @@ const Center = () => {
     }
     else if(Liked === true && Favorited === false) {
       return (
-        <div className={styles.listContent}>
-          <div className={styles.description} >
+        <div style={{marginRight: '50px'}}>
+          <div>
             <p style={{float:'right'}}>
-              <MessageOutlined style={{marginRight: '20px'}}  onClick={onReply}/>
-              
+              <MessageOutlined 
+                  style={{marginRight: '20px'}}  
+                  onClick={showModal}
+                />
+                <Modal title="Basic Modal" visible={isModalVisible} destroyOnClose = {true} footer={null}>
+                    <ProForm
+                      hideRequiredMark
+                      style={{
+                        margin: 'auto',
+                        marginTop: 8,
+                        maxWidth: 600,
+                      }}
+                      name="basic"
+                      layout="vertical"
+                      initialValues={{
+                        public: '1',
+                      }}
+                      onFinish={handleOk}
+                      onReset={handleCancel}
+                    >
+                      <ProFormTextArea
+                        label="Comment"
+                        width="xl"
+                        name="goal"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please input your comment.',
+                          },
+                        ]}
+                        placeholder=""
+                      />
+                    </ProForm>
+                </Modal>
               <LikeTwoTone style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
               
               <StarOutlined onClick={(e) => onCollection(Favorited, e)}/>
@@ -252,11 +326,43 @@ const Center = () => {
     }
     else if(Liked === false && Favorited === true) {
       return (
-        <div className={styles.listContent}>
-          <div className={styles.description} >
+        <div style={{marginRight: '50px'}}>
+          <div  >
             <p style={{float:'right'}}>
-              <MessageOutlined style={{marginRight: '20px'}} onClick={onReply}/>
-              
+              <MessageOutlined 
+                  style={{marginRight: '20px'}}  
+                  onClick={showModal}
+                />
+                <Modal title="Basic Modal" visible={isModalVisible} destroyOnClose = {true} footer={null}>
+                    <ProForm
+                      hideRequiredMark
+                      style={{
+                        margin: 'auto',
+                        marginTop: 8,
+                        maxWidth: 600,
+                      }}
+                      name="basic"
+                      layout="vertical"
+                      initialValues={{
+                        public: '1',
+                      }}
+                      onFinish={handleOk}
+                      onReset={handleCancel}
+                    >
+                      <ProFormTextArea
+                        label="Comment"
+                        width="xl"
+                        name="goal"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please input your comment.',
+                          },
+                        ]}
+                        placeholder=""
+                      />
+                    </ProForm>
+                </Modal>
               <LikeOutlined style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)} />
               
               <StarTwoTone onClick={(e) => onCollection(Favorited, e)}/>
@@ -267,11 +373,43 @@ const Center = () => {
     }
     else {
       return (
-        <div className={styles.listContent}>
-          <div className={styles.description} style={{float:'right'}}>
+        <div style={{marginRight: '50px'}}>
+          <div style={{float:'right'}}>
             <p style={{float:'right'}}>
-              <MessageOutlined style={{marginRight: '20px'}} onClick={onReply}/>
-              
+              <MessageOutlined 
+                  style={{marginRight: '20px'}}  
+                  onClick={showModal}
+                />
+                <Modal title="Basic Modal" visible={isModalVisible} destroyOnClose = {true} footer={null}>
+                    <ProForm
+                      hideRequiredMark
+                      style={{
+                        margin: 'auto',
+                        marginTop: 8,
+                        maxWidth: 600,
+                      }}
+                      name="basic"
+                      layout="vertical"
+                      initialValues={{
+                        public: '1',
+                      }}
+                      onFinish={handleOk}
+                      onReset={handleCancel}
+                    >
+                      <ProFormTextArea
+                        label="Comment"
+                        width="xl"
+                        name="goal"
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please input your comment.',
+                          },
+                        ]}
+                        placeholder=""
+                      />
+                    </ProForm>
+                </Modal>
               <LikeOutlined style={{marginRight: '20px'}} onClick={(e) => onLike(Liked, e)}/>
               
               <StarOutlined onClick={(e) => onCollection(Favorited, e)}/>
@@ -301,10 +439,27 @@ const Center = () => {
     return null;
   };
 
+  const clickGroup = () => {
+    if(typeof(groupID) === 'undefined') {
+      history.push({
+        pathname:'/account/center',
+        search: currentUser.name,
+      });
+      return;
+    }
+    else {
+      history.push({
+        pathname: '/group/content',
+        search: groupID,
+      });
+    }
+    
+  }
+
   return (
     <GridContent>
       <Row gutter={24}>
-        <Col lg={17} md={24}>
+        <Col lg={24} md={24}>
           <Card
             bordered={false}
             style={{
@@ -314,7 +469,9 @@ const Center = () => {
           >
             {!loading && list && (
               <div>
+                <a onClick={clickGroup}> Return</a>
                 {renderPostInfo(list)}
+                
                 {renderButtonInfo(list)}
               </div>
             )}

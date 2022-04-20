@@ -12,43 +12,64 @@ import { history, useRequest, useModel, useIntl } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { createPost } from '@/services/create';
 import styles from './style.less';
+import cookie from "react-cookies";
 
-const groupName = history.location.search.substring(1);
+const groupID = history.location.search.substring(1);
 
 const BasicForm = () => {
 
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState;
   const intl = useIntl();
+  const groupName = cookie.load("groupName");
 
   const onFinish = async (values) => {
-    const date = new Date();
-    
-    const result = await createPost({
-      groupName: groupName,
-      userName: currentUser.name,
-      title: values.title,
-      content: values.content,
-      time: date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate(),
-    });
-
-    console.log(result);
-
-
-    if(result.message === 'Ok') {
-      const defaultLoginSuccessMessage = intl.formatMessage({
-        id: 'createPost',
-        defaultMessage: 'Post submitted successfully!',
+    try {
+      console.log(values);   
+      const result = await createPost({
+        Title: values.title,
+        TypeID: 5,
+        CommunityID: parseInt(groupID),
+        Content: values.content,
       });
-      message.success(defaultLoginSuccessMessage);
 
-      const postid = result.postid;
+      console.log(result);
+      
 
-      history.push({
-        pathname: '/group/post',
-        search: postid,
+      if(result.message === '200') {
+        cookie.remove('groupName');
+        cookie.save('groupID', groupID);
+        const defaultcreatePostSuccessMessage = intl.formatMessage({
+          id: 'createPost',
+          defaultMessage: 'Post submitted successfully!',
+        });
+        message.success(defaultcreatePostSuccessMessage);
+
+        const postid = result.articleID;
+        console.log(postid);
+
+        history.push({
+          pathname: '/group/post',
+          search: postid.toString(),
+        });
+        return;
+      }
+      else {
+        const defaultcreatePostFailedMessage = intl.formatMessage({
+          id: 'createPostFailed',
+          defaultMessage: 'Post submitted failed! Please try again.',
+        });
+        message.error(defaultcreatePostFailedMessage);
+        return;
+      }
+    }catch (error) {
+      const defaultcreatePostFailedMessage = intl.formatMessage({
+        id: 'createPostFailed',
+        defaultMessage: 'Failed!',
       });
+      message.error(defaultcreatePostFailedMessage);
     }
+    
     
   };
 
@@ -65,12 +86,39 @@ const BasicForm = () => {
           name="basic"
           layout="vertical"
           initialValues={{
-            public: '1',
           }}
           onFinish={onFinish}
         >
           <ProFormText
-            width="md"
+            width="xl"
+            label="Group ID"
+            name="groupID"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            placeholder=""
+            initialValue={groupID}
+            disabled={true}
+          />
+
+          <ProFormText
+            width="xl"
+            label="Group Name"
+            name="groupName"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            placeholder=""
+            initialValue={groupName}
+            disabled={true}
+          />
+
+          <ProFormText
+            width="xl"
             label="Title"
             name="title"
             rules={[

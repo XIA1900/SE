@@ -28,6 +28,20 @@ const operationTabList = [
       </span>
     ),
   },
+  // {
+  //   key: 'post',
+  //   tab: (
+  //     <span>
+  //       Post{' '}
+  //       <span
+  //         style={{
+  //           fontSize: 14,
+  //         }}
+  //       >
+  //       </span>
+  //     </span>
+  //   ),
+  // },
   {
     key: 'follower',
     tab: (
@@ -56,20 +70,20 @@ const operationTabList = [
       </span>
     ),
   },
-  {
-    key: 'blacklist',
-    tab: (
-      <span>
-        Blacklist{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-        </span>
-      </span>
-    ),
-  },
+  // {
+  //   key: 'blacklist',
+  //   tab: (
+  //     <span>
+  //       Blacklist{' '}
+  //       <span
+  //         style={{
+  //           fontSize: 14,
+  //         }}
+  //       >
+  //       </span>
+  //     </span>
+  //   ),
+  // },
 ];
 
 const CourseList = ({ tags }) => {
@@ -221,6 +235,7 @@ const Center = () => {
     async() => {
       const result = await queryCurrent({
         username: username,
+        target: username,
       });
       return result;
     },
@@ -232,12 +247,18 @@ const Center = () => {
   console.log(data);
   let currentUser = [];
   if(typeof(data) != 'undefined') {
+    const info = data.userInfo;
     currentUser = {
-      name: data.Username,
-      birthday: data.Birthday,
-      gender: data.Gender,
-      major: data.Department,
-      avatar: 'http://192.168.3.132:10010/resources/userfiles/'+ data.Username+'/avatar.png',
+      name: info.Username,
+      birthday: info.Birthday.substring(0,10),
+      email: info.Username+'@ufl.edu',
+      gender: info.Gender,
+      major: info.Department,
+      grade: 1,
+      avatar: 'http://167.71.166.120:8001/resources/userfiles/'+ info.Username+'/avatar.png',
+      country: 'U.S',
+      province: 'Florida',
+      city: 'Gainesville',
     };
   }
 
@@ -263,14 +284,14 @@ const Center = () => {
             />
             {email}
           </p>
-          <p>
+          {/* <p>
             <PhoneOutlined
               style={{
                 marginRight: 8,
               }}
             />
             {phone} 
-          </p>
+          </p> */}
           <p>
             <ClusterOutlined
               style={{
@@ -311,14 +332,14 @@ const Center = () => {
             />
             {email}
           </p>
-          <p>
+          {/* <p>
             <PhoneOutlined
               style={{
                 marginRight: 8,
               }}
             />
             {phone} 
-          </p>
+          </p> */}
           <p>
             <ClusterOutlined
               style={{
@@ -392,6 +413,10 @@ const Center = () => {
       return <Collection />;
     }
 
+    // if (tabValue === 'post') {
+    //   return <Post />;
+    // }
+
     if (tabValue === 'follower') {
       return <Follower />;
     }
@@ -400,9 +425,9 @@ const Center = () => {
       return <Following />;
     }
 
-    if (tabValue == 'blacklist') {
-      return <Blacklist />
-    }
+    // if (tabValue == 'blacklist') {
+    //   return <Blacklist />
+    // }
 
     return null;
   };

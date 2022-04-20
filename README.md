@@ -7,7 +7,7 @@ This is SE Projects By Center of the Road Group
 - Backend: Bowei Wu(TOMBowei), Yingjie Chen(fongziyjun16)
 
 **Technological stack:**
-- Frontend: React etc.
+- Frontend: React, HTML/CSS, JSX
 - Backend: Golang, GIN,  GORM.
 - Database: Mysql, Redis, ElasticSearch..
 
@@ -66,27 +66,28 @@ But they seem to be all sports-related. Although lots of students have a huge in
 
 ## Components and functions:
 
--  If **not** signed in, **visitors** can only view posts and cannot interact with other users.
-- If signed in as **regular users**, he/she can do following: 
-	1. reply to others' posts
-	2. reply to private messages
-	3. create new post in group or in his/her own page
-	4. subscribe/ unsubscribe a user
-	5. join groups/communities
-	6. anonymous post
-	7. block/report/like/dislike/follow others users/posts
-	8. setting personal information
-	9. receive notifications, such as new followers, new posts, new replies etc
--   If signed as **group admin**:
-	1. can close/delete a post
-	2. can mute a user if he/she violates certain rules
-	3. post rules
-	4. deal with reports from users
-	5. receive notifications including reports or requests from users
+### Login and Logout
+- A user must log in to view the posts, groups, and communicate with other users. In expected scenario, our database should include the UFID and password of all eligible employees and students, so we didn't provide a registration portal. But of course we can't acquire the information we need, so we offer some accounts, including kirby, exia, link, cat and boss, all with password 007. Once logged in, the user should receive a unique token, which will be carried on all request to backend database.
+- Before exiting Gator Forum, a user is supposed to log out to clear the cookies, and expire the unique token.
 
-## Other Functions
-- Can have different groups in which people of similar interests can discuss with each other. Groups can be "sports", "music", "rate-my-professor", "daily life", "courses" ... and so on. Users can join multiple groups and discuss with others in the group. Each group may have a few managers.
-- Can earn points/badge based on their activation. To encourage them to post.
-- Can switch among best/most-recent/hot posts.
-- Can search for discussions related to key words.
-- Can search for users.
+### Group
+- A group can be created by a user. The basic information of a group includes: group name, group id, group description. group avatar, create date. Besides basic information, a group also contains a list of members (users who join this group), and a lists of posts submitted by members.
+- The basic information of a group can be updated by its creator.
+- Users can either join or quit the group. Once joined, this user becomes a member of the group, and can create posts, comment posts, quit group. Once quitted, the user will no longer be able to create posts or comment on others posts until he joins again. But his posts will not be deleted from the group.
+- We keep the lists of latest posts and earlies posts and user can choose the sequence they want.
+
+### Post
+- A post must and must only belong to a specific group. The attributes of a post contain: post id, post title, post content, create date.
+- Once posted, other users could comment this post, like this post, unlike this post if liked before, collect this post and uncollect this post if collected before.
+- Each post has three tabs that users can switch while viewing the post: Collection, Comment, Like. Collection tab will return a list of users who collceted this post. Comment will return a list of comments, where each comment includes username, user avatar, content, date. Like tab will return a list of users who liked this post.
+	
+### User
+- A user is defined by the unique username (UFID). The basic information of a user includes: username, avatar, gender, birthday, department, major, email, country, state, city.
+- For each user, we maintain the following lists:
+	- Following: tht list of users that are followed by this user.
+	- Follower: the list of users that are following this user. User can remove following a user.
+	- Collection: the list of posts collected by this user. 
+
+### Search
+- By input a string, a user can search for groups, users, and posts.
+

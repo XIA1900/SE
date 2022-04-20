@@ -23,6 +23,9 @@ This is SE Projects By Center of the Road Group
 ## Sprint 4 Deliverables
 - https://github.com/fongziyjun16/SE/tree/main/Sprint4
 
+## How to run
+- https://github.com/fongziyjun16/SE/wiki#how-to-run
+
 ## Demo video functionality
 
 https://user-images.githubusercontent.com/90939944/164087559-24c308af-6fe5-425a-a714-28f19fa8d725.mp4

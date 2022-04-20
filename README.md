@@ -14,6 +14,15 @@ This is SE Projects By Center of the Road Group
 
 - http://167.71.166.120:10010/swagger/index.html
 
+## Wiki Documentation
+- https://github.com/fongziyjun16/SE/wiki
+
+## Project Board Link
+- https://github.com/fongziyjun16/SE/projects
+
+## Sprint 4 Deliverables
+- https://github.com/fongziyjun16/SE/tree/main/Sprint4
+
 ## Demo video functionality
 
 https://user-images.githubusercontent.com/90939944/164087559-24c308af-6fe5-425a-a714-28f19fa8d725.mp4
@@ -27,8 +36,14 @@ https://user-images.githubusercontent.com/89665680/164123715-44a495b6-2f54-42f2-
 
 # Gator Forum
 
-## Introduction
-Basically, Gator-forum is similar to any other forums, like Stack Overflow, Douban, Quora, Reddit… But we hope it is more student-life related instead of society-related or limited in specific field.
+## Description
+Gator-forum is similar to any other forums, like Stack Overflow, Douban, Quora, Reddit… But we hope it is more student-life-related instead of society-related or limited to a specific field. 
+
+In order to gather more students who have interests in common, students could set up interest groups and manage the group. There would be a specific description of the group in order to make people fully clear before they join the group. They can post articles in the group and look up all other articles from different groups which may help them to find more interests.
+
+All articles could be liked, commented and favorited by anyone. It will be a good place to make new friends, whenever someone is interested in the others, they can just follow them to get more information about others. And because of the favorited function, good articles could be saved whenever students want to review them. Besides the search function is also complete, students could search articles or groups just by a few words they want, and the forum will respond to them with the possible answers it owned back to students.
+
+Furthermore, the file system is also complete, each student has its own file system and limited file space for them to upload their avatars as they like. And so do the group model, the group manager could also do that to update the avatar for the group, which will keep the group active. 
 
 A few gator forums have been discovered:
 -   [https://insidethegators.com/forums/1](https://insidethegators.com/forums/1)

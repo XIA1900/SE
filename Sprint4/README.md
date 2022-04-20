@@ -7,6 +7,8 @@
 - Optimize the search function implemented by elastic search.
 - Clearify more specifically to different rols (Casbin ruls).
 - Adding more test cases for all the new functionality implemented.
+- Completed all expected interfaces, functions, interactions.
+- Ran a thorough test on page redirection and every function.
 
 ## How to run
 - [Docker Deployment](https://github.com/fongziyjun16/SE/wiki/Docker-Deployment).

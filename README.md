@@ -1,7 +1,9 @@
 This is SE Projects By Center of the Road Group
 
 **Group members:**
-- Frontend: Yuwei Xia(XIA1900), Kaiyue Wang(kywithsweet)
+- Frontend: 
+	- Yuwei Xia(XIA1900): Designed and built all webpages, implemented all required functions, integrated with backend.
+	- Kaiyue Wang(kywithsweet): Cypress test.
 - Backend: Bowei Wu(TOMBowei), Yingjie Chen(fongziyjun16)
 
 **Technological stack:**
@@ -56,13 +58,13 @@ A few gator forums have been discovered:
 
 But they seem to be all sports-related. Although lots of students have a huge interest in sports, we do not want to only focus on sports. We want to create a place where people can not only discuss about sports, but also lots of things including their courses, their professors, their daily life, their hobbies and so on. They can share whatever they like and legal on Gator-forum.
 
-## Potential Users:
+## Users:
 
 - regular users (UF students/employees)
 - admin (Gator Forum Administrator)
 
 
-## Possible User Interactions:
+## Components and functions:
 
 -  If **not** signed in, **visitors** can only view posts and cannot interact with other users.
 - If signed in as **regular users**, he/she can do following: 

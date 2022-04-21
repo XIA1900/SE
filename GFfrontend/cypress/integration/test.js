@@ -11,6 +11,7 @@ describe('login', function(){
         })
     
     it('incorrectLogin', function(){
+       cy.visit('http://localhost:8000/user/login')
        cy.get('.ant-pro-form-login-main').get('#username').type('cat')
        cy.get('.ant-pro-form-login-main').get('#password').type('1234')
        cy.get('button:contains("Login")').click()

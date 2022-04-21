@@ -42,31 +42,31 @@ describe('login', function(){
      })
     
     it('forwardPersonalCenterpage', function () {
-        cy.contains('cat').click()
+        cy.get('#root > div > section > div > header.ant-layout-header.ant-pro-fixed-header > div > div.ant-space.ant-space-horizontal.ant-space-align-center.right___3L8KG > div:nth-child(2) > span').click()
         cy.contains('Personal Center').click()
         cy.url().should('include', '/account/center?cat')
      })
    
     it('forwardSettingspage', function () {
-        cy.contains('cat').click()
+        cy.get('#root > div > section > div > header.ant-layout-header.ant-pro-fixed-header > div > div.ant-space.ant-space-horizontal.ant-space-align-center.right___3L8KG > div:nth-child(2) > span').click()
         cy.contains('Settings').click()
         cy.url().should('include', '/account/settings?cat')
      })
 
     it('forwardCreateGrouppage', function () {
-        cy.contains('cat').click()
+        cy.get('#root > div > section > div > header.ant-layout-header.ant-pro-fixed-header > div > div.ant-space.ant-space-horizontal.ant-space-align-center.right___3L8KG > div:nth-child(2) > span').click()
         cy.contains('Created Groups').click()
         cy.url().should('include', '/account/selectGroups/created?cat')
         //create
      })
     it('forwardJoinGrouppage', function () {
-        cy.contains('cat').click()
+        cy.get('#root > div > section > div > header.ant-layout-header.ant-pro-fixed-header > div > div.ant-space.ant-space-horizontal.ant-space-align-center.right___3L8KG > div:nth-child(2) > span').click()
         cy.contains('Created Groups').click()
         cy.url().should('include', '/account/selectGroups/joined?cat')   
      })
 
     it('Logout', function () {
-        cy.contains('cat').click()
+        cy.get('#root > div > section > div > header.ant-layout-header.ant-pro-fixed-header > div > div.ant-space.ant-space-horizontal.ant-space-align-center.right___3L8KG > div:nth-child(2) > span').click()
         cy.contains('Log out').click()
         cy.url().should('include', '/user/login')  
      })

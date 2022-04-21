@@ -34,7 +34,7 @@ https://user-images.githubusercontent.com/90939944/164087559-24c308af-6fe5-425a-
 
 ## Cypress test video
 
-https://user-images.githubusercontent.com/90939944/164369367-6933825a-c326-4ef2-8517-e19f3b4577a1.mp4
+https://user-images.githubusercontent.com/90939944/164370699-de224802-e360-4e22-8c77-88d966b087eb.mp4
 
 ## Backend test video
 https://user-images.githubusercontent.com/89665680/164123715-44a495b6-2f54-42f2-8b7c-42459bd919f9.mp4
